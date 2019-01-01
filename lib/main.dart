@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:kon_banega_mokshadhipati/Service/apiservice.dart';
+import 'package:kon_banega_mokshadhipati/UI/forgot_password.dart';
 import 'package:kon_banega_mokshadhipati/UI/login_ui.dart';
-import 'package:kon_banega_mokshadhipati/UI/game_ui.dart';
+import 'package:kon_banega_mokshadhipati/UI/game_page.dart';
+import 'package:kon_banega_mokshadhipati/UI/register_page.dart';
+import 'package:kon_banega_mokshadhipati/UI/send_otp_page.dart';
+import 'package:kon_banega_mokshadhipati/UI/verify_otp_page.dart';
 
 void main() => runApp(MyApp());
 
@@ -20,7 +24,7 @@ class MyApp extends StatelessWidget {
     _theme = await appAuth.checkTheme();
     if (_isIntroDone) {
       if (_result) {
-        _defaultHome = new GameUI();
+        _defaultHome = new GamePage();
       }
     } else {
       _defaultHome = new LoginUI();
@@ -43,8 +47,12 @@ class MyApp extends StatelessWidget {
               fontFamily: 'GoogleSans'),
       home: _defaultHome,
       routes: <String, WidgetBuilder>{
-        '/gameUI': (BuildContext context) => new GameUI(),
+        '/gamePage': (BuildContext context) => new GamePage(),
         '/login': (BuildContext context) => new LoginUI(),
+        '/registerPage': (BuildContext context) => new RegisterPage(),
+        '/forgotPassword': (BuildContext context) => new ForgotPassword(),
+        '/sendOtp': (BuildContext context) => new SendOTP(),
+        '/verifyOtp': (BuildContext context) => new VerifyOTP(),
       },
     );
   }

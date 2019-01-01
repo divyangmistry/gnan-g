@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:kon_banega_mokshadhipati/UI/drag_ans.dart';
 
-class GameUI extends StatefulWidget {
+class GamePage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return new GameUIState();
+    return new GamePageState();
   }
 }
 
-class GameUIState extends State<GameUI> {
+class GamePageState extends State<GamePage> {
   Color caughtColor = Colors.grey;
   Color _chandegCaughtColor;
 
