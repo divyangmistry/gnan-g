@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class VerifyOTP extends StatefulWidget {
-
   var register;
   VerifyOTP({this.register});
 
@@ -54,7 +53,8 @@ class VerifyOTPState extends State<VerifyOTP> {
                   child: new RaisedButton(
                       shape: new RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(300.0)),
-                      onPressed: () => Navigator.popUntil(context, ModalRoute.withName('/login')),
+                      onPressed: () => Navigator.pushNamedAndRemoveUntil(
+                          context, '/login', ModalRoute.withName('/login')),
                       // debugPrint("pop"),
                       color: Theme.of(context).primaryColor,
                       child: new Text(

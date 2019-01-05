@@ -60,7 +60,8 @@ class ForgotPasswordState extends State<ForgotPassword> {
             child: new RaisedButton(
                 shape: new RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(300.0)),
-                onPressed: () => Navigator.popUntil(context, ModalRoute.withName('/login')),
+                onPressed: () => Navigator.pushNamedAndRemoveUntil(
+                    context, '/login', ModalRoute.withName('/login')),
                 color: Theme.of(context).primaryColor,
                 child: new Text(
                   'Reset Password',
