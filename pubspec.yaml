@@ -15,7 +15,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  shared_preferences: "0.4.2"
+  shared_preferences: "0.4.3"
   http: "0.11.3+17"
 
 
