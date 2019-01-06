@@ -44,7 +44,7 @@ class GamePageState extends State<GamePage> {
   _bodyView() {
     return new Container(
       alignment: Alignment.topCenter,
-      padding: const EdgeInsets.only(top: 10.0),
+      // padding: const EdgeInsets.only(top: 10.0),
       color: _changeColors(caughtColor),
       // setState(() {
       //       position = offset;
