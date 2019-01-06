@@ -157,29 +157,96 @@ class LoginUIState extends State<LoginUI> {
           });
           print(json.decode(res.body)['user_info']);
         } else {
-          _showError(json.decode(res.body)['msg']);
+          _showError(json.decode(res.body)['msg'], true);
         }
       });
     }
   }
 
-  void _showError(String msg) {
+  void _showError(String msg, bool showCancel) {
     showDialog(
-        context: context,
-        builder: (BuildContext build) {
-          return AlertDialog(
-            title: Text('Error'),
-            content: Text(msg),
-            actions: <Widget>[
-              FlatButton(
-                child: Text('Try Again'),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              )
+      context: context,
+      barrierDismissible: false,
+      builder: (_) {
+        return AlertDialog(
+          shape: new RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(7.0),
+          ),
+          title: Text('Error', textAlign: TextAlign.center),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Text(
+                msg,
+                style: TextStyle(color: Colors.blueGrey),
+              ),
+              SizedBox(height: 20.0),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  showCancel
+                      ? FlatButton(
+                          shape: new RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5.0),
+                              side: BorderSide(color: Colors.grey)),
+                          child: Row(
+                            children: <Widget>[
+                              Icon(
+                                Icons.close,
+                                size: 22.0,
+                                color: Colors.blue[900],
+                              ),
+                              SizedBox(
+                                width: 5.0,
+                              ),
+                              Text(
+                                'Cancel',
+                                style: TextStyle(color: Colors.blue[900]),
+                              )
+                            ],
+                          ),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                        )
+                      : new Container(width: 0, height: 0),
+                  showCancel
+                      ? SizedBox(
+                          width: 10.0,
+                        )
+                      : new Container(width: 0, height: 0),
+                  FlatButton(
+                    shape: new RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5.0)),
+                    color: Colors.blue[900],
+                    child: Row(
+                      children: <Widget>[
+                        Icon(
+                          Icons.done,
+                          size: 22.0,
+                          color: Colors.white,
+                        ),
+                        SizedBox(
+                          width: 5.0,
+                        ),
+                        Text(
+                          'Try Again',
+                          style: TextStyle(color: Colors.white),
+                        )
+                      ],
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                ],
+              ),
             ],
-          );
-        });
+          ),
+        );
+      },
+    );
   }
 }
 
