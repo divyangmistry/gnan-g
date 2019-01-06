@@ -57,7 +57,7 @@ class LoginUIState extends State<LoginUI> {
             height: 50.0,
             width: 15.0,
             child: new RaisedButton(
-              onPressed: () => Navigator.pushNamed(context, '/gamePage'),
+              onPressed: () => Navigator.pushNamed(context, '/simpleGame'),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30.0)),
               color: Theme.of(context).primaryColor,
