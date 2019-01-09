@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:kon_banega_mokshadhipati/Service/apiservice.dart';
 import 'package:kon_banega_mokshadhipati/UI/card_swip_game.dart';
 import 'package:kon_banega_mokshadhipati/UI/forgot_password.dart';
@@ -9,7 +10,12 @@ import 'package:kon_banega_mokshadhipati/UI/send_otp_page.dart';
 import 'package:kon_banega_mokshadhipati/UI/simple_game.dart';
 import 'package:kon_banega_mokshadhipati/UI/verify_otp_page.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+      .then((_) {
+    runApp(MyApp());
+  });
+}
 
 class MyApp extends StatelessWidget {
   ApiService appAuth = new ApiService();
