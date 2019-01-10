@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:kon_banega_mokshadhipati/UI/verify_otp_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import '../Service/apiservice.dart';
@@ -12,10 +13,12 @@ class LoginUIState extends State<LoginUI> {
   final _formKey = GlobalKey<FormState>();
   _LoginData _data = new _LoginData();
   ApiService _api = new ApiService();
+  bool _autoValidate = false;
 
   _bodyView() {
     return new Form(
       key: _formKey,
+      autovalidate: _autoValidate,
       child: Container(
         alignment: Alignment.topCenter,
         color: Colors.white,
@@ -140,27 +143,29 @@ class LoginUIState extends State<LoginUI> {
 
   void _login() {
     // if (_formKey.currentState.validate()) {
-    //   _formKey.currentState.save();
-    //   print('LOGIN DATA');
-    //   print('MOBILE : ${_data.mobile}');
-    //   print('PASSWORD : ${_data.password}');
+    // _formKey.currentState.save();
+    // print('LOGIN DATA');
+    // print('MOBILE : ${_data.mobile}');
+    // print('PASSWORD : ${_data.password}');
 
-    //   var data;
+    // var data;
 
-    //   data = {'mobile': _data.mobile, 'password': _data.password};
+    // data = {'mobile': _data.mobile, 'password': _data.password};
 
-    //   _api.login(json.encode(data)).then((res) {
-    //     if (res.statusCode == 200) {
-    //       SharedPreferences.getInstance().then((localstorage) {
-    //         localstorage.setString(
-    //             'user_info', (json.decode(res.body)['user_info']).toString());
-    //       });
-    //       print(json.decode(res.body)['user_info']);
-    Navigator.pushNamed(context, '/simpleGame');
-    //     } else {
-    //       _showError(json.decode(res.body)['msg'], true);
-    //     }
-    //   });
+    // _api.login(json.encode(data)).then((res) {
+    //   if (res.statusCode == 200) {
+    //     SharedPreferences.getInstance().then((localstorage) {
+    //       localstorage.setString(
+    //           'user_info', (json.decode(res.body)['user_info']).toString());
+    //     });
+    //     print(json.decode(res.body)['user_info']);
+    Navigator.pushReplacementNamed(context, '/simpleGame');
+    // } else {
+    //   _showError(json.decode(res.body)['msg'], true);
+    // }
+    // });
+    // } else {
+    //   _autoValidate = true;
     // }
   }
 
