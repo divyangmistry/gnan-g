@@ -87,13 +87,13 @@ class SendOTPState extends State<SendOTP> {
 
   void _sendOTP() {
     // TODO : Generate OTP and send
-    // if (_formKey.currentState.validate()) {
-    //   print(_mobileController.text);
-    Navigator.pop(context);
-    Navigator.pushReplacementNamed(context, '/forgotPassword');
-    // } else {
-    //   _autoValidate = true;
-    // }
+    if (_formKey.currentState.validate()) {
+      print(_mobileController.text);
+      Navigator.pop(context);
+      Navigator.pushReplacementNamed(context, '/forgotPassword');
+    } else {
+      _autoValidate = true;
+    }
   }
 
   @override

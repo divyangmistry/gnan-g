@@ -1,10 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:kon_banega_mokshadhipati/UI/drag_ans.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class GamePage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
     return new GamePageState();
   }
 }
@@ -12,6 +14,15 @@ class GamePage extends StatefulWidget {
 class GamePageState extends State<GamePage> {
   Color caughtColor = Colors.grey;
   Color _chandegCaughtColor;
+  String _userData;
+
+  GamePageState() {
+    SharedPreferences.getInstance().then((localstorage) {
+      _userData = localstorage.getString('user_info');
+      print('USER DATA : ');
+      print(_userData);
+    });
+  }
 
   _changeColors(color) {
     setState(() {
@@ -103,7 +114,6 @@ class GamePageState extends State<GamePage> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return new Scaffold(
       backgroundColor: _chandegCaughtColor,
       appBar: _appBarView(),

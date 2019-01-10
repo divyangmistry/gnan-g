@@ -172,41 +172,41 @@ class RegisterPageState extends State<RegisterPage> {
 
   void _register() {
     // TODO : Implement send OTP
-    // if (_formKey.currentState.validate()) {
-    //   _formKey.currentState.save();
-    //   print('REGISTER : ');
-    //   print(_data.name);
-    //   print(_data.mobile);
-    //   print(_data.password);
-    //   print(_data.email);
-    Navigator.pop(context);
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => VerifyOTP('register'),
-      ),
-    );
-    // var data;
-    // data = {
-    //   "mobile": _data.mobile,
-    //   "password": _data.password,
-    //   "name": _data.name,
-    //   "email": _data.email
-    // };
-    // _api.register(json.encode(data)).then((res) {
-    //   if (res.statusCode == 201) {
-    //     _showError('Success', json.decode(res.body)['msg'], false);
-    //     print(json.decode(res.body).toString());
-    //   } else {
-    //     _showError(
-    //         'Error',
-    //         json.decode(res.body)['msg'] ? json.decode(res.body)['msg'] : '',
-    //         false);
-    //   }
-    // });
-    // } else {
-    //   _autoValidate = true;
-    // }
+    if (_formKey.currentState.validate()) {
+      _formKey.currentState.save();
+      print('REGISTER : ');
+      print(_data.name);
+      print(_data.mobile);
+      print(_data.password);
+      print(_data.email);
+      Navigator.pop(context);
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => VerifyOTP('register'),
+        ),
+      );
+      var data;
+      data = {
+        "mobile": _data.mobile,
+        "password": _data.password,
+        "name": _data.name,
+        "email": _data.email
+      };
+      _api.register(json.encode(data)).then((res) {
+        if (res.statusCode == 201) {
+          _showError('Success', json.decode(res.body)['msg'], false);
+          print(json.decode(res.body).toString());
+        } else {
+          _showError(
+              'Error',
+              json.decode(res.body)['msg'] ? json.decode(res.body)['msg'] : '',
+              false);
+        }
+      });
+    } else {
+      _autoValidate = true;
+    }
   }
 
   void _showError(String title, String msg, bool showCancel) {

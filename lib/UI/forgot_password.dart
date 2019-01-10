@@ -117,31 +117,31 @@ class ForgotPasswordState extends State<ForgotPassword> {
   }
 
   void _changePassword() {
-    // if (_formKey.currentState.validate()) {
-    //   _formKey.currentState.save();
-    //   print('FORGOT PASSWORD : ');
-    //   print(_data.password);
-    //   print(_data.retypePassword);
-    // var data;
-    // data = {
-    //   'password': _data.password,
-    //   'verifyPassword': _data.retypePassword
-    // };
-    // _api.forgotPassword(json.encode(data)).then((res) {
-    //   if (res.statusCode == 201) {
-    //     _showError('Success', json.decode(res.body)['msg'], false);
-    //     print(json.decode(res.body).toString());
-    Navigator.pushReplacementNamed(context, '/login');
-    //   } else {
-    //     _showError(
-    //         'Error',
-    //         json.decode(res.body)['msg'] ? json.decode(res.body)['msg'] : '',
-    //         false);
-    //   }
-    // });
-    // } else {
-    //   _autoValidate = true;
-    // }
+    if (_formKey.currentState.validate()) {
+      _formKey.currentState.save();
+      print('FORGOT PASSWORD : ');
+      print(_data.password);
+      print(_data.retypePassword);
+      var data;
+      data = {
+        'password': _data.password,
+        'verifyPassword': _data.retypePassword
+      };
+      _api.forgotPassword(json.encode(data)).then((res) {
+        if (res.statusCode == 201) {
+          _showError('Success', json.decode(res.body)['msg'], false);
+          print(json.decode(res.body).toString());
+          Navigator.pushReplacementNamed(context, '/login');
+        } else {
+          _showError(
+              'Error',
+              json.decode(res.body)['msg'] ? json.decode(res.body)['msg'] : '',
+              false);
+        }
+      });
+    } else {
+      _autoValidate = true;
+    }
   }
 
   void _showError(String title, String msg, bool showCancel) {
