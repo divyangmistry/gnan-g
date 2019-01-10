@@ -131,8 +131,8 @@ class ApiService {
   }
 
   // Get AK Question Detail
-  Future<http.Response> getAkQuestions(data) async {
-    http.Response res = await http.post(_apiUrl + '/ak_questionDetails',
+  Future<http.Response> getQuestions(data) async {
+    http.Response res = await http.post(_apiUrl + '/get_questions',
         body: data, headers: headers);
     return res;
   }
