@@ -19,6 +19,7 @@ class SimpleGameState extends State<SimpleGame> {
   int correctAnsCounter = 0;
   int wrongAnsCounter = 0;
   int totalAnswers = 1;
+  List<bool> colorChangeAnswer = [false, false, false, false];
 
   void _correctAnswer(index) {
     var rng = new Random();
@@ -31,8 +32,9 @@ class SimpleGameState extends State<SimpleGame> {
         initColor = false;
         correctAnsCounter = correctAnsCounter + 1;
         totalAnswers = totalAnswers + 1;
+        colorChangeAnswer[index] = true;
       });
-      return _dialogBox(correctColor);
+      // return _dialogBox(correctColor);
     } else {
       setState(() {
         correctColor = false;
@@ -41,7 +43,8 @@ class SimpleGameState extends State<SimpleGame> {
         totalAnswers = totalAnswers + 1;
         if (totalWrongHearts >= 1) {
           totalWrongHearts = totalWrongHearts - 1;
-          return _dialogBox(correctColor);
+          colorChangeAnswer[index] = false;
+          // return _dialogBox(correctColor);
         } else
           return _gameOverDialogBox();
       });
@@ -288,34 +291,46 @@ class SimpleGameState extends State<SimpleGame> {
               alignment: Alignment.bottomCenter,
               child: Column(
                 children: <Widget>[
-                  new ListTile(
-                    leading: new CircleAvatar(
-                      child: new Text('A'),
+                  new Container(
+                    color: colorChangeAnswer[0] == true ? Colors.green : null,
+                    child: new ListTile(
+                      leading: new CircleAvatar(
+                        child: new Text('A'),
+                      ),
+                      title: new Text('Option 01'),
+                      onTap: () => _correctAnswer(0),
                     ),
-                    title: new Text('Option 01'),
-                    onTap: () => _correctAnswer(0),
                   ),
-                  new ListTile(
-                    leading: new CircleAvatar(
-                      child: new Text('B'),
+                  new Container(
+                    color: colorChangeAnswer[1] == true ? Colors.green : null,
+                    child: new ListTile(
+                      leading: new CircleAvatar(
+                        child: new Text('B'),
+                      ),
+                      title: new Text('Option 02'),
+                      onTap: () => _correctAnswer(1),
                     ),
-                    title: new Text('Option 02'),
-                    onTap: () => _correctAnswer(1),
                   ),
-                  new ListTile(
-                    leading: new CircleAvatar(
-                      child: new Text('C'),
+                  new Container(
+                    color: colorChangeAnswer[2] == true ? Colors.green : null,
+                    child: new ListTile(
+                      leading: new CircleAvatar(
+                        child: new Text('C'),
+                      ),
+                      title: new Text('Option 03'),
+                      onTap: () => _correctAnswer(2),
                     ),
-                    title: new Text('Option 03'),
-                    onTap: () => _correctAnswer(2),
                   ),
-                  new ListTile(
-                    leading: new CircleAvatar(
-                      child: new Text('D'),
+                  new Container(
+                    color: colorChangeAnswer[3] == true ? Colors.green : null,
+                    child: new ListTile(
+                      leading: new CircleAvatar(
+                        child: new Text('D'),
+                      ),
+                      title: new Text('Option 04'),
+                      onTap: () => _correctAnswer(3),
                     ),
-                    title: new Text('Option 04'),
-                    onTap: () => _correctAnswer(3),
-                  ),
+                  )
                 ],
               ),
             ),
