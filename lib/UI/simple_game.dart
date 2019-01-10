@@ -17,20 +17,27 @@ class SimpleGameState extends State<SimpleGame> {
   int correctAnsCounter = 0;
   int wrongAnsCounter = 0;
   int totalAnswers = 1;
-  List<bool> colorChangeAnswer = [false, false, false, false];
+  // List<bool> colorChangeAnswer = [false, false, false, false];
 
+  int correctAnsIndex = -1;
+  int selectedAnsIndex = -1;
   void _correctAnswer(index) {
     var rng = new Random();
     for (var i = 0; i < 1; i++) {
       _value = rng.nextInt(4);
     }
+    setState(() {
+      correctAnsIndex = _value;
+      selectedAnsIndex = index;
+    });
+
     if (index == _value) {
       setState(() {
         correctColor = true;
         initColor = false;
         correctAnsCounter = correctAnsCounter + 1;
         totalAnswers = totalAnswers + 1;
-        colorChangeAnswer[index] = true;
+        // colorChangeAnswer[index] = true;
       });
       // return _dialogBox(correctColor);
     } else {
@@ -41,7 +48,7 @@ class SimpleGameState extends State<SimpleGame> {
         totalAnswers = totalAnswers + 1;
         if (totalWrongHearts >= 1) {
           totalWrongHearts = totalWrongHearts - 1;
-          colorChangeAnswer[index] = false;
+          // colorChangeAnswer[index] = false;
           // return _dialogBox(correctColor);
         } else
           return _gameOverDialogBox();
@@ -286,162 +293,40 @@ class SimpleGameState extends State<SimpleGame> {
               padding: EdgeInsets.only(top: 5.0),
             ),
             new Container(
-              alignment: Alignment.bottomCenter,
-              child: Column(
-                children: <Widget>[
-                  new Container(
-                    color: colorChangeAnswer[0] == true ? Colors.green : null,
-                    child: new ListTile(
-                      leading: new CircleAvatar(
-                        child: new Text('A'),
-                      ),
-                      title: new Text('Option 01'),
-                      onTap: () => _correctAnswer(0),
-                    ),
-                  ),
-                  new Container(
-                    color: colorChangeAnswer[1] == true ? Colors.green : null,
-                    child: new ListTile(
-                      leading: new CircleAvatar(
-                        child: new Text('B'),
-                      ),
-                      title: new Text('Option 02'),
-                      onTap: () => _correctAnswer(1),
-                    ),
-                  ),
-                  new Container(
-                    color: colorChangeAnswer[2] == true ? Colors.green : null,
-                    child: new ListTile(
-                      leading: new CircleAvatar(
-                        child: new Text('C'),
-                      ),
-                      title: new Text('Option 03'),
-                      onTap: () => _correctAnswer(2),
-                    ),
-                  ),
-                  new Container(
-                    color: colorChangeAnswer[3] == true ? Colors.green : null,
-                    child: new ListTile(
-                      leading: new CircleAvatar(
-                        child: new Text('D'),
-                      ),
-                      title: new Text('Option 04'),
-                      onTap: () => _correctAnswer(3),
-                    ),
-                  )
-                ],
+              height: MediaQuery.of(context).size.height / 3.1,
+              // alignment: Alignment.bottomCenter,
+              child: ListView.builder(
+                itemCount: 4,
+                itemBuilder: (context, index) {
+                  return _optionsList(index);
+                },
               ),
             ),
-
-            // new Container(
-            //   alignment: Alignment.bottomCenter,
-            //   child: new Row(
-            //     crossAxisAlignment: CrossAxisAlignment.end,
-            //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            //     children: <Widget>[
-            //       new Container(
-            //         height: 50.0,
-            //         width: 120.0,
-            //         child: new RaisedButton(
-            //           elevation: 3.0,
-            //           color: Colors.orange.shade300,
-            //           shape: RoundedRectangleBorder(
-            //               borderRadius: BorderRadius.circular(10.0)),
-            //           onPressed: () {
-            //             setState(() {
-            //               correctColor = true;
-            //               initColor = false;
-            //             });
-            //           },
-            //           child: new Text(
-            //             'Option 01',
-            //             style: TextStyle(
-            //                 fontSize: 15.0, fontWeight: FontWeight.w700),
-            //           ),
-            //         ),
-            //       ),
-            //       new Container(
-            //         height: 50.0,
-            //         width: 120.0,
-            //         child: new RaisedButton(
-            //           elevation: 3.0,
-            //           color: Colors.orange.shade300,
-            //           shape: RoundedRectangleBorder(
-            //               borderRadius: BorderRadius.circular(10.0)),
-            //           onPressed: () {
-            //             setState(() {
-            //               correctColor = false;
-            //               initColor = false;
-            //             });
-            //           },
-            //           child: new Text(
-            //             'Option 02',
-            //             style: TextStyle(
-            //                 fontSize: 15.0, fontWeight: FontWeight.w700),
-            //           ),
-            //         ),
-            //       ),
-            //     ],
-            //   ),
-            // ),
-            // new Padding(
-            //   padding: EdgeInsets.only(top: 20.0),
-            // ),
-            // new Container(
-            //   alignment: Alignment.bottomCenter,
-            //   child: new Row(
-            //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            //     children: <Widget>[
-            //       new Container(
-            //         height: 50.0,
-            //         width: 120.0,
-            //         child: new RaisedButton(
-            //           elevation: 3.0,
-            //           color: Colors.orange.shade300,
-            //           shape: RoundedRectangleBorder(
-            //               borderRadius: BorderRadius.circular(10.0)),
-            //           onPressed: () {
-            //             setState(() {
-            //               correctColor = false;
-            //               initColor = false;
-            //             });
-            //           },
-            //           child: new Text(
-            //             'Option 03',
-            //             style: TextStyle(
-            //                 fontSize: 15.0, fontWeight: FontWeight.w700),
-            //           ),
-            //         ),
-            //       ),
-            //       new Container(
-            //         height: 50.0,
-            //         width: 120.0,
-            //         child: new RaisedButton(
-            //           elevation: 3.0,
-            //           color: Colors.orange.shade300,
-            //           shape: RoundedRectangleBorder(
-            //               borderRadius: BorderRadius.circular(10.0)),
-            //           onPressed: () {
-            //             setState(() {
-            //               correctColor = false;
-            //               initColor = false;
-            //             });
-            //           },
-            //           child: new Text(
-            //             'Option 04',
-            //             style: TextStyle(
-            //                 fontSize: 15.0, fontWeight: FontWeight.w700),
-            //           ),
-            //         ),
-            //       ),
-            //     ],
-            //   ),
-            // ),
             new Padding(
               padding: EdgeInsets.only(bottom: 50.0),
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  _optionsList(index) {
+    return new Card(
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(30.0))),
+      /*color: initColor == false
+          ? colorChangeAnswer[index] == true ? Colors.green : Colors.red
+          : null,*/
+      color: selectedAnsIndex == index
+          ? selectedAnsIndex == correctAnsIndex ? Colors.green : Colors.red
+          : null,
+      child: new ListTile(
+        leading: new CircleAvatar(
+          child: new Text('$index'),
+        ),
+        title: new Text('Option $index'),
+        onTap: () => _correctAnswer(index),
       ),
     );
   }
