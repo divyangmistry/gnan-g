@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:kon_banega_mokshadhipati/UI/login_ui.dart';
 
 class SimpleGame extends StatefulWidget {
   @override
@@ -11,6 +12,7 @@ class SimpleGame extends StatefulWidget {
 }
 
 class SimpleGameState extends State<SimpleGame> {
+  int totalWrongHearts = 3;
   bool correctColor = false;
   bool initColor = true;
   int _value;
@@ -37,9 +39,67 @@ class SimpleGameState extends State<SimpleGame> {
         initColor = false;
         wrongAnsCounter = wrongAnsCounter + 1;
         totalAnswers = totalAnswers + 1;
+        if (totalWrongHearts >= 1) {
+          totalWrongHearts = totalWrongHearts - 1;
+          return _dialogBox(correctColor);
+        } else
+          return _gameOverDialogBox();
       });
-      return _dialogBox(correctColor);
     }
+  }
+
+  void _gameOverDialogBox() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            shape: new RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(7.0),
+            ),
+            title: new Text(
+              'Game Over',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  color: Colors.blueGrey,
+                  fontSize: 30.0,
+                  fontWeight: FontWeight.w800),
+            ),
+            content: new Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                new Text('You are done ... GO HOME !',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: Colors.blueGrey,
+                        fontSize: 18.0,
+                        fontStyle: FontStyle.italic,
+                        fontWeight: FontWeight.w300)),
+                SizedBox(height: 20.0),
+                new FlatButton.icon(
+                    icon: correctColor
+                        ? Icon(
+                            Icons.done,
+                            color: Colors.green,
+                          )
+                        : Icon(Icons.close, color: Colors.red),
+                    label: new Text('OK!',
+                        style: TextStyle(
+                            color: correctColor ? Colors.green : Colors.red)),
+                    shape: new RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5.0),
+                        side: BorderSide(color: Colors.grey)),
+                    onPressed: () {
+                      Navigator.popUntil(
+                          context, ModalRoute.withName('/login'));
+                      setState(() {
+                        initColor = true;
+                        correctColor = false;
+                      });
+                    }),
+              ],
+            ),
+          );
+        });
   }
 
   void _dialogBox(correctColor) {
@@ -51,7 +111,7 @@ class SimpleGameState extends State<SimpleGame> {
               borderRadius: BorderRadius.circular(7.0),
             ),
             title: new Text(
-              correctColor ? 'Success!' : 'Warning!',
+              correctColor ? 'Success!' : 'LOL !',
               textAlign: TextAlign.center,
               style: TextStyle(
                   color: correctColor ? Colors.green : Colors.red,
@@ -116,17 +176,27 @@ class SimpleGameState extends State<SimpleGame> {
         child: new Container(
           height: 50.0,
           child: new Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-              new Text(
-                "Correct Answer's : $correctAnsCounter",
-                style: TextStyle(color: Colors.green, fontSize: 15.0),
+              new Container(
+                width: MediaQuery.of(context).size.width / 2,
+                alignment: Alignment.center,
+                child: new Text(
+                  "Correct Answer's : $correctAnsCounter",
+                  style: TextStyle(color: Colors.green, fontSize: 15.0),
+                ),
               ),
-              new SizedBox(width: 40.0),
-              new Text(
-                "Wrong Answer's : $wrongAnsCounter",
-                style: TextStyle(color: Colors.red, fontSize: 15.0),
-              ),
+              new Container(
+                width: MediaQuery.of(context).size.width / 2,
+                child: new ListView.builder(
+                  padding: EdgeInsets.only(left: 60.0),
+                  scrollDirection: Axis.horizontal,
+                  itemCount: totalWrongHearts,
+                  itemBuilder: (context, index) {
+                    return new Icon(Icons.healing);
+                  },
+                ),
+              )
             ],
           ),
         ),

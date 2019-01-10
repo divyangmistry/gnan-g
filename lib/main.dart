@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kon_banega_mokshadhipati/Service/apiservice.dart';
-import 'package:kon_banega_mokshadhipati/UI/card_swip_game.dart';
 import 'package:kon_banega_mokshadhipati/UI/forgot_password.dart';
 import 'package:kon_banega_mokshadhipati/UI/login_ui.dart';
 import 'package:kon_banega_mokshadhipati/UI/game_page.dart';
@@ -57,7 +56,6 @@ class MyApp extends StatelessWidget {
       routes: <String, WidgetBuilder>{
         '/gamePage': (BuildContext context) => new GamePage(),
         '/simpleGame': (BuildContext context) => new SimpleGame(),
-        '/cardSwipGame': (BuildContext context) => new CardSwipGame(),
         '/login': (BuildContext context) => new LoginUI(),
         '/registerPage': (BuildContext context) => new RegisterPage(),
         '/forgotPassword': (BuildContext context) => new ForgotPassword(),
