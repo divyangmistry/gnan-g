@@ -142,31 +142,30 @@ class LoginUIState extends State<LoginUI> {
       );
 
   void _login() {
-    // if (_formKey.currentState.validate()) {
-    // _formKey.currentState.save();
-    // print('LOGIN DATA');
-    // print('MOBILE : ${_data.mobile}');
-    // print('PASSWORD : ${_data.password}');
+    if (_formKey.currentState.validate()) {
+      _formKey.currentState.save();
+      print('LOGIN DATA');
+      print('MOBILE : ${_data.mobile}');
+      print('PASSWORD : ${_data.password}');
 
-    // var data;
+      var data;
 
-    // data = {'mobile': _data.mobile, 'password': _data.password};
+      data = {'mobile': _data.mobile, 'password': _data.password};
 
-    // _api.login(json.encode(data)).then((res) {
-    //   if (res.statusCode == 200) {
-    //     SharedPreferences.getInstance().then((localstorage) {
-    //       localstorage.setString(
-    //           'user_info', (json.decode(res.body)['user_info']).toString());
-    //     });
-    //     print(json.decode(res.body)['user_info']);
-    Navigator.pushReplacementNamed(context, '/simpleGame');
-    // } else {
-    //   _showError(json.decode(res.body)['msg'], true);
-    // }
-    // });
-    // } else {
-    //   _autoValidate = true;
-    // }
+      _api.login(json.encode(data)).then((res) {
+        if (res.statusCode == 200) {
+          SharedPreferences.getInstance().then((localstorage) {
+            localstorage.setString('user_info', res.body);
+          });
+          print(json.decode(res.body)['user_info']);
+          Navigator.pushReplacementNamed(context, '/simpleGame');
+        } else {
+          _showError(json.decode(res.body)['msg'], true);
+        }
+      });
+    } else {
+      _autoValidate = true;
+    }
   }
 
   void _showError(String msg, bool showCancel) {

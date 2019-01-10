@@ -1,6 +1,9 @@
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../Service/apiservice.dart';
 
 class SimpleGame extends StatefulWidget {
   @override
@@ -10,14 +13,27 @@ class SimpleGame extends StatefulWidget {
 }
 
 class SimpleGameState extends State<SimpleGame> {
-  int totalWrongHearts = 3;
+  int totalWrongHearts = 0;
   bool correctColor = false;
   bool initColor = true;
   int _value;
   int correctAnsCounter = 0;
   int wrongAnsCounter = 0;
   int totalAnswers = 1;
+  Map<dynamic, dynamic> _userData;
   List<bool> colorChangeAnswer = [false, false, false, false];
+  ApiService _api = new ApiService();
+
+  SimpleGameState() {
+    SharedPreferences.getInstance().then((localstorage) {
+      _userData = json.decode(localstorage.getString('user_info'));
+      print('USER DATA : ');
+      print(_userData);
+      setState(() {
+        totalWrongHearts = _userData['user_info']['lives'];
+      });
+    });
+  }
 
   void _correctAnswer(index) {
     var rng = new Random();
