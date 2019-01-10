@@ -1,12 +1,10 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:kon_banega_mokshadhipati/UI/login_ui.dart';
 
 class SimpleGame extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
     return new SimpleGameState();
   }
 }
@@ -54,6 +52,7 @@ class SimpleGameState extends State<SimpleGame> {
   void _gameOverDialogBox() {
     showDialog(
         context: context,
+        barrierDismissible: false,
         builder: (context) {
           return AlertDialog(
             shape: new RoundedRectangleBorder(
@@ -92,8 +91,8 @@ class SimpleGameState extends State<SimpleGame> {
                         borderRadius: BorderRadius.circular(5.0),
                         side: BorderSide(color: Colors.grey)),
                     onPressed: () {
-                      Navigator.popUntil(
-                          context, ModalRoute.withName('/login'));
+                      Navigator.pop(context);
+                      Navigator.pushReplacementNamed(context, '/login');
                       setState(() {
                         initColor = true;
                         correctColor = false;
@@ -163,7 +162,6 @@ class SimpleGameState extends State<SimpleGame> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return new Scaffold(
       // appBar: _appBarView(),
       body: _bodyView(),

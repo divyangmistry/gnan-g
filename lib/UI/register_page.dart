@@ -1,17 +1,14 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:kon_banega_mokshadhipati/UI/verify_otp_page.dart';
 import '../Service//apiservice.dart';
 
-enum AlertType {
-  Success,
-  Error
-}
+enum AlertType { Success, Error }
 
 class RegisterPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
     return new RegisterPageState();
   }
 }
@@ -21,21 +18,26 @@ class RegisterPageState extends State<RegisterPage> {
   final String register = 'register';
   _RegisterData _data = new _RegisterData();
   ApiService _api = new ApiService();
+  bool _autoValidate = false;
 
   _appBarView() {
     return new AppBar(
       centerTitle: true,
-      title: new Text('REGISTER',
-          style: TextStyle(
-              color: Colors.white,
-              fontSize: 30.0,
-              fontWeight: FontWeight.w300)),
+      title: new Text(
+        'REGISTER',
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 30.0,
+          fontWeight: FontWeight.w300,
+        ),
+      ),
     );
   }
 
   _bodyView() {
     return Form(
       key: _formKey,
+      autovalidate: _autoValidate,
       child: new Container(
         child: new ListView(
           padding: new EdgeInsets.all(20.0),
@@ -121,15 +123,16 @@ class RegisterPageState extends State<RegisterPage> {
               padding: EdgeInsets.only(top: 20.0),
             ),
             new TextFormField(
+              keyboardType: TextInputType.emailAddress,
               validator: (value) {
-                // Pattern pattern = r'^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+';
-                // RegExp regex = new RegExp(pattern);
+                Pattern pattern =
+                    r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+                RegExp regex = new RegExp(pattern);
                 if (value.isEmpty) {
                   return 'Email is required';
+                } else if (!regex.hasMatch(value)) {
+                  return 'Enter valid email';
                 }
-                // else if (!regex.hasMatch(pattern)) {
-                //   return 'Enter valid email';
-                // }
               },
               onSaved: (value) {
                 _data.email = value;
@@ -148,17 +151,18 @@ class RegisterPageState extends State<RegisterPage> {
               height: 50.0,
               width: 15.0,
               child: new RaisedButton(
-                  shape: new RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(300.0)),
-                  onPressed: _register,
-                  color: Theme.of(context).primaryColor,
-                  child: new Text(
-                    'Register',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 20.0),
-                  )),
+                shape: new RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(300.0)),
+                onPressed: _register,
+                color: Theme.of(context).primaryColor,
+                child: new Text(
+                  'Register',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 20.0),
+                ),
+              ),
             ),
           ],
         ),
@@ -167,29 +171,42 @@ class RegisterPageState extends State<RegisterPage> {
   }
 
   void _register() {
-    if (_formKey.currentState.validate()) {
-      _formKey.currentState.save();
-      print('REGISTER : ');
-      print(_data.name);
-      print(_data.mobile);
-      print(_data.password);
-      print(_data.email);
-      var data;
-      data = {
-        "mobile": _data.mobile,
-        "password": _data.password,
-        "name": _data.name,
-        "email": _data.email
-      };
-      _api.register(json.encode(data)).then((res) {
-        if (res.statusCode == 201) {
-          _showError('Success', json.decode(res.body)['msg'], false);
-          print(json.decode(res.body).toString());
-        } else {
-          _showError('Error', json.decode(res.body)['msg'] ? json.decode(res.body)['msg'] : '', false);
-        }
-      });
-    }
+    // TODO : Implement send OTP
+    // if (_formKey.currentState.validate()) {
+    //   _formKey.currentState.save();
+    //   print('REGISTER : ');
+    //   print(_data.name);
+    //   print(_data.mobile);
+    //   print(_data.password);
+    //   print(_data.email);
+    Navigator.pop(context);
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => VerifyOTP('register'),
+      ),
+    );
+    // var data;
+    // data = {
+    //   "mobile": _data.mobile,
+    //   "password": _data.password,
+    //   "name": _data.name,
+    //   "email": _data.email
+    // };
+    // _api.register(json.encode(data)).then((res) {
+    //   if (res.statusCode == 201) {
+    //     _showError('Success', json.decode(res.body)['msg'], false);
+    //     print(json.decode(res.body).toString());
+    //   } else {
+    //     _showError(
+    //         'Error',
+    //         json.decode(res.body)['msg'] ? json.decode(res.body)['msg'] : '',
+    //         false);
+    //   }
+    // });
+    // } else {
+    //   _autoValidate = true;
+    // }
   }
 
   void _showError(String title, String msg, bool showCancel) {
@@ -280,7 +297,6 @@ class RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return new Scaffold(
       appBar: _appBarView(),
       body: _bodyView(),

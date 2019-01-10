@@ -60,7 +60,6 @@ class MyApp extends StatelessWidget {
         '/registerPage': (BuildContext context) => new RegisterPage(),
         '/forgotPassword': (BuildContext context) => new ForgotPassword(),
         '/sendOtp': (BuildContext context) => new SendOTP(),
-        '/verifyOtp': (BuildContext context) => new VerifyOTP(),
       },
     );
   }
