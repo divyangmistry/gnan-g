@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:kon_banega_mokshadhipati/constans/sharedpref_constant.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -30,6 +31,14 @@ class ApiService {
     return res;
   }
 
+  Future<http.Response> getUserState(data) async {
+    //http.Response res = await http.post(_apiUrl + '/profileUpdate',
+    //    body: data, headers: headers);
+    String userStateRes = "{\r\n   \"results\": {\r\n       \"quiz_levels\": [\r\n           {\r\n               \"_id\": \"5c2b2ab18f19ebed466d9a82\",\r\n               \"level_index\": \"1\",\r\n               \"name\": \"Primary\",\r\n               \"level_type\": \"Regular\"\r\n           },\r\n           {\r\n               \"_id\": \"5c2b2abe8f19ebed466d9a83\",\r\n               \"level_index\": \"2\",\r\n               \"name\": \"Secondary\",\r\n               \"level_type\": \"Regular\"\r\n           }\r\n       ],\r\n       \"completed\": [\r\n           {\r\n               \"level\": 1,\r\n               \"score\": 1\r\n           }\r\n       ],\r\n       \"current\": [\r\n           {\r\n               \"user_mobile\": \"1234567891\",\r\n               \"question_st\": 1,\r\n               \"level\": 1,\r\n               \"score\": 2,\r\n               \"lives\": 4,\r\n               \"current_score\": 1,\r\n               \"completed\": false,\r\n               \"updatedAt\": \"2019-01-06T16:08:54.057Z\",\r\n               \"total_questions\": 5\r\n           }\r\n       ],\r\n       \"Question_Sta\": [\r\n           {\r\n               \"_id\": \"5c28fc2db305c24a23a69406\",\r\n               \"question_st\": 2\r\n           }\r\n       ]\r\n   }\r\n}";
+    return http.Response(userStateRes,200);
+    //return res;
+  }
+
 
   // Get Question Detail
   Future<http.Response> getQuestions(int level, int from, int to) async {
@@ -53,7 +62,7 @@ class ApiService {
   // Check Login Status
   Future<bool> checkLoginStatus() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (prefs.getString('userData') != null) {
+    if (prefs.getBool(SharedPrefConstant.b_isUserLoggedIn)) {
       return true;
     } else {
       return false;

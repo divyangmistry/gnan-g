@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kon_banega_mokshadhipati/model/levelinfo.dart';
+import 'package:kon_banega_mokshadhipati/model/quizlevel.dart';
 
 class LevelUI extends StatefulWidget {
 
@@ -12,12 +12,12 @@ class LevelUI extends StatefulWidget {
 }
 
 class LevelUIState extends State<LevelUI> {
-  final List<LevelInfo> levelinfos = [];
+  final List<QuizLevel> levelinfos = [];
 
   @override
   Widget build(BuildContext context) {
-    levelinfos.add(LevelInfo(1, "Level 1"));
-    levelinfos.add(LevelInfo(2, "Level 2"));
+    levelinfos.add(QuizLevel(1, "Level 1"));
+    levelinfos.add(QuizLevel(2, "Level 2"));
     return new Scaffold(
       appBar: _appBarView(),
       body: _bodyView(),
@@ -47,7 +47,7 @@ class LevelUIState extends State<LevelUI> {
     ),);
   }
 
-  Widget getLevelButton(LevelInfo levelInfo) {
+  Widget getLevelButton(QuizLevel levelInfo) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: new RaisedButton(

@@ -1,12 +1,12 @@
-class LevelInfo {
+class QuizLevel {
   int levelIndex;
   String name;
   String levelType;
 
-  LevelInfo(this.levelIndex,this.name);
+  QuizLevel(this.levelIndex,this.name);
 
-  LevelInfo.fromJson(Map<String, dynamic> json) {
-    levelIndex = json['level_index'];
+  QuizLevel.fromJson(Map<String, dynamic> json) {
+    levelIndex = int.parse(json['level_index']);
     name = json['name'];
     levelType = json['level_type'];
   }
@@ -18,4 +18,11 @@ class LevelInfo {
     data['level_type'] = this.levelType;
     return data;
   }
+
+  @override
+  String toString() {
+    return 'QuizLevel{levelIndex: $levelIndex, name: $name, levelType: $levelType}';
+  }
+
+
 }

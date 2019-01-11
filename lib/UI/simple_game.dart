@@ -37,12 +37,12 @@ class SimpleGameState extends State<SimpleGame> {
         totalWrongHearts = _userData['user_info']['lives'];
       });
     });*/
-    userLives = CacheData.userSession.currentStat.lives;
+    userLives = CacheData.userState.currentStat.lives;
     _loadAllQuestions();
   }
 
   _loadAllQuestions() {
-    currentState = CacheData.userSession.currentStat;
+    currentState = CacheData.userState.currentStat;
     _api.getQuestions(currentState.level,currentState.queSt,currentState.totalQues).then((res) {
       setState(() {
         if (res.statusCode == 200) {

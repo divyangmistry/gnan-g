@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kon_banega_mokshadhipati/Service/apiservice.dart';
@@ -8,6 +10,8 @@ import 'package:kon_banega_mokshadhipati/UI/register_page.dart';
 import 'package:kon_banega_mokshadhipati/UI/send_otp_page.dart';
 import 'package:kon_banega_mokshadhipati/UI/simple_game.dart';
 import 'package:kon_banega_mokshadhipati/UI/verify_otp_page.dart';
+import 'package:kon_banega_mokshadhipati/model/CacheData.dart';
+import 'package:kon_banega_mokshadhipati/model/user_state.dart';
 
 void main() {
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
@@ -24,20 +28,36 @@ class MyApp extends StatelessWidget {
     main();
   }
 
+  MyApp() {
+    main();
+  }
   Widget _defaultHome = new LoginUI();
   void main() async {
-    bool _result = await appAuth.checkLoginStatus();
+    bool _isAlreadyLoggedIn = await appAuth.checkLoginStatus();
+    _isAlreadyLoggedIn = true;
     bool _isIntroDone = await appAuth.checkIsIntoVisited();
     _theme = await appAuth.checkTheme();
     if (_isIntroDone) {
-      if (_result) {
-        _defaultHome = new GamePage();
+      if (_isAlreadyLoggedIn) {
+        _loadUserState();
+        _defaultHome = new SimpleGame();
       }
     } else {
       _defaultHome = new LoginUI();
     }
   }
 
+  _loadUserState() async {
+    await appAuth.getUserState(null).then((res) {
+      if (res.statusCode == 200) {
+        Map<String,dynamic> userstateStr = json.decode(res.body)['results'];
+        print(userstateStr);
+        UserState userState = UserState.fromJson(userstateStr);
+        CacheData.userState = userState;
+      }
+    });
+
+  }
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {

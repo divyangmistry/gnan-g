@@ -1,11 +1,9 @@
-import 'package:kon_banega_mokshadhipati/model/usersession.dart';
+import 'package:kon_banega_mokshadhipati/model/user_state.dart';
 
-import 'levelinfo.dart';
-import 'usersession.dart';
+import 'quizlevel.dart';
 class CacheData {
 
-    static List<LevelInfo> levelInfos;
-    static UserSession userSession;
-
+    static List<QuizLevel> levelInfos;
+    static UserState userState;
 
 }
