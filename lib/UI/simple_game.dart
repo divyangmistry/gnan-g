@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:kon_banega_mokshadhipati/model/CacheData.dart';
+import 'package:kon_banega_mokshadhipati/model/current-stat.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Service/apiservice.dart';
 import '../model/question.dart';
@@ -13,7 +15,7 @@ class SimpleGame extends StatefulWidget {
 }
 
 class SimpleGameState extends State<SimpleGame> {
-  int totalWrongHearts = 3;
+  int userLives = 3;
   int correctAnsCounter = 0;
   int wrongAnsCounter = 0;
   int totalAnswers = 1;
@@ -23,9 +25,9 @@ class SimpleGameState extends State<SimpleGame> {
   Map<dynamic, dynamic> _userData;
   List<Question> questions;
   Question question;
-  List<bool> colorChangeAnswer = [false, false, false, false];
+  int currentQueIndex;
   ApiService _api = new ApiService();
-
+  CurrentState currentState;
   SimpleGameState() {
     /*SharedPreferences.getInstance().then((localstorage) {
       _userData = json.decode(localstorage.getString('user_info'));
@@ -35,11 +37,13 @@ class SimpleGameState extends State<SimpleGame> {
         totalWrongHearts = _userData['user_info']['lives'];
       });
     });*/
+    userLives = CacheData.userSession.currentStat.lives;
     _loadAllQuestions();
   }
 
   _loadAllQuestions() {
-    _api.getQuestions(1,1,10).then((res) {
+    currentState = CacheData.userSession.currentStat;
+    _api.getQuestions(currentState.level,currentState.queSt,currentState.totalQues).then((res) {
       setState(() {
         if (res.statusCode == 200) {
           String questionList = res.body;
@@ -47,6 +51,7 @@ class SimpleGameState extends State<SimpleGame> {
           questions = d1.map((queJson) => Question.fromJson(queJson)).toList();
           print(questions);
           question = questions.getRange(0, 1).first;
+          currentQueIndex = 0;
         } else {
           //_showError(json.decode(res.body)['msg'], true);
         }
@@ -69,13 +74,16 @@ class SimpleGameState extends State<SimpleGame> {
       } else {
         isGivenCorrectAns = false;
         wrongAnsCounter = wrongAnsCounter + 1;
-        if (totalWrongHearts >= 1) {
-          totalWrongHearts = totalWrongHearts - 1;
+        if (userLives >= 1) {
+          userLives = userLives - 1;
         } else
           return _gameOverDialogBox();
       }
       totalAnswers = totalAnswers + 1;
-      _dialogBox(isGivenCorrectAns);
+      bool isCompletedLevel = false;
+      if(currentQueIndex == questions.length -1)
+        isCompletedLevel = true;
+      _dialogBox(isGivenCorrectAns, isCompletedLevel);
     });
   }
 
@@ -133,7 +141,17 @@ class SimpleGameState extends State<SimpleGame> {
         });
   }
 
-  void _dialogBox(isSelectedAnsCorrect) {
+  void _dialogBox(isSelectedAnsCorrect, isCompletedLevel) {
+    String msg = "";
+    if(isCompletedLevel) {
+      msg = "Level " + currentState.level.toString() + " is Completed";
+    } else {
+      if(isSelectedAnsCorrect)
+        msg = "You gave correct answer";
+      else
+        msg = "You gave wrong answer";
+    }
+
     showDialog(
         context: context,
         builder: (context) {
@@ -153,9 +171,7 @@ class SimpleGameState extends State<SimpleGame> {
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 new Text(
-                    isSelectedAnsCorrect
-                        ? 'You gave correct answer!'
-                        : 'You gave wrong answer',
+                    msg,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         color: Colors.blueGrey,
@@ -179,8 +195,11 @@ class SimpleGameState extends State<SimpleGame> {
                     onPressed: () {
                       Navigator.pop(context);
                       setState(() {
-                        _reInit();
-                        _loadNextQuestion();
+                        if(!isCompletedLevel) {
+                          _reInit();
+                          _loadNextQuestion();
+                        }
+
                       });
                     }),
               ],
@@ -189,10 +208,14 @@ class SimpleGameState extends State<SimpleGame> {
         });
   }
 
-  int tempCurrentQue = 0;
   _loadNextQuestion() {
-    tempCurrentQue++;
-    question = questions.getRange(tempCurrentQue, tempCurrentQue + 1).first;
+    if(currentQueIndex < questions.length - 1) {
+      currentQueIndex++;
+      question = questions.getRange(currentQueIndex, currentQueIndex + 1).first;
+    } else {
+
+    }
+
     //question = Question(tempQue, "MCQ", "This is " + tempQue.toString() + " Question", options, answerIndex);
   }
   @override
@@ -236,7 +259,7 @@ class SimpleGameState extends State<SimpleGame> {
               child: new ListView.builder(
                 padding: EdgeInsets.only(left: 60.0),
                 scrollDirection: Axis.horizontal,
-                itemCount: totalWrongHearts,
+                itemCount: userLives,
                 itemBuilder: (context, index) {
                   return new Icon(Icons.healing);
                 },
@@ -303,7 +326,7 @@ class SimpleGameState extends State<SimpleGame> {
             ),
             new Center(
               child: new Text(
-                "QUESTION " + question.questionSt.toString(),
+                "QUESTION " + question.index.toString(),
                 style: TextStyle(
                     color: Colors.blueGrey,
                     fontSize: 20.0,
@@ -319,7 +342,7 @@ class SimpleGameState extends State<SimpleGame> {
               padding: EdgeInsets.all(20.0),
               child: new Center(
                 child: new Text(
-                  question.question,
+                  question.text,
                   style: TextStyle(
                       color: Colors.blueGrey,
                       fontSize: 20.0,

@@ -1,26 +1,26 @@
 import 'option.dart';
 class Question {
-  int questionSt;
+  int index;
   String questionType;
-  String question;
+  String text;
   List<Options> options;
   int score;
   int level;
   int answer;
 
   Question(
-      {this.questionSt,
+      {this.index,
         this.questionType,
-        this.question,
+        this.text,
         this.options,
         this.score,
         this.level,
         this.answer});
 
   Question.fromJson(Map<String, dynamic> json) {
-    questionSt = json['question_st'];
+    index = json['question_st'];
     questionType = json['question_type'];
-    question = json['question'];
+    text = json['question'];
     if (json['options'] != null) {
       options = new List<Options>();
       json['options'].forEach((v) {
@@ -40,9 +40,9 @@ class Question {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['question_st'] = this.questionSt;
+    data['question_st'] = this.index;
     data['question_type'] = this.questionType;
-    data['question'] = this.question;
+    data['question'] = this.text;
     if (this.options != null) {
       data['options'] = this.options.map((v) => v.toJson()).toList();
     }
@@ -54,7 +54,7 @@ class Question {
 
   @override
   String toString() {
-    return 'Question{questionSt: $questionSt, questionType: $questionType, question: $question, options: $options, score: $score, level: $level, answer: $answer}';
+    return 'Question{questionSt: $index, questionType: $questionType, question: $text, options: $options, score: $score, level: $level, answer: $answer}';
   }
 
 
