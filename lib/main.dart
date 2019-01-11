@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kon_banega_mokshadhipati/Service/apiservice.dart';
 import 'package:kon_banega_mokshadhipati/UI/forgot_password.dart';
+import 'package:kon_banega_mokshadhipati/UI/level_ui.dart';
 import 'package:kon_banega_mokshadhipati/UI/login_ui.dart';
 import 'package:kon_banega_mokshadhipati/UI/game_page.dart';
 import 'package:kon_banega_mokshadhipati/UI/register_page.dart';
@@ -60,6 +61,7 @@ class MyApp extends StatelessWidget {
         '/registerPage': (BuildContext context) => new RegisterPage(),
         '/forgotPassword': (BuildContext context) => new ForgotPassword(),
         '/sendOtp': (BuildContext context) => new SendOTP(),
+        '/level': (BuildContext context) => new LevelUI(),
       },
     );
   }
