@@ -2,9 +2,11 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:kon_banega_mokshadhipati/model/CacheData.dart';
+import 'package:kon_banega_mokshadhipati/model/current-stat.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Service/apiservice.dart';
-
+import '../model/question.dart';
 class SimpleGame extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -13,56 +15,76 @@ class SimpleGame extends StatefulWidget {
 }
 
 class SimpleGameState extends State<SimpleGame> {
-  int totalWrongHearts = 0;
-  bool correctColor = false;
-  bool initColor = true;
-  int _value;
+  int userLives = 3;
   int correctAnsCounter = 0;
   int wrongAnsCounter = 0;
   int totalAnswers = 1;
+  bool isGivenCorrectAns = false;
+  int correctAnsIndex = -1;
+  int selectedAnsIndex = -1;
   Map<dynamic, dynamic> _userData;
-  List<bool> colorChangeAnswer = [false, false, false, false];
+  List<Question> questions;
+  Question question;
+  int currentQueIndex;
   ApiService _api = new ApiService();
-
+  CurrentState currentState;
   SimpleGameState() {
-    SharedPreferences.getInstance().then((localstorage) {
+    /*SharedPreferences.getInstance().then((localstorage) {
       _userData = json.decode(localstorage.getString('user_info'));
       print('USER DATA : ');
       print(_userData);
       setState(() {
         totalWrongHearts = _userData['user_info']['lives'];
       });
-    });
+    });*/
+    userLives = CacheData.userState.currentStat.lives;
+    _loadAllQuestions();
   }
 
-  void _correctAnswer(index) {
-    var rng = new Random();
-    for (var i = 0; i < 1; i++) {
-      _value = rng.nextInt(4);
-    }
-    if (index == _value) {
+  _loadAllQuestions() {
+    currentState = CacheData.userState.currentStat;
+    _api.getQuestions(currentState.level,currentState.queSt,currentState.totalQues).then((res) {
       setState(() {
-        correctColor = true;
-        initColor = false;
-        correctAnsCounter = correctAnsCounter + 1;
-        totalAnswers = totalAnswers + 1;
-        colorChangeAnswer[index] = true;
+        if (res.statusCode == 200) {
+          String questionList = res.body;
+          List<dynamic> d1 = json.decode(questionList);
+          questions = d1.map((queJson) => Question.fromJson(queJson)).toList();
+          print(questions);
+          question = questions.getRange(0, 1).first;
+          currentQueIndex = 0;
+        } else {
+          //_showError(json.decode(res.body)['msg'], true);
+        }
       });
-      // return _dialogBox(correctColor);
-    } else {
-      setState(() {
-        correctColor = false;
-        initColor = false;
+    });
+  }
+  _reInit() {
+    isGivenCorrectAns = false;
+    correctAnsIndex = -1;
+    selectedAnsIndex = -1;
+  }
+
+  void _onOptionSelect(index) {
+    setState(() {
+      correctAnsIndex = question.answer - 1;
+      selectedAnsIndex = index;
+      if (selectedAnsIndex == correctAnsIndex) {
+        isGivenCorrectAns = true;
+        correctAnsCounter = correctAnsCounter + 1;
+      } else {
+        isGivenCorrectAns = false;
         wrongAnsCounter = wrongAnsCounter + 1;
-        totalAnswers = totalAnswers + 1;
-        if (totalWrongHearts >= 1) {
-          totalWrongHearts = totalWrongHearts - 1;
-          colorChangeAnswer[index] = false;
-          // return _dialogBox(correctColor);
+        if (userLives >= 1) {
+          userLives = userLives - 1;
         } else
           return _gameOverDialogBox();
-      });
-    }
+      }
+      totalAnswers = totalAnswers + 1;
+      bool isCompletedLevel = false;
+      if(currentQueIndex == questions.length -1)
+        isCompletedLevel = true;
+      _dialogBox(isGivenCorrectAns, isCompletedLevel);
+    });
   }
 
   void _gameOverDialogBox() {
@@ -94,7 +116,7 @@ class SimpleGameState extends State<SimpleGame> {
                         fontWeight: FontWeight.w300)),
                 SizedBox(height: 20.0),
                 new FlatButton.icon(
-                    icon: correctColor
+                    icon: isGivenCorrectAns
                         ? Icon(
                             Icons.done,
                             color: Colors.green,
@@ -102,7 +124,7 @@ class SimpleGameState extends State<SimpleGame> {
                         : Icon(Icons.close, color: Colors.red),
                     label: new Text('OK!',
                         style: TextStyle(
-                            color: correctColor ? Colors.green : Colors.red)),
+                            color: isGivenCorrectAns ? Colors.green : Colors.red)),
                     shape: new RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(5.0),
                         side: BorderSide(color: Colors.grey)),
@@ -110,8 +132,7 @@ class SimpleGameState extends State<SimpleGame> {
                       Navigator.pop(context);
                       Navigator.pushReplacementNamed(context, '/login');
                       setState(() {
-                        initColor = true;
-                        correctColor = false;
+                        isGivenCorrectAns = false;
                       });
                     }),
               ],
@@ -120,7 +141,17 @@ class SimpleGameState extends State<SimpleGame> {
         });
   }
 
-  void _dialogBox(correctColor) {
+  void _dialogBox(isSelectedAnsCorrect, isCompletedLevel) {
+    String msg = "";
+    if(isCompletedLevel) {
+      msg = "Level " + currentState.level.toString() + " is Completed";
+    } else {
+      if(isSelectedAnsCorrect)
+        msg = "You gave correct answer";
+      else
+        msg = "You gave wrong answer";
+    }
+
     showDialog(
         context: context,
         builder: (context) {
@@ -129,10 +160,10 @@ class SimpleGameState extends State<SimpleGame> {
               borderRadius: BorderRadius.circular(7.0),
             ),
             title: new Text(
-              correctColor ? 'Success!' : 'LOL !',
+              isSelectedAnsCorrect ? 'Success!' : 'LOL !',
               textAlign: TextAlign.center,
               style: TextStyle(
-                  color: correctColor ? Colors.green : Colors.red,
+                  color: isSelectedAnsCorrect ? Colors.green : Colors.red,
                   fontSize: 30.0,
                   fontWeight: FontWeight.w800),
             ),
@@ -140,9 +171,7 @@ class SimpleGameState extends State<SimpleGame> {
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 new Text(
-                    correctColor
-                        ? 'You gave correct answer!'
-                        : 'You gave wrong answer',
+                    msg,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         color: Colors.blueGrey,
@@ -151,23 +180,26 @@ class SimpleGameState extends State<SimpleGame> {
                         fontWeight: FontWeight.w300)),
                 SizedBox(height: 20.0),
                 new FlatButton.icon(
-                    icon: correctColor
+                    icon: isSelectedAnsCorrect
                         ? Icon(
                             Icons.done,
                             color: Colors.green,
                           )
                         : Icon(Icons.close, color: Colors.red),
-                    label: new Text(correctColor ? 'OK!' : 'Try Again!',
+                    label: new Text('Next',
                         style: TextStyle(
-                            color: correctColor ? Colors.green : Colors.red)),
+                            color: isSelectedAnsCorrect ? Colors.green : Colors.red)),
                     shape: new RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(5.0),
                         side: BorderSide(color: Colors.grey)),
                     onPressed: () {
                       Navigator.pop(context);
                       setState(() {
-                        initColor = true;
-                        correctColor = false;
+                        if(!isCompletedLevel) {
+                          _reInit();
+                          _loadNextQuestion();
+                        }
+
                       });
                     }),
               ],
@@ -176,51 +208,68 @@ class SimpleGameState extends State<SimpleGame> {
         });
   }
 
+  _loadNextQuestion() {
+    if(currentQueIndex < questions.length - 1) {
+      currentQueIndex++;
+      question = questions.getRange(currentQueIndex, currentQueIndex + 1).first;
+    } else {
+
+    }
+
+    //question = Question(tempQue, "MCQ", "This is " + tempQue.toString() + " Question", options, answerIndex);
+  }
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
       // appBar: _appBarView(),
       body: _bodyView(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: correctColor ? Colors.green : Colors.red,
-        onPressed: () => debugPrint("yo"),
-        child: new Icon(Icons.chevron_right),
-      ),
-      bottomNavigationBar: BottomAppBar(
-        shape: CircularNotchedRectangle(),
-        notchMargin: 10.0,
-        child: new Container(
-          height: 50.0,
-          child: new Row(
-            // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              new Container(
-                width: MediaQuery.of(context).size.width / 2,
-                alignment: Alignment.center,
-                child: new Text(
-                  "Correct Answer's : $correctAnsCounter",
-                  style: TextStyle(color: Colors.green, fontSize: 15.0),
-                ),
+      floatingActionButton: _floatingActionButton(),
+      bottomNavigationBar: _bottomBar(),
+    );
+  }
+
+  _floatingActionButton() {
+    return FloatingActionButton(
+      backgroundColor: isGivenCorrectAns ? Colors.green : Colors.red,
+      onPressed: () => debugPrint("yo"),
+      child: new Icon(Icons.chevron_right),
+    );
+  }
+
+  _bottomBar() {
+    return BottomAppBar(
+      shape: CircularNotchedRectangle(),
+      notchMargin: 10.0,
+      child: new Container(
+        height: 50.0,
+        child: new Row(
+          // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            new Container(
+              width: MediaQuery.of(context).size.width / 2,
+              alignment: Alignment.center,
+              child: new Text(
+                "Correct Answer's : $correctAnsCounter",
+                style: TextStyle(color: Colors.green, fontSize: 15.0),
               ),
-              new Container(
-                width: MediaQuery.of(context).size.width / 2,
-                child: new ListView.builder(
-                  padding: EdgeInsets.only(left: 60.0),
-                  scrollDirection: Axis.horizontal,
-                  itemCount: totalWrongHearts,
-                  itemBuilder: (context, index) {
-                    return new Icon(Icons.healing);
-                  },
-                ),
-              )
-            ],
-          ),
+            ),
+            new Container(
+              width: MediaQuery.of(context).size.width / 2,
+              child: new ListView.builder(
+                padding: EdgeInsets.only(left: 60.0),
+                scrollDirection: Axis.horizontal,
+                itemCount: userLives,
+                itemBuilder: (context, index) {
+                  return new Icon(Icons.healing);
+                },
+              ),
+            )
+          ],
         ),
       ),
     );
   }
-
   _appBarView() {
     return new AppBar(
       title: new Text('Score here!'),
@@ -244,19 +293,22 @@ class SimpleGameState extends State<SimpleGame> {
   }
 
   _bodyView() {
+    if(question == null) {
+      return Container();
+    }
     return new Container(
       padding: EdgeInsets.only(top: 30.0),
       decoration: BoxDecoration(
         gradient: LinearGradient(
             stops: [0.1, 0.5, 0.7, 0.9],
-            colors: initColor
+            colors: (selectedAnsIndex == -1)
                 ? [
                     Colors.blueGrey,
                     Colors.blueGrey,
                     Colors.blueGrey,
                     Colors.blueGrey
                   ]
-                : (correctColor
+                : (isGivenCorrectAns
                     ? [Colors.green, Colors.green, Colors.green, Colors.green]
                     : [Colors.red, Colors.red, Colors.red, Colors.red]),
             begin: FractionalOffset.bottomCenter,
@@ -274,10 +326,10 @@ class SimpleGameState extends State<SimpleGame> {
             ),
             new Center(
               child: new Text(
-                "QUESTION $totalAnswers",
+                "QUESTION " + question.index.toString(),
                 style: TextStyle(
                     color: Colors.blueGrey,
-                    fontSize: 25.0,
+                    fontSize: 20.0,
                     fontWeight: FontWeight.w600),
               ),
             ),
@@ -290,7 +342,7 @@ class SimpleGameState extends State<SimpleGame> {
               padding: EdgeInsets.all(20.0),
               child: new Center(
                 child: new Text(
-                  'Are you ready to role ?',
+                  question.text,
                   style: TextStyle(
                       color: Colors.blueGrey,
                       fontSize: 20.0,
@@ -302,162 +354,37 @@ class SimpleGameState extends State<SimpleGame> {
               padding: EdgeInsets.only(top: 5.0),
             ),
             new Container(
-              alignment: Alignment.bottomCenter,
-              child: Column(
-                children: <Widget>[
-                  new Container(
-                    color: colorChangeAnswer[0] == true ? Colors.green : null,
-                    child: new ListTile(
-                      leading: new CircleAvatar(
-                        child: new Text('A'),
-                      ),
-                      title: new Text('Option 01'),
-                      onTap: () => _correctAnswer(0),
-                    ),
-                  ),
-                  new Container(
-                    color: colorChangeAnswer[1] == true ? Colors.green : null,
-                    child: new ListTile(
-                      leading: new CircleAvatar(
-                        child: new Text('B'),
-                      ),
-                      title: new Text('Option 02'),
-                      onTap: () => _correctAnswer(1),
-                    ),
-                  ),
-                  new Container(
-                    color: colorChangeAnswer[2] == true ? Colors.green : null,
-                    child: new ListTile(
-                      leading: new CircleAvatar(
-                        child: new Text('C'),
-                      ),
-                      title: new Text('Option 03'),
-                      onTap: () => _correctAnswer(2),
-                    ),
-                  ),
-                  new Container(
-                    color: colorChangeAnswer[3] == true ? Colors.green : null,
-                    child: new ListTile(
-                      leading: new CircleAvatar(
-                        child: new Text('D'),
-                      ),
-                      title: new Text('Option 04'),
-                      onTap: () => _correctAnswer(3),
-                    ),
-                  )
-                ],
+              height: MediaQuery.of(context).size.height / 3.1,
+              // alignment: Alignment.bottomCenter,
+              child: ListView.builder(
+                itemCount: question.options.length,
+                itemBuilder: (context, index) {
+                  return _getOptionWidget(index);
+                },
               ),
             ),
-
-            // new Container(
-            //   alignment: Alignment.bottomCenter,
-            //   child: new Row(
-            //     crossAxisAlignment: CrossAxisAlignment.end,
-            //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            //     children: <Widget>[
-            //       new Container(
-            //         height: 50.0,
-            //         width: 120.0,
-            //         child: new RaisedButton(
-            //           elevation: 3.0,
-            //           color: Colors.orange.shade300,
-            //           shape: RoundedRectangleBorder(
-            //               borderRadius: BorderRadius.circular(10.0)),
-            //           onPressed: () {
-            //             setState(() {
-            //               correctColor = true;
-            //               initColor = false;
-            //             });
-            //           },
-            //           child: new Text(
-            //             'Option 01',
-            //             style: TextStyle(
-            //                 fontSize: 15.0, fontWeight: FontWeight.w700),
-            //           ),
-            //         ),
-            //       ),
-            //       new Container(
-            //         height: 50.0,
-            //         width: 120.0,
-            //         child: new RaisedButton(
-            //           elevation: 3.0,
-            //           color: Colors.orange.shade300,
-            //           shape: RoundedRectangleBorder(
-            //               borderRadius: BorderRadius.circular(10.0)),
-            //           onPressed: () {
-            //             setState(() {
-            //               correctColor = false;
-            //               initColor = false;
-            //             });
-            //           },
-            //           child: new Text(
-            //             'Option 02',
-            //             style: TextStyle(
-            //                 fontSize: 15.0, fontWeight: FontWeight.w700),
-            //           ),
-            //         ),
-            //       ),
-            //     ],
-            //   ),
-            // ),
-            // new Padding(
-            //   padding: EdgeInsets.only(top: 20.0),
-            // ),
-            // new Container(
-            //   alignment: Alignment.bottomCenter,
-            //   child: new Row(
-            //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            //     children: <Widget>[
-            //       new Container(
-            //         height: 50.0,
-            //         width: 120.0,
-            //         child: new RaisedButton(
-            //           elevation: 3.0,
-            //           color: Colors.orange.shade300,
-            //           shape: RoundedRectangleBorder(
-            //               borderRadius: BorderRadius.circular(10.0)),
-            //           onPressed: () {
-            //             setState(() {
-            //               correctColor = false;
-            //               initColor = false;
-            //             });
-            //           },
-            //           child: new Text(
-            //             'Option 03',
-            //             style: TextStyle(
-            //                 fontSize: 15.0, fontWeight: FontWeight.w700),
-            //           ),
-            //         ),
-            //       ),
-            //       new Container(
-            //         height: 50.0,
-            //         width: 120.0,
-            //         child: new RaisedButton(
-            //           elevation: 3.0,
-            //           color: Colors.orange.shade300,
-            //           shape: RoundedRectangleBorder(
-            //               borderRadius: BorderRadius.circular(10.0)),
-            //           onPressed: () {
-            //             setState(() {
-            //               correctColor = false;
-            //               initColor = false;
-            //             });
-            //           },
-            //           child: new Text(
-            //             'Option 04',
-            //             style: TextStyle(
-            //                 fontSize: 15.0, fontWeight: FontWeight.w700),
-            //           ),
-            //         ),
-            //       ),
-            //     ],
-            //   ),
-            // ),
             new Padding(
               padding: EdgeInsets.only(bottom: 50.0),
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  _getOptionWidget(index) {
+    return new Card(
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(30.0))),
+      color: selectedAnsIndex == index
+          ? selectedAnsIndex == correctAnsIndex ? Colors.green : Colors.red
+          : null,
+      child: new ListTile(
+        leading: new CircleAvatar(
+          child: new Text('$index'),
+        ),
+        title: new Text(question.options.getRange(index, index + 1).first.option),
+        onTap: () => _onOptionSelect(index),
       ),
     );
   }

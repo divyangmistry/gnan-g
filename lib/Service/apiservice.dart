@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:kon_banega_mokshadhipati/constans/sharedpref_constant.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -30,6 +31,27 @@ class ApiService {
     return res;
   }
 
+  Future<http.Response> getUserState(data) async {
+    //http.Response res = await http.post(_apiUrl + '/profileUpdate',
+    //    body: data, headers: headers);
+    String userStateRes = "{\r\n   \"results\": {\r\n       \"quiz_levels\": [\r\n           {\r\n               \"_id\": \"5c2b2ab18f19ebed466d9a82\",\r\n               \"level_index\": \"1\",\r\n               \"name\": \"Primary\",\r\n               \"level_type\": \"Regular\"\r\n           },\r\n           {\r\n               \"_id\": \"5c2b2abe8f19ebed466d9a83\",\r\n               \"level_index\": \"2\",\r\n               \"name\": \"Secondary\",\r\n               \"level_type\": \"Regular\"\r\n           }\r\n       ],\r\n       \"completed\": [\r\n           {\r\n               \"level\": 1,\r\n               \"score\": 1\r\n           }\r\n       ],\r\n       \"current\": [\r\n           {\r\n               \"user_mobile\": \"1234567891\",\r\n               \"question_st\": 1,\r\n               \"level\": 1,\r\n               \"score\": 2,\r\n               \"lives\": 4,\r\n               \"current_score\": 1,\r\n               \"completed\": false,\r\n               \"updatedAt\": \"2019-01-06T16:08:54.057Z\",\r\n               \"total_questions\": 5\r\n           }\r\n       ],\r\n       \"Question_Sta\": [\r\n           {\r\n               \"_id\": \"5c28fc2db305c24a23a69406\",\r\n               \"question_st\": 2\r\n           }\r\n       ]\r\n   }\r\n}";
+    return http.Response(userStateRes,200);
+    //return res;
+  }
+
+
+  // Get Question Detail
+  Future<http.Response> getQuestions(int level, int from, int to) async {
+    var data;
+    data = {'level': level, 'QuestaionFrom': from , 'QuestaionTo' : to};
+    //http.Response res = await http.post(_apiUrl + '/questions',
+    //    body: data, headers: headers);
+    String questionList = "[\r\n   {\r\n       \"question_st\": 1,\r\n       \"question_type\": \"MCQ\",\r\n       \"question\": \"What is question?\",\r\n       \"options\": [\r\n           {\r\n               \"option_number\": 1,\r\n               \"option\": \"a\"\r\n           },\r\n           {\r\n               \"option_number\": 2,\r\n               \"option\": \"b\"\r\n           },\r\n           {\r\n               \"option_number\": 3,\r\n               \"option\": \"c\"\r\n           },\r\n           {\r\n               \"option_number\": 4,\r\n               \"option\": \"d\"\r\n           }\r\n       ],\r\n       \"score\": 1,\r\n       \"level\": 1,\r\n       \"answer\": \"d\"\r\n   },\r\n   {\r\n       \"question_st\": 2,\r\n       \"question_type\": \"MCQ\",\r\n       \"question\": \"What is question?\",\r\n       \"options\": [\r\n           {\r\n               \"option_number\": 1,\r\n               \"option\": \"a\"\r\n           },\r\n           {\r\n               \"option_number\": 2,\r\n               \"option\": \"b\"\r\n           },\r\n           {\r\n               \"option_number\": 3,\r\n               \"option\": \"c\"\r\n           },\r\n           {\r\n               \"option_number\": 4,\r\n               \"option\": \"d\"\r\n           }\r\n       ],\r\n       \"score\": 1,\r\n       \"level\": 1,\r\n       \"answer\": \"d\"\r\n   },\r\n   {\r\n       \"question_st\": 3,\r\n       \"question_type\": \"MCQ\",\r\n       \"question\": \"What is question?\",\r\n       \"options\": [\r\n           {\r\n               \"option_number\": 1,\r\n               \"option\": \"a\"\r\n           },\r\n           {\r\n               \"option_number\": 2,\r\n               \"option\": \"b\"\r\n           },\r\n           {\r\n               \"option_number\": 3,\r\n               \"option\": \"c\"\r\n           },\r\n           {\r\n               \"option_number\": 4,\r\n               \"option\": \"d\"\r\n           }\r\n       ],\r\n       \"score\": 1,\r\n       \"level\": 1,\r\n       \"answer\": \"d\"\r\n   },\r\n   {\r\n       \"question_st\": 4,\r\n       \"question_type\": \"MCQ\",\r\n       \"question\": \"What is question?\",\r\n       \"options\": [\r\n           {\r\n               \"option_number\": 1,\r\n               \"option\": \"a\"\r\n           },\r\n           {\r\n               \"option_number\": 2,\r\n               \"option\": \"b\"\r\n           },\r\n           {\r\n               \"option_number\": 3,\r\n               \"option\": \"c\"\r\n           },\r\n           {\r\n               \"option_number\": 4,\r\n               \"option\": \"d\"\r\n           }\r\n       ],\r\n       \"score\": 1,\r\n       \"level\": 1,\r\n       \"answer\": \"d\"\r\n   }\r\n]";
+    return http.Response(questionList,200);
+    //return res;
+  }
+
+
   // Logout
   Future<void> logout() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -40,7 +62,7 @@ class ApiService {
   // Check Login Status
   Future<bool> checkLoginStatus() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (prefs.getString('userData') != null) {
+    if (prefs.getBool(SharedPrefConstant.b_isUserLoggedIn)) {
       return true;
     } else {
       return false;
@@ -126,13 +148,6 @@ class ApiService {
   // Generate Ticket
   Future<http.Response> generateTicketForAK(data) async {
     http.Response res = await http.post(_apiUrl + '/generateTicketForAK',
-        body: data, headers: headers);
-    return res;
-  }
-
-  // Get AK Question Detail
-  Future<http.Response> getQuestions(data) async {
-    http.Response res = await http.post(_apiUrl + '/get_questions',
         body: data, headers: headers);
     return res;
   }
