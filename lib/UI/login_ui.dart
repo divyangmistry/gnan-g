@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'package:kon_banega_mokshadhipati/UI/verify_otp_page.dart';
+import 'package:kon_banega_mokshadhipati/model/CacheData.dart';
+import 'package:kon_banega_mokshadhipati/model/user_state.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import '../Service/apiservice.dart';
@@ -160,7 +162,8 @@ class LoginUIState extends State<LoginUI> {
     //         localstorage.setBool(SharedPrefConstant.b_isUserLoggedIn, true);
     //       });
     //       print(json.decode(res.body)['user_info']);
-    Navigator.pushReplacementNamed(context, '/level');
+          _loadUserState();
+    // Navigator.pushReplacementNamed(context, '/simpleGame');
     //     } else {
     //       _showError(json.decode(res.body)['msg'], true);
     //     }
@@ -168,6 +171,21 @@ class LoginUIState extends State<LoginUI> {
     // } else {
     //   _autoValidate = true;
     // }
+  }
+
+  _loadUserState() {
+    var data = {"user_mob": 7574852413};
+    _api.getUserState(json.encode(data)).then((res) {
+      if (res.statusCode == 200) {
+        Map<String, dynamic> userstateStr = json.decode(res.body)['results'];
+        print('userstateStr :::');
+        print(userstateStr);
+        UserState userState = UserState.fromJson(userstateStr);
+        CacheData.userState = userState;
+    Navigator.pushReplacementNamed(context, '/simpleGame');
+        // Navigator.pushReplacementNamed(context, '/level');
+      }
+    });
   }
 
   void _showError(String msg, bool showCancel) {

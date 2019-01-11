@@ -7,6 +7,7 @@ import 'package:kon_banega_mokshadhipati/model/current-stat.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Service/apiservice.dart';
 import '../model/question.dart';
+
 class SimpleGame extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -43,10 +44,13 @@ class SimpleGameState extends State<SimpleGame> {
 
   _loadAllQuestions() {
     currentState = CacheData.userState.currentStat;
-    _api.getQuestions(currentState.level,currentState.queSt,currentState.totalQues).then((res) {
+    _api
+        .getQuestions(currentState.level, 0, currentState.totalQues)
+        .then((res) {
       setState(() {
         if (res.statusCode == 200) {
           String questionList = res.body;
+          print(utf8.decode(res.bodyBytes));
           List<dynamic> d1 = json.decode(questionList);
           questions = d1.map((queJson) => Question.fromJson(queJson)).toList();
           print(questions);
@@ -58,6 +62,7 @@ class SimpleGameState extends State<SimpleGame> {
       });
     });
   }
+
   _reInit() {
     isGivenCorrectAns = false;
     correctAnsIndex = -1;
@@ -81,8 +86,7 @@ class SimpleGameState extends State<SimpleGame> {
       }
       totalAnswers = totalAnswers + 1;
       bool isCompletedLevel = false;
-      if(currentQueIndex == questions.length -1)
-        isCompletedLevel = true;
+      if (currentQueIndex == questions.length - 1) isCompletedLevel = true;
       _dialogBox(isGivenCorrectAns, isCompletedLevel);
     });
   }
@@ -124,7 +128,8 @@ class SimpleGameState extends State<SimpleGame> {
                         : Icon(Icons.close, color: Colors.red),
                     label: new Text('OK!',
                         style: TextStyle(
-                            color: isGivenCorrectAns ? Colors.green : Colors.red)),
+                            color:
+                                isGivenCorrectAns ? Colors.green : Colors.red)),
                     shape: new RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(5.0),
                         side: BorderSide(color: Colors.grey)),
@@ -143,10 +148,10 @@ class SimpleGameState extends State<SimpleGame> {
 
   void _dialogBox(isSelectedAnsCorrect, isCompletedLevel) {
     String msg = "";
-    if(isCompletedLevel) {
+    if (isCompletedLevel) {
       msg = "Level " + currentState.level.toString() + " is Completed";
     } else {
-      if(isSelectedAnsCorrect)
+      if (isSelectedAnsCorrect)
         msg = "You gave correct answer";
       else
         msg = "You gave wrong answer";
@@ -170,8 +175,7 @@ class SimpleGameState extends State<SimpleGame> {
             content: new Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                new Text(
-                    msg,
+                new Text(msg,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         color: Colors.blueGrey,
@@ -188,18 +192,19 @@ class SimpleGameState extends State<SimpleGame> {
                         : Icon(Icons.close, color: Colors.red),
                     label: new Text('Next',
                         style: TextStyle(
-                            color: isSelectedAnsCorrect ? Colors.green : Colors.red)),
+                            color: isSelectedAnsCorrect
+                                ? Colors.green
+                                : Colors.red)),
                     shape: new RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(5.0),
                         side: BorderSide(color: Colors.grey)),
                     onPressed: () {
                       Navigator.pop(context);
                       setState(() {
-                        if(!isCompletedLevel) {
+                        if (!isCompletedLevel) {
                           _reInit();
                           _loadNextQuestion();
                         }
-
                       });
                     }),
               ],
@@ -209,15 +214,14 @@ class SimpleGameState extends State<SimpleGame> {
   }
 
   _loadNextQuestion() {
-    if(currentQueIndex < questions.length - 1) {
+    if (currentQueIndex < questions.length - 1) {
       currentQueIndex++;
       question = questions.getRange(currentQueIndex, currentQueIndex + 1).first;
-    } else {
-
-    }
+    } else {}
 
     //question = Question(tempQue, "MCQ", "This is " + tempQue.toString() + " Question", options, answerIndex);
   }
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -270,6 +274,7 @@ class SimpleGameState extends State<SimpleGame> {
       ),
     );
   }
+
   _appBarView() {
     return new AppBar(
       title: new Text('Score here!'),
@@ -293,7 +298,7 @@ class SimpleGameState extends State<SimpleGame> {
   }
 
   _bodyView() {
-    if(question == null) {
+    if (question == null) {
       return Container();
     }
     return new Container(
@@ -383,7 +388,8 @@ class SimpleGameState extends State<SimpleGame> {
         leading: new CircleAvatar(
           child: new Text('$index'),
         ),
-        title: new Text(question.options.getRange(index, index + 1).first.option),
+        title:
+            new Text(question.options.getRange(index, index + 1).first.option),
         onTap: () => _onOptionSelect(index),
       ),
     );

@@ -1,5 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:kon_banega_mokshadhipati/model/CacheData.dart';
+import 'package:kon_banega_mokshadhipati/model/current-stat.dart';
 import 'package:kon_banega_mokshadhipati/model/quizlevel.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../Service/apiservice.dart';
 
 class LevelUI extends StatefulWidget {
   static final String MODULE = "[LevelUI] ";
@@ -11,13 +17,38 @@ class LevelUI extends StatefulWidget {
 }
 
 class LevelUIState extends State<LevelUI> {
-  final List<QuizLevel> levelinfos = [];
+  List<QuizLevel> levelinfos = [];
+  ApiService _api = new ApiService();
+  Map<dynamic, dynamic> _userData;
+
+  
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    _getLevels();
+    super.initState();
+  }
+
+  _getLevels() {
+    levelinfos = CacheData.userState.quizLevels;
+    // SharedPreferences.getInstance().then((localstorage) {
+    //   _userData = json.decode(localstorage.getString('user_info'));
+    //   print('USER DATA : ');
+    //   print(_userData);
+    //   var data;
+    //   data = {"user_mob": _userData['user_info']['mobile']};
+    //   _api.getLevels(json.encode(data)).then((res) {
+    //     if (res.statusCode == 200) {
+    //       print('LEVELS : ');
+    //       print(res.body);
+    //     } else {}
+    //   });
+    // });
+  }
 
   @override
   Widget build(BuildContext context) {
-    levelinfos.clear();
-    levelinfos.add(QuizLevel(1, "Level 1"));
-    levelinfos.add(QuizLevel(2, "Level 2"));
     return new Scaffold(
       appBar: _appBarView(),
       body: _bodyView(),
@@ -27,11 +58,14 @@ class LevelUIState extends State<LevelUI> {
   _appBarView() {
     return new AppBar(
       centerTitle: true,
-      title: new Text('Level',
-          style: TextStyle(
-              color: Colors.white,
-              fontSize: 30.0,
-              fontWeight: FontWeight.w300)),
+      title: new Text(
+        'Level',
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 30.0,
+          fontWeight: FontWeight.w300,
+        ),
+      ),
     );
   }
 
@@ -48,21 +82,17 @@ class LevelUIState extends State<LevelUI> {
   }
 
   Widget getLevelButton(QuizLevel levelInfo) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: new MaterialButton(
-        onPressed: null,
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(50.0)),
-        color: Theme.of(context).primaryColor,
-        child: new Text(
+    return new Padding(
+      padding: EdgeInsets.all(10.0),
+      child: new OutlineButton(
+        onPressed: () {},
+        child: Text(
           levelInfo.name,
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.w600,
-            fontSize: 20.0,
-          ),
+          textScaleFactor: 1.5,
         ),
+        shape: new CircleBorder(),
+        borderSide: BorderSide(color: Colors.blue),
+        padding: const EdgeInsets.all(20.0),
       ),
     );
   }

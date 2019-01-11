@@ -51,6 +51,7 @@ class MyApp extends StatelessWidget {
     appAuth.getUserState(null).then((res) {
       if (res.statusCode == 200) {
         Map<String,dynamic> userstateStr = json.decode(res.body)['results'];
+        print('userstateStr :::');
         print(userstateStr);
         UserState userState = UserState.fromJson(userstateStr);
         CacheData.userState = userState;
