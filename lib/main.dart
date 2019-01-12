@@ -29,9 +29,8 @@ void main() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   // Set default home.
   Widget _defaultHome = new LoginUI();
-  _result = prefs.getBool('b_isUserLoggedIn');
+  _result = prefs.getBool('b_isUserLoggedIn') == null ? false : prefs.getBool('b_isUserLoggedIn');
   _theme = await appAuth.checkTheme();
-
   if (_result) {
     var data = {
       'user_mob': json.decode(prefs.getString('user_info'))['user_info']

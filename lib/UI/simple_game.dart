@@ -36,7 +36,7 @@ class SimpleGameState extends State<SimpleGame> {
     print('LEVEL NO :::::::::');
     print(level);
 
-    userLives = CacheData.userState.currentStat.lives;
+    // userLives = CacheData.userState.currentStat.lives;
     print('USER LIVES :::::::::');
     print(userLives);
     _loadAllQuestions(level);
