@@ -32,8 +32,6 @@ class ApiService {
   }
 
   Future<http.Response> getUserState(data) async {
-    //http.Response res = await http.post(_apiUrl + '/profileUpdate',
-    //    body: data, headers: headers);
     http.Response res =
         await http.post(_apiUrl + '/quiz_level', body: data, headers: headers);
     //String userStateRes =
@@ -63,9 +61,13 @@ class ApiService {
 
   // Check Login Status
   Future<bool> checkLoginStatus() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (prefs.getBool(SharedPrefConstant.b_isUserLoggedIn)) {
-      return true;
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (prefs.getBool(SharedPrefConstant.b_isUserLoggedIn) != null) {
+      if (prefs.getBool(SharedPrefConstant.b_isUserLoggedIn)) {
+        return true;
+      } else {
+        return false;
+      }
     } else {
       return false;
     }

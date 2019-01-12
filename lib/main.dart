@@ -11,14 +11,13 @@ import 'package:kon_banega_mokshadhipati/UI/game_page.dart';
 import 'package:kon_banega_mokshadhipati/UI/register_page.dart';
 import 'package:kon_banega_mokshadhipati/UI/send_otp_page.dart';
 import 'package:kon_banega_mokshadhipati/UI/simple_game.dart';
-import 'package:kon_banega_mokshadhipati/model/CacheData.dart';
+import 'package:kon_banega_mokshadhipati/model/cacheData.dart';
 import 'package:kon_banega_mokshadhipati/model/user_state.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 ApiService appAuth = new ApiService();
 bool _theme = false;
-bool _result;
-
+bool _result = false;
 void setTheme(value) {
   _theme = value;
   main();
@@ -29,7 +28,9 @@ void main() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   // Set default home.
   Widget _defaultHome = new LoginUI();
-  _result = prefs.getBool('b_isUserLoggedIn') == null ? false : prefs.getBool('b_isUserLoggedIn');
+  _result = prefs.getBool('b_isUserLoggedIn') == null
+      ? false
+      : prefs.getBool('b_isUserLoggedIn');
   _theme = await appAuth.checkTheme();
   if (_result) {
     var data = {
@@ -45,15 +46,12 @@ void main() async {
       CacheData.userState = userState;
       _defaultHome = new LevelUI();
     } else {
-      print('ERROR In MAIN :: ');
-      print(res.body);
+      _defaultHome = new LoginUI();
     }
-  } else {
-    _defaultHome = new LoginUI();
   }
 
   runApp(
-    MaterialApp(
+    new MaterialApp(
       title: 'kon banega mokshadhipati',
       theme: _theme
           ? ThemeData(

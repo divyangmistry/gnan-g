@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:kon_banega_mokshadhipati/model/cacheData.dart';
+import 'package:kon_banega_mokshadhipati/model/current_stat.dart';
 import 'package:kon_banega_mokshadhipati/UI/simple_game.dart';
-import 'package:kon_banega_mokshadhipati/model/CacheData.dart';
 import 'package:kon_banega_mokshadhipati/model/quizlevel.dart';
 import '../Service/apiservice.dart';
 

@@ -22,27 +22,27 @@ class CurrentState {
 
   CurrentState.fromJson(Map<String, dynamic> json) {
     userMobile = json['user_mobile'];
-    queSt = json['que_st'];
+    queSt = json['question_st'];
     level = json['level'];
     score = json['score'];
     lives = json['lives'];
     currentScore = json['current_score'];
     completed = json['completed'];
     updatedAt = json['updatedAt'];
-    totalQues = json['total_ques'];
+    totalQues = json['total_questions'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['user_mobile'] = this.userMobile;
-    data['que_st'] = this.queSt;
+    data['question_st'] = this.queSt;
     data['level'] = this.level;
     data['score'] = this.score;
     data['lives'] = this.lives;
     data['current_score'] = this.currentScore;
     data['completed'] = this.completed;
     data['updatedAt'] = this.updatedAt;
-    data['total_ques'] = this.totalQues;
+    data['total_questions'] = this.totalQues;
     return data;
   }
 

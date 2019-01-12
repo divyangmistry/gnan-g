@@ -1,10 +1,7 @@
 import 'dart:convert';
-import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'package:kon_banega_mokshadhipati/model/CacheData.dart';
-import 'package:kon_banega_mokshadhipati/model/current-stat.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:kon_banega_mokshadhipati/model/cacheData.dart';
+import 'package:kon_banega_mokshadhipati/model/current_stat.dart';
 import '../Service/apiservice.dart';
 import '../model/question.dart';
 
@@ -31,12 +28,10 @@ class SimpleGameState extends State<SimpleGame> {
   int currentQueIndex;
   ApiService _api = new ApiService();
   CurrentState currentState;
-  
-  SimpleGameState(int level) {
-    print('LEVEL NO :::::::::');
-    print(level);
 
-    // userLives = CacheData.userState.currentStat.lives;
+  SimpleGameState(int level) {
+    if (CacheData.userState.currentStat.lives != null)
+      userLives = CacheData.userState.currentStat.lives;
     print('USER LIVES :::::::::');
     print(userLives);
     _loadAllQuestions(level);
@@ -77,7 +72,7 @@ class SimpleGameState extends State<SimpleGame> {
       } else {
         isGivenCorrectAns = false;
         wrongAnsCounter = wrongAnsCounter + 1;
-        if (userLives >= 1) {
+        if (userLives > 1) {
           userLives = userLives - 1;
         } else
           return _gameOverDialogBox();
@@ -133,7 +128,7 @@ class SimpleGameState extends State<SimpleGame> {
                         side: BorderSide(color: Colors.grey)),
                     onPressed: () {
                       Navigator.pop(context);
-                      Navigator.pushReplacementNamed(context, '/login');
+                      Navigator.pushReplacementNamed(context, '/level');
                       setState(() {
                         isGivenCorrectAns = false;
                       });
