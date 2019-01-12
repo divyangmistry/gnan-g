@@ -152,6 +152,7 @@ class SimpleGameState extends State<SimpleGame> {
 
     showDialog(
         context: context,
+        barrierDismissible: false,
         builder: (context) {
           return AlertDialog(
             shape: new RoundedRectangleBorder(
@@ -197,6 +198,8 @@ class SimpleGameState extends State<SimpleGame> {
                         if (!isCompletedLevel) {
                           _reInit();
                           _loadNextQuestion();
+                        } else {
+                          Navigator.pushReplacementNamed(context, '/level');
                         }
                       });
                     }),
