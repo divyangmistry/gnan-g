@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:http/http.dart';
 import 'package:kon_banega_mokshadhipati/Service/apiservice.dart';
 import 'package:kon_banega_mokshadhipati/UI/forgot_password.dart';
 import 'package:kon_banega_mokshadhipati/UI/level_ui.dart';
@@ -10,60 +11,50 @@ import 'package:kon_banega_mokshadhipati/UI/game_page.dart';
 import 'package:kon_banega_mokshadhipati/UI/register_page.dart';
 import 'package:kon_banega_mokshadhipati/UI/send_otp_page.dart';
 import 'package:kon_banega_mokshadhipati/UI/simple_game.dart';
-import 'package:kon_banega_mokshadhipati/UI/verify_otp_page.dart';
 import 'package:kon_banega_mokshadhipati/model/CacheData.dart';
 import 'package:kon_banega_mokshadhipati/model/user_state.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
-      .then((_) {
-    runApp(MyApp());
-  });
+ApiService appAuth = new ApiService();
+bool _theme = false;
+bool _result;
+
+void setTheme(value) {
+  _theme = value;
+  main();
 }
 
-class MyApp extends StatelessWidget {
-  ApiService appAuth = new ApiService();
-  bool _theme = false;
-  void set Theme(value) {
-    _theme = value;
-    main();
-  }
-
-  MyApp() {
-    main();
-  }
+void main() async {
+  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  // Set default home.
   Widget _defaultHome = new LoginUI();
-  void main() async {
-    bool _isAlreadyLoggedIn = await appAuth.checkLoginStatus();
-    _isAlreadyLoggedIn = true;
-    bool _isIntroDone = await appAuth.checkIsIntoVisited();
-    _theme = await appAuth.checkTheme();
-    if (true) {
-      if (_isAlreadyLoggedIn) {
-        _loadUserState();
-      }
+  _result = prefs.getBool('b_isUserLoggedIn');
+  _theme = await appAuth.checkTheme();
+
+  if (_result) {
+    var data = {
+      'user_mob': json.decode(prefs.getString('user_info'))['user_info']
+          ['mobile']
+    };
+    Response res = await appAuth.getUserState(json.encode(data));
+    if (res.statusCode == 200) {
+      Map<String, dynamic> userstateStr = json.decode(res.body)['results'];
+      print('IN MAIN ::: userstateStr :::');
+      print(userstateStr);
+      UserState userState = UserState.fromJson(userstateStr);
+      CacheData.userState = userState;
+      _defaultHome = new LevelUI();
     } else {
-      _defaultHome = new LoginUI();
+      print('ERROR In MAIN :: ');
+      print(res.body);
     }
+  } else {
+    _defaultHome = new LoginUI();
   }
 
-  _loadUserState() {
-    appAuth.getUserState(null).then((res) {
-      if (res.statusCode == 200) {
-        Map<String,dynamic> userstateStr = json.decode(res.body)['results'];
-        print('userstateStr :::');
-        print(userstateStr);
-        UserState userState = UserState.fromJson(userstateStr);
-        CacheData.userState = userState;
-        _defaultHome = new SimpleGame();
-      }
-    });
-
-  }
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
+  runApp(
+    MaterialApp(
       title: 'kon banega mokshadhipati',
       theme: _theme
           ? ThemeData(
@@ -84,6 +75,6 @@ class MyApp extends StatelessWidget {
         '/sendOtp': (BuildContext context) => new SendOTP(),
         '/level': (BuildContext context) => new LevelUI(),
       },
-    );
-  }
+    ),
+  );
 }

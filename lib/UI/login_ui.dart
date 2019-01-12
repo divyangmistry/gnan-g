@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:http/http.dart';
 import 'package:kon_banega_mokshadhipati/UI/verify_otp_page.dart';
 import 'package:kon_banega_mokshadhipati/model/CacheData.dart';
 import 'package:kon_banega_mokshadhipati/model/user_state.dart';
@@ -145,47 +146,47 @@ class LoginUIState extends State<LoginUI> {
       );
 
   void _login() {
-    // if (_formKey.currentState.validate()) {
-    //   _formKey.currentState.save();
-    //   print('LOGIN DATA');
-    //   print('MOBILE : ${_data.mobile}');
-    //   print('PASSWORD : ${_data.password}');
+    if (_formKey.currentState.validate()) {
+      _formKey.currentState.save();
+      print('LOGIN DATA');
+      print('MOBILE : ${_data.mobile}');
+      print('PASSWORD : ${_data.password}');
 
-    //   var data;
+      var data;
 
-    //   data = {'mobile': _data.mobile, 'password': _data.password};
+      data = {'mobile': _data.mobile, 'password': _data.password};
 
-    //   _api.login(json.encode(data)).then((res) {
-    //     if (res.statusCode == 200) {
-    //       SharedPreferences.getInstance().then((localstorage) {
-    //         localstorage.setString('user_info', res.body);
-    //         localstorage.setBool(SharedPrefConstant.b_isUserLoggedIn, true);
-    //       });
-    //       print(json.decode(res.body)['user_info']);
-          _loadUserState();
-    // Navigator.pushReplacementNamed(context, '/simpleGame');
-    //     } else {
-    //       _showError(json.decode(res.body)['msg'], true);
-    //     }
-    //   });
-    // } else {
-    //   _autoValidate = true;
-    // }
+      _api.login(json.encode(data)).then((res) {
+        if (res.statusCode == 200) {
+          SharedPreferences.getInstance().then((localstorage) {
+            localstorage.setString('user_info', res.body);
+            localstorage.setBool(SharedPrefConstant.b_isUserLoggedIn, true);
+          });
+          print(json.decode(res.body)['user_info']);
+          _loadUserState(_data.mobile);
+        } else {
+          _showError(json.decode(res.body)['msg'], true);
+        }
+      });
+    } else {
+      _autoValidate = true;
+    }
   }
 
-  _loadUserState() {
-    var data = {"user_mob": 7574852413};
-    _api.getUserState(json.encode(data)).then((res) {
-      if (res.statusCode == 200) {
-        Map<String, dynamic> userstateStr = json.decode(res.body)['results'];
-        print('userstateStr :::');
-        print(userstateStr);
-        UserState userState = UserState.fromJson(userstateStr);
-        CacheData.userState = userState;
-    Navigator.pushReplacementNamed(context, '/simpleGame');
-        // Navigator.pushReplacementNamed(context, '/level');
-      }
-    });
+  _loadUserState(mobile) async {
+    var data = {'user_mob': mobile};
+    Response res = await _api.getUserState(json.encode(data));
+    if (res.statusCode == 200) {
+      Map<String, dynamic> userstateStr = json.decode(res.body)['results'];
+      print('IN LOGIN ::: userstateStr :::');
+      print(userstateStr);
+      UserState userState = UserState.fromJson(userstateStr);
+      CacheData.userState = userState;
+      Navigator.pushReplacementNamed(context, '/level');
+    } else {
+      print('ERROR : ');
+      print(res.body);
+    }
   }
 
   void _showError(String msg, bool showCancel) {
