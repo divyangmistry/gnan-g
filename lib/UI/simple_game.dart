@@ -8,10 +8,12 @@ import '../Service/apiservice.dart';
 import '../model/question.dart';
 
 class SimpleGame extends StatefulWidget {
+  final int level;
+  SimpleGame({this.level = 1});
   @override
   State<StatefulWidget> createState() {
 
-    return new SimpleGameState();
+    return new SimpleGameState(level);
   }
 }
 
@@ -32,14 +34,14 @@ class SimpleGameState extends State<SimpleGame> {
   SimpleGameState() {
     if(CacheData.userState.currentStat.lives != null)
       userLives = CacheData.userState.currentStat.lives;
-    _loadAllQuestions();
+    print('USER LIVES :::::::::');
+    print(userLives);
+    _loadAllQuestions(level);
   }
 
-  _loadAllQuestions() {
+  _loadAllQuestions(int level) {
     currentState = CacheData.userState.currentStat;
-    _api
-        .getQuestions(currentState.level, 0, currentState.totalQues)
-        .then((res) {
+    _api.getQuestions(level, 0, currentState.totalQues).then((res) {
       setState(() {
         if (res.statusCode == 200) {
           String questionList = res.body;
