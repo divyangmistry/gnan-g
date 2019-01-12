@@ -6,7 +6,8 @@ import 'package:http/http.dart' as http;
 
 class ApiService {
   // final _apiUrl = 'http://192.168.43.23:3000';
-  final _apiUrl = 'http://192.168.1.103:3000';
+  final _apiUrl = 'http://10.0.2.2:3000';
+  //final _apiUrl = 'http://192.168.1.103:3000';
 
   var headers = {'content-type': 'application/json'};
 
@@ -61,9 +62,13 @@ class ApiService {
 
   // Check Login Status
   Future<bool> checkLoginStatus() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (prefs.getBool(SharedPrefConstant.b_isUserLoggedIn)) {
-      return true;
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (prefs.getBool(SharedPrefConstant.b_isUserLoggedIn) != null) {
+      if (prefs.getBool(SharedPrefConstant.b_isUserLoggedIn)) {
+        return true;
+      } else {
+        return false;
+      }
     } else {
       return false;
     }

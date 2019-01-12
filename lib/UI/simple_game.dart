@@ -13,7 +13,7 @@ class SimpleGame extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
 
-    return new SimpleGameState(level);
+    return new SimpleGameState();
   }
 }
 
@@ -31,12 +31,13 @@ class SimpleGameState extends State<SimpleGame> {
   int currentQueIndex;
   ApiService _api = new ApiService();
   CurrentState currentState;
+
   SimpleGameState() {
     if(CacheData.userState.currentStat.lives != null)
       userLives = CacheData.userState.currentStat.lives;
     print('USER LIVES :::::::::');
     print(userLives);
-    _loadAllQuestions(level);
+    _loadAllQuestions(widget.level);
   }
 
   _loadAllQuestions(int level) {
