@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:kon_banega_mokshadhipati/UI/verify_otp_page.dart';
-import 'package:kon_banega_mokshadhipati/model/CacheData.dart';
+import 'package:kon_banega_mokshadhipati/model/cacheData.dart';
 import 'package:kon_banega_mokshadhipati/model/user_state.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';

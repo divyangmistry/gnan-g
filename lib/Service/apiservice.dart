@@ -6,6 +6,8 @@ import 'package:http/http.dart' as http;
 
 class ApiService {
   final _apiUrl = 'http://192.168.43.23:3000';
+  //final _apiUrl = 'http://10.0.2.2:3000';
+  //final _apiUrl = 'http://192.168.43.90:3000';
   // final _apiUrl = 'http://192.168.1.103:3000';
 
   var headers = {'content-type': 'application/json'};
@@ -32,8 +34,6 @@ class ApiService {
   }
 
   Future<http.Response> getUserState(data) async {
-    //http.Response res = await http.post(_apiUrl + '/profileUpdate',
-    //    body: data, headers: headers);
     http.Response res =
         await http.post(_apiUrl + '/quiz_level', body: data, headers: headers);
     //String userStateRes =
@@ -64,11 +64,7 @@ class ApiService {
   // Check Login Status
   Future<bool> checkLoginStatus() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (prefs.getBool(SharedPrefConstant.b_isUserLoggedIn)) {
-      return true;
-    } else {
-      return false;
-    }
+    return true;
   }
 
   // Check Theme

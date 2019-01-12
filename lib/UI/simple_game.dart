@@ -2,15 +2,15 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:kon_banega_mokshadhipati/model/CacheData.dart';
-import 'package:kon_banega_mokshadhipati/model/current-stat.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:kon_banega_mokshadhipati/model/cacheData.dart';
+import 'package:kon_banega_mokshadhipati/model/current_stat.dart';
 import '../Service/apiservice.dart';
 import '../model/question.dart';
 
 class SimpleGame extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
+
     return new SimpleGameState();
   }
 }
@@ -30,15 +30,8 @@ class SimpleGameState extends State<SimpleGame> {
   ApiService _api = new ApiService();
   CurrentState currentState;
   SimpleGameState() {
-    /*SharedPreferences.getInstance().then((localstorage) {
-      _userData = json.decode(localstorage.getString('user_info'));
-      print('USER DATA : ');
-      print(_userData);
-      setState(() {
-        totalWrongHearts = _userData['user_info']['lives'];
-      });
-    });*/
-    userLives = CacheData.userState.currentStat.lives;
+    if(CacheData.userState.currentStat.lives != null)
+      userLives = CacheData.userState.currentStat.lives;
     _loadAllQuestions();
   }
 
@@ -79,7 +72,7 @@ class SimpleGameState extends State<SimpleGame> {
       } else {
         isGivenCorrectAns = false;
         wrongAnsCounter = wrongAnsCounter + 1;
-        if (userLives >= 1) {
+        if (userLives > 1) {
           userLives = userLives - 1;
         } else
           return _gameOverDialogBox();
@@ -135,7 +128,7 @@ class SimpleGameState extends State<SimpleGame> {
                         side: BorderSide(color: Colors.grey)),
                     onPressed: () {
                       Navigator.pop(context);
-                      Navigator.pushReplacementNamed(context, '/login');
+                      Navigator.pushReplacementNamed(context, '/level');
                       setState(() {
                         isGivenCorrectAns = false;
                       });

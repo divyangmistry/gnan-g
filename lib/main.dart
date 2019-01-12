@@ -11,7 +11,7 @@ import 'package:kon_banega_mokshadhipati/UI/register_page.dart';
 import 'package:kon_banega_mokshadhipati/UI/send_otp_page.dart';
 import 'package:kon_banega_mokshadhipati/UI/simple_game.dart';
 import 'package:kon_banega_mokshadhipati/UI/verify_otp_page.dart';
-import 'package:kon_banega_mokshadhipati/model/CacheData.dart';
+import 'package:kon_banega_mokshadhipati/model/cacheData.dart';
 import 'package:kon_banega_mokshadhipati/model/user_state.dart';
 
 void main() {

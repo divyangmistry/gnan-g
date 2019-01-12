@@ -1,6 +1,6 @@
 
 
-import 'package:kon_banega_mokshadhipati/model/current-stat.dart';
+import 'package:kon_banega_mokshadhipati/model/current_stat.dart';
 import 'package:kon_banega_mokshadhipati/model/quizlevel.dart';
 
 class UserState {

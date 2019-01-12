@@ -29,13 +29,13 @@ class Question {
     }
     score = json['score'];
     level = json['level'];
-    String ansStr = json['answer'];
-    for(final option in options) {
+    answer = int.parse(json['answer']);
+/*    for(final option in options) {
       if (option.option == ansStr) {
         answer = option.optionNumber;
         break;
       }
-    }
+    }*/
   }
 
   Map<String, dynamic> toJson() {

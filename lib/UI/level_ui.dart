@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:kon_banega_mokshadhipati/model/CacheData.dart';
-import 'package:kon_banega_mokshadhipati/model/current-stat.dart';
+import 'package:kon_banega_mokshadhipati/model/cacheData.dart';
+import 'package:kon_banega_mokshadhipati/model/current_stat.dart';
 import 'package:kon_banega_mokshadhipati/model/quizlevel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Service/apiservice.dart';
@@ -85,7 +85,7 @@ class LevelUIState extends State<LevelUI> {
     return new Padding(
       padding: EdgeInsets.all(10.0),
       child: new OutlineButton(
-        onPressed: () {},
+        onPressed: () {Navigator.pushReplacementNamed(context, '/simpleGame');},
         child: Text(
           levelInfo.name,
           textScaleFactor: 1.5,
