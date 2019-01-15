@@ -128,22 +128,34 @@ class GameLevelPageState extends State<GameLevelPage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        _button('Leaderboard', Icons.poll, () {
-          Navigator.pushNamed(context, '/leaderboard');
-        }),
+        _button(
+          'Leaderboard',
+          Icons.poll,
+          () {
+            Navigator.pushNamed(context, '/leaderboard');
+          },
+          Colors.purple[200],
+        ),
         SizedBox(width: 10.0),
-        _button('Invites', Icons.donut_large, () {}),
+        _button(
+          'Play GAME',
+          Icons.play_circle_filled,
+          () {
+            Navigator.pushNamed(context, '/gamePage');
+          },
+          Colors.green[400],
+        ),
       ],
     );
   }
 
-  Widget _button(String btnLable, icon, Function clickEvent) {
+  Widget _button(String btnLable, icon, Function clickEvent, color) {
     return Expanded(
       child: RaisedButton(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(50.0),
         ),
-        color: Colors.purple[100],
+        color: color,
         elevation: 10.0,
         padding: EdgeInsets.all(12.0),
         onPressed: clickEvent,
