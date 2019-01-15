@@ -23,13 +23,17 @@ class GameLevelPageState extends State<GameLevelPage> {
             children: <Widget>[
               _gameBar(),
               SizedBox(
-                height: 50.0,
+                height: 20.0,
               ),
               _userCard(),
               SizedBox(
-                height: 50.0,
+                height: 20.0,
               ),
               _bonusRoundInfo(),
+              SizedBox(
+                height: 20.0,
+              ),
+              _bottomButtons(),
             ],
           ),
         ),
@@ -45,6 +49,7 @@ class GameLevelPageState extends State<GameLevelPage> {
             Icons.person_outline,
             color: Colors.white,
           ),
+          () {},
         ),
         new Expanded(
           child: Center(
@@ -59,6 +64,7 @@ class GameLevelPageState extends State<GameLevelPage> {
             Icons.help_outline,
             color: Colors.white,
           ),
+          () {},
         ),
       ],
     );
@@ -66,7 +72,7 @@ class GameLevelPageState extends State<GameLevelPage> {
 
   Widget _userCard() {
     return new Container(
-      height: 260,
+      height: 250,
       child: new Stack(
         children: <Widget>[
           _userDetail(),
@@ -83,6 +89,7 @@ class GameLevelPageState extends State<GameLevelPage> {
   Widget _bonusRoundInfo() {
     return Card(
       elevation: 10.0,
+      color: Colors.grey[100],
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15.0),
       ),
@@ -108,6 +115,36 @@ class GameLevelPageState extends State<GameLevelPage> {
               ],
             )
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _bottomButtons() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        _button('Leaderboard', Icons.poll, () {}),
+        SizedBox(width: 10.0),
+        _button('Invites', Icons.donut_large, () {}),
+      ],
+    );
+  }
+
+  Widget _button(String btnLable, icon, Function clickEvent) {
+    return Expanded(
+      child: RaisedButton(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(50.0),
+        ),
+        color: Colors.purple[100],
+        elevation: 10.0,
+        padding: EdgeInsets.all(12.0),
+        onPressed: clickEvent,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[Icon(icon), SizedBox(width: 10), Text(btnLable)],
         ),
       ),
     );
@@ -141,11 +178,12 @@ class GameLevelPageState extends State<GameLevelPage> {
 
   Widget _userDetail() {
     return Card(
-      margin: EdgeInsets.fromLTRB(0, 50, 0, 0),
+      margin: EdgeInsets.fromLTRB(5, 50, 5, 0),
       elevation: 10.0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15.0),
       ),
+      color: Colors.grey[100],
       child: Padding(
         padding: EdgeInsets.all(10.0),
         child: new Column(
@@ -161,14 +199,14 @@ class GameLevelPageState extends State<GameLevelPage> {
               ),
             ),
             new SizedBox(
-              height: 40,
+              height: 30,
             ),
             new Row(
               children: <Widget>[
-                _scoreData('Balance', '\$10'),
-                VerticalDivider(),
+                _scoreData('Points', '\$10'),
+                VerticalDivider(height: 60),
                 _scoreData('Rank', '15th'),
-                VerticalDivider(),
+                VerticalDivider(height: 60),
                 _scoreData('Lives', '05'),
               ],
             ),
@@ -201,11 +239,11 @@ class GameLevelPageState extends State<GameLevelPage> {
     );
   }
 
-  Widget _iconButton(Icon icon) {
+  Widget _iconButton(Icon icon, Function clickEvent) {
     return new RaisedButton(
-      onPressed: () {},
+      onPressed: clickEvent,
       child: icon,
-      color: Colors.purple,
+      color: Colors.purple[500],
       shape: new CircleBorder(),
       elevation: 5.0,
       padding: const EdgeInsets.all(10.0),
