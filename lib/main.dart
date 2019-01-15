@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:http/http.dart';
 import 'package:kon_banega_mokshadhipati/Service/apiservice.dart';
 import 'package:kon_banega_mokshadhipati/UI/forgot_password.dart';
+import 'package:kon_banega_mokshadhipati/UI/game_level.dart';
 import 'package:kon_banega_mokshadhipati/UI/level_ui.dart';
 import 'package:kon_banega_mokshadhipati/UI/login_ui.dart';
 import 'package:kon_banega_mokshadhipati/UI/game_page.dart';
@@ -27,28 +28,29 @@ void main() async {
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   SharedPreferences prefs = await SharedPreferences.getInstance();
   // Set default home.
-  Widget _defaultHome = new LoginUI();
-  _result = prefs.getBool('b_isUserLoggedIn') == null
-      ? false
-      : prefs.getBool('b_isUserLoggedIn');
-  _theme = await appAuth.checkTheme();
-  if (_result) {
-    var data = {
-      'user_mob': json.decode(prefs.getString('user_info'))['user_info']
-          ['mobile']
-    };
-    Response res = await appAuth.getUserState(json.encode(data));
-    if (res.statusCode == 200) {
-      Map<String, dynamic> userstateStr = json.decode(res.body)['results'];
-      print('IN MAIN ::: userstateStr :::');
-      print(userstateStr);
-      UserState userState = UserState.fromJson(userstateStr);
-      CacheData.userState = userState;
-      _defaultHome = new LevelUI();
-    } else {
-      _defaultHome = new LoginUI();
-    }
-  }
+  Widget _defaultHome = new GameLevelPage();
+  // Widget _defaultHome = new LoginUI();
+  // _result = prefs.getBool('b_isUserLoggedIn') == null
+  //     ? false
+  //     : prefs.getBool('b_isUserLoggedIn');
+  // _theme = await appAuth.checkTheme();
+  // if (_result) {
+  //   var data = {
+  //     'user_mob': json.decode(prefs.getString('user_info'))['user_info']
+  //         ['mobile']
+  //   };
+  //   Response res = await appAuth.getUserState(json.encode(data));
+  //   if (res.statusCode == 200) {
+  //     Map<String, dynamic> userstateStr = json.decode(res.body)['results'];
+  //     print('IN MAIN ::: userstateStr :::');
+  //     print(userstateStr);
+  //     UserState userState = UserState.fromJson(userstateStr);
+  //     CacheData.userState = userState;
+  //     _defaultHome = new LevelUI();
+  //   } else {
+  //     _defaultHome = new LoginUI();
+  //   }
+  // }
 
   runApp(
     new MaterialApp(
