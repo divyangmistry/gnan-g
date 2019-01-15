@@ -49,7 +49,9 @@ class GameLevelPageState extends State<GameLevelPage> {
             Icons.person_outline,
             color: Colors.white,
           ),
-          () {},
+          () {
+            Navigator.pushNamed(context, '/profile');
+          },
         ),
         new Expanded(
           child: Center(
@@ -64,7 +66,9 @@ class GameLevelPageState extends State<GameLevelPage> {
             Icons.help_outline,
             color: Colors.white,
           ),
-          () {},
+          () {
+            Navigator.pushNamed(context, '/rules');
+          },
         ),
       ],
     );
@@ -124,7 +128,9 @@ class GameLevelPageState extends State<GameLevelPage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        _button('Leaderboard', Icons.poll, () {}),
+        _button('Leaderboard', Icons.poll, () {
+          Navigator.pushNamed(context, '/leaderboard');
+        }),
         SizedBox(width: 10.0),
         _button('Invites', Icons.donut_large, () {}),
       ],
