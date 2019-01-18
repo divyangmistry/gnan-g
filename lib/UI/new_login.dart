@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kon_banega_mokshadhipati/colors.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -7,74 +8,75 @@ class LoginPage extends StatefulWidget {
 
 class LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
+  bool _autoValidate = false;
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      backgroundColor: Colors.white,
-      body: new Container(
-        decoration: new BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('images/bkg.jpg'),
-            fit: BoxFit.fill,
-          ),
-        ),
-        child: new SafeArea(
+    return new Form(
+      key: _formKey,
+      autovalidate: _autoValidate,
+      child: new Scaffold(
+        body: SafeArea(
           child: new ListView(
-            padding: EdgeInsets.all(15.0),
+            padding: EdgeInsets.symmetric(horizontal: 24.0),
             children: <Widget>[
               new SizedBox(
-                height: 50,
+                height: 80.0,
               ),
-              _logo(),
+              new Column(
+                children: <Widget>[
+                  new Image.asset('images/logo.png',height: 70,),
+                  // new SizedBox(height: 16.0),
+                  // new Text('SAMPLE')
+                ],
+              ),
               new SizedBox(
-                height: 50,
+                height: 120.0,
               ),
-              _loginView(),
-              new SizedBox(
-                height: 40.0,
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _loginView() {
-    return new Opacity(
-      opacity: 0.9,
-      child: new Card(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15.0),
-        ),
-        elevation: 10.0,
-        child: new Padding(
-          padding: EdgeInsets.all(20.0),
-          child: new Column(
-            children: <Widget>[
-              new Container(
-                child: new Center(
-                  child: new Text(
-                    'Login',
-                    textScaleFactor: 2,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                      color: Colors.pink
-                    ),
+              new AccentColorOverride(
+                color: kQuizBrown900,
+                child: new TextFormField(
+                  validator: _mhtIdValidation,
+                  decoration: InputDecoration(
+                    labelText: 'Mobile no.',
+                    hintText: 'Enter Mobile no.',
                   ),
+                  keyboardType: TextInputType.numberWithOptions(),
                 ),
               ),
-              new SizedBox(
-                height: 50.0,
+              new SizedBox(height: 12.0),
+              new AccentColorOverride(
+                color: kQuizBrown900,
+                child: new TextFormField(
+                  validator: _passwordValidation,
+                  decoration: InputDecoration(
+                    labelText: 'Password',
+                    hintText: 'Enter Password',
+                  ),
+                  obscureText: true,
+                ),
               ),
-              _loginForm(),
-              new SizedBox(
-                height: 40.0,
-              ),
-              _loginButton(),
-              new SizedBox(
-                height: 20.0,
+              new ButtonBar(
+                children: <Widget>[
+                  new FlatButton(
+                    child: Text('Cancel'),
+                    onPressed: () {
+                      _formKey.currentState.reset();
+                      _autoValidate = false;
+                    },
+                  ),
+                  new RaisedButton(
+                    child: Text('Login'),
+                    elevation: 8.0,
+                    onPressed: () {
+                      if (_formKey.currentState.validate()) {
+                        Navigator.pop(context);
+                      } else {
+                        _autoValidate = true;
+                      }
+                    },
+                  ),
+                ],
               ),
             ],
           ),
@@ -92,71 +94,7 @@ class LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _loginForm() {
-    return new Form(
-      key: _formKey,
-      child: new Column(
-        children: <Widget>[
-          new TextFormField(
-            validator: _mobileValidation,
-            keyboardType: TextInputType.numberWithOptions(),
-            decoration: const InputDecoration(
-              labelText: 'Mht ID:',
-              hintText: 'Enter your Mht ID',
-              border: OutlineInputBorder(),
-              suffixIcon: Icon(Icons.person_outline),
-            ),
-            // onSaved: (String value) {
-            //   this._data.mobile = value;
-            // },
-          ),
-          new SizedBox(
-            height: 20.0,
-          ),
-          new TextFormField(
-            validator: _passwordValidation,
-            obscureText: true,
-            decoration: const InputDecoration(
-              labelText: 'Password:',
-              hintText: 'Enter your Password',
-              border: OutlineInputBorder(),
-              suffixIcon: Icon(
-                Icons.lock_outline,
-              ),
-            ),
-            // onSaved: (String value) {
-            //   this._data.password = value;
-            // },
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _loginButton() {
-    return RaisedButton(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(50.0),
-      ),
-      color: Colors.purple[300],
-      elevation: 10.0,
-      padding: EdgeInsets.all(12.0),
-      onPressed: () {
-        Navigator.pushNamed(context, '/gameStart');
-      },
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Icon(Icons.vpn_key),
-          SizedBox(width: 10),
-          Text('Login')
-        ],
-      ),
-    );
-  }
-
-  String _mobileValidation(value) {
+  String _mhtIdValidation(value) {
     if (value.isEmpty) {
       return 'Mht ID is required';
     } else if (value.length != 10) {
@@ -168,7 +106,6 @@ class LoginPageState extends State<LoginPage> {
   String _passwordValidation(value) {
     Pattern pattern =
         r'(?=^.{6,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$';
-    // Pattern pattern = r'^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).*$';
     RegExp regex = new RegExp(pattern);
     if (value.isEmpty) {
       return 'Password is required';
@@ -178,5 +115,23 @@ class LoginPageState extends State<LoginPage> {
       return 'Passwords must contain uppercase, lowercase letters and numbers';
     }
     return "";
+  }
+}
+
+
+class AccentColorOverride extends StatelessWidget {
+  const AccentColorOverride({Key key, this.color, this.child})
+      : super(key: key);
+
+  final Color color;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Theme(
+      child: child,
+      data: Theme.of(context)
+          .copyWith(accentColor: color, brightness: Brightness.dark),
+    );
   }
 }
