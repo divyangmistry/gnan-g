@@ -35,19 +35,25 @@ class LoginPageState extends State<LoginPage> {
           child: new ListView(
             padding: EdgeInsets.symmetric(horizontal: 30.0),
             children: <Widget>[
-              new SizedBox(
-                height: 60.0,
-              ),
+              new SizedBox(height: 40.0),
               new Column(
                 children: <Widget>[
                   new Image.asset(
                     'images/logo1.png',
                     height: 150,
                   ),
+                  new SizedBox(height: 30.0),
+                  new Text(
+                    'SIGN IN',
+                    textScaleFactor: 1.5,
+                    style: TextStyle(
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
                 ],
               ),
               new SizedBox(
-                height: 60.0,
+                height: 50.0,
               ),
               new AccentColorOverride(
                 color: kQuizBrown900,
@@ -113,7 +119,7 @@ class LoginPageState extends State<LoginPage> {
               ),
               new SizedBox(height: 50.0),
               _signupBox(),
-              new SizedBox(height: 30.0),
+              new SizedBox(height: 15.0),
               _termsAndCondition(),
             ],
           ),
@@ -142,7 +148,7 @@ class LoginPageState extends State<LoginPage> {
               ),
             ),
             onPressed: () {
-              Navigator.pushNamed(context, '/registerPage');
+              Navigator.pushReplacementNamed(context, '/signup');
             },
           ),
         ],

@@ -4,6 +4,7 @@ import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Service/apiservice.dart';
+import 'UI/new_signup.dart';
 import 'UI/forgot_password.dart';
 import 'UI/game_level.dart';
 import 'UI/game_page.dart';
@@ -77,7 +78,9 @@ class _QuizAppState extends State<QuizApp> {
         '/gamePage': (BuildContext context) => new GamePage(),
         '/simpleGame': (BuildContext context) => new SimpleGame(),
         '/login': (BuildContext context) => new LoginUI(),
+        '/login_new': (BuildContext context) => new LoginPage(),
         '/registerPage': (BuildContext context) => new RegisterPage(),
+        '/signup': (BuildContext context) => new SignUpPage(),
         '/forgotPassword': (BuildContext context) => new ForgotPassword(),
         '/sendOtp': (BuildContext context) => new SendOTP(),
         '/level': (BuildContext context) => new LevelUI(),
