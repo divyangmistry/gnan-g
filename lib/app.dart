@@ -15,6 +15,7 @@ import 'package:kon_banega_mokshadhipati/UI/register_page.dart';
 import 'package:kon_banega_mokshadhipati/UI/rules.dart';
 import 'package:kon_banega_mokshadhipati/UI/send_otp_page.dart';
 import 'package:kon_banega_mokshadhipati/UI/simple_game.dart';
+import 'package:kon_banega_mokshadhipati/UI/leaderboard.dart';
 import 'package:kon_banega_mokshadhipati/model/cacheData.dart';
 import 'package:kon_banega_mokshadhipati/model/user_state.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -27,7 +28,7 @@ class QuizApp extends StatefulWidget {
 }
 
 class _QuizAppState extends State<QuizApp> {
-  Widget _defaultHome = new LoginPage();
+  Widget _defaultHome = new LeaderBoard();
   ApiService _api = new ApiService();
 
   @override
