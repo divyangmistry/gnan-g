@@ -1,23 +1,24 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
-import 'package:kon_banega_mokshadhipati/Service/apiservice.dart';
-import 'package:kon_banega_mokshadhipati/UI/forgot_password.dart';
-import 'package:kon_banega_mokshadhipati/UI/game_level.dart';
-import 'package:kon_banega_mokshadhipati/UI/game_page.dart';
-import 'package:kon_banega_mokshadhipati/UI/leaderboar.dart';
-import 'package:kon_banega_mokshadhipati/UI/level_ui.dart';
-import 'package:kon_banega_mokshadhipati/UI/login_ui.dart';
-import 'package:kon_banega_mokshadhipati/UI/new_login.dart';
-import 'package:kon_banega_mokshadhipati/UI/profile.dart';
-import 'package:kon_banega_mokshadhipati/UI/register_page.dart';
-import 'package:kon_banega_mokshadhipati/UI/rules.dart';
-import 'package:kon_banega_mokshadhipati/UI/send_otp_page.dart';
-import 'package:kon_banega_mokshadhipati/UI/simple_game.dart';
-import 'package:kon_banega_mokshadhipati/model/cacheData.dart';
-import 'package:kon_banega_mokshadhipati/model/user_state.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'Service/apiservice.dart';
+import 'UI/forgot_password.dart';
+import 'UI/game_level.dart';
+import 'UI/game_page.dart';
+import 'UI/leaderboar.dart';
+import 'UI/level_ui.dart';
+import 'UI/login_ui.dart';
+import 'UI/new_login.dart';
+import 'UI/profile.dart';
+import 'UI/register_page.dart';
+import 'UI/rules.dart';
+import 'UI/send_otp_page.dart';
+import 'UI/simple_game.dart';
+import 'UI/terms&condition.dart';
+import 'model/cacheData.dart';
+import 'model/user_state.dart';
 
 import 'colors.dart';
 
@@ -84,6 +85,7 @@ class _QuizAppState extends State<QuizApp> {
         '/rules': (BuildContext context) => new RulesPagePage(),
         '/profile': (BuildContext context) => new ProfilePagePage(),
         '/leaderboard': (BuildContext context) => new LeaderboarPagePage(),
+        '/t&c': (BuildContext context) => new TermsAndConditionPage(),
       },
     );
   }
@@ -99,21 +101,22 @@ ThemeData _buildQuizTheme() {
   final ThemeData base = ThemeData.light();
   return base.copyWith(
     accentColor: kQuizBrown900,
-    primaryColor: kQuizPink100,
+    primaryColor: kQuizMain100,
     scaffoldBackgroundColor: kQuizBackgroundWhite,
     cardColor: kQuizBackgroundWhite,
-    textSelectionColor: kQuizPink100,
+    textSelectionColor: kQuizMain100,
     errorColor: kQuizErrorRed,
     buttonTheme: base.buttonTheme.copyWith(
-      buttonColor: kQuizPink100,
+      buttonColor: kQuizMain400,
       textTheme: ButtonTextTheme.normal,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10.0),
+        borderRadius: BorderRadius.circular(30.0),
       ),
     ),
     primaryIconTheme: base.iconTheme.copyWith(color: kQuizBrown900),
     inputDecorationTheme: InputDecorationTheme(
-      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0)),
+      border: OutlineInputBorder(borderRadius: BorderRadius.circular(30.0)),
+      prefixStyle: TextStyle(color: kQuizBrown900)
     ),
     textTheme: _buildQuizTextTheme(base.textTheme),
     primaryTextTheme: _buildQuizTextTheme(base.primaryTextTheme),
