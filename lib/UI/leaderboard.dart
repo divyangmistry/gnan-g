@@ -7,53 +7,73 @@ class LeaderBoard extends StatefulWidget {
 }
 
 class LeaderBoardState extends State<LeaderBoard> {
-  @override
-  Widget build(BuildContext context) {
-
-    Widget titleSection = Container(
-      padding: const EdgeInsets.all(32.0),
+  
+  Container _buildLeaderRow(int rank, String name, int points, IconData icon) {
+    return Container(
+      padding: EdgeInsets.all(16),
       child: Row(
         children: <Widget>[
           Text(
-            '1',
+            rank.toString(),
             style: TextStyle(
-              fontWeight: FontWeight.bold
+                fontSize: 24.0,
+                fontWeight: FontWeight.bold
             ),
           ),
-          Icon(
-            Icons.face,
+          Container(
+              child: Icon(
+                icon,
+                size: 50,
+              ),
+              padding: EdgeInsets.fromLTRB(18,0,12,0)
           ),
           Expanded(
-            child: Text('Albert Einstein'),
+            child: Text(
+              name,
+              style: TextStyle(
+                  fontSize: 18
+              ),
+            ),
           ),
-          Text(
-            '160',
-            style: TextStyle(
-              fontSize: 16.0,
-              fontWeight: FontWeight.bold
+          Container(
+            padding: EdgeInsets.fromLTRB(0, 0, 6, 0),
+            child: Text(
+              points.toString(),
+              style: TextStyle(
+                  fontSize: 32.0,
+                  fontWeight: FontWeight.bold
+              ),
             ),
           )
         ],
       ),
     );
+  }
+  
+  @override
+  Widget build(BuildContext context) {
 
-    debugPaintSizeEnabled=true;
+    Widget leaderSection = Column(
+      children: <Widget>[
+        _buildLeaderRow(1, "Albert Einstein", 160, Icons.face),
+        Divider(),
+        _buildLeaderRow(2, "Nikola Tesla", 83, Icons.face),
+        Divider(),
+        _buildLeaderRow(3, "MBA", 56, Icons.face),
+      ],
+    );
+
+    debugPaintSizeEnabled=false;
     return new Scaffold(
       appBar: AppBar(
         title: Text('Leaderboard'),
         backgroundColor: Colors.blue,
       ),
-      body: new SafeArea(
-//        child: new Center(
-          child: new Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              Text("2nd"),
-              Image.asset("images/face.png"),
-              Text("83pts"),
-            ],
-          ),
-        ),
+      body: Column(
+        children: <Widget>[
+          leaderSection
+        ],
+      ),
 //      ),
     );
   }
