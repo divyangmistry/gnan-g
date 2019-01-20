@@ -4,6 +4,8 @@ import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Service/apiservice.dart';
+import 'UI/register_new.dart';
+import 'UI/new_otp.dart';
 import 'UI/new_signup.dart';
 import 'UI/forgot_password.dart';
 import 'UI/game_level.dart';
@@ -80,9 +82,11 @@ class _QuizAppState extends State<QuizApp> {
         '/login': (BuildContext context) => new LoginUI(),
         '/login_new': (BuildContext context) => new LoginPage(),
         '/registerPage': (BuildContext context) => new RegisterPage(),
+        '/register_new': (BuildContext context) => new RegisterPage2(),
         '/signup': (BuildContext context) => new SignUpPage(),
         '/forgotPassword': (BuildContext context) => new ForgotPassword(),
         '/sendOtp': (BuildContext context) => new SendOTP(),
+        '/otp_new': (BuildContext context) => new OtpVerifyPage(),
         '/level': (BuildContext context) => new LevelUI(),
         '/gameStart': (BuildContext context) => new GameLevelPage(),
         '/rules': (BuildContext context) => new RulesPagePage(),
@@ -145,7 +149,7 @@ TextTheme _buildQuizTextTheme(TextTheme base) {
         ),
       )
       .apply(
-        fontFamily: 'GoogleSans',
+        fontFamily: 'CmSans',
         displayColor: kQuizBrown900,
         bodyColor: kQuizBrown900,
       );

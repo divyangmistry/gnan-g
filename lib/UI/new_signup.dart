@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // File import
+import '../common.dart';
 import '../Service/apiservice.dart';
 import '../colors.dart';
 
@@ -26,7 +27,7 @@ class SignUpPageState extends State<SignUpPage> {
       key: _formKey,
       autovalidate: _autoValidate,
       child: new Scaffold(
-        backgroundColor: kQuizBackgroundWhite,
+      backgroundColor: kQuizSurfaceWhite,
         body: SafeArea(
           child: new ListView(
             padding: EdgeInsets.symmetric(horizontal: 30.0),
@@ -161,27 +162,28 @@ class SignUpPageState extends State<SignUpPage> {
   }
 
   void _submit() {
-    if (_formKey.currentState.validate()) {
-      _formKey.currentState.save();
-      print('SIGNUP DATA');
-      print('MHTID : ${this._mhtId}');
-      print('MOBILE : ${this._mobile}');
-      Navigator.pushNamed(context, '/gameStart');
-      // var data = {'mobile': _mhtId, 'password': _password};
-      // _api.login(json.encode(data)).then((res) {
-      //   if (res.statusCode == 200) {
-      //     SharedPreferences.getInstance().then((localstorage) {
-      //       localstorage.setString('user_info', res.body);
-      //       localstorage.setBool(SharedPrefConstant.b_isUserLoggedIn, true);
-      //     });
-      //     print(json.decode(res.body)['user_info']);
-      //   } else {
-      //     _showError(json.decode(res.body)['msg'], true);
-      //   }
-      // });
-    } else {
-      _autoValidate = true;
-    }
+    Navigator.pushReplacementNamed(context, '/otp_new');
+    // if (_formKey.currentState.validate()) {
+    //   _formKey.currentState.save();
+    //   print('SIGNUP DATA');
+    //   print('MHTID : ${this._mhtId}');
+    //   print('MOBILE : ${this._mobile}');
+    //   Navigator.pushReplacementNamed(context, '/otp_new');
+    //   // var data = {'mobile': _mhtId, 'password': _password};
+    //   // _api.login(json.encode(data)).then((res) {
+    //   //   if (res.statusCode == 200) {
+    //   //     SharedPreferences.getInstance().then((localstorage) {
+    //   //       localstorage.setString('user_info', res.body);
+    //   //       localstorage.setBool(SharedPrefConstant.b_isUserLoggedIn, true);
+    //   //     });
+    //   //     print(json.decode(res.body)['user_info']);
+    //   //   } else {
+    //   //     _showError(json.decode(res.body)['msg'], true);
+    //   //   }
+    //   // });
+    // } else {
+    //   _autoValidate = true;
+    // }
   }
 
   String _mhtIdValidation(value) {
@@ -285,23 +287,6 @@ class SignUpPageState extends State<SignUpPage> {
           ),
         );
       },
-    );
-  }
-}
-
-class AccentColorOverride extends StatelessWidget {
-  const AccentColorOverride({Key key, this.color, this.child})
-      : super(key: key);
-
-  final Color color;
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    return Theme(
-      child: child,
-      data: Theme.of(context)
-          .copyWith(accentColor: color, brightness: Brightness.dark),
     );
   }
 }

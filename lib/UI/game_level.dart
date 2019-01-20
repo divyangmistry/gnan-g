@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../colors.dart';
 
 class GameLevelPage extends StatefulWidget {
   @override
@@ -9,33 +10,25 @@ class GameLevelPageState extends State<GameLevelPage> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      backgroundColor: Colors.white,
-      body: new Container(
-        decoration: new BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('images/bkg.jpg'),
-            fit: BoxFit.cover,
-          ),
-        ),
-        child: new SafeArea(
-          child: new ListView(
-            padding: EdgeInsets.all(15.0),
-            children: <Widget>[
-              _gameBar(),
-              SizedBox(
-                height: 20.0,
-              ),
-              _userCard(),
-              SizedBox(
-                height: 20.0,
-              ),
-              _bonusRoundInfo(),
-              SizedBox(
-                height: 20.0,
-              ),
-              _bottomButtons(),
-            ],
-          ),
+      backgroundColor: kQuizSurfaceWhite,
+      body: new SafeArea(
+        child: new ListView(
+          padding: EdgeInsets.symmetric(horizontal: 30.0,vertical: 20.0),
+          children: <Widget>[
+            _gameBar(),
+            SizedBox(
+              height: 20.0,
+            ),
+            _userCard(),
+            SizedBox(
+              height: 20.0,
+            ),
+            _bonusRoundInfo(),
+            SizedBox(
+              height: 20.0,
+            ),
+            _bottomButtons(),
+          ],
         ),
       ),
     );
@@ -45,10 +38,7 @@ class GameLevelPageState extends State<GameLevelPage> {
     return new Row(
       children: <Widget>[
         _iconButton(
-          Icon(
-            Icons.person_outline,
-            color: Colors.white,
-          ),
+          Icon(Icons.person_outline, color: Colors.white),
           () {
             Navigator.pushNamed(context, '/profile');
           },
@@ -56,7 +46,7 @@ class GameLevelPageState extends State<GameLevelPage> {
         new Expanded(
           child: Center(
             child: Image.asset(
-              'images/logo.png',
+              'images/logo1.png',
               height: 70.0,
             ),
           ),
@@ -82,7 +72,7 @@ class GameLevelPageState extends State<GameLevelPage> {
           _userDetail(),
           Positioned(
             top: 0,
-            left: MediaQuery.of(context).size.width / 2 - 70,
+            left: MediaQuery.of(context).size.width / 2 - 80,
             child: _userAvatar(),
           ),
         ],
@@ -92,10 +82,10 @@ class GameLevelPageState extends State<GameLevelPage> {
 
   Widget _bonusRoundInfo() {
     return Card(
-      elevation: 10.0,
-      color: Colors.grey[100],
+      elevation: 5.0,
+      color: Colors.grey[50],
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15.0),
+        borderRadius: BorderRadius.circular(30.0),
       ),
       child: Padding(
         padding: EdgeInsets.all(20.0),
@@ -104,7 +94,7 @@ class GameLevelPageState extends State<GameLevelPage> {
             Text(
               'Next Game',
               textScaleFactor: 1.5,
-              style: TextStyle(color: Colors.pink),
+              style: TextStyle(color: kQuizMain400),
             ),
             SizedBox(
               height: 30.0,
@@ -112,9 +102,7 @@ class GameLevelPageState extends State<GameLevelPage> {
             Row(
               children: <Widget>[
                 _bonusData(Icons.access_time, 'Tommorrow', '07:00 pm'),
-                VerticalDivider(
-                  height: 80.0,
-                ),
+                VerticalDivider(height: 80.0),
                 _bonusData(Icons.monetization_on, 'Points', '\$200'),
               ],
             )
@@ -134,7 +122,6 @@ class GameLevelPageState extends State<GameLevelPage> {
           () {
             Navigator.pushNamed(context, '/leaderboard');
           },
-          Colors.purple[200],
         ),
         SizedBox(width: 10.0),
         _button(
@@ -143,26 +130,33 @@ class GameLevelPageState extends State<GameLevelPage> {
           () {
             Navigator.pushNamed(context, '/gamePage');
           },
-          Colors.green[400],
         ),
       ],
     );
   }
 
-  Widget _button(String btnLable, icon, Function clickEvent, color) {
+  Widget _button(String btnLable, icon, Function clickEvent) {
     return Expanded(
       child: RaisedButton(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(50.0),
         ),
-        color: color,
         elevation: 10.0,
         padding: EdgeInsets.all(12.0),
         onPressed: clickEvent,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[Icon(icon), SizedBox(width: 10), Text(btnLable)],
+          children: <Widget>[
+            Icon(icon, color: kQuizSurfaceWhite),
+            SizedBox(width: 10),
+            Text(
+              btnLable,
+              style: TextStyle(
+                color: kQuizSurfaceWhite,
+              ),
+            )
+          ],
         ),
       ),
     );
@@ -175,19 +169,22 @@ class GameLevelPageState extends State<GameLevelPage> {
           Icon(
             icon,
             size: 40.0,
+            color: kQuizBrown900,
           ),
           SizedBox(
             height: 10.0,
           ),
-          Title(
-            child: Text(title),
-            color: Colors.grey,
+          Text(
+            title,
+            style: TextStyle(
+              color: kQuizMain50,
+            ),
           ),
           SizedBox(height: 5.0),
           Text(
             value,
             textScaleFactor: 1.5,
-            style: TextStyle(color: Colors.pink),
+            style: TextStyle(color: kQuizMain400),
           ),
         ],
       ),
@@ -197,11 +194,11 @@ class GameLevelPageState extends State<GameLevelPage> {
   Widget _userDetail() {
     return Card(
       margin: EdgeInsets.fromLTRB(5, 50, 5, 0),
-      elevation: 10.0,
+      elevation: 5.0,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15.0),
+        borderRadius: BorderRadius.circular(30.0),
       ),
-      color: Colors.grey[100],
+      color: Colors.grey[50],
       child: Padding(
         padding: EdgeInsets.all(10.0),
         child: new Column(
@@ -213,7 +210,8 @@ class GameLevelPageState extends State<GameLevelPage> {
               'Milan Vadher',
               textScaleFactor: 1.5,
               style: TextStyle(
-                color: Colors.pink,
+                fontWeight: FontWeight.w200,
+                color: kQuizMain400,
               ),
             ),
             new SizedBox(
@@ -241,15 +239,15 @@ class GameLevelPageState extends State<GameLevelPage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Title(
-              child: Text(title),
-              color: Colors.grey,
+            Text(
+              title,
+              style: TextStyle(color: kQuizMain50),
             ),
             SizedBox(height: 5.0),
             Text(
               value,
               textScaleFactor: 2,
-              style: TextStyle(color: Colors.pink),
+              style: TextStyle(color: kQuizMain400),
             )
           ],
         ),
@@ -261,7 +259,6 @@ class GameLevelPageState extends State<GameLevelPage> {
     return new RaisedButton(
       onPressed: clickEvent,
       child: icon,
-      color: Colors.purple[500],
       shape: new CircleBorder(),
       elevation: 5.0,
       padding: const EdgeInsets.all(10.0),
@@ -288,12 +285,13 @@ class GameLevelPageState extends State<GameLevelPage> {
 class VerticalDivider extends StatelessWidget {
   final double height;
   VerticalDivider({this.height: 40});
+
   @override
   Widget build(BuildContext context) {
     return new Container(
       height: height,
       width: 1.0,
-      color: Colors.grey,
+      color: kQuizMain50,
       margin: const EdgeInsets.only(left: 10.0, right: 10.0),
     );
   }

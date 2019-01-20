@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // File import
+import '../common.dart';
 import '../Service/apiservice.dart';
 import '../colors.dart';
 import '../constans/sharedpref_constant.dart';
@@ -30,7 +31,7 @@ class LoginPageState extends State<LoginPage> {
       key: _formKey,
       autovalidate: _autoValidate,
       child: new Scaffold(
-        backgroundColor: kQuizBackgroundWhite,
+      backgroundColor: kQuizSurfaceWhite,
         body: SafeArea(
           child: new ListView(
             padding: EdgeInsets.symmetric(horizontal: 30.0),
@@ -94,7 +95,7 @@ class LoginPageState extends State<LoginPage> {
                         });
                       },
                       child: Icon(
-                        _obscureText ? Icons.visibility : Icons.visibility_off,
+                        _obscureText ? Icons.visibility_off : Icons.visibility,
                         semanticLabel:
                             _obscureText ? 'show password' : 'hide password',
                         color: kQuizBrown900,
@@ -137,7 +138,7 @@ class LoginPageState extends State<LoginPage> {
         children: <Widget>[
           new Text(
             'Don\'t have an account?',
-            style: TextStyle(color: Colors.grey),
+            style: TextStyle(color: kQuizMain50),
           ),
           new FlatButton(
             child: new Text(
@@ -148,7 +149,7 @@ class LoginPageState extends State<LoginPage> {
               ),
             ),
             onPressed: () {
-              Navigator.pushReplacementNamed(context, '/signup');
+              Navigator.pushNamed(context, '/signup');
             },
           ),
         ],
@@ -166,7 +167,7 @@ class LoginPageState extends State<LoginPage> {
           new FlatButton(
             child: new Text(
               'Terms and Conditions',
-              style: TextStyle(color: Colors.grey),
+              style: TextStyle(color: kQuizMain50),
             ),
             onPressed: () {
               Navigator.pushNamed(context, '/t&c');
@@ -183,7 +184,7 @@ class LoginPageState extends State<LoginPage> {
       print('LOGIN DATA');
       print('MOBILE : ${this._mhtId}');
       print('PASSWORD : ${this._password}');
-      Navigator.pushNamed(context, '/gameStart');
+      Navigator.pushReplacementNamed(context, '/gameStart');
       // var data = {'mobile': _mhtId, 'password': _password};
       // _api.login(json.encode(data)).then((res) {
       //   if (res.statusCode == 200) {
@@ -324,23 +325,6 @@ class LoginPageState extends State<LoginPage> {
           ),
         );
       },
-    );
-  }
-}
-
-class AccentColorOverride extends StatelessWidget {
-  const AccentColorOverride({Key key, this.color, this.child})
-      : super(key: key);
-
-  final Color color;
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    return Theme(
-      child: child,
-      data: Theme.of(context)
-          .copyWith(accentColor: color, brightness: Brightness.dark),
     );
   }
 }
