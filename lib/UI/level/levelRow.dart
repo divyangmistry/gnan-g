@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kon_banega_mokshadhipati/UI/game/mainGame.dart';
 import '../../colors.dart';
 import '../../model/quizlevel.dart';
 
@@ -102,7 +103,14 @@ class LevelCardRow extends StatelessWidget {
       margin: const EdgeInsets.only(top: 16.0, bottom: 8.0),
       child: GestureDetector(
         onTap: () {
-          onLevelTap(levelDetails);
+          print('LEVEL DETAILS :: ');
+          print(levelDetails);
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => new MainGamePage(level: levelDetails,),
+            ),
+          );
         },
         child: new Stack(
           children: <Widget>[
@@ -112,10 +120,5 @@ class LevelCardRow extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  onLevelTap(level) {
-    print('LEVEL DETAILS :: ');
-    print(level);
   }
 }

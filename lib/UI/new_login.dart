@@ -179,7 +179,7 @@ class LoginPageState extends State<LoginPage> {
   }
 
   void _submit() {
-    Navigator.pushNamed(context, '/game_new');
+    Navigator.pushNamed(context, '/level_new');
     // if (_formKey.currentState.validate()) {
     //   _formKey.currentState.save();
     //   print('LOGIN DATA');
