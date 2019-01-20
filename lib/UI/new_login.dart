@@ -31,7 +31,7 @@ class LoginPageState extends State<LoginPage> {
       key: _formKey,
       autovalidate: _autoValidate,
       child: new Scaffold(
-      backgroundColor: kQuizSurfaceWhite,
+        backgroundColor: kQuizSurfaceWhite,
         body: SafeArea(
           child: new ListView(
             padding: EdgeInsets.symmetric(horizontal: 30.0),
@@ -179,28 +179,29 @@ class LoginPageState extends State<LoginPage> {
   }
 
   void _submit() {
-    if (_formKey.currentState.validate()) {
-      _formKey.currentState.save();
-      print('LOGIN DATA');
-      print('MOBILE : ${this._mhtId}');
-      print('PASSWORD : ${this._password}');
-      Navigator.pushReplacementNamed(context, '/gameStart');
-      // var data = {'mobile': _mhtId, 'password': _password};
-      // _api.login(json.encode(data)).then((res) {
-      //   if (res.statusCode == 200) {
-      //     SharedPreferences.getInstance().then((localstorage) {
-      //       localstorage.setString('user_info', res.body);
-      //       localstorage.setBool(SharedPrefConstant.b_isUserLoggedIn, true);
-      //     });
-      //     print(json.decode(res.body)['user_info']);
-      //     _loadUserState(_mhtId);
-      //   } else {
-      //     _showError(json.decode(res.body)['msg'], true);
-      //   }
-      // });
-    } else {
-      _autoValidate = true;
-    }
+    Navigator.pushNamed(context, '/game_new');
+    // if (_formKey.currentState.validate()) {
+    //   _formKey.currentState.save();
+    //   print('LOGIN DATA');
+    //   print('MOBILE : ${this._mhtId}');
+    //   print('PASSWORD : ${this._password}');
+    //   Navigator.pushReplacementNamed(context, '/game_new');
+    //   // var data = {'mobile': _mhtId, 'password': _password};
+    //   // _api.login(json.encode(data)).then((res) {
+    //   //   if (res.statusCode == 200) {
+    //   //     SharedPreferences.getInstance().then((localstorage) {
+    //   //       localstorage.setString('user_info', res.body);
+    //   //       localstorage.setBool(SharedPrefConstant.b_isUserLoggedIn, true);
+    //   //     });
+    //   //     print(json.decode(res.body)['user_info']);
+    //   //     _loadUserState(_mhtId);
+    //   //   } else {
+    //   //     _showError(json.decode(res.body)['msg'], true);
+    //   //   }
+    //   // });
+    // } else {
+    //   _autoValidate = true;
+    // }
   }
 
   _loadUserState(mhtId) async {

@@ -4,6 +4,7 @@ import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Service/apiservice.dart';
+import 'UI/level/levelList.dart';
 import 'UI/register_new.dart';
 import 'UI/new_otp.dart';
 import 'UI/new_signup.dart';
@@ -79,6 +80,7 @@ class _QuizAppState extends State<QuizApp> {
       routes: <String, WidgetBuilder>{
         '/gamePage': (BuildContext context) => new GamePage(),
         '/simpleGame': (BuildContext context) => new SimpleGame(),
+        '/game_new': (BuildContext context) => new NewLevelPage(),
         '/login': (BuildContext context) => new LoginUI(),
         '/login_new': (BuildContext context) => new LoginPage(),
         '/registerPage': (BuildContext context) => new RegisterPage(),

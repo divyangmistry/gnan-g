@@ -132,7 +132,7 @@ class SignUpPageState extends State<SignUpPage> {
               ),
             ),
             onPressed: () {
-              Navigator.pushReplacementNamed(context, '/login_new');
+              Navigator.pop(context);
             },
           ),
         ],
