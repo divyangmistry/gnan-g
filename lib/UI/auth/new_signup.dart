@@ -5,25 +5,21 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // File import
-import '../common.dart';
-import '../Service/apiservice.dart';
-import '../colors.dart';
-import '../constans/sharedpref_constant.dart';
-import '../model/cacheData.dart';
-import '../model/user_state.dart';
+import '../../common.dart';
+import '../../Service/apiservice.dart';
+import '../../colors.dart';
 
-class LoginPage extends StatefulWidget {
+class SignUpPage extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => new LoginPageState();
+  State<StatefulWidget> createState() => new SignUpPageState();
 }
 
-class LoginPageState extends State<LoginPage> {
+class SignUpPageState extends State<SignUpPage> {
   final _formKey = GlobalKey<FormState>();
   bool _autoValidate = false;
-  bool _obscureText = true;
   ApiService _api = new ApiService();
   String _mhtId;
-  String _password;
+  String _mobile;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +27,7 @@ class LoginPageState extends State<LoginPage> {
       key: _formKey,
       autovalidate: _autoValidate,
       child: new Scaffold(
-        backgroundColor: kQuizSurfaceWhite,
+      backgroundColor: kQuizSurfaceWhite,
         body: SafeArea(
           child: new ListView(
             padding: EdgeInsets.symmetric(horizontal: 30.0),
@@ -45,12 +41,12 @@ class LoginPageState extends State<LoginPage> {
                   ),
                   new SizedBox(height: 30.0),
                   new Text(
-                    'SIGN IN',
+                    'SIGN UP',
                     textScaleFactor: 1.5,
                     style: TextStyle(
                       fontWeight: FontWeight.w800,
                     ),
-                  ),
+                  )
                 ],
               ),
               new SizedBox(
@@ -79,39 +75,26 @@ class LoginPageState extends State<LoginPage> {
               new AccentColorOverride(
                 color: kQuizBrown900,
                 child: new TextFormField(
-                  validator: _passwordValidation,
+                  validator: _mobileValidation,
                   decoration: InputDecoration(
-                    labelText: 'Password',
-                    hintText: 'Enter Password',
+                    labelText: 'Mobile no.',
+                    hintText: 'Enter Mobile no.',
                     prefixIcon: Icon(
-                      Icons.vpn_key,
+                      Icons.call,
                       color: kQuizBrown900,
                     ),
                     filled: true,
-                    suffixIcon: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          _obscureText = !_obscureText;
-                        });
-                      },
-                      child: Icon(
-                        _obscureText ? Icons.visibility_off : Icons.visibility,
-                        semanticLabel:
-                            _obscureText ? 'show password' : 'hide password',
-                        color: kQuizBrown900,
-                      ),
-                    ),
                   ),
                   onSaved: (String value) {
-                    _password = value;
+                    _mhtId = value;
                   },
-                  obscureText: _obscureText,
+                  keyboardType: TextInputType.numberWithOptions(),
                 ),
               ),
               new SizedBox(height: 20.0),
               new RaisedButton(
                 child: Text(
-                  'SIGN IN',
+                  'SIGN UP',
                   style: TextStyle(color: Colors.white),
                 ),
                 elevation: 4.0,
@@ -119,7 +102,7 @@ class LoginPageState extends State<LoginPage> {
                 onPressed: _submit,
               ),
               new SizedBox(height: 50.0),
-              _signupBox(),
+              _loginBox(),
               new SizedBox(height: 15.0),
               _termsAndCondition(),
             ],
@@ -129,7 +112,7 @@ class LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _signupBox() {
+  Widget _loginBox() {
     return new Container(
       child: new Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -137,19 +120,19 @@ class LoginPageState extends State<LoginPage> {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           new Text(
-            'Don\'t have an account?',
-            style: TextStyle(color: kQuizMain50),
+            'Already have an account?',
+            style: TextStyle(color: Colors.grey),
           ),
           new FlatButton(
             child: new Text(
-              'SIGN UP NOW',
+              'LOGIN NOW',
               style: TextStyle(
                 color: kQuizBrown900,
                 fontWeight: FontWeight.w700,
               ),
             ),
             onPressed: () {
-              Navigator.pushNamed(context, '/signup');
+              Navigator.pop(context);
             },
           ),
         ],
@@ -167,7 +150,7 @@ class LoginPageState extends State<LoginPage> {
           new FlatButton(
             child: new Text(
               'Terms and Conditions',
-              style: TextStyle(color: kQuizMain50),
+              style: TextStyle(color: Colors.grey),
             ),
             onPressed: () {
               Navigator.pushNamed(context, '/t&c');
@@ -179,13 +162,13 @@ class LoginPageState extends State<LoginPage> {
   }
 
   void _submit() {
-    Navigator.pushNamed(context, '/level_new');
+    Navigator.pushReplacementNamed(context, '/otp_new');
     // if (_formKey.currentState.validate()) {
     //   _formKey.currentState.save();
-    //   print('LOGIN DATA');
-    //   print('MOBILE : ${this._mhtId}');
-    //   print('PASSWORD : ${this._password}');
-    //   Navigator.pushReplacementNamed(context, '/game_new');
+    //   print('SIGNUP DATA');
+    //   print('MHTID : ${this._mhtId}');
+    //   print('MOBILE : ${this._mobile}');
+    //   Navigator.pushReplacementNamed(context, '/otp_new');
     //   // var data = {'mobile': _mhtId, 'password': _password};
     //   // _api.login(json.encode(data)).then((res) {
     //   //   if (res.statusCode == 200) {
@@ -194,7 +177,6 @@ class LoginPageState extends State<LoginPage> {
     //   //       localstorage.setBool(SharedPrefConstant.b_isUserLoggedIn, true);
     //   //     });
     //   //     print(json.decode(res.body)['user_info']);
-    //   //     _loadUserState(_mhtId);
     //   //   } else {
     //   //     _showError(json.decode(res.body)['msg'], true);
     //   //   }
@@ -202,22 +184,6 @@ class LoginPageState extends State<LoginPage> {
     // } else {
     //   _autoValidate = true;
     // }
-  }
-
-  _loadUserState(mhtId) async {
-    var data = {'user_mob': mhtId};
-    Response res = await _api.getUserState(json.encode(data));
-    if (res.statusCode == 200) {
-      Map<String, dynamic> userstateStr = json.decode(res.body)['results'];
-      print('IN LOGIN ::: userstateStr :::');
-      print(userstateStr);
-      UserState userState = UserState.fromJson(userstateStr);
-      CacheData.userState = userState;
-      Navigator.pushReplacementNamed(context, '/level');
-    } else {
-      print('ERROR : ');
-      print(res.body);
-    }
   }
 
   String _mhtIdValidation(value) {
@@ -229,16 +195,11 @@ class LoginPageState extends State<LoginPage> {
     return null;
   }
 
-  String _passwordValidation(value) {
-    Pattern pattern =
-        r'(?=^.{6,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$';
-    RegExp regex = new RegExp(pattern);
+  String _mobileValidation(value) {
     if (value.isEmpty) {
-      return 'Password is required';
-    } else if (value.length < 6) {
-      return 'Passwords must contain at least six characters';
-    } else if (!regex.hasMatch(value)) {
-      return 'Passwords must contain uppercase, lowercase letters and numbers';
+      return 'Mobile no. is required';
+    } else if (value.length != 10) {
+      return 'Enter Valid Mobile no.';
     }
     return null;
   }

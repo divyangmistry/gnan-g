@@ -1,41 +1,35 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:kon_banega_mokshadhipati/UI/verify_otp_page.dart';
-import '../Service//apiservice.dart';
+import '../../Service/apiservice.dart';
 
-enum AlertType { Success, Error }
-
-class RegisterPage extends StatefulWidget {
+class ForgotPassword extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return new RegisterPageState();
+    return new ForgotPasswordState();
   }
 }
 
-class RegisterPageState extends State<RegisterPage> {
+class ForgotPasswordState extends State<ForgotPassword> {
+  _ForgotPasswordData _data = new _ForgotPasswordData();
   final _formKey = GlobalKey<FormState>();
-  final String register = 'register';
-  _RegisterData _data = new _RegisterData();
   ApiService _api = new ApiService();
   bool _autoValidate = false;
+
+  final _passwordController = new TextEditingController();
 
   _appBarView() {
     return new AppBar(
       centerTitle: true,
       title: new Text(
-        'REGISTER',
+        'FORGOT PASSWORD',
         style: TextStyle(
-          color: Colors.white,
-          fontSize: 30.0,
-          fontWeight: FontWeight.w300,
-        ),
+            color: Colors.white, fontSize: 20.0, fontWeight: FontWeight.w300),
       ),
     );
   }
 
   _bodyView() {
-    return Form(
+    return new Form(
       key: _formKey,
       autovalidate: _autoValidate,
       child: new Container(
@@ -50,28 +44,7 @@ class RegisterPageState extends State<RegisterPage> {
               padding: EdgeInsets.only(top: 60.0),
             ),
             new TextFormField(
-              validator: (value) {
-                if (value.isEmpty) {
-                  return 'Name is required';
-                }
-                if (value.length < 3) {
-                  return 'Name must be 3 character long';
-                }
-              },
-              onSaved: (value) {
-                _data.name = value;
-              },
-              decoration: new InputDecoration(
-                labelText: 'Name',
-                hintText: 'Enter your Name',
-                suffixIcon: new Icon(Icons.person_outline),
-                border: OutlineInputBorder(),
-              ),
-            ),
-            new Padding(
-              padding: EdgeInsets.only(top: 20.0),
-            ),
-            new TextFormField(
+              controller: _passwordController,
               validator: (value) {
                 Pattern pattern =
                     r'(?=^.{6,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$';
@@ -84,63 +57,35 @@ class RegisterPageState extends State<RegisterPage> {
                   return 'Passwords must contain uppercase, lowercase letters and numbers';
                 }
               },
-              obscureText: true,
-              decoration: const InputDecoration(
-                labelText: 'Password:',
-                hintText: 'Enter your Password',
-                border: OutlineInputBorder(),
-                suffixIcon: Icon(
-                  Icons.lock_outline,
-                ),
-              ),
               onSaved: (String value) {
                 this._data.password = value;
               },
-            ),
-            new Padding(
-              padding: EdgeInsets.only(top: 20.0),
-            ),
-            new TextFormField(
-              validator: (value) {
-                if (value.isEmpty) {
-                  return 'Mobile no. is required';
-                } else if (value.length != 10) {
-                  return 'Mobile no. must have 10 digit';
-                }
-              },
-              keyboardType: TextInputType.numberWithOptions(),
-              decoration: const InputDecoration(
-                labelText: 'Mobile no.:',
-                hintText: 'Enter your Mobile no.',
-                border: OutlineInputBorder(),
-                suffixIcon: Icon(Icons.person_outline),
-              ),
-              onSaved: (String value) {
-                this._data.mobile = value;
-              },
-            ),
-            new Padding(
-              padding: EdgeInsets.only(top: 20.0),
-            ),
-            new TextFormField(
-              keyboardType: TextInputType.emailAddress,
-              validator: (value) {
-                Pattern pattern =
-                    r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-                RegExp regex = new RegExp(pattern);
-                if (value.isEmpty) {
-                  return 'Email is required';
-                } else if (!regex.hasMatch(value)) {
-                  return 'Enter valid email';
-                }
-              },
-              onSaved: (value) {
-                _data.email = value;
-              },
+              obscureText: true,
               decoration: new InputDecoration(
-                labelText: 'Email',
-                hintText: 'Enter your Email',
-                suffixIcon: new Icon(Icons.person_outline),
+                  labelText: 'New Password',
+                  hintText: 'Enter your new password',
+                  suffixIcon: new Icon(Icons.lock_open),
+                  border: OutlineInputBorder()),
+            ),
+            new Padding(
+              padding: EdgeInsets.only(top: 20.0),
+            ),
+            new TextFormField(
+              validator: (value) {
+                if (value.isEmpty) {
+                  return 'Password is required';
+                } else if (value != _passwordController.text) {
+                  return 'Password & Verify Password must be same';
+                }
+              },
+              onSaved: (String value) {
+                this._data.retypePassword = value;
+              },
+              obscureText: true,
+              decoration: new InputDecoration(
+                labelText: 'Verify Password',
+                hintText: 'Verify your Password',
+                suffixIcon: new Icon(Icons.lock_outline),
                 border: OutlineInputBorder(),
               ),
             ),
@@ -153,14 +98,15 @@ class RegisterPageState extends State<RegisterPage> {
               child: new RaisedButton(
                 shape: new RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(300.0)),
-                onPressed: _register,
+                onPressed: _changePassword,
                 color: Theme.of(context).primaryColor,
                 child: new Text(
-                  'Register',
+                  'Reset Password',
                   style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 20.0),
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 20.0,
+                  ),
                 ),
               ),
             ),
@@ -170,33 +116,22 @@ class RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  void _register() {
-    // TODO : Implement send OTP
+  void _changePassword() {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
-      print('REGISTER : ');
-      print(_data.name);
-      print(_data.mobile);
+      print('FORGOT PASSWORD : ');
       print(_data.password);
-      print(_data.email);
-      Navigator.pop(context);
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => VerifyOTP('register'),
-        ),
-      );
+      print(_data.retypePassword);
       var data;
       data = {
-        "mobile": _data.mobile,
-        "password": _data.password,
-        "name": _data.name,
-        "email": _data.email
+        'password': _data.password,
+        'verifyPassword': _data.retypePassword
       };
-      _api.register(json.encode(data)).then((res) {
+      _api.forgotPassword(json.encode(data)).then((res) {
         if (res.statusCode == 201) {
           _showError('Success', json.decode(res.body)['msg'], false);
           print(json.decode(res.body).toString());
+          Navigator.pushReplacementNamed(context, '/login');
         } else {
           _showError(
               'Error',
@@ -304,9 +239,7 @@ class RegisterPageState extends State<RegisterPage> {
   }
 }
 
-class _RegisterData {
-  String name;
-  String mobile;
+class _ForgotPasswordData {
   String password;
-  String email;
+  String retypePassword;
 }

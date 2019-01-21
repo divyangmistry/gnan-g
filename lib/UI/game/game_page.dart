@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:kon_banega_mokshadhipati/UI/drag_ans.dart';
+import '../game/drag_ans.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class GamePage extends StatefulWidget {

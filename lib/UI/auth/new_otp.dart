@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../colors.dart';
-import '../common.dart';
-import '../Service/apiservice.dart';
+import '../../colors.dart';
+import '../../common.dart';
+import '../../Service/apiservice.dart';
 
 class OtpVerifyPage extends StatefulWidget {
   @override

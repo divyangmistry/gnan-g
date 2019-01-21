@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:kon_banega_mokshadhipati/model/cacheData.dart';
 import 'package:kon_banega_mokshadhipati/model/current_stat.dart';
-import '../Service/apiservice.dart';
-import '../model/question.dart';
+import '../../Service/apiservice.dart';
+import '../../model/question.dart';
 
 class SimpleGame extends StatefulWidget {
   final int level;

@@ -6,22 +6,18 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'Service/apiservice.dart';
 import 'UI/game/mainGame.dart';
 import 'UI/level/levelList.dart';
-import 'UI/register_new.dart';
-import 'UI/new_otp.dart';
-import 'UI/new_signup.dart';
-import 'UI/forgot_password.dart';
+import 'UI/auth/register_new.dart';
+import 'UI/auth/new_otp.dart';
+import 'UI/auth/new_signup.dart';
+import 'UI/auth/forgot_password.dart';
 import 'UI/game_level.dart';
-import 'UI/game_page.dart';
-import 'UI/leaderboar.dart';
-import 'UI/level_ui.dart';
-import 'UI/login_ui.dart';
-import 'UI/new_login.dart';
+import 'UI/game/game_page.dart';
+import 'UI/game/leaderboar.dart';
+import 'UI/auth/new_login.dart';
 import 'UI/profile.dart';
-import 'UI/register_page.dart';
-import 'UI/rules.dart';
-import 'UI/send_otp_page.dart';
-import 'UI/simple_game.dart';
-import 'UI/terms&condition.dart';
+import 'UI/others/rules.dart';
+import 'UI/game/simple_game.dart';
+import 'UI/others/terms&condition.dart';
 import 'model/cacheData.dart';
 import 'model/user_state.dart';
 
@@ -65,9 +61,9 @@ class _QuizAppState extends State<QuizApp> {
         print(userstateStr);
         UserState userState = UserState.fromJson(userstateStr);
         CacheData.userState = userState;
-        _defaultHome = new LevelUI();
+        _defaultHome = new NewLevelPage();
       } else {
-        _defaultHome = new LoginUI();
+        _defaultHome = new LoginPage();
       }
     }
   }
@@ -83,15 +79,11 @@ class _QuizAppState extends State<QuizApp> {
         '/simpleGame': (BuildContext context) => new SimpleGame(),
         '/game_new': (BuildContext context) => new MainGamePage(),
         '/level_new': (BuildContext context) => new NewLevelPage(),
-        '/login': (BuildContext context) => new LoginUI(),
         '/login_new': (BuildContext context) => new LoginPage(),
-        '/registerPage': (BuildContext context) => new RegisterPage(),
         '/register_new': (BuildContext context) => new RegisterPage2(),
         '/signup': (BuildContext context) => new SignUpPage(),
         '/forgotPassword': (BuildContext context) => new ForgotPassword(),
-        '/sendOtp': (BuildContext context) => new SendOTP(),
         '/otp_new': (BuildContext context) => new OtpVerifyPage(),
-        '/level': (BuildContext context) => new LevelUI(),
         '/gameStart': (BuildContext context) => new GameLevelPage(),
         '/rules': (BuildContext context) => new RulesPagePage(),
         '/profile': (BuildContext context) => new ProfilePagePage(),
