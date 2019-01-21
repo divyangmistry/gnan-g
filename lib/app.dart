@@ -11,7 +11,6 @@ import 'UI/auth/new_otp.dart';
 import 'UI/auth/new_signup.dart';
 import 'UI/auth/forgot_password.dart';
 import 'UI/game_level.dart';
-import 'UI/game/game_page.dart';
 import 'UI/game/leaderboar.dart';
 import 'UI/auth/new_login.dart';
 import 'UI/profile.dart';
@@ -75,7 +74,6 @@ class _QuizAppState extends State<QuizApp> {
       home: _defaultHome,
       theme: _kQuizTheme,
       routes: <String, WidgetBuilder>{
-        '/gamePage': (BuildContext context) => new GamePage(),
         '/simpleGame': (BuildContext context) => new SimpleGame(),
         '/game_new': (BuildContext context) => new MainGamePage(),
         '/level_new': (BuildContext context) => new NewLevelPage(),
@@ -118,9 +116,8 @@ ThemeData _buildQuizTheme() {
     ),
     primaryIconTheme: base.iconTheme.copyWith(color: kQuizBrown900),
     inputDecorationTheme: InputDecorationTheme(
-      border: OutlineInputBorder(borderRadius: BorderRadius.circular(30.0)),
-      prefixStyle: TextStyle(color: kQuizBrown900)
-    ),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(30.0)),
+        prefixStyle: TextStyle(color: kQuizBrown900)),
     textTheme: _buildQuizTextTheme(base.textTheme),
     primaryTextTheme: _buildQuizTextTheme(base.primaryTextTheme),
     accentTextTheme: _buildQuizTextTheme(base.accentTextTheme),

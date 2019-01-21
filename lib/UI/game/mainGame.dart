@@ -14,7 +14,7 @@ class MainGamePage extends StatefulWidget {
 
 class MainGamePageState extends State<MainGamePage> {
   bool clickAns = false;
-  List option = [false, false, false, false];
+  List<bool> option = [false, false, false, false];
   int userLives = 3;
 
   @override
@@ -32,7 +32,7 @@ class MainGamePageState extends State<MainGamePage> {
             padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
             children: <Widget>[
               titleBar(),
-              SizedBox(height: 50),
+              // SizedBox(height: 50),
               new Padding(
                 padding: EdgeInsets.all(50),
                 child: questionUi(),
@@ -43,37 +43,90 @@ class MainGamePageState extends State<MainGamePage> {
         ),
       ),
       bottomNavigationBar: BottomAppBar(
-        child: SizedBox(
-          height: 50,
           child: Row(
-            children: <Widget>[
-              SizedBox(width: 10),
-              Text('Points : ', style: TextStyle(color: kQuizMain50)),
-              Text('120\$',
-                  style: TextStyle(color: kQuizBrown900), textScaleFactor: 1.2),
-              SizedBox(width: 20),
-              Text('Lives : ', style: TextStyle(color: kQuizMain50)),
-              new Container(
-                height: 25,
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  scrollDirection: Axis.horizontal,
-                  itemCount: userLives,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Icon(Icons.account_circle);
-                  },
-                ),
-              ),
-            ],
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          Container(
+            // width: 0.0,
+            child: IconButton(
+              icon: Icon(Icons.menu),
+              onPressed: () {
+                showModalBottomSheet(
+                    builder: (BuildContext context) => _bottomDrawer(),
+                    context: context);
+              },
+            ),
           ),
-        ),
-      ),
+          Expanded(
+            child: Text(
+              'SUBMIT',
+              textAlign: TextAlign.center,
+            ),
+          ),
+          SizedBox(
+            width: 50.0,
+          )
+        ],
+      )
+
+          // Row(
+          //   children: <Widget>[
+          // SizedBox(width: 10),
+          // Text('Points : ', style: TextStyle(color: kQuizMain50)),
+          // Text('120\$',
+          //     style: TextStyle(color: kQuizBrown900), textScaleFactor: 1.2),
+          // SizedBox(width: 20),
+          // Text('Lives : ', style: TextStyle(color: kQuizMain50)),
+          // new Container(
+          //   height: 25,
+          //   child: ListView.builder(
+          //     shrinkWrap: true,
+          //     scrollDirection: Axis.horizontal,
+          //     itemCount: userLives,
+          //     itemBuilder: (BuildContext context, int index) {
+          //       return Icon(Icons.account_circle);
+          //     },
+          //   ),
+          // ),
+          // ],
+          // ),
+          // ),
+          ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-      floatingActionButton: new FloatingActionButton.extended(
-        label: Text('Get Hint'),
-        icon: Icon(Icons.help_outline),
+      floatingActionButton: new FloatingActionButton(
+        // label: Text('Get Hint'),
+        // icon: Icon(Icons.help_outline),
+        child: Icon(Icons.help_outline),
         onPressed: () {},
         backgroundColor: kQuizMain400,
+      ),
+    );
+  }
+
+  Widget _bottomDrawer() {
+    return Drawer(
+      elevation: 5.0,
+      child: Column(
+        children: <Widget>[
+          SizedBox(
+            height: 20.0,
+          ),
+          ListTile(
+            title: Text('Option 01'),
+          ),
+          SizedBox(
+            height: 20.0,
+          ),
+          ListTile(
+            title: Text('Option 01'),
+          ),
+          SizedBox(
+            height: 20.0,
+          ),
+          ListTile(
+            title: Text('Option 01'),
+          ),
+        ],
       ),
     );
   }
@@ -97,6 +150,21 @@ class MainGamePageState extends State<MainGamePage> {
         options('Option 3', 2),
         new SizedBox(height: 20),
         options('Option 4', 3),
+        new SizedBox(height: 80),
+        Center(
+          child: Container(
+            child: MaterialButton(
+              elevation: 0,
+              splashColor: Colors.teal,
+              onPressed: () => debugPrint('hello'),
+              child: Icon(
+                Icons.done,
+                color: Colors.white,
+                size: 50.0,
+              ),
+            ),
+          ),
+        )
       ],
     );
   }
