@@ -15,6 +15,7 @@ class MainGamePage extends StatefulWidget {
 class MainGamePageState extends State<MainGamePage> {
   bool clickAns = false;
   List option = [false, false, false, false];
+  int userLives = 3;
 
   @override
   void initState() {
@@ -41,16 +42,39 @@ class MainGamePageState extends State<MainGamePage> {
           ),
         ),
       ),
-      floatingActionButton: option.contains(true)
-          ? new FloatingActionButton(
-              onPressed: () {},
-              child: Icon(
-                Icons.check,
-                size: 30,
+      bottomNavigationBar: BottomAppBar(
+        child: SizedBox(
+          height: 50,
+          child: Row(
+            children: <Widget>[
+              SizedBox(width: 10),
+              Text('Points : ', style: TextStyle(color: kQuizMain50)),
+              Text('120\$',
+                  style: TextStyle(color: kQuizBrown900), textScaleFactor: 1.2),
+              SizedBox(width: 20),
+              Text('Lives : ', style: TextStyle(color: kQuizMain50)),
+              new Container(
+                height: 25,
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  scrollDirection: Axis.horizontal,
+                  itemCount: userLives,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Icon(Icons.account_circle);
+                  },
+                ),
               ),
-              backgroundColor: Colors.green,
-            )
-          : new Container(),
+            ],
+          ),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+      floatingActionButton: new FloatingActionButton.extended(
+        label: Text('Get Hint'),
+        icon: Icon(Icons.help_outline),
+        onPressed: () {},
+        backgroundColor: kQuizMain400,
+      ),
     );
   }
 
@@ -137,7 +161,7 @@ class MainGamePageState extends State<MainGamePage> {
         new Text(
           widget.level.name.toUpperCase(),
           textScaleFactor: 1.2,
-          // style: TextStyle(color: kQuizSurfaceWhite),
+          style: TextStyle(color: kQuizSurfaceWhite),
         ),
         new Expanded(
           child: new Container(),
@@ -145,7 +169,6 @@ class MainGamePageState extends State<MainGamePage> {
         new IconButton(
           icon: Icon(Icons.settings),
           onPressed: () {},
-          // color: kQuizSurfaceWhite,
         ),
       ],
     );
