@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../model/quizlevel.dart';
 import '../../colors.dart';
+import '../../common.dart';
 
 class MainGamePage extends StatefulWidget {
   final QuizLevel level;
@@ -24,20 +25,7 @@ class MainGamePageState extends State<MainGamePage> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      body: new Container(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            stops: [0.1, 0.9],
-            colors: [
-              kQuizMain100,
-              kQuizMain300,
-            ],
-          ),
-        ),
+      body: new BackgroundGredient(
         child: SafeArea(
           child: new ListView(
             padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
@@ -58,7 +46,6 @@ class MainGamePageState extends State<MainGamePage> {
               onPressed: () {},
               child: Icon(
                 Icons.check,
-                // color: kQuizBrown900,
                 size: 30,
               ),
               backgroundColor: Colors.green,

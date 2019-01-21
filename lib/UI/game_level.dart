@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../common.dart';
 import '../colors.dart';
 
 class GameLevelPage extends StatefulWidget {
@@ -102,7 +103,7 @@ class GameLevelPageState extends State<GameLevelPage> {
             Row(
               children: <Widget>[
                 _bonusData(Icons.access_time, 'Tommorrow', '07:00 pm'),
-                VerticalDivider(height: 80.0),
+                CustomVerticalDivider(height: 80.0),
                 _bonusData(Icons.monetization_on, 'Points', '\$200'),
               ],
             )
@@ -220,9 +221,9 @@ class GameLevelPageState extends State<GameLevelPage> {
             new Row(
               children: <Widget>[
                 _scoreData('Points', '\$10'),
-                VerticalDivider(height: 60),
+                CustomVerticalDivider(height: 60),
                 _scoreData('Rank', '15th'),
-                VerticalDivider(height: 60),
+                CustomVerticalDivider(height: 60),
                 _scoreData('Lives', '05'),
               ],
             ),
@@ -282,17 +283,4 @@ class GameLevelPageState extends State<GameLevelPage> {
   }
 }
 
-class VerticalDivider extends StatelessWidget {
-  final double height;
-  VerticalDivider({this.height: 40});
 
-  @override
-  Widget build(BuildContext context) {
-    return new Container(
-      height: height,
-      width: 1.0,
-      color: kQuizMain50,
-      margin: const EdgeInsets.only(left: 10.0, right: 10.0),
-    );
-  }
-}

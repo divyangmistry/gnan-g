@@ -11,3 +11,6 @@ const kQuizErrorRed = const Color(0xFFFF002D);
 
 const kQuizSurfaceWhite = const Color(0xFFFAFAFA);
 const kQuizBackgroundWhite = Colors.white;
+
+const kBackgroundGrediant1 = Colors.blue;
+const kBackgroundGrediant2 = Colors.purple;

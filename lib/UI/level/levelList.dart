@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import '../../colors.dart';
 import 'levelRow.dart';
 import '../../model/quizlevel.dart';
+import '../../common.dart';
 
 class NewLevelPage extends StatefulWidget {
   @override
@@ -9,11 +12,29 @@ class NewLevelPage extends StatefulWidget {
 }
 
 class NewLevelPageState extends State<NewLevelPage> {
+  bool display = true;
+
   @override
-  Widget build(BuildContext context) {
-    return new Scaffold(
-      backgroundColor: kQuizSurfaceWhite,
-      body: new SafeArea(
+  void initState() {
+    super.initState();
+    loadData();
+  }
+
+  Future<Null> loadData() async {
+    const timeOut = const Duration(seconds: 2);
+    new Timer(timeOut, () {
+      setState(() {
+        // TODO : Load levels
+        display = false;
+      });
+    });
+  }
+
+  Widget _pageToDisplay() {
+    if (display) {
+      return CustomLoading();
+    } else {
+      return new SafeArea(
         child: Column(
           children: <Widget>[
             new SizedBox(height: 20),
@@ -21,13 +42,24 @@ class NewLevelPageState extends State<NewLevelPage> {
               'LEVELS',
               textScaleFactor: 1.5,
               style: TextStyle(
-                fontWeight: FontWeight.w800,
-              ),
+                  fontWeight: FontWeight.w800,
+                  color: kQuizSurfaceWhite,
+                  letterSpacing: 4),
             ),
             new SizedBox(height: 20),
             new LevelList(),
           ],
         ),
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return new Scaffold(
+      backgroundColor: kQuizSurfaceWhite,
+      body: new BackgroundGredient(
+        child: _pageToDisplay(),
       ),
     );
   }
@@ -38,7 +70,6 @@ class LevelList extends StatelessWidget {
   Widget build(BuildContext context) {
     return new Flexible(
       child: new Container(
-        color: kQuizSurfaceWhite,
         child: new ListView.builder(
           itemExtent: 160.0,
           itemCount: DummyLevelList.levels.length,
