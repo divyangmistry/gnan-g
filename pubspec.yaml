@@ -48,6 +48,8 @@ flutter:
     - images/bkg.jpg
     - images/login.jpg
     - images/face.jpg
+    - images/rank2.jpg
+    - images/rank3.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.

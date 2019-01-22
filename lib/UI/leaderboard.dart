@@ -8,7 +8,7 @@ class LeaderBoard extends StatefulWidget {
 
 class LeaderBoardState extends State<LeaderBoard> {
   
-  Container _buildLeaderRow(int rank, String name, int points, IconData icon) {
+  Container _buildLeaderRow(int rank, String name, int points, IconData icon, String imagePath) {
     return Container(
       padding: EdgeInsets.all(16),
       child: Row(
@@ -21,11 +21,19 @@ class LeaderBoardState extends State<LeaderBoard> {
             ),
           ),
           Container(
-              child: Icon(
-                icon,
-                size: 50,
-              ),
-              padding: EdgeInsets.fromLTRB(18,0,12,0)
+            padding: EdgeInsets.fromLTRB(18,0,12,0),
+            child: Container(
+              width: 50,
+              height: 50,
+              decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.white54,
+                  image: DecorationImage(
+                      fit: BoxFit.fill,
+                      image: AssetImage(imagePath)
+                  )
+              )
+            ),
           ),
           Expanded(
             child: Text(
@@ -54,12 +62,12 @@ class LeaderBoardState extends State<LeaderBoard> {
     return Container(
       padding: EdgeInsets.all(16),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
           Expanded(
             flex: 33,
-            child: Container(
-//              padding: EdgeInsets.symmetric(horizontal: 36),
+            child:
+            Container(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.baseline,
@@ -80,23 +88,27 @@ class LeaderBoardState extends State<LeaderBoard> {
               ),
             ),
           ),
-          Expanded(
-            flex: 33,
-            child: Container(
+//          Expanded(
+//            flex: 33,
+//            child:
+            Container(
 //                padding: EdgeInsets.symmetric(horizontal: 36),
               width: 64,
               height: 64,
-              child: Image.asset(
-                'images/face.jpg',
-                width: 64.0,
-                height: 64.0,
-//              fit: BoxFit.fill,
-              )
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.white54,
+                image: DecorationImage(
+                  fit: BoxFit.fill,
+                  image: AssetImage('images/face.jpg')
+                )
+              ),
             ),
-          ),
+//          ),
           Expanded(
             flex: 33,
-            child: Container(
+            child:
+            Container(
 //              padding: EdgeInsets.symmetric(horizontal: 36),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.baseline,
@@ -139,18 +151,18 @@ class LeaderBoardState extends State<LeaderBoard> {
               ),
             ),
           ),
-          _buildUserRow(2, 83, 'image/face.jpg')
+          _buildUserRow(1, 83456, 'image/face.jpg')
         ],
       )
     );
 
     Widget leaderSection = Column(
       children: <Widget>[
-        _buildLeaderRow(1, "Albert Einstein is a very long name and this might cause some issues, but it seems flutter handles this pretty well. Well Done!", 60, Icons.face),
+        _buildLeaderRow(1, "If we have a very long name", 83456, Icons.face, 'images/face.jpg'),
         Divider(),
-        _buildLeaderRow(2, "Nikola Tesla", 83, Icons.face),
+        _buildLeaderRow(2, "Nikola Tesla", 83, Icons.face, 'images/rank2.jpg'),
         Divider(),
-        _buildLeaderRow(3, "MBA", 56, Icons.face),
+        _buildLeaderRow(3, "MBA", 56, Icons.face, 'images/rank3.jpg'),
       ],
     );
 
