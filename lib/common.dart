@@ -5,7 +5,9 @@ import 'colors.dart';
 class AccentColorOverride extends StatelessWidget {
   final Color color;
   final Widget child;
-  AccentColorOverride({Key key, this.color, this.child});
+  AccentColorOverride({Key key, @required this.color, @required this.child})
+      : assert(color != null),
+        assert(child != null);
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +38,7 @@ class CustomVerticalDivider extends StatelessWidget {
 // Gredient APP background
 class BackgroundGredient extends StatelessWidget {
   final Widget child;
-  BackgroundGredient({this.child});
+  BackgroundGredient({@required this.child}) : assert(child != null);
 
   @override
   Widget build(BuildContext context) {
@@ -72,6 +74,118 @@ class CustomLoading extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+// All common functions
+class CommonFunction {
+  // common Alert dialog
+  alertDialog({
+    @required BuildContext context,
+    String title,
+    @required String msg,
+    bool showDoneButton = true,
+    IconData doneButtonIcon = Icons.done,
+    String doneButtonText = 'Try Again',
+    @required Function doneButtonFn,
+    bool showCancel = false,
+    IconData cancelButtonIcon = Icons.close,
+    String cancelButtonText = 'Cancel',
+    @required Function cancelButtonFn,
+    bool barrierDismissible = true,
+    AlertDialog Function() builder,
+  }) {
+    showDialog(
+      context: context,
+      barrierDismissible: barrierDismissible,
+      builder: (_) {
+        return AlertDialog(
+          shape: new RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(7.0),
+          ),
+          title:
+              title != null ? Text(title, textAlign: TextAlign.center) : null,
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Text(
+                msg,
+                style: TextStyle(color: Colors.blueGrey),
+              ),
+              SizedBox(height: 20.0),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  showCancel
+                      ? FlatButton(
+                          shape: new RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5.0),
+                              side: BorderSide(color: Colors.grey)),
+                          child: Row(
+                            children: <Widget>[
+                              Icon(
+                                cancelButtonIcon,
+                                size: 22.0,
+                                color: Colors.blue[900],
+                              ),
+                              SizedBox(
+                                width: 5.0,
+                              ),
+                              Text(
+                                cancelButtonText,
+                                style: TextStyle(color: Colors.blue[900]),
+                              )
+                            ],
+                          ),
+                          onPressed: cancelButtonFn != null
+                              ? cancelButtonFn
+                              : () {
+                                  Navigator.pop(context);
+                                  return false;
+                                },
+                        )
+                      : new Container(width: 0, height: 0),
+                  showCancel
+                      ? SizedBox(
+                          width: 10.0,
+                        )
+                      : new Container(width: 0, height: 0),
+                  showDoneButton
+                      ? FlatButton(
+                          shape: new RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5.0)),
+                          color: Colors.blue[900],
+                          child: Row(
+                            children: <Widget>[
+                              Icon(
+                                doneButtonIcon,
+                                size: 22.0,
+                                color: Colors.white,
+                              ),
+                              SizedBox(
+                                width: 5.0,
+                              ),
+                              Text(
+                                doneButtonText,
+                                style: TextStyle(color: Colors.white),
+                              )
+                            ],
+                          ),
+                          onPressed: doneButtonFn != null
+                              ? doneButtonFn
+                              : () {
+                                  Navigator.pop(context);
+                                },
+                        )
+                      : new Container(width: 0, height: 0),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

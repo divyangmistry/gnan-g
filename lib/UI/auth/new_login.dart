@@ -18,6 +18,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class LoginPageState extends State<LoginPage> {
+  CommonFunction cf = new CommonFunction();
+
   final _formKey = GlobalKey<FormState>();
   bool _autoValidate = false;
   bool _obscureText = true;
@@ -179,7 +181,10 @@ class LoginPageState extends State<LoginPage> {
   }
 
   void _submit() {
-    Navigator.pushNamed(context, '/level_new');
+    print('In Submit');
+    cf.alertDialog(context: context,title: 'Title', msg: 'Testing',showCancel: true, cancelButtonFn: null, doneButtonFn: onClickDone);
+    // _showError('msg', true);
+    // Navigator.pushNamed(context, '/level_new');
     // if (_formKey.currentState.validate()) {
     //   _formKey.currentState.save();
     //   print('LOGIN DATA');
@@ -202,6 +207,16 @@ class LoginPageState extends State<LoginPage> {
     // } else {
     //   _autoValidate = true;
     // }
+  }
+
+  onClickDone() {
+    print('Done');
+    Navigator.pop(context);
+  }
+
+  onClickClose() {
+    print('Close');
+    Navigator.pop(context);
   }
 
   _loadUserState(mhtId) async {
@@ -243,89 +258,4 @@ class LoginPageState extends State<LoginPage> {
     return null;
   }
 
-  void _showError(String msg, bool showCancel) {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (_) {
-        return AlertDialog(
-          shape: new RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(7.0),
-          ),
-          title: Text('Error', textAlign: TextAlign.center),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Text(
-                msg,
-                style: TextStyle(color: Colors.blueGrey),
-              ),
-              SizedBox(height: 20.0),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  showCancel
-                      ? FlatButton(
-                          shape: new RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5.0),
-                              side: BorderSide(color: Colors.grey)),
-                          child: Row(
-                            children: <Widget>[
-                              Icon(
-                                Icons.close,
-                                size: 22.0,
-                                color: Colors.blue[900],
-                              ),
-                              SizedBox(
-                                width: 5.0,
-                              ),
-                              Text(
-                                'Cancel',
-                                style: TextStyle(color: Colors.blue[900]),
-                              )
-                            ],
-                          ),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                        )
-                      : new Container(width: 0, height: 0),
-                  showCancel
-                      ? SizedBox(
-                          width: 10.0,
-                        )
-                      : new Container(width: 0, height: 0),
-                  FlatButton(
-                    shape: new RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5.0)),
-                    color: Colors.blue[900],
-                    child: Row(
-                      children: <Widget>[
-                        Icon(
-                          Icons.done,
-                          size: 22.0,
-                          color: Colors.white,
-                        ),
-                        SizedBox(
-                          width: 5.0,
-                        ),
-                        Text(
-                          'Try Again',
-                          style: TextStyle(color: Colors.white),
-                        )
-                      ],
-                    ),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                ],
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
 }
