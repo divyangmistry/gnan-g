@@ -120,9 +120,11 @@ class LoginPageState extends State<LoginPage> {
                 padding: EdgeInsets.all(20.0),
                 onPressed: _submit,
               ),
-              new SizedBox(height: 50.0),
-              _signupBox(),
               new SizedBox(height: 15.0),
+              _forgotPasswordBox(),
+              new SizedBox(height: 20.0),
+              _signupBox(),
+              new SizedBox(height: 5.0),
               _termsAndCondition(),
             ],
           ),
@@ -152,6 +154,30 @@ class LoginPageState extends State<LoginPage> {
             ),
             onPressed: () {
               Navigator.pushNamed(context, '/signup');
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _forgotPasswordBox() {
+    return new Container(
+      child: new Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          new FlatButton(
+            child: new Text(
+              'Forgot password ?',
+              style: TextStyle(
+                color: kQuizBrown900,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            onPressed: () {
+              Navigator.pushNamed(context, '/forgotPassword');
             },
           ),
         ],

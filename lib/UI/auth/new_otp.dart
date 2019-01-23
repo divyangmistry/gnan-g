@@ -88,7 +88,7 @@ class OtpVerifyPageState extends State<OtpVerifyPage> {
       print('OTP DATA');
       print('OTP : ${this._otp}');
       Navigator.pop(context);
-      Navigator.pushReplacementNamed(context, '/register_new');
+      Navigator.pushReplacementNamed(context, '/otp_new');
       // TODO : Implement Verify OTP
     } else {
       _autoValidate = true;

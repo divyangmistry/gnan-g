@@ -78,6 +78,11 @@ class CustomLoading extends StatelessWidget {
   }
 }
 
+// *********************************** //
+// *********************************** //
+// *********************************** //
+// *********************************** //
+
 // All common functions
 class CommonFunction {
   // mhtId Validation
@@ -147,7 +152,7 @@ class CommonFunction {
       builder: (_) {
         return AlertDialog(
           shape: new RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(7.0),
+            borderRadius: BorderRadius.circular(30.0),
           ),
           title:
               title != null ? Text(title, textAlign: TextAlign.center) : null,
@@ -166,21 +171,22 @@ class CommonFunction {
                   showCancel
                       ? FlatButton(
                           shape: new RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5.0),
-                              side: BorderSide(color: Colors.grey)),
+                            borderRadius: BorderRadius.circular(30.0),
+                            side: BorderSide(color: kQuizMain50),
+                          ),
                           child: Row(
                             children: <Widget>[
                               Icon(
                                 cancelButtonIcon,
                                 size: 22.0,
-                                color: Colors.blue[900],
+                                color: kQuizBrown900,
                               ),
                               SizedBox(
                                 width: 5.0,
                               ),
                               Text(
                                 cancelButtonText,
-                                style: TextStyle(color: Colors.blue[900]),
+                                style: TextStyle(color: kQuizBrown900),
                               )
                             ],
                           ),
@@ -199,22 +205,22 @@ class CommonFunction {
                       : new Container(width: 0, height: 0),
                   showDoneButton
                       ? FlatButton(
-                          shape: new RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5.0)),
-                          color: Colors.blue[900],
+                          color: kQuizBrown900,
                           child: Row(
                             children: <Widget>[
                               Icon(
                                 doneButtonIcon,
                                 size: 22.0,
-                                color: Colors.white,
+                                color: kQuizBackgroundWhite,
                               ),
                               SizedBox(
                                 width: 5.0,
                               ),
                               Text(
                                 doneButtonText,
-                                style: TextStyle(color: Colors.white),
+                                style: TextStyle(
+                                  color: kQuizBackgroundWhite,
+                                ),
                               )
                             ],
                           ),

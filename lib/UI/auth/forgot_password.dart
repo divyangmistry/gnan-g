@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import '../../Service/apiservice.dart';
 import '../../common.dart';
+import '../../colors.dart';
 
 class ForgotPassword extends StatefulWidget {
   @override
@@ -11,155 +12,88 @@ class ForgotPassword extends StatefulWidget {
 }
 
 class ForgotPasswordState extends State<ForgotPassword> {
-  _ForgotPasswordData _data = new _ForgotPasswordData();
   CommonFunction cf = new CommonFunction();
-
   final _formKey = GlobalKey<FormState>();
   ApiService _api = new ApiService();
   bool _autoValidate = false;
+  String _mhtId;
 
-  final _passwordController = new TextEditingController();
-
-  _appBarView() {
-    return new AppBar(
-      centerTitle: true,
-      title: new Text(
-        'FORGOT PASSWORD',
-        style: TextStyle(
-            color: Colors.white, fontSize: 20.0, fontWeight: FontWeight.w300),
-      ),
-    );
-  }
-
-  _bodyView() {
+  @override
+  Widget build(BuildContext context) {
     return new Form(
       key: _formKey,
       autovalidate: _autoValidate,
-      child: new Container(
-        child: new ListView(
-          padding: new EdgeInsets.all(20.0),
-          children: <Widget>[
-            new Image.asset(
-              'images/planet.png',
-              height: 200.0,
-            ),
-            new Padding(
-              padding: EdgeInsets.only(top: 60.0),
-            ),
-            new TextFormField(
-              controller: _passwordController,
-              validator: cf.passwordValidation,
-              onSaved: (String value) {
-                this._data.password = value;
-              },
-              obscureText: true,
-              decoration: new InputDecoration(
-                  labelText: 'New Password',
-                  hintText: 'Enter your new password',
-                  suffixIcon: new Icon(Icons.lock_open),
-                  border: OutlineInputBorder()),
-            ),
-            new Padding(
-              padding: EdgeInsets.only(top: 20.0),
-            ),
-            new TextFormField(
-              validator: (value) {
-                if (value.isEmpty) {
-                  return 'Verify Password is required';
-                } else if (value != _passwordController.text) {
-                  return 'Password and Verifypassword must be same';
-                }
-                return null;
-              },
-              onSaved: (String value) {
-                this._data.retypePassword = value;
-              },
-              obscureText: true,
-              decoration: new InputDecoration(
-                labelText: 'Verify Password',
-                hintText: 'Verify your Password',
-                suffixIcon: new Icon(Icons.lock_outline),
-                border: OutlineInputBorder(),
-              ),
-            ),
-            new Padding(
-              padding: EdgeInsets.only(top: 20.0),
-            ),
-            new Container(
-              height: 50.0,
-              width: 15.0,
-              child: new RaisedButton(
-                shape: new RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(300.0)),
-                onPressed: _changePassword,
-                color: Theme.of(context).primaryColor,
-                child: new Text(
-                  'Reset Password',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w600,
-                    fontSize: 20.0,
+      child: new Scaffold(
+        backgroundColor: kQuizSurfaceWhite,
+        body: SafeArea(
+          child: new ListView(
+            padding: EdgeInsets.symmetric(horizontal: 30.0),
+            children: <Widget>[
+              new SizedBox(height: 40.0),
+              new Column(
+                children: <Widget>[
+                  new Image.asset(
+                    'images/logo1.png',
+                    height: 150,
                   ),
+                  new SizedBox(height: 30.0),
+                  new Text(
+                    'FORGOT PASSWORD',
+                    textScaleFactor: 1.5,
+                    style: TextStyle(
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                ],
+              ),
+              new SizedBox(
+                height: 50.0,
+              ),
+              new AccentColorOverride(
+                color: kQuizBrown900,
+                child: new TextFormField(
+                  validator: cf.mhtIdValidation,
+                  decoration: InputDecoration(
+                    labelText: 'Mht Id',
+                    hintText: 'Enter Mht Id no.',
+                    prefixIcon: Icon(
+                      Icons.person_outline,
+                      color: kQuizBrown900,
+                    ),
+                    filled: true,
+                  ),
+                  onSaved: (String value) {
+                    _mhtId = value;
+                  },
+                  keyboardType: TextInputType.numberWithOptions(),
                 ),
               ),
-            ),
-          ],
+              new SizedBox(height: 20.0),
+              new RaisedButton(
+                child: Text(
+                  'SUBMIT',
+                  style: TextStyle(color: Colors.white),
+                ),
+                elevation: 4.0,
+                padding: EdgeInsets.all(20.0),
+                onPressed: _submit,
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  void _changePassword() {
+  void _submit() {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
-      print('FORGOT PASSWORD : ');
-      print(_data.password);
-      print(_data.retypePassword);
-      var data;
-      data = {
-        'password': _data.password,
-        'verifyPassword': _data.retypePassword
-      };
-      _api.forgotPassword(json.encode(data)).then((res) {
-        if (res.statusCode == 201) {
-          cf.alertDialog(
-              context: context,
-              barrierDismissible: false,
-              title: 'Success',
-              msg: json.decode(res.body)['msg'],
-              showCancel: false,
-              cancelButtonFn: null,
-              doneButtonFn: null);
-          print(json.decode(res.body).toString());
-          Navigator.pushReplacementNamed(context, '/login');
-        } else {
-          cf.alertDialog(
-              context: context,
-              barrierDismissible: false,
-              title: 'Error',
-              msg: json.decode(res.body)['msg']
-                  ? json.decode(res.body)['msg']
-                  : '',
-              showCancel: false,
-              cancelButtonFn: null,
-              doneButtonFn: null);
-        }
-      });
+      print('FORGOT PASSWORD');
+      print('MHTID : ${this._mhtId}');
+      Navigator.pop(context);
+      Navigator.pushReplacementNamed(context, '/');
     } else {
       _autoValidate = true;
     }
   }
-
-  @override
-  Widget build(BuildContext context) {
-    return new Scaffold(
-      appBar: _appBarView(),
-      body: _bodyView(),
-    );
-  }
-}
-
-class _ForgotPasswordData {
-  String password;
-  String retypePassword;
 }
