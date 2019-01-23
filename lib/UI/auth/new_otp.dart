@@ -10,6 +10,7 @@ class OtpVerifyPage extends StatefulWidget {
 
 class OtpVerifyPageState extends State<OtpVerifyPage> {
   final _formKey = GlobalKey<FormState>();
+  CommonFunction cf = new CommonFunction();
   bool _autoValidate = false;
   ApiService _api = new ApiService();
   String _otp;
@@ -48,7 +49,7 @@ class OtpVerifyPageState extends State<OtpVerifyPage> {
               new AccentColorOverride(
                 color: kQuizBrown900,
                 child: new TextFormField(
-                  validator: _otpValidation,
+                  validator: cf.otpValidation,
                   decoration: InputDecoration(
                     labelText: 'OTP',
                     hintText: 'Enter OTP',
@@ -79,15 +80,6 @@ class OtpVerifyPageState extends State<OtpVerifyPage> {
         ),
       ),
     );
-  }
-
-  String _otpValidation(String value) {
-    if (value.isEmpty) {
-      return 'OTP is required';
-    } else if (value.length != 6) {
-      return 'OTP must have 6 digit';
-    }
-    return null;
   }
 
   void _submit() {

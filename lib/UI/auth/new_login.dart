@@ -61,7 +61,7 @@ class LoginPageState extends State<LoginPage> {
               new AccentColorOverride(
                 color: kQuizBrown900,
                 child: new TextFormField(
-                  validator: _mhtIdValidation,
+                  validator: cf.mhtIdValidation,
                   decoration: InputDecoration(
                     labelText: 'Mht Id',
                     hintText: 'Enter Mht Id no.',
@@ -81,7 +81,7 @@ class LoginPageState extends State<LoginPage> {
               new AccentColorOverride(
                 color: kQuizBrown900,
                 child: new TextFormField(
-                  validator: _passwordValidation,
+                  validator: cf.passwordValidation,
                   decoration: InputDecoration(
                     labelText: 'Password',
                     hintText: 'Enter Password',
@@ -233,29 +233,6 @@ class LoginPageState extends State<LoginPage> {
       print('ERROR : ');
       print(res.body);
     }
-  }
-
-  String _mhtIdValidation(value) {
-    if (value.isEmpty) {
-      return 'Mht ID is required';
-    } else if (value.length != 6) {
-      return 'Mht ID must have 6 digit';
-    }
-    return null;
-  }
-
-  String _passwordValidation(value) {
-    Pattern pattern =
-        r'(?=^.{6,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$';
-    RegExp regex = new RegExp(pattern);
-    if (value.isEmpty) {
-      return 'Password is required';
-    } else if (value.length < 6) {
-      return 'Passwords must contain at least six characters';
-    } else if (!regex.hasMatch(value)) {
-      return 'Passwords must contain uppercase, lowercase letters and numbers';
-    }
-    return null;
   }
 
 }

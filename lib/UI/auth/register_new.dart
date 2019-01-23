@@ -16,6 +16,7 @@ class RegisterPage2State extends State<RegisterPage2> {
   ApiService _api = new ApiService();
   final _passwordController = new TextEditingController();
   final _verifyPasswordController = new TextEditingController();
+  CommonFunction cf = new CommonFunction();
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +57,7 @@ class RegisterPage2State extends State<RegisterPage2> {
                 color: kQuizBrown900,
                 child: new TextFormField(
                   controller: _passwordController,
-                  validator: _passwordValidation,
+                  validator: cf.passwordValidation,
                   decoration: InputDecoration(
                     labelText: 'Password',
                     hintText: 'Enter Password',
@@ -87,7 +88,14 @@ class RegisterPage2State extends State<RegisterPage2> {
                 color: kQuizBrown900,
                 child: new TextFormField(
                   controller: _verifyPasswordController,
-                  validator: _verifyPasswordValidation,
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return 'Verify Password is required';
+                    } else if (value != _passwordController.text) {
+                      return 'Password and Verifypassword must be same';
+                    }
+                    return null;
+                  },
                   decoration: InputDecoration(
                     labelText: 'Verify Password',
                     hintText: 'Enter Password',
@@ -129,29 +137,6 @@ class RegisterPage2State extends State<RegisterPage2> {
         ),
       ),
     );
-  }
-
-  String _passwordValidation(value) {
-    Pattern pattern =
-        r'(?=^.{6,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$';
-    RegExp regex = new RegExp(pattern);
-    if (value.isEmpty) {
-      return 'Password is required';
-    } else if (value.length < 6) {
-      return 'Passwords must contain at least six characters';
-    } else if (!regex.hasMatch(value)) {
-      return 'Passwords must contain uppercase, lowercase letters and numbers';
-    }
-    return null;
-  }
-
-  String _verifyPasswordValidation(value) {
-    if (value.isEmpty) {
-      return 'Verify Password is required';
-    } else if (_passwordController.text != _verifyPasswordController.text) {
-      return 'Password and Verifypassword must be same';
-    }
-    return null;
   }
 
   void _submit() {

@@ -80,6 +80,51 @@ class CustomLoading extends StatelessWidget {
 
 // All common functions
 class CommonFunction {
+  // mhtId Validation
+  String mhtIdValidation(value) {
+    if (value.isEmpty) {
+      return 'Mht ID is required';
+    } else if (value.length != 6) {
+      return 'Mht ID must have 6 digit';
+    }
+    return null;
+  }
+
+  // password Validation
+  String passwordValidation(value) {
+    Pattern pattern =
+        r'(?=^.{6,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$';
+    RegExp regex = new RegExp(pattern);
+    if (value.isEmpty) {
+      return 'Password is required';
+    } else if (value.length < 6) {
+      return 'Passwords must contain at least six characters';
+    } else if (!regex.hasMatch(value)) {
+      return 'Passwords must contain uppercase, lowercase letters and numbers';
+    }
+    return null;
+  }
+
+  // otp Validation
+  String otpValidation(String value) {
+    if (value.isEmpty) {
+      return 'OTP is required';
+    } else if (value.length != 6) {
+      return 'OTP must have 6 digit';
+    }
+    return null;
+  }
+
+  // mobile Validation
+  String mobileValidation(value) {
+    if (value.isEmpty) {
+      return 'Mobile no. is required';
+    } else if (value.length != 10) {
+      return 'Enter Valid Mobile no.';
+    }
+    return null;
+  }
+
   // common Alert dialog
   alertDialog({
     @required BuildContext context,

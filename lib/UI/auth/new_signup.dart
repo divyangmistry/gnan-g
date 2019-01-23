@@ -1,6 +1,7 @@
 // Package import
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'package:kon_banega_mokshadhipati/constans/sharedpref_constant.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -16,6 +17,7 @@ class SignUpPage extends StatefulWidget {
 
 class SignUpPageState extends State<SignUpPage> {
   final _formKey = GlobalKey<FormState>();
+  CommonFunction cf = new CommonFunction();
   bool _autoValidate = false;
   ApiService _api = new ApiService();
   String _mhtId;
@@ -55,7 +57,7 @@ class SignUpPageState extends State<SignUpPage> {
               new AccentColorOverride(
                 color: kQuizBrown900,
                 child: new TextFormField(
-                  validator: _mhtIdValidation,
+                  validator: cf.mhtIdValidation,
                   decoration: InputDecoration(
                     labelText: 'Mht Id',
                     hintText: 'Enter Mht Id no.',
@@ -75,7 +77,7 @@ class SignUpPageState extends State<SignUpPage> {
               new AccentColorOverride(
                 color: kQuizBrown900,
                 child: new TextFormField(
-                  validator: _mobileValidation,
+                  validator: cf.mobileValidation,
                   decoration: InputDecoration(
                     labelText: 'Mobile no.',
                     hintText: 'Enter Mobile no.',
@@ -169,124 +171,20 @@ class SignUpPageState extends State<SignUpPage> {
     //   print('MHTID : ${this._mhtId}');
     //   print('MOBILE : ${this._mobile}');
     //   Navigator.pushReplacementNamed(context, '/otp_new');
-    //   // var data = {'mobile': _mhtId, 'password': _password};
-    //   // _api.login(json.encode(data)).then((res) {
-    //   //   if (res.statusCode == 200) {
-    //   //     SharedPreferences.getInstance().then((localstorage) {
-    //   //       localstorage.setString('user_info', res.body);
-    //   //       localstorage.setBool(SharedPrefConstant.b_isUserLoggedIn, true);
-    //   //     });
-    //   //     print(json.decode(res.body)['user_info']);
-    //   //   } else {
-    //   //     _showError(json.decode(res.body)['msg'], true);
-    //   //   }
-    //   // });
+    //   var data = {'mobile': _mhtId, 'password': _password};
+    //   _api.login(json.encode(data)).then((res) {
+    //     if (res.statusCode == 200) {
+    //       SharedPreferences.getInstance().then((localstorage) {
+    //         localstorage.setString('user_info', res.body);
+    //         localstorage.setBool(SharedPrefConstant.b_isUserLoggedIn, true);
+    //       });
+    //       print(json.decode(res.body)['user_info']);
+    //     } else {
+    //     }
+    //   });
     // } else {
     //   _autoValidate = true;
     // }
   }
 
-  String _mhtIdValidation(value) {
-    if (value.isEmpty) {
-      return 'Mht ID is required';
-    } else if (value.length != 6) {
-      return 'Mht ID must have 6 digit';
-    }
-    return null;
-  }
-
-  String _mobileValidation(value) {
-    if (value.isEmpty) {
-      return 'Mobile no. is required';
-    } else if (value.length != 10) {
-      return 'Enter Valid Mobile no.';
-    }
-    return null;
-  }
-
-  void _showError(String msg, bool showCancel) {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (_) {
-        return AlertDialog(
-          shape: new RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(7.0),
-          ),
-          title: Text('Error', textAlign: TextAlign.center),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Text(
-                msg,
-                style: TextStyle(color: Colors.blueGrey),
-              ),
-              SizedBox(height: 20.0),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  showCancel
-                      ? FlatButton(
-                          shape: new RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5.0),
-                              side: BorderSide(color: Colors.grey)),
-                          child: Row(
-                            children: <Widget>[
-                              Icon(
-                                Icons.close,
-                                size: 22.0,
-                                color: Colors.blue[900],
-                              ),
-                              SizedBox(
-                                width: 5.0,
-                              ),
-                              Text(
-                                'Cancel',
-                                style: TextStyle(color: Colors.blue[900]),
-                              )
-                            ],
-                          ),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                        )
-                      : new Container(width: 0, height: 0),
-                  showCancel
-                      ? SizedBox(
-                          width: 10.0,
-                        )
-                      : new Container(width: 0, height: 0),
-                  FlatButton(
-                    shape: new RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5.0)),
-                    color: Colors.blue[900],
-                    child: Row(
-                      children: <Widget>[
-                        Icon(
-                          Icons.done,
-                          size: 22.0,
-                          color: Colors.white,
-                        ),
-                        SizedBox(
-                          width: 5.0,
-                        ),
-                        Text(
-                          'Try Again',
-                          style: TextStyle(color: Colors.white),
-                        )
-                      ],
-                    ),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                ],
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
 }
