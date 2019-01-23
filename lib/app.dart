@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'package:kon_banega_mokshadhipati/UI/intro/intro.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Service/apiservice.dart';
@@ -28,7 +29,8 @@ class QuizApp extends StatefulWidget {
 }
 
 class _QuizAppState extends State<QuizApp> {
-  Widget _defaultHome = new LoginPage();
+  // Widget _defaultHome = new LoginPage();
+  Widget _defaultHome = new InroPage();
   ApiService _api = new ApiService();
 
   @override
