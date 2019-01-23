@@ -5,6 +5,7 @@ import '../../colors.dart';
 import 'levelRow.dart';
 import '../../model/quizlevel.dart';
 import '../../common.dart';
+// import 'package:flame/flame.dart';
 
 class NewLevelPage extends StatefulWidget {
   @override
@@ -18,6 +19,13 @@ class NewLevelPageState extends State<NewLevelPage> {
   void initState() {
     super.initState();
     loadData();
+    // Flame.audio.play('music/CV-01Trimantra.mp3');
+  }
+
+  @override
+  void dipose() {
+    super.dispose();
+    // Flame.audio.clear('music/CV-01Trimantra.mp3');
   }
 
   Future<Null> loadData() async {

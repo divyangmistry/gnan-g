@@ -1,3 +1,4 @@
+import 'package:flame/flame.dart';
 import 'package:flutter/material.dart';
 import '../../model/quizlevel.dart';
 import '../../colors.dart';
@@ -16,11 +17,13 @@ class MainGamePageState extends State<MainGamePage> {
   bool clickAns = false;
   List<bool> option = [false, false, false, false];
   int userLives = 3;
+  bool trueAnswer = false;
 
   @override
   void initState() {
     print(widget.level);
     super.initState();
+    Flame.audio.loop('music/bensound-epic.mp3');
   }
 
   @override
@@ -33,7 +36,8 @@ class MainGamePageState extends State<MainGamePage> {
             children: <Widget>[
               titleBar(),
               // SizedBox(height: 50),
-              new Padding(
+              new Container(
+                alignment: Alignment.bottomCenter,
                 padding: EdgeInsets.all(50),
                 child: questionUi(),
               ),
@@ -43,62 +47,59 @@ class MainGamePageState extends State<MainGamePage> {
         ),
       ),
       bottomNavigationBar: BottomAppBar(
+          color: kBackgroundGrediant1,
+          elevation: 10.0,
           child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-          Container(
-            // width: 0.0,
-            child: IconButton(
-              icon: Icon(Icons.menu),
-              onPressed: () {
-                showModalBottomSheet(
-                    builder: (BuildContext context) => _bottomDrawer(),
-                    context: context);
-              },
-            ),
-          ),
-          Expanded(
-            child: Text(
-              'SUBMIT',
-              textAlign: TextAlign.center,
-            ),
-          ),
-          SizedBox(
-            width: 50.0,
-          )
-        ],
-      )
-
-          // Row(
-          //   children: <Widget>[
-          // SizedBox(width: 10),
-          // Text('Points : ', style: TextStyle(color: kQuizMain50)),
-          // Text('120\$',
-          //     style: TextStyle(color: kQuizBrown900), textScaleFactor: 1.2),
-          // SizedBox(width: 20),
-          // Text('Lives : ', style: TextStyle(color: kQuizMain50)),
-          // new Container(
-          //   height: 25,
-          //   child: ListView.builder(
-          //     shrinkWrap: true,
-          //     scrollDirection: Axis.horizontal,
-          //     itemCount: userLives,
-          //     itemBuilder: (BuildContext context, int index) {
-          //       return Icon(Icons.account_circle);
-          //     },
-          //   ),
-          // ),
-          // ],
-          // ),
-          // ),
-          ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-      floatingActionButton: new FloatingActionButton(
-        // label: Text('Get Hint'),
-        // icon: Icon(Icons.help_outline),
-        child: Icon(Icons.help_outline),
-        onPressed: () {},
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Container(
+                child: IconButton(
+                  icon: Icon(
+                    Icons.menu,
+                    color: kQuizBackgroundWhite,
+                  ),
+                  onPressed: () {
+                    showModalBottomSheet(
+                        builder: (BuildContext context) => _bottomDrawer(),
+                        context: context);
+                  },
+                ),
+              ),
+              Container(
+                child: Row(
+                  children: <Widget>[
+                    Text('Lives : ',
+                        style: TextStyle(color: kQuizBackgroundWhite)),
+                    new Container(
+                      height: 25,
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        scrollDirection: Axis.horizontal,
+                        itemCount: userLives,
+                        itemBuilder: (BuildContext context, int index) {
+                          return Icon(
+                            Icons.account_circle,
+                            color: kQuizBackgroundWhite,
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          )),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: new FloatingActionButton.extended(
+        onPressed: () {
+          trueAnswer
+              ? Flame.audio.play('music/party_horn-Mike_Koenig-76599891.mp3')
+              : Flame.audio.play('music/Pac man dies.mp3');
+        },
         backgroundColor: kQuizMain400,
+        icon: Icon(Icons.done),
+        label: Text('SUBMIT'),
       ),
     );
   }
@@ -111,14 +112,24 @@ class MainGamePageState extends State<MainGamePage> {
           SizedBox(
             height: 20.0,
           ),
-          ListTile(
-            title: Text('Option 01'),
+          Center(
+            child: CircleAvatar(
+              child: Image.asset('images/face.png'),
+              maxRadius: 50.0,
+            ),
           ),
           SizedBox(
             height: 20.0,
           ),
-          ListTile(
-            title: Text('Option 01'),
+          Center(
+            child: Text(
+              'Root_Node',
+              style: TextStyle(
+                  color: Colors.blueGrey,
+                  fontSize: 30.0,
+                  fontWeight: FontWeight.w400,
+                  fontFamily: 'hobo'),
+            ),
           ),
           SizedBox(
             height: 20.0,
@@ -133,6 +144,10 @@ class MainGamePageState extends State<MainGamePage> {
 
   Widget questionUi() {
     return new Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      // verticalDirection: VerticalDirection.down,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         new Text(
           'When do you want to here your Rundown ?',
@@ -149,21 +164,9 @@ class MainGamePageState extends State<MainGamePage> {
         new SizedBox(height: 20),
         options('Option 3', 2),
         new SizedBox(height: 20),
-        options('Option 4', 3),
-        new SizedBox(height: 80),
-        Center(
-          child: Container(
-            child: MaterialButton(
-              elevation: 0,
-              splashColor: Colors.teal,
-              onPressed: () => debugPrint('hello'),
-              child: Icon(
-                Icons.done,
-                color: Colors.white,
-                size: 50.0,
-              ),
-            ),
-          ),
+        Container(
+          child: options('Option 4', 3),
+          alignment: Alignment.bottomCenter,
         )
       ],
     );
@@ -178,6 +181,7 @@ class MainGamePageState extends State<MainGamePage> {
           setState(() {
             option = [false, false, false, false];
             option[index] = !option[index];
+            option[3] == true ? trueAnswer = true : trueAnswer = false;
           });
         },
         height: 50,
@@ -214,10 +218,13 @@ class MainGamePageState extends State<MainGamePage> {
     return new Row(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: <Widget>[
         new IconButton(
-          icon: Icon(Icons.close),
+          icon: Icon(
+            Icons.close,
+            color: kQuizSurfaceWhite,
+          ),
           onPressed: () {
             Navigator.pop(context);
           },
@@ -234,10 +241,11 @@ class MainGamePageState extends State<MainGamePage> {
         new Expanded(
           child: new Container(),
         ),
-        new IconButton(
-          icon: Icon(Icons.settings),
-          onPressed: () {},
-        ),
+        Container(
+          child: Text('120 \$',
+              style: TextStyle(color: kQuizBackgroundWhite),
+              textScaleFactor: 1.2),
+        )
       ],
     );
   }

@@ -208,9 +208,9 @@ class LoginPageState extends State<LoginPage> {
 
   void _submit() {
     print('In Submit');
-    cf.alertDialog(context: context,title: 'Title', msg: 'Testing',showCancel: true, cancelButtonFn: null, doneButtonFn: onClickDone);
+    // cf.alertDialog(context: context,title: 'Title', msg: 'Testing',showCancel: true, cancelButtonFn: null, doneButtonFn: onClickDone);
     // _showError('msg', true);
-    // Navigator.pushNamed(context, '/level_new');
+    Navigator.pushNamed(context, '/level_new');
     // if (_formKey.currentState.validate()) {
     //   _formKey.currentState.save();
     //   print('LOGIN DATA');
