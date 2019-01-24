@@ -1,7 +1,12 @@
 // Package import
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'package:kon_banega_mokshadhipati/UI/auth/new_otp.dart';
 import 'package:kon_banega_mokshadhipati/constans/sharedpref_constant.dart';
+import 'package:kon_banega_mokshadhipati/constans/wsconstants.dart';
+import 'package:kon_banega_mokshadhipati/model/appresponse.dart';
+import 'package:kon_banega_mokshadhipati/model/signupsession.dart';
+import 'package:kon_banega_mokshadhipati/utils/response_parser.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -88,7 +93,7 @@ class SignUpPageState extends State<SignUpPage> {
                     filled: true,
                   ),
                   onSaved: (String value) {
-                    _mhtId = value;
+                    _mobile = value;
                   },
                   keyboardType: TextInputType.numberWithOptions(),
                 ),
@@ -164,27 +169,27 @@ class SignUpPageState extends State<SignUpPage> {
   }
 
   void _submit() {
-    Navigator.pushReplacementNamed(context, '/otp_new');
-    // if (_formKey.currentState.validate()) {
-    //   _formKey.currentState.save();
-    //   print('SIGNUP DATA');
-    //   print('MHTID : ${this._mhtId}');
-    //   print('MOBILE : ${this._mobile}');
-    //   Navigator.pushReplacementNamed(context, '/otp_new');
-    //   var data = {'mobile': _mhtId, 'password': _password};
-    //   _api.login(json.encode(data)).then((res) {
-    //     if (res.statusCode == 200) {
-    //       SharedPreferences.getInstance().then((localstorage) {
-    //         localstorage.setString('user_info', res.body);
-    //         localstorage.setBool(SharedPrefConstant.b_isUserLoggedIn, true);
-    //       });
-    //       print(json.decode(res.body)['user_info']);
-    //     } else {
-    //     }
-    //   });
-    // } else {
-    //   _autoValidate = true;
-    // }
+    //Navigator.pushReplacementNamed(context, '/otp_new');
+    if (_formKey.currentState.validate()) {
+      _formKey.currentState.save();
+      print('SIGNUP DATA');
+      print('MHTID : ${this._mhtId}');
+      print('MOBILE : ${this._mobile}');
+      _api.validateUser(_mhtId, _mobile).then((res) {
+        AppResponse appResponse = ResponseParser.parseResponse(context: context, res: res);
+        if (appResponse.status == WSConstant.SUCCESS_CODE) {
+          SignUpSession signUpSession = SignUpSession.fromJson(appResponse.data);
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => new OtpVerifyPage(signUpSession: signUpSession),
+            ),
+          );
+        } else {}
+      });
+    } else {
+      _autoValidate = true;
+    }
   }
 
 }

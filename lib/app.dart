@@ -2,6 +2,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:kon_banega_mokshadhipati/UI/intro/intro.dart';
+import 'package:kon_banega_mokshadhipati/constans/wsconstants.dart';
+import 'package:kon_banega_mokshadhipati/model/appresponse.dart';
+import 'package:kon_banega_mokshadhipati/utils/response_parser.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Service/apiservice.dart';
@@ -56,8 +59,9 @@ class _QuizAppState extends State<QuizApp> {
       _defaultHome = new GameLevelPage();
       var data = {'user_mob': mobile};
       Response res = await _api.getUserState(json.encode(data));
-      if (res.statusCode == 200) {
-        Map<String, dynamic> userstateStr = json.decode(res.body)['results'];
+      AppResponse appResponse = ResponseParser.parseResponse(context: context, res: res);
+      if (appResponse.status == WSConstant.SUCCESS_CODE) {
+        Map<String, dynamic> userstateStr = appResponse.data['results'];
         print('IN MAIN ::: userstateStr :::');
         print(userstateStr);
         UserState userState = UserState.fromJson(userstateStr);

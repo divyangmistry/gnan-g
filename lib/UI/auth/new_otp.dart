@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:kon_banega_mokshadhipati/model/signupsession.dart';
 import '../../colors.dart';
 import '../../common.dart';
 import '../../Service/apiservice.dart';
 
 class OtpVerifyPage extends StatefulWidget {
+  final SignUpSession signUpSession;
+
+  OtpVerifyPage({this.signUpSession});
   @override
   State<StatefulWidget> createState() => new OtpVerifyPageState();
 }
@@ -87,8 +91,13 @@ class OtpVerifyPageState extends State<OtpVerifyPage> {
       _formKey.currentState.save();
       print('OTP DATA');
       print('OTP : ${this._otp}');
-      Navigator.pop(context);
-      Navigator.pushReplacementNamed(context, '/otp_new');
+      if(_otp == widget.signUpSession.otp.toString()) {
+        Navigator.pop(context);
+        Navigator.pushReplacementNamed(context, '/register_new');
+      } else {
+        cf.alertDialog(context: context, msg: "OTP is not valid, Please check again otp", doneButtonFn: null, cancelButtonFn: null);
+      }
+
       // TODO : Implement Verify OTP
     } else {
       _autoValidate = true;
