@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:intro_slider/intro_slider.dart';
+import '../../colors.dart';
 
 class InroPage extends StatefulWidget {
   @override
@@ -7,51 +7,129 @@ class InroPage extends StatefulWidget {
 }
 
 class InroPageState extends State<InroPage> {
-  List<Slide> slides = new List();
-
-  @override
-  void initState() {
-    super.initState();
-    slides.add(
-      new Slide(
-        title: "ERASER",
-        description:
-            "Allow miles wound place the leave had. To sitting subject no improve studied limited",
-        pathImage: "images/logo1.png",
-        backgroundColor: Color(0xfff5a623),
+  
+  List<Widget> slides = [
+    Container(
+      child: Column(
+        children: <Widget>[
+          SizedBox(height: 30),
+          Text(
+            'Title - 1',
+            textScaleFactor: 2,
+            style: TextStyle(color: kQuizBrown900),
+          ),
+          Expanded(
+            child: Image.asset('images/logo1.png'),
+          ),
+          Padding(
+            padding: EdgeInsets.all(30),
+            child: Text(
+              'Description some long long description that is so long that user can find details.',
+              textAlign: TextAlign.center,
+              style: TextStyle(color: kQuizMain50),
+              textScaleFactor: 1.2,
+            ),
+          ),
+          SizedBox(height: 20),
+        ],
       ),
-    );
-    slides.add(
-      new Slide(
-        title: "PENCIL",
-        description:
-            "Ye indulgence unreserved connection alteration appearance",
-        pathImage: "images/TZLogo.jpg",
-        backgroundColor: Color(0xff203152),
+    ),
+    Container(
+      child: Column(
+        children: <Widget>[
+          SizedBox(height: 30),
+          Text(
+            'Title - 2',
+            textScaleFactor: 2,
+            style: TextStyle(color: kQuizBrown900),
+          ),
+          Expanded(
+            child: Image.asset('images/TZLogo.jpg'),
+          ),
+          Padding(
+            padding: EdgeInsets.all(30),
+            child: Text(
+              'Description some long long description that is so long that user can find details.',
+              textAlign: TextAlign.center,
+              style: TextStyle(color: kQuizMain50),
+              textScaleFactor: 1.2,
+            ),
+          ),
+          SizedBox(height: 20),
+        ],
       ),
-    );
-    slides.add(
-      new Slide(
-        title: "RULER",
-        description:
-            "Much evil soon high in hope do view. Out may few northward believing attempted. Yet timed being songs marry one defer men our. Although finished blessing do of",
-        pathImage: "images/face.png",
-        backgroundColor: Color(0xff9932CC),
+    ),
+    Container(
+      child: Column(
+        children: <Widget>[
+          SizedBox(height: 30),
+          Text(
+            'Title - 3',
+            textScaleFactor: 2,
+            style: TextStyle(color: kQuizBrown900),
+          ),
+          Expanded(
+            child: Image.asset('images/logo.png'),
+          ),
+          Padding(
+            padding: EdgeInsets.all(30),
+            child: Text(
+              'Description some long long description that is so long that user can find details.',
+              textAlign: TextAlign.center,
+              style: TextStyle(color: kQuizMain50),
+              textScaleFactor: 1.2,
+            ),
+          ),
+          SizedBox(height: 20),
+        ],
       ),
-    );
-  }
+    ),
+  ];
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      body: new IntroSlider(
-        slides: this.slides,
-        onDonePress: () {
-          Navigator.pushReplacementNamed(context, '/login_new');
-        },
-        onSkipPress: () {
-          Navigator.pushReplacementNamed(context, '/login_new');
-        },
+    return DefaultTabController(
+      length: slides.length,
+      child: Scaffold(
+        backgroundColor: kQuizSurfaceWhite,
+        body: SafeArea(
+          child: Builder(
+            builder: (BuildContext context) {
+              return Column(
+                children: <Widget>[
+                  Expanded(
+                    child: TabBarView(
+                      children: slides,
+                    ),
+                  ),
+                  TabPageSelector(),
+                  SizedBox(height: 20),
+                  Container(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 30),
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: RaisedButton(
+                          padding: EdgeInsets.all(20),
+                          onPressed: () {
+                            Navigator.pushReplacementNamed(context, '/login_new');
+                          },
+                          child: Text(
+                            'DIVE INTO GAME',
+                            style: TextStyle(
+                              color: kQuizBackgroundWhite,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                ],
+              );
+            },
+          ),
+        ),
       ),
     );
   }

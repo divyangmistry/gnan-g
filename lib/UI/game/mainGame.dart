@@ -23,7 +23,7 @@ class MainGamePageState extends State<MainGamePage> {
   void initState() {
     print(widget.level);
     super.initState();
-    Flame.audio.loop('music/bensound-epic.mp3');
+    // Flame.audio.loop('music/bensound-epic.mp3');
   }
 
   @override
@@ -93,9 +93,9 @@ class MainGamePageState extends State<MainGamePage> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: new FloatingActionButton.extended(
         onPressed: () {
-          trueAnswer
-              ? Flame.audio.play('music/party_horn-Mike_Koenig-76599891.mp3')
-              : Flame.audio.play('music/Pac man dies.mp3');
+          // trueAnswer
+          //     ? Flame.audio.play('music/party_horn-Mike_Koenig-76599891.mp3')
+          //     : Flame.audio.play('music/Pac man dies.mp3');
         },
         backgroundColor: kQuizMain400,
         icon: Icon(Icons.done),
