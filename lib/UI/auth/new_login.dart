@@ -206,30 +206,41 @@ class LoginPageState extends State<LoginPage> {
     );
   }
 
-  void _submit() {
-    print('In Submit');
-    // cf.alertDialog(context: context,title: 'Title', msg: 'Testing',showCancel: true, cancelButtonFn: null, doneButtonFn: onClickDone);
-    // _showError('msg', true);
-    Navigator.pushNamed(context, '/level_new');
+  void _submit() async {
+    Navigator.pushReplacementNamed(context, '/level_new');
     // if (_formKey.currentState.validate()) {
     //   _formKey.currentState.save();
     //   print('LOGIN DATA');
     //   print('MOBILE : ${this._mhtId}');
     //   print('PASSWORD : ${this._password}');
-    //   Navigator.pushReplacementNamed(context, '/game_new');
-    //   // var data = {'mobile': _mhtId, 'password': _password};
-    //   // _api.login(json.encode(data)).then((res) {
-    //   //   if (res.statusCode == 200) {
-    //   //     SharedPreferences.getInstance().then((localstorage) {
-    //   //       localstorage.setString('user_info', res.body);
-    //   //       localstorage.setBool(SharedPrefConstant.b_isUserLoggedIn, true);
-    //   //     });
-    //   //     print(json.decode(res.body)['user_info']);
-    //   //     _loadUserState(_mhtId);
-    //   //   } else {
-    //   //     _showError(json.decode(res.body)['msg'], true);
-    //   //   }
-    //   // });
+    //   Map<String, dynamic> data = {'mobile': _mhtId, 'password': _password};
+    //   try {
+    //     Response res = await _api.postApi(url: '/login', data: data);
+    //     if (res.statusCode == 200) {
+    //       SharedPreferences pref = await SharedPreferences.getInstance();
+    //       pref.setString('user_info', res.body);
+    //       pref.setBool(SharedPrefConstant.b_isUserLoggedIn, true);
+    //       print(json.decode(res.body)['user_info']);
+    //       _api.appendTokenToHeader(json.decode(res.body)['user_info']['token']);
+    //       Navigator.pushReplacementNamed(context, '/level_new');
+    //     } else {
+    //       cf.alertDialog(
+    //         context: context,
+    //         msg: json.decode(res.body)['msg'],
+    //         barrierDismissible: false,
+    //         cancelButtonFn: null,
+    //         doneButtonFn: null,
+    //       );
+    //     }
+    //   } catch (err) {
+    //     cf.alertDialog(
+    //       context: context,
+    //       msg: err.toString(),
+    //       barrierDismissible: false,
+    //       cancelButtonFn: null,
+    //       doneButtonFn: null,
+    //     );
+    //   }
     // } else {
     //   _autoValidate = true;
     // }
@@ -260,5 +271,4 @@ class LoginPageState extends State<LoginPage> {
       print(res.body);
     }
   }
-
 }
