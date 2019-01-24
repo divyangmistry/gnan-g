@@ -213,20 +213,21 @@ class LoginPageState extends State<LoginPage> {
     //   print('LOGIN DATA');
     //   print('MOBILE : ${this._mhtId}');
     //   print('PASSWORD : ${this._password}');
-    //   Map<String, dynamic> data = {'mobile': _mhtId, 'password': _password};
     //   try {
+    //     Map<String, dynamic> data = {'mobile': _mhtId, 'password': _password};
     //     Response res = await _api.postApi(url: '/login', data: data);
+    //     Map<String, dynamic> jsonResponse = json.decode(res.body);
     //     if (res.statusCode == 200) {
     //       SharedPreferences pref = await SharedPreferences.getInstance();
     //       pref.setString('user_info', res.body);
     //       pref.setBool(SharedPrefConstant.b_isUserLoggedIn, true);
-    //       print(json.decode(res.body)['user_info']);
-    //       _api.appendTokenToHeader(json.decode(res.body)['user_info']['token']);
-    //       Navigator.pushReplacementNamed(context, '/level_new');
+    //       print(jsonResponse['user_info']);
+    //       _api.appendTokenToHeader(jsonResponse['user_info']['token']);
+    //       _loadUserState(jsonResponse['user_info']['mht_id']);
     //     } else {
     //       cf.alertDialog(
     //         context: context,
-    //         msg: json.decode(res.body)['msg'],
+    //         msg: jsonResponse['msg'],
     //         barrierDismissible: false,
     //         cancelButtonFn: null,
     //         doneButtonFn: null,
@@ -257,18 +258,33 @@ class LoginPageState extends State<LoginPage> {
   }
 
   _loadUserState(mhtId) async {
-    var data = {'user_mob': mhtId};
-    Response res = await _api.getUserState(json.encode(data));
-    if (res.statusCode == 200) {
-      Map<String, dynamic> userstateStr = json.decode(res.body)['results'];
-      print('IN LOGIN ::: userstateStr :::');
-      print(userstateStr);
-      UserState userState = UserState.fromJson(userstateStr);
-      CacheData.userState = userState;
-      Navigator.pushReplacementNamed(context, '/level');
-    } else {
-      print('ERROR : ');
-      print(res.body);
+    try {
+      var data = {'user_mob': mhtId};
+      Response res = await _api.postApi(url: '/quiz_level', data: data);
+      Map<String, dynamic> jsonResponse = json.decode(res.body);
+      if (res.statusCode == 200) {
+        print('IN LOGIN ::: userstateStr :::');
+        print(jsonResponse);
+        UserState userState = UserState.fromJson(jsonResponse);
+        CacheData.userState = userState;
+        Navigator.pushReplacementNamed(context, '/level_new');
+      } else {
+        cf.alertDialog(
+          context: context,
+          msg: jsonResponse['msg'].toString(),
+          barrierDismissible: false,
+          cancelButtonFn: null,
+          doneButtonFn: null,
+        );
+      }
+    } catch (err) {
+      cf.alertDialog(
+        context: context,
+        msg: err.toString(),
+        barrierDismissible: false,
+        cancelButtonFn: null,
+        doneButtonFn: null,
+      );
     }
   }
 }
