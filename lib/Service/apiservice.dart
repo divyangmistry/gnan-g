@@ -29,6 +29,7 @@ class ApiService {
   /// * [data] - API body
   Future<http.Response> postApi(
       {@required String url, @required Map<String, dynamic> data}) async {
+        print(_apiUrl + url);
     http.Response res = await http.post(_apiUrl + url,
         body: json.encode(data), headers: headers);
     return res;
@@ -39,7 +40,7 @@ class ApiService {
   ///
   /// * [token] - For authenticate api
   appendTokenToHeader(token) {
-    headers['xx-token'] = token;
+    headers['x-access-token'] = token;
     print(headers);
   }
 
