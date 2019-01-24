@@ -1,4 +1,5 @@
 import 'package:flame/flame.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../model/quizlevel.dart';
 import '../../colors.dart';
@@ -18,6 +19,8 @@ class MainGamePageState extends State<MainGamePage> {
   List<bool> option = [false, false, false, false];
   int userLives = 3;
   bool trueAnswer = false;
+  bool _changeTheme = false;
+  bool _showLivesBanner = false;
 
   @override
   void initState() {
@@ -31,17 +34,61 @@ class MainGamePageState extends State<MainGamePage> {
     return new Scaffold(
       body: new BackgroundGredient(
         child: SafeArea(
-          child: new ListView(
-            padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+          child: new Stack(
+            fit: StackFit.loose,
             children: <Widget>[
-              titleBar(),
-              // SizedBox(height: 50),
-              new Container(
-                alignment: Alignment.bottomCenter,
-                padding: EdgeInsets.all(50),
-                child: questionUi(),
+              new ListView(
+                shrinkWrap: true,
+                padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                children: <Widget>[
+                  titleBar(),
+                  Center(
+                    child: new Text(
+                      'When do you want to here your Rundown ?',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: kQuizBackgroundWhite,
+                      ),
+                      textScaleFactor: 1.6,
+                    ),
+                  ),
+                  new Container(
+                    alignment: Alignment.bottomCenter,
+                    padding: EdgeInsets.all(50),
+                    child: questionUi(),
+                  ),
+                  // SizedBox(height: 50),
+                ],
               ),
-              SizedBox(height: 50),
+              Container(
+                alignment: Alignment(0, 0.75),
+                child: _showLivesBanner
+                    ? Card(
+                        elevation: 20.0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.only(
+                            bottomRight: Radius.zero,
+                            topLeft: Radius.circular(60.0),
+                            topRight: Radius.circular(60.0),
+                            bottomLeft: Radius.circular(60.0),
+                          ),
+                        ),
+                        child: Container(
+                          alignment: Alignment.center,
+                          height: 200.0,
+                          child: ListView(
+                            padding: EdgeInsets.all(10.0),
+                            children: <Widget>[
+                              ListTile(
+                                title: Text('data'),
+                              ),
+                            ],
+                          ),
+                          // color: Colors.blue,
+                        ),
+                      )
+                    : null,
+              )
             ],
           ),
         ),
@@ -69,22 +116,37 @@ class MainGamePageState extends State<MainGamePage> {
               Container(
                 child: Row(
                   children: <Widget>[
-                    Text('Lives : ',
-                        style: TextStyle(color: kQuizBackgroundWhite)),
-                    new Container(
-                      height: 25,
-                      child: ListView.builder(
-                        shrinkWrap: true,
-                        scrollDirection: Axis.horizontal,
-                        itemCount: userLives,
-                        itemBuilder: (BuildContext context, int index) {
-                          return Icon(
-                            Icons.account_circle,
-                            color: kQuizBackgroundWhite,
-                          );
-                        },
-                      ),
+                    Text(
+                      'Lives : ',
+                      style: TextStyle(color: kQuizBackgroundWhite),
                     ),
+                    GestureDetector(
+                      onLongPress: () => Tooltip(
+                            message: 'Earn LIVES !',
+                          ),
+                      onTap: () {
+                        setState(() {
+                          _showLivesBanner
+                              ? _showLivesBanner = false
+                              : _showLivesBanner = true;
+                          print('$_showLivesBanner');
+                        });
+                      },
+                      child: Container(
+                        height: 25,
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          scrollDirection: Axis.horizontal,
+                          itemCount: userLives,
+                          itemBuilder: (BuildContext context, int index) {
+                            return Icon(
+                              Icons.account_circle,
+                              color: kQuizBackgroundWhite,
+                            );
+                          },
+                        ),
+                      ),
+                    )
                   ],
                 ),
               ),
@@ -93,9 +155,9 @@ class MainGamePageState extends State<MainGamePage> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: new FloatingActionButton.extended(
         onPressed: () {
-          // trueAnswer
-          //     ? Flame.audio.play('music/party_horn-Mike_Koenig-76599891.mp3')
-          //     : Flame.audio.play('music/Pac man dies.mp3');
+          trueAnswer
+              ? Flame.audio.play('music/party_horn-Mike_Koenig-76599891.mp3')
+              : Flame.audio.play('music/Pac man dies.mp3');
         },
         backgroundColor: kQuizMain400,
         icon: Icon(Icons.done),
@@ -114,7 +176,12 @@ class MainGamePageState extends State<MainGamePage> {
           ),
           Center(
             child: CircleAvatar(
-              child: Image.asset('images/face.png'),
+              child: Center(
+                child: Icon(
+                  Icons.person,
+                  size: 60.0,
+                ),
+              ),
               maxRadius: 50.0,
             ),
           ),
@@ -134,41 +201,48 @@ class MainGamePageState extends State<MainGamePage> {
           SizedBox(
             height: 20.0,
           ),
-          ListTile(
-            title: Text('Option 01'),
-          ),
+          _bottomDrawerItems(),
         ],
       ),
     );
   }
 
+  Widget _bottomDrawerItems() {
+    return SwitchListTile(
+      // selected: true,
+      onChanged: (bool value) {
+        setState(() {
+          !value ?? true;
+        });
+      },
+      value: true,
+      title: Text('Change Theme :'),
+    );
+  }
+
   Widget questionUi() {
-    return new Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      // verticalDirection: VerticalDirection.down,
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        new Text(
-          'When do you want to here your Rundown ?',
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            color: kQuizBackgroundWhite,
+    return Container(
+      height: MediaQuery.of(context).size.height / 1.5,
+      alignment: Alignment(0, 0.75),
+      child: new Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        // verticalDirection: VerticalDirection.down,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          new SizedBox(height: 30),
+          options('Option 1', 0),
+          new SizedBox(height: 20),
+          options('Option 2', 1),
+          new SizedBox(height: 20),
+          options('Option 3', 2),
+          new SizedBox(height: 20),
+          Container(
+            child: options('Option 4', 3),
+            alignment: Alignment.bottomCenter,
           ),
-          textScaleFactor: 1.6,
-        ),
-        new SizedBox(height: 30),
-        options('Option 1', 0),
-        new SizedBox(height: 20),
-        options('Option 2', 1),
-        new SizedBox(height: 20),
-        options('Option 3', 2),
-        new SizedBox(height: 20),
-        Container(
-          child: options('Option 4', 3),
-          alignment: Alignment.bottomCenter,
-        )
-      ],
+        ],
+      ),
     );
   }
 
@@ -228,7 +302,6 @@ class MainGamePageState extends State<MainGamePage> {
           onPressed: () {
             Navigator.pop(context);
           },
-          // color: kQuizSurfaceWhite,
         ),
         new Expanded(
           child: new Container(),
