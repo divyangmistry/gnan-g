@@ -6,7 +6,7 @@ class QuizLevel {
   QuizLevel(this.levelIndex,this.name);
 
   QuizLevel.fromJson(Map<String, dynamic> json) {
-    levelIndex = int.parse(json['level_index']);
+    levelIndex = json['level_index'];
     name = json['name'];
     levelType = json['level_type'];
   }

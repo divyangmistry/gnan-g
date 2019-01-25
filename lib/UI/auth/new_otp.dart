@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kon_banega_mokshadhipati/UI/auth/register_new.dart';
 import 'package:kon_banega_mokshadhipati/model/signupsession.dart';
 import '../../colors.dart';
 import '../../common.dart';
@@ -6,8 +7,9 @@ import '../../Service/apiservice.dart';
 
 class OtpVerifyPage extends StatefulWidget {
   final SignUpSession signUpSession;
+  final bool fromForgotPassword;
 
-  OtpVerifyPage({this.signUpSession});
+  OtpVerifyPage({this.signUpSession, this.fromForgotPassword = false});
   @override
   State<StatefulWidget> createState() => new OtpVerifyPageState();
 }
@@ -25,7 +27,7 @@ class OtpVerifyPageState extends State<OtpVerifyPage> {
       key: _formKey,
       autovalidate: _autoValidate,
       child: new Scaffold(
-      backgroundColor: kQuizSurfaceWhite,
+        backgroundColor: kQuizSurfaceWhite,
         body: SafeArea(
           child: new ListView(
             padding: EdgeInsets.symmetric(horizontal: 30.0),
@@ -89,16 +91,24 @@ class OtpVerifyPageState extends State<OtpVerifyPage> {
   void _submit() {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
-      print('OTP DATA');
-      print('OTP : ${this._otp}');
-      if(_otp == widget.signUpSession.otp.toString()) {
+      if (_otp == widget.signUpSession.otp.toString()) {
         Navigator.pop(context);
-        Navigator.pushReplacementNamed(context, '/register_new');
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => new RegisterPage2(
+                fromForgotPassword: widget.fromForgotPassword),
+          ),
+        );
       } else {
-        cf.alertDialog(context: context, msg: "OTP is not valid, Please check again otp", doneButtonFn: null, cancelButtonFn: null);
+        cf.alertDialog(
+          context: context,
+          title: 'Eroor',
+          msg: "OTP is not valid, Please try again.",
+          doneButtonFn: null,
+          cancelButtonFn: null,
+        );
       }
-
-      // TODO : Implement Verify OTP
     } else {
       _autoValidate = true;
     }

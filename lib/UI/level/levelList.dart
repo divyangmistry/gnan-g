@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:kon_banega_mokshadhipati/model/cacheData.dart';
+import 'package:kon_banega_mokshadhipati/model/user_state.dart';
 import '../../colors.dart';
 import 'levelRow.dart';
 import '../../model/quizlevel.dart';
@@ -80,9 +82,9 @@ class LevelList extends StatelessWidget {
       child: new Container(
         child: new ListView.builder(
           itemExtent: 160.0,
-          itemCount: DummyLevelList.levels.length,
+          itemCount: CacheData.userState.quizLevels.length,
           itemBuilder: (_, index) =>
-              new LevelCardRow(DummyLevelList.levels[index]),
+              new LevelCardRow(CacheData.userState.quizLevels[index]),
         ),
       ),
     );

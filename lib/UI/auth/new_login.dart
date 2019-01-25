@@ -1,10 +1,14 @@
 // Package import
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'package:kon_banega_mokshadhipati/constans/wsconstants.dart';
+import 'package:kon_banega_mokshadhipati/notification/notifcation_setup.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // File import
+import '../../model/appresponse.dart';
+import '../../utils/response_parser.dart';
 import '../../common.dart';
 import '../../Service/apiservice.dart';
 import '../../colors.dart';
@@ -81,7 +85,7 @@ class LoginPageState extends State<LoginPage> {
               new AccentColorOverride(
                 color: kQuizBrown900,
                 child: new TextFormField(
-                  validator: cf.passwordValidation,
+                  // validator: cf.passwordValidation,
                   decoration: InputDecoration(
                     labelText: 'Password',
                     hintText: 'Enter Password',
@@ -207,77 +211,79 @@ class LoginPageState extends State<LoginPage> {
   }
 
   void _submit() async {
-    Navigator.pushReplacementNamed(context, '/level_new');
-    // if (_formKey.currentState.validate()) {
-    //   _formKey.currentState.save();
-    //   print('LOGIN DATA');
-    //   print('MOBILE : ${this._mhtId}');
-    //   print('PASSWORD : ${this._password}');
-    //   try {
-    //     Map<String, dynamic> data = {'mobile': _mhtId, 'password': _password};
-    //     Response res = await _api.postApi(url: '/login', data: data);
-    //     Map<String, dynamic> jsonResponse = json.decode(res.body);
-    //     if (res.statusCode == 200) {
-    //       SharedPreferences pref = await SharedPreferences.getInstance();
-    //       pref.setString('user_info', res.body);
-    //       pref.setBool(SharedPrefConstant.b_isUserLoggedIn, true);
-    //       print(jsonResponse['user_info']);
-    //       _api.appendTokenToHeader(jsonResponse['user_info']['token']);
-    //       _loadUserState(jsonResponse['user_info']['mht_id']);
-    //     } else {
-    //       cf.alertDialog(
-    //         context: context,
-    //         msg: jsonResponse['msg'],
-    //         barrierDismissible: false,
-    //         cancelButtonFn: null,
-    //         doneButtonFn: null,
-    //       );
-    //     }
-    //   } catch (err) {
-    //     cf.alertDialog(
-    //       context: context,
-    //       msg: err.toString(),
-    //       barrierDismissible: false,
-    //       cancelButtonFn: null,
-    //       doneButtonFn: null,
-    //     );
-    //   }
-    // } else {
-    //   _autoValidate = true;
-    // }
+    if (_formKey.currentState.validate()) {
+      _formKey.currentState.save();
+      print('LOGIN DATA');
+      print('MOBILE : ${this._mhtId}');
+      print('PASSWORD : ${this._password}');
+      try {
+        Map<String, dynamic> data = {'mht_id': _mhtId, 'password': _password};
+        Response res = await _api.postApi(url: '/login', data: data);
+        AppResponse appResponse =
+            ResponseParser.parseResponse(context: context, res: res);
+        if (appResponse.status == WSConstant.SUCCESS_CODE) {
+          SharedPreferences pref = await SharedPreferences.getInstance();
+          pref.setString('user_info', res.body);
+          pref.setBool(SharedPrefConstant.b_isUserLoggedIn, true);
+          print(appResponse.data['user_info']);
+          _api.appendTokenToHeader(appResponse.data['token']);
+          NotificationSetup.setupNotification();
+          _loadUserState(appResponse.data['mhtId']);
+        } else {
+          cf.alertDialog(
+            context: context,
+            msg: appResponse.message,
+            barrierDismissible: false,
+            cancelButtonFn: null,
+            doneButtonFn: null,
+          );
+        }
+      } catch (err) {
+        print('CATCH 1 :: ');
+        print(err);
+        cf.alertDialog(
+          context: context,
+          msg: err.toString(),
+          barrierDismissible: false,
+          cancelButtonFn: null,
+          doneButtonFn: onClickDone,
+          doneButtonIcon: Icons.replay,
+        );
+      }
+    } else {
+      _autoValidate = true;
+    }
   }
 
   onClickDone() {
-    print('Done');
-    Navigator.pop(context);
-  }
-
-  onClickClose() {
-    print('Close');
+    print('Try Again ... ');
     Navigator.pop(context);
   }
 
   _loadUserState(mhtId) async {
     try {
-      var data = {'user_mob': mhtId};
-      Response res = await _api.postApi(url: '/quiz_level', data: data);
-      Map<String, dynamic> jsonResponse = json.decode(res.body);
-      if (res.statusCode == 200) {
+      var data = {'mhtid': mhtId};
+      Response res = await _api.postApi(url: '/user_state', data: data);
+      AppResponse appResponse =
+          ResponseParser.parseResponse(context: context, res: res);
+      if (appResponse.status == WSConstant.SUCCESS_CODE) {
         print('IN LOGIN ::: userstateStr :::');
-        print(jsonResponse);
-        UserState userState = UserState.fromJson(jsonResponse);
+        print(appResponse.data);
+        UserState userState = UserState.fromJson(appResponse.data['results']);
         CacheData.userState = userState;
         Navigator.pushReplacementNamed(context, '/level_new');
       } else {
         cf.alertDialog(
           context: context,
-          msg: jsonResponse['msg'].toString(),
+          msg: appResponse.message,
           barrierDismissible: false,
           cancelButtonFn: null,
           doneButtonFn: null,
         );
       }
     } catch (err) {
+      print('CATCH 2 :: ');
+      print(err);
       cf.alertDialog(
         context: context,
         msg: err.toString(),

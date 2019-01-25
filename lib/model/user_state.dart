@@ -15,6 +15,7 @@ class UserState {
     if (json['quiz_levels'] != null) {
       quizLevels = new List<QuizLevel>();
       json['quiz_levels'].forEach((v) {
+        print(v);
         quizLevels.add(new QuizLevel.fromJson(v));
       });
     }
