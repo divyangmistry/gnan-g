@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:kon_banega_mokshadhipati/constans/sharedpref_constant.dart';
+import 'package:meta/meta.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -8,12 +9,57 @@ class ApiService {
   final _apiUrl = 'http://192.168.43.23:3000';
   // final _apiUrl = 'http://192.168.1.103:3000';
 
-  var headers = {'content-type': 'application/json'};
+  Map<String, String> headers = {'content-type': 'application/json'};
+
+  bool enableMock = false;
+
+  /// Common HTTP Requests
+
+  /// HTTP Get request
+  ///
+  /// * [url] - API endpoint url e.g. : '/login'
+  Future<http.Response> getApi({@required String url}) async {
+    http.Response res = await http.get(_apiUrl + url, headers: headers);
+    return res;
+  }
+
+  /// HTTP Post request
+  ///
+  /// * [url] - API endpoint url e.g. : '/login'
+  /// * [data] - API body
+  Future<http.Response> postApi(
+      {@required String url, @required Map<String, dynamic> data}) async {
+        print(_apiUrl + url);
+    http.Response res = await http.post(_apiUrl + url,
+        body: json.encode(data), headers: headers);
+    return res;
+  }
+
+  /// Call after login done successfully
+  /// Append token to header
+  ///
+  /// * [token] - For authenticate api
+  appendTokenToHeader(token) {
+    headers['x-access-token'] = token;
+    print(headers);
+  }
 
   // Login
   Future<http.Response> login(data) async {
     http.Response res =
         await http.post(_apiUrl + '/login', body: data, headers: headers);
+    return res;
+  }
+
+  Future<http.Response> validateUser(String mhtId, String mobileNo) async {
+    var data = {'mht_id': mhtId, 'modile': mobileNo};
+    if (enableMock) {
+      String validateUserRes =
+          "{\r\n    \"status\": 200,\r\n    \"message\": \"\",\r\n    \"data\": {\r\n        \"otp\": 311437,\r\n        \"msg\": \"OTP is send to your Contact number.\",\r\n        \"data\": {\r\n            \"_id\": \"5c460544153e0fa09b0783be\",\r\n            \"mobile\": \"8153922317\",\r\n            \"name\": \"tEST:\",\r\n            \"email\": \"ttttt@ttt.com\",\r\n            \"mht_id\": 454545,\r\n            \"center\": \"terre\"\r\n        }\r\n    }\r\n}";
+      return http.Response(validateUserRes, 200);
+    }
+    http.Response res = await http.post(_apiUrl + '/generate_otp',
+        body: json.encode(data), headers: headers);
     return res;
   }
 
@@ -32,11 +78,13 @@ class ApiService {
   }
 
   Future<http.Response> getUserState(data) async {
+    if (enableMock) {
+      String userStateRes =
+          "{\r\n    \"status\": 200,\r\n    \"message\": \"\",\r\n    \"data\": {\r\n        \"results\": {\r\n            \"quiz_levels\": [\r\n                {\r\n                    \"_id\": \"5c4606839a8ec823d093b722\",\r\n                    \"level_index\": 1,\r\n                    \"name\": \"test33\",\r\n                    \"level_type\": \"REGULAR\",\r\n                    \"total_questions\": 10,\r\n                    \"categorys\": [\r\n                        {\r\n                            \"_id\": \"5c4606839a8ec823d093b723\",\r\n                            \"category_number\": 1,\r\n                            \"category\": \"1\"\r\n                        }\r\n                    ],\r\n                    \"start_date\": \"2019-01-18T00:00:00.000Z\",\r\n                    \"end_date\": \"3019-01-18T00:00:00.000Z\",\r\n                    \"description\": \"Avo Game ramva\",\r\n                    \"imagepath\": \"\",\r\n                    \"totalscores\": 30\r\n                },\r\n                {\r\n                    \"_id\": \"5c46069c9a8ec823d093b724\",\r\n                    \"level_index\": 2,\r\n                    \"name\": \"Biji Var\",\r\n                    \"level_type\": \"REGULAR\",\r\n                    \"total_questions\": 10,\r\n                    \"categorys\": [\r\n                        {\r\n                            \"_id\": \"5c46069c9a8ec823d093b725\",\r\n                            \"category_number\": 1,\r\n                            \"category\": \"1\"\r\n                        }\r\n                    ],\r\n                    \"start_date\": \"2019-01-18T00:00:00.000Z\",\r\n                    \"end_date\": \"3019-01-18T00:00:00.000Z\",\r\n                    \"description\": \"Avo Game ramva\",\r\n                    \"imagepath\": \"\",\r\n                    \"totalscores\": 30\r\n                },\r\n                {\r\n                    \"_id\": \"5c4606a69a8ec823d093b726\",\r\n                    \"level_index\": 3,\r\n                    \"name\": \"Triji Var\",\r\n                    \"level_type\": \"REGULAR\",\r\n                    \"total_questions\": 10,\r\n                    \"categorys\": [\r\n                        {\r\n                            \"_id\": \"5c4606a69a8ec823d093b727\",\r\n                            \"category_number\": 1,\r\n                            \"category\": \"1\"\r\n                        }\r\n                    ],\r\n                    \"start_date\": \"2019-01-18T00:00:00.000Z\",\r\n                    \"end_date\": \"3019-01-18T00:00:00.000Z\",\r\n                    \"description\": \"Avo Game ramva\",\r\n                    \"imagepath\": \"\",\r\n                    \"totalscores\": 0\r\n                }\r\n            ],\r\n            \"completed\": [],\r\n            \"current\": {\r\n                \"question_st\": 1,\r\n                \"level\": 1,\r\n                \"score\": 0,\r\n                \"completed\": false,\r\n                \"_id\": \"5c4894bb8f45cc208ccfb0a7\",\r\n                \"mht_id\": 454545,\r\n                \"total_questions\": 10,\r\n                \"updatedAt\": \"2019-01-23T16:22:19.788Z\",\r\n                \"createdAt\": \"2019-01-23T16:22:19.788Z\",\r\n                \"__v\": 0\r\n            },\r\n            \"totalscore\": 0\r\n        }\r\n    }\r\n}";
+      return http.Response(userStateRes, 200);
+    }
     http.Response res =
         await http.post(_apiUrl + '/quiz_level', body: data, headers: headers);
-    //String userStateRes =
-    //    "{\r\n   \"results\": {\r\n       \"quiz_levels\": [\r\n           {\r\n               \"_id\": \"5c2b2ab18f19ebed466d9a82\",\r\n               \"level_index\": \"1\",\r\n               \"name\": \"Primary\",\r\n               \"level_type\": \"Regular\"\r\n           },\r\n           {\r\n               \"_id\": \"5c2b2abe8f19ebed466d9a83\",\r\n               \"level_index\": \"2\",\r\n               \"name\": \"Secondary\",\r\n               \"level_type\": \"Regular\"\r\n           }\r\n       ],\r\n       \"completed\": [\r\n           {\r\n               \"level\": 1,\r\n               \"score\": 1\r\n           }\r\n       ],\r\n       \"current\": [\r\n           {\r\n               \"user_mobile\": \"1234567891\",\r\n               \"question_st\": 1,\r\n               \"level\": 1,\r\n               \"score\": 2,\r\n               \"lives\": 4,\r\n               \"current_score\": 1,\r\n               \"completed\": false,\r\n               \"updatedAt\": \"2019-01-06T16:08:54.057Z\",\r\n               \"total_questions\": 5\r\n           }\r\n       ],\r\n       \"Question_Sta\": [\r\n           {\r\n               \"_id\": \"5c28fc2db305c24a23a69406\",\r\n               \"question_st\": 2\r\n           }\r\n       ]\r\n   }\r\n}";
-    //return http.Response(userStateRes, 200);
     return res;
   }
 
@@ -61,7 +109,7 @@ class ApiService {
 
   // Check Login Status
   Future<bool> checkLoginStatus() async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     if (prefs.getBool(SharedPrefConstant.b_isUserLoggedIn) != null) {
       if (prefs.getBool(SharedPrefConstant.b_isUserLoggedIn)) {
         return true;

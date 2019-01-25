@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 
-const kQuizPink50 = const Color(0xFFFEEAE6);
-const kQuizPink100 = const Color(0xFFFEDBD0);
-const kQuizPink300 = const Color(0xFFFBB8AC);
-const kQuizPink400 = const Color(0xFFEAA4A4);
+const kQuizMain50 = const Color(0xFFACA7BB);
+const kQuizMain100 = const Color(0xFFACA7BB);
+const kQuizMain300 = const Color(0xFF6A25FF);
+const kQuizMain400 = const Color(0xFF23007F);
 
-const kQuizBrown900 = const Color(0xFF442B2D);
+const kQuizBrown900 = const Color(0xFF240E47);
 
-const kQuizErrorRed = const Color(0xFFC5032B);
+const kQuizErrorRed = const Color(0xFFFF002D);
 
-const kQuizSurfaceWhite = const Color(0xFFFFFBFA);
+const kQuizSurfaceWhite = const Color(0xFFFAFAFA);
 const kQuizBackgroundWhite = Colors.white;
+
+const kBackgroundGrediant1 = Colors.blue;
+const kBackgroundGrediant2 = Colors.purple;
