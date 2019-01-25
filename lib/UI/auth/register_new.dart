@@ -5,6 +5,7 @@ import 'package:kon_banega_mokshadhipati/model/appresponse.dart';
 import 'package:kon_banega_mokshadhipati/utils/response_parser.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../model/signupsession.dart';
+import 'package:kon_banega_mokshadhipati/notification/notifcation_setup.dart';
 import '../../colors.dart';
 import '../../common.dart';
 import '../../Service/apiservice.dart';
@@ -151,11 +152,22 @@ class RegisterPage2State extends State<RegisterPage2> {
 
   void _submit() async {
     if (_formKey.currentState.validate()) {
+<<<<<<< HEAD
       if (widget.fromForgotPassword) {
         _resetPassword();
       } else {
         _registerUser();
       }
+=======
+      _formKey.currentState.save();
+      print('PROFILE DATA');
+      print('Password : ${this._passwordController.text}');
+      print('VerifyPassword : ${this._verifyPasswordController.text}');
+      Navigator.pop(context);
+      NotificationSetup.setupNotification();
+      Navigator.pushReplacementNamed(context, '/gameStart');
+      // TODO : Implement SAVE user password
+>>>>>>> stash
     } else {
       _autoValidate = true;
     }
