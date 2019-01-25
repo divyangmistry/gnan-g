@@ -210,7 +210,6 @@ class LoginPageState extends State<LoginPage> {
   }
 
   void _submit() async {
-    // Navigator.pushReplacementNamed(context, '/level_new');
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
       print('LOGIN DATA');
@@ -241,12 +240,13 @@ class LoginPageState extends State<LoginPage> {
         print('CATCH 1 :: ');
         print(err);
         cf.alertDialog(
-            context: context,
-            msg: err.toString(),
-            barrierDismissible: false,
-            cancelButtonFn: null,
-            doneButtonFn: onClickDone,
-            doneButtonIcon: Icons.replay);
+          context: context,
+          msg: err.toString(),
+          barrierDismissible: false,
+          cancelButtonFn: null,
+          doneButtonFn: onClickDone,
+          doneButtonIcon: Icons.replay,
+        );
       }
     } else {
       _autoValidate = true;

@@ -1,5 +1,11 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
+import 'package:kon_banega_mokshadhipati/constans/wsconstants.dart';
+import 'package:kon_banega_mokshadhipati/model/appresponse.dart';
+import 'package:kon_banega_mokshadhipati/model/signupsession.dart';
+import 'package:kon_banega_mokshadhipati/utils/response_parser.dart';
+import '../../UI/auth/new_otp.dart';
 import '../../Service/apiservice.dart';
 import '../../common.dart';
 import '../../colors.dart';
@@ -85,13 +91,44 @@ class ForgotPasswordState extends State<ForgotPassword> {
     );
   }
 
-  void _submit() {
+  void _submit() async {
     if (_formKey.currentState.validate()) {
-      _formKey.currentState.save();
-      print('FORGOT PASSWORD');
-      print('MHTID : ${this._mhtId}');
-      Navigator.pop(context);
-      Navigator.pushReplacementNamed(context, '/');
+      try {
+        _formKey.currentState.save();
+        Map<String, dynamic> data = {'mht_id': _mhtId};
+        Response res = await _api.postApi(url: '/forgot_password', data: data);
+        AppResponse appResponse = ResponseParser.parseResponse(context: context, res: res);
+        if (appResponse.status == WSConstant.SUCCESS_CODE) {
+          SignUpSession signUpSession = SignUpSession.fromJson(appResponse.data);
+          Navigator.pop(context);
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  new OtpVerifyPage(signUpSession: signUpSession),
+            ),
+          );
+        } else {
+          cf.alertDialog(
+            context: context,
+            msg: appResponse.message,
+            barrierDismissible: false,
+            cancelButtonFn: null,
+            doneButtonFn: null,
+          );
+        }
+      } catch (err) {
+        print('CATCH :: ');
+        print(err);
+        cf.alertDialog(
+          context: context,
+          msg: err.toString(),
+          barrierDismissible: false,
+          cancelButtonFn: null,
+          doneButtonFn: null,
+          doneButtonIcon: Icons.replay,
+        );
+      }
     } else {
       _autoValidate = true;
     }

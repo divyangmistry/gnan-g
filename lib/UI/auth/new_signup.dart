@@ -2,13 +2,10 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:kon_banega_mokshadhipati/UI/auth/new_otp.dart';
-import 'package:kon_banega_mokshadhipati/constans/sharedpref_constant.dart';
 import 'package:kon_banega_mokshadhipati/constans/wsconstants.dart';
 import 'package:kon_banega_mokshadhipati/model/appresponse.dart';
 import 'package:kon_banega_mokshadhipati/model/signupsession.dart';
 import 'package:kon_banega_mokshadhipati/utils/response_parser.dart';
-import 'dart:convert';
-import 'package:shared_preferences/shared_preferences.dart';
 
 // File import
 import '../../common.dart';
@@ -34,7 +31,7 @@ class SignUpPageState extends State<SignUpPage> {
       key: _formKey,
       autovalidate: _autoValidate,
       child: new Scaffold(
-      backgroundColor: kQuizSurfaceWhite,
+        backgroundColor: kQuizSurfaceWhite,
         body: SafeArea(
           child: new ListView(
             padding: EdgeInsets.symmetric(horizontal: 30.0),
@@ -168,28 +165,47 @@ class SignUpPageState extends State<SignUpPage> {
     );
   }
 
-  void _submit() {
-    //Navigator.pushReplacementNamed(context, '/otp_new');
+  void _submit() async {
     if (_formKey.currentState.validate()) {
-      _formKey.currentState.save();
-      print('SIGNUP DATA');
-      print('MHTID : ${this._mhtId}');
-      print('MOBILE : ${this._mobile}');
-      _api.validateUser(_mhtId, _mobile).then((res) {
-        AppResponse appResponse = ResponseParser.parseResponse(context: context, res: res);
+      try {
+        _formKey.currentState.save();
+        Map<String, dynamic> data = {'mht_id': _mhtId, 'password': _mobile};
+        Response res = await _api.postApi(url: '/validate_user', data: data);
+        AppResponse appResponse =
+            ResponseParser.parseResponse(context: context, res: res);
         if (appResponse.status == WSConstant.SUCCESS_CODE) {
-          SignUpSession signUpSession = SignUpSession.fromJson(appResponse.data);
-          Navigator.push(
+          SignUpSession signUpSession =
+              SignUpSession.fromJson(appResponse.data);
+          Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => new OtpVerifyPage(signUpSession: signUpSession),
+              builder: (context) =>
+                  new OtpVerifyPage(signUpSession: signUpSession),
             ),
           );
-        } else {}
-      });
+        } else {
+          cf.alertDialog(
+            context: context,
+            msg: appResponse.message,
+            barrierDismissible: false,
+            cancelButtonFn: null,
+            doneButtonFn: null,
+          );
+        }
+      } catch (err) {
+        print('CATCH :: ');
+        print(err);
+        cf.alertDialog(
+          context: context,
+          msg: err.toString(),
+          barrierDismissible: false,
+          cancelButtonFn: null,
+          doneButtonFn: null,
+          doneButtonIcon: Icons.replay,
+        );
+      }
     } else {
       _autoValidate = true;
     }
   }
-
 }
