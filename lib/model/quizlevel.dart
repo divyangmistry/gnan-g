@@ -2,6 +2,9 @@ class QuizLevel {
   int levelIndex;
   String name;
   String levelType;
+  int totalPoints;
+  String imgUrl;
+  String description;
 
   QuizLevel(this.levelIndex,this.name);
 
@@ -9,6 +12,9 @@ class QuizLevel {
     levelIndex = json['level_index'];
     name = json['name'];
     levelType = json['level_type'];
+    totalPoints = json['totalscores'];
+    imgUrl = json['imagepath'];
+    description = json['description'];
   }
 
   Map<String, dynamic> toJson() {
@@ -16,6 +22,9 @@ class QuizLevel {
     data['level_index'] = this.levelIndex;
     data['name'] = this.name;
     data['level_type'] = this.levelType;
+    data['totalscores'] = this.totalPoints;
+    data['imagepath'] = this.imgUrl;
+    data['description'] = this.description;
     return data;
   }
 
@@ -24,24 +33,5 @@ class QuizLevel {
     return 'QuizLevel{levelIndex: $levelIndex, name: $name, levelType: $levelType}';
   }
 
-
-}
-
-
-class DummyLevelList {
-
-  static final List<QuizLevel> levels = [
-    QuizLevel(1,'Level 1'),
-    QuizLevel(2,'Level 2'),
-    QuizLevel(3,'Level 3'),
-    QuizLevel(4,'Level 4'),
-    QuizLevel(5,'Level 5'),
-    QuizLevel(6,'Level 6'),
-    QuizLevel(7,'Level 7'),
-    QuizLevel(8,'Level 8'),
-    QuizLevel(9,'Level 9'),
-    QuizLevel(10,'Level 10'),
-    QuizLevel(11,'Level 11'),
-  ];
 
 }

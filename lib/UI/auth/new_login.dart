@@ -268,7 +268,7 @@ class LoginPageState extends State<LoginPage> {
           ResponseParser.parseResponse(context: context, res: res);
       if (appResponse.status == WSConstant.SUCCESS_CODE) {
         print('IN LOGIN ::: userstateStr :::');
-        print(appResponse.data);
+        print(appResponse.data['results']['quiz_levels'][0]['imagepath']);
         UserState userState = UserState.fromJson(appResponse.data['results']);
         CacheData.userState = userState;
         Navigator.pushReplacementNamed(context, '/level_new');

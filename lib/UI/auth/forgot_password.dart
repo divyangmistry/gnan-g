@@ -105,7 +105,7 @@ class ForgotPasswordState extends State<ForgotPassword> {
             context,
             MaterialPageRoute(
               builder: (context) =>
-                  new OtpVerifyPage(signUpSession: signUpSession),
+                  new OtpVerifyPage(signUpSession: signUpSession, fromForgotPassword: true,),
             ),
           );
         } else {

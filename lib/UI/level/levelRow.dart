@@ -50,9 +50,7 @@ class LevelCardRow extends StatelessWidget {
             ),
             new SizedBox(height: 10),
             new Text(
-              levelDetails.levelType == null
-                  ? "Some Description"
-                  : levelDetails.levelType,
+              levelDetails.description != null ? levelDetails.description : "",
               style: TextStyle(
                 color: kQuizMain50,
               ),
@@ -86,7 +84,7 @@ class LevelCardRow extends StatelessWidget {
                   style: TextStyle(color: kQuizMain50),
                 ),
                 new Text(
-                  '100',
+                  levelDetails.totalPoints != null ? levelDetails.totalPoints.toString() : "",
                   style: TextStyle(color: kQuizMain400),
                 ),
               ],
@@ -108,7 +106,9 @@ class LevelCardRow extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => new MainGamePage(level: levelDetails,),
+              builder: (context) => new MainGamePage(
+                    level: levelDetails,
+                  ),
             ),
           );
         },
