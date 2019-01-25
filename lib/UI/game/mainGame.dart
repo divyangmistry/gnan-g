@@ -37,30 +37,60 @@ class MainGamePageState extends State<MainGamePage> {
           child: new Stack(
             alignment: Alignment.center,
             fit: StackFit.loose,
+            // overflow: Overflow.clip,
             children: <Widget>[
-              new ListView(
-                shrinkWrap: true,
-                padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
-                children: <Widget>[
-                  titleBar(),
-                  Container(
-                    // alignment: Alignment.center,
-                    child: Text(
-                      'When do you want to here your Rundown ?',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: kQuizBackgroundWhite,
-                      ),
-                      textScaleFactor: 1.6,
-                    ),
+              // new ListView(
+              //   shrinkWrap: true,
+              //   padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
+              //   children: <Widget>[
+              //     // SizedBox(height: 50),
+              //   ],
+              // ),
+              // Container(
+              //   alignment: Alignment(0, -1),
+              //   child: titleBar(),
+              // ),
+              Container(
+                alignment: Alignment(-1, -1),
+                child: IconButton(
+                  icon: Icon(
+                    Icons.close,
+                    color: kQuizSurfaceWhite,
                   ),
-                  new Container(
-                    alignment: Alignment.center,
-                    padding: EdgeInsets.all(50),
-                    child: questionUi(),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+              ),
+              Container(
+                alignment: Alignment(0, -0.95),
+                child: Text(
+                  widget.level.name.toUpperCase(),
+                  textScaleFactor: 1.2,
+                  style: TextStyle(color: kQuizSurfaceWhite),
+                ),
+              ),
+              Container(
+                alignment: Alignment(0.90, -0.95),
+                child: Text('120 \$',
+                    style: TextStyle(color: kQuizBackgroundWhite),
+                    textScaleFactor: 1.2),
+              ),
+              Container(
+                alignment: Alignment(0, -0.30),
+                child: Text(
+                  'When do you want to here your Rundown ?',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: kQuizBackgroundWhite,
                   ),
-                  // SizedBox(height: 50),
-                ],
+                  textScaleFactor: 1.6,
+                ),
+              ),
+              new Container(
+                alignment: Alignment(0, 0.95),
+                padding: EdgeInsets.all(50),
+                child: questionUi(),
               ),
               Container(
                 margin: EdgeInsets.all(20.0),
@@ -234,12 +264,11 @@ class MainGamePageState extends State<MainGamePage> {
 
   Widget questionUi() {
     return Container(
-      // height: MediaQuery.of(context).size.height / 1.2,
-      alignment: Alignment(0, 0.75),
+      // height: MediaQuery.of(context).size.height / 2,
+      // alignment: Alignment(0, 0.75),
       child: new Column(
         crossAxisAlignment: CrossAxisAlignment.center,
-        // verticalDirection: VerticalDirection.down,
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        verticalDirection: VerticalDirection.down,
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           new SizedBox(height: 30),
@@ -300,38 +329,38 @@ class MainGamePageState extends State<MainGamePage> {
     );
   }
 
-  Widget titleBar() {
-    return new Row(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: <Widget>[
-        new IconButton(
-          icon: Icon(
-            Icons.close,
-            color: kQuizSurfaceWhite,
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        new Expanded(
-          child: new Container(),
-        ),
-        new Text(
-          widget.level.name.toUpperCase(),
-          textScaleFactor: 1.2,
-          style: TextStyle(color: kQuizSurfaceWhite),
-        ),
-        new Expanded(
-          child: new Container(),
-        ),
-        Container(
-          child: Text('120 \$',
-              style: TextStyle(color: kQuizBackgroundWhite),
-              textScaleFactor: 1.2),
-        )
-      ],
-    );
-  }
+  // Widget titleBar() {
+  //   return Row(
+  //     mainAxisSize: MainAxisSize.min,
+  //     crossAxisAlignment: CrossAxisAlignment.center,
+  //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+  //     children: <Widget>[
+  //       new IconButton(
+  //         icon: Icon(
+  //           Icons.close,
+  //           color: kQuizSurfaceWhite,
+  //         ),
+  //         onPressed: () {
+  //           Navigator.pop(context);
+  //         },
+  //       ),
+  //       new Expanded(
+  //         child: new Container(),
+  //       ),
+  //       new Text(
+  //         widget.level.name.toUpperCase(),
+  //         textScaleFactor: 1.2,
+  //         style: TextStyle(color: kQuizSurfaceWhite),
+  //       ),
+  //       new Expanded(
+  //         child: new Container(),
+  //       ),
+  //       Container(
+  //         child: Text('120 \$',
+  //             style: TextStyle(color: kQuizBackgroundWhite),
+  //             textScaleFactor: 1.2),
+  //       )
+  //     ],
+  //   );
+  // }
 }
