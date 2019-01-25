@@ -35,15 +35,17 @@ class MainGamePageState extends State<MainGamePage> {
       body: new BackgroundGredient(
         child: SafeArea(
           child: new Stack(
+            alignment: Alignment.center,
             fit: StackFit.loose,
             children: <Widget>[
               new ListView(
                 shrinkWrap: true,
-                padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
                 children: <Widget>[
                   titleBar(),
-                  Center(
-                    child: new Text(
+                  Container(
+                    // alignment: Alignment.center,
+                    child: Text(
                       'When do you want to here your Rundown ?',
                       textAlign: TextAlign.center,
                       style: TextStyle(
@@ -53,7 +55,7 @@ class MainGamePageState extends State<MainGamePage> {
                     ),
                   ),
                   new Container(
-                    alignment: Alignment.bottomCenter,
+                    alignment: Alignment.center,
                     padding: EdgeInsets.all(50),
                     child: questionUi(),
                   ),
@@ -61,7 +63,8 @@ class MainGamePageState extends State<MainGamePage> {
                 ],
               ),
               Container(
-                alignment: Alignment(0, 0.75),
+                margin: EdgeInsets.all(20.0),
+                alignment: Alignment(0, 0.95),
                 child: _showLivesBanner
                     ? Card(
                         elevation: 20.0,
@@ -76,11 +79,20 @@ class MainGamePageState extends State<MainGamePage> {
                         child: Container(
                           alignment: Alignment.center,
                           height: 200.0,
-                          child: ListView(
-                            padding: EdgeInsets.all(10.0),
+                          padding: EdgeInsets.all(30.0),
+                          child: Column(
                             children: <Widget>[
                               ListTile(
-                                title: Text('data'),
+                                onTap: () => debugPrint(
+                                    'Cutting off the money for 1 life !'),
+                                title: Text('Earn 1 life => '),
+                                trailing: Icon(Icons.person),
+                              ),
+                              ListTile(
+                                onTap: () => debugPrint(
+                                    'Cutting off the money for 2 life !'),
+                                title: Text('Earn 2 life => '),
+                                trailing: Icon(Icons.group),
                               ),
                             ],
                           ),
@@ -222,7 +234,7 @@ class MainGamePageState extends State<MainGamePage> {
 
   Widget questionUi() {
     return Container(
-      height: MediaQuery.of(context).size.height / 1.5,
+      // height: MediaQuery.of(context).size.height / 1.2,
       alignment: Alignment(0, 0.75),
       child: new Column(
         crossAxisAlignment: CrossAxisAlignment.center,
