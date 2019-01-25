@@ -152,22 +152,11 @@ class RegisterPage2State extends State<RegisterPage2> {
 
   void _submit() async {
     if (_formKey.currentState.validate()) {
-<<<<<<< HEAD
       if (widget.fromForgotPassword) {
         _resetPassword();
       } else {
         _registerUser();
       }
-=======
-      _formKey.currentState.save();
-      print('PROFILE DATA');
-      print('Password : ${this._passwordController.text}');
-      print('VerifyPassword : ${this._verifyPasswordController.text}');
-      Navigator.pop(context);
-      NotificationSetup.setupNotification();
-      Navigator.pushReplacementNamed(context, '/gameStart');
-      // TODO : Implement SAVE user password
->>>>>>> stash
     } else {
       _autoValidate = true;
     }
@@ -190,6 +179,7 @@ class RegisterPage2State extends State<RegisterPage2> {
       if (appResponse.status == WSConstant.SUCCESS_CODE) {
         SharedPreferences pref = await SharedPreferences.getInstance();
         pref.setString('user_info', res.body);
+        NotificationSetup.setupNotification();
         Navigator.pop(context);
         Navigator.pushReplacementNamed(context, '/gameStart');
       } else {
