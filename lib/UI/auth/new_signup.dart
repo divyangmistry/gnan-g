@@ -170,40 +170,25 @@ class SignUpPageState extends State<SignUpPage> {
     if (_formKey.currentState.validate()) {
       try {
         _formKey.currentState.save();
-        Map<String, dynamic> data = {'mht_id': _mhtId, 'mobile': _mobile};
-        Response res = await _api.postApi(url: '/validate_user', data: data);
-        Map<String, dynamic> jsonResponse = json.decode(res.body);
-        print(jsonResponse);
-        if (res.statusCode == 200) {
+        Response res = await _api.validateUser(mhtId: _mhtId, mobileNo: _mobile);
+        AppResponse appResponse = ResponseParser.parseResponse(context: context, res: res);
+        if (appResponse.status == 200) {
+          SignUpSession signUpSession = SignUpSession.fromJson(appResponse.data);
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
               builder: (context) => new OtpVerifyPage(
-                    otp: jsonResponse['data']['otp'],
-                    userData: jsonResponse,
+                    otp: signUpSession.otp,
+                    userData: signUpSession.userData,
                     fromForgotPassword: false,
                   ),
             ),
-          );
-        } else {
-          CommonFunction.alertDialog(
-            context: context,
-            title: 'Error - ' + res.statusCode.toString(),
-            msg: jsonResponse['data']['msg'] != null ? jsonResponse['data']['msg'] : "An error occured",
-            doneButtonText: 'Okay',
-            barrierDismissible: false,
-            doneButtonFn: null,
           );
         }
       } catch (err) {
         print('CATCH :: ');
         print(err);
-        CommonFunction.alertDialog(
-          context: context,
-          msg: err.toString(),
-          barrierDismissible: false,
-          doneButtonFn: null,
-        );
+        CommonFunction.displayErrorDialog(context: context, msg: err.toString());
       }
     } else {
       _autoValidate = true;

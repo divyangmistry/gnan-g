@@ -12,7 +12,7 @@ import '../../Service/apiservice.dart';
 
 class RegisterPage2 extends StatefulWidget {
   final bool fromForgotPassword;
-  final Map<String, dynamic> userData;
+  final UserData userData;
 
   RegisterPage2({this.userData, this.fromForgotPassword = false});
   @override
@@ -164,71 +164,33 @@ class RegisterPage2State extends State<RegisterPage2> {
 
   _registerUser() async {
     try {
-      SignUpSession signUpSession = new SignUpSession();
-      Map<String, dynamic> data = {
-        'mht_id': signUpSession.data['mht_id'],
-        'mobile': signUpSession.data['mobile'],
-        'password': signUpSession.data['password'],
-        'name': signUpSession.data['name'],
-        'email': signUpSession.data['email'],
-        'center': signUpSession.data['center'],
-      };
-      Response res = await _api.postApi(url: '/register', data: data);
-      AppResponse appResponse =
-          ResponseParser.parseResponse(context: context, res: res);
+      widget.userData.password = _passwordController.text.toString();
+      Response res = await _api.register(userData: widget.userData);
+      AppResponse appResponse = ResponseParser.parseResponse(context: context, res: res);
       if (appResponse.status == WSConstant.SUCCESS_CODE) {
         SharedPreferences pref = await SharedPreferences.getInstance();
         pref.setString('user_info', res.body);
         NotificationSetup.setupNotification();
         Navigator.pop(context);
         Navigator.pushReplacementNamed(context, '/gameStart');
-      } else {
-        CommonFunction.alertDialog(
-          context: context,
-          msg: appResponse.message,
-          barrierDismissible: false,
-          doneButtonFn: null,
-        );
       }
     } catch (err) {
-      CommonFunction.alertDialog(
-        context: context,
-        msg: err.toString(),
-        barrierDismissible: false,
-        doneButtonFn: null,
-      );
+      CommonFunction.displayErrorDialog(context: context, msg: err.toString());
     }
   }
 
   _resetPassword() async {
     try {
-      Map<String, dynamic> data = {
-        'mht_id': widget.userData['data']['data']['mht_id'],
-        'password': _passwordController.text,
-      };
-      Response res = await _api.postApi(url: '/update_password', data: data);
-      AppResponse appResponse =
-          ResponseParser.parseResponse(context: context, res: res);
+      Response res = await _api.updatePassword(mhtId: widget.userData.mhtId, password: _passwordController.text);
+      AppResponse appResponse = ResponseParser.parseResponse(context: context, res: res);
       if (appResponse.status == WSConstant.SUCCESS_CODE) {
         SharedPreferences pref = await SharedPreferences.getInstance();
         pref.setString('user_info', res.body);
         Navigator.pop(context);
         Navigator.pushReplacementNamed(context, '/gameStart');
-      } else {
-        CommonFunction.alertDialog(
-          context: context,
-          msg: appResponse.message,
-          barrierDismissible: false,
-          doneButtonFn: null,
-        );
       }
     } catch (err) {
-      CommonFunction.alertDialog(
-        context: context,
-        msg: err.toString(),
-        barrierDismissible: false,
-        doneButtonFn: null,
-      );
+      CommonFunction.displayErrorDialog(context: context, msg: err.toString());
     }
   }
 
@@ -247,16 +209,16 @@ class RegisterPage2State extends State<RegisterPage2> {
               textScaleFactor: 1.5,
             ),
             SizedBox(height: 30),
-            titleAndData('Name : ', widget.userData['data']['data']['name']),
+            titleAndData('Name : ', widget.userData.name),
             SizedBox(height: 15),
             titleAndData(
-                'Mobile no. : ', widget.userData['data']['data']['mobile']),
+                'Mobile no. : ', widget.userData.mobile),
             SizedBox(height: 15),
             titleAndData(
-                'Email id : ', widget.userData['data']['data']['email']),
+                'Email id : ', widget.userData.email),
             SizedBox(height: 15),
             titleAndData(
-                'Center : ', widget.userData['data']['data']['center']),
+                'Center : ', widget.userData.center),
           ],
         ),
       ),

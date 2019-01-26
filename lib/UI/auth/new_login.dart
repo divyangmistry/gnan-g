@@ -1,6 +1,9 @@
 // Package import
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'package:kon_banega_mokshadhipati/model/appresponse.dart';
+import 'package:kon_banega_mokshadhipati/model/userinfo.dart';
+import 'package:kon_banega_mokshadhipati/utils/response_parser.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -212,37 +215,23 @@ class LoginPageState extends State<LoginPage> {
       print('MOBILE : ${this._mhtId}');
       print('PASSWORD : ${this._password}');
       try {
-        Map<String, dynamic> data = {'mht_id': _mhtId, 'password': _password};
-        Response res = await _api.postApi(url: '/login', data: data);
-        Map<String, dynamic> jsonResponse = json.decode(res.body);
-        if (res.statusCode == 200) {
+        Response res = await _api.login(mhtId: _mhtId, password: _password);
+        AppResponse appResponse = ResponseParser.parseResponse(context: context, res: res);
+        if (appResponse.status == 200) {
+          UserInfo userInfo = UserInfo.fromJson(appResponse.data);
           SharedPreferences pref = await SharedPreferences.getInstance();
-          pref.setString('user_info', res.body);
-          pref.setString('token', jsonResponse['data']['token']);
+          pref.setString('user_info', userInfo.toJson().toString());
+          pref.setString('token', userInfo.token);
           pref.setBool(SharedPrefConstant.b_isUserLoggedIn, true);
-          print(jsonResponse['data']['user_info']);
-          _api.appendTokenToHeader(jsonResponse['data']['token']);
+          print(userInfo);
+          _api.appendTokenToHeader(userInfo.token);
           NotificationSetup.setupNotification();
           _loadUserState(this._mhtId);
-        } else {
-          CommonFunction.alertDialog(
-            context: context,
-            title: 'Error - ' + res.statusCode.toString(),
-            msg: jsonResponse['data']['msg'],
-            doneButtonText: 'Okay',
-            barrierDismissible: false,
-            doneButtonFn: null,
-          );
         }
       } catch (err) {
         print('CATCH 1 :: ');
         print(err);
-        CommonFunction.alertDialog(
-          context: context,
-          msg: err.toString(),
-          barrierDismissible: false,
-          doneButtonFn: onClickDone,
-        );
+        CommonFunction.displayErrorDialog(context: context, msg:err.toString());
       }
     } else {
       _autoValidate = true;
@@ -256,38 +245,18 @@ class LoginPageState extends State<LoginPage> {
 
   _loadUserState(mhtId) async {
     try {
-      var data = {'mhtid': mhtId};
-      Response res = await _api.postApi(url: '/user_state', data: data);
-      Map<String, dynamic> jsonResponse = json.decode(res.body);
-      print('********');
-      print(jsonResponse);
-      if (res.statusCode == 200) {
+      Response res = await _api.getUserState(mhtId: mhtId);
+      AppResponse appResponse = ResponseParser.parseResponse(context: context, res: res);
+      if (appResponse.status == 200) {
         print('IN LOGIN ::: userstateStr :::');
-        UserState userState =
-            UserState.fromJson(jsonResponse['data']['results']);
+        UserState userState = UserState.fromJson(appResponse.data['results']);
         CacheData.userState = userState;
         Navigator.pushReplacementNamed(context, '/level_new');
-      } else {
-        CommonFunction.alertDialog(
-          context: context,
-          title: 'Error - ' + res.statusCode.toString(),
-          msg: jsonResponse['data']['msg'] != null
-              ? jsonResponse['data']['msg']
-              : "An error occured.",
-          doneButtonText: 'Okay',
-          barrierDismissible: false,
-          doneButtonFn: null,
-        );
       }
     } catch (err) {
       print('CATCH 2 :: ');
       print(err);
-      CommonFunction.alertDialog(
-        context: context,
-        msg: err.toString(),
-        barrierDismissible: false,
-        doneButtonFn: null,
-      );
+      CommonFunction.displayErrorDialog(context: context, msg: err.toString());
     }
   }
 }
