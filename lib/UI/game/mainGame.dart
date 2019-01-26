@@ -72,9 +72,7 @@ class MainGamePageState extends State<MainGamePage> {
               ),
               Container(
                 alignment: Alignment(0.90, -0.95),
-                child: Text('120 \$',
-                    style: TextStyle(color: kQuizBackgroundWhite),
-                    textScaleFactor: 1.2),
+                child: CommonFunction.pointsUI(point: '120'),
               ),
               Container(
                 alignment: Alignment(0, -0.30),

@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:kon_banega_mokshadhipati/model/cacheData.dart';
 import 'package:kon_banega_mokshadhipati/model/user_state.dart';
@@ -48,13 +47,27 @@ class NewLevelPageState extends State<NewLevelPage> {
         child: Column(
           children: <Widget>[
             new SizedBox(height: 20),
-            new Text(
-              'LEVELS',
-              textScaleFactor: 1.5,
-              style: TextStyle(
-                  fontWeight: FontWeight.w800,
-                  color: kQuizSurfaceWhite,
-                  letterSpacing: 4),
+            new Row(
+              // mainAxisAlignment: MainAxisAlignment.s,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                SizedBox(width: 20,),
+                Expanded(child: Container(),),
+                Container(width: 60,),
+                new Text(
+                  'LEVELS',
+                  textScaleFactor: 1.5,
+                  style: TextStyle(
+                      fontWeight: FontWeight.w800,
+                      color: kQuizSurfaceWhite,
+                      letterSpacing: 4),
+                ),
+                Expanded(child: Container(),),
+                Container(
+                  child: CommonFunction.pointsUI(point: '120'),
+                ),
+                SizedBox(width: 20,)
+              ],
             ),
             new SizedBox(height: 20),
             new LevelList(),

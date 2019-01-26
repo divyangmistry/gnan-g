@@ -131,6 +131,40 @@ class CommonFunction {
     return null;
   }
 
+  // points ui
+  static Widget pointsUI({String point = '100'}) {
+    return new Container(
+      height: 40,
+      padding: EdgeInsets.only(right: 10, left: 10),
+      decoration: BoxDecoration(
+        color: kQuizSurfaceWhite,
+        borderRadius: BorderRadius.circular(10),
+        boxShadow: [BoxShadow(
+          color: Colors.black,
+          blurRadius: 5.0,
+          offset: Offset(-2, 2)
+        )]
+      ),
+      child: new Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          SizedBox(width: 1),
+          Text(
+            point,
+            style: TextStyle(
+              color: kQuizMain400,
+            ),
+            textScaleFactor: 1.5,
+          ),
+          SizedBox(width: 5),
+          Image.asset('images/coin.png', height: 20),
+        ],
+      ),
+    );
+  }
+
   static displayErrorDialog({@required BuildContext context, String msg}) {
     if (msg == null)
       msg =
