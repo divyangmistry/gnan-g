@@ -187,7 +187,6 @@ class RegisterPage2State extends State<RegisterPage2> {
           context: context,
           msg: appResponse.message,
           barrierDismissible: false,
-          cancelButtonFn: null,
           doneButtonFn: null,
         );
       }
@@ -196,9 +195,7 @@ class RegisterPage2State extends State<RegisterPage2> {
         context: context,
         msg: err.toString(),
         barrierDismissible: false,
-        cancelButtonFn: null,
         doneButtonFn: null,
-        doneButtonIcon: Icons.replay,
       );
     }
   }
@@ -222,7 +219,6 @@ class RegisterPage2State extends State<RegisterPage2> {
           context: context,
           msg: appResponse.message,
           barrierDismissible: false,
-          cancelButtonFn: null,
           doneButtonFn: null,
         );
       }
@@ -231,9 +227,7 @@ class RegisterPage2State extends State<RegisterPage2> {
         context: context,
         msg: err.toString(),
         barrierDismissible: false,
-        cancelButtonFn: null,
         doneButtonFn: null,
-        doneButtonIcon: Icons.replay,
       );
     }
   }

@@ -192,7 +192,6 @@ class SignUpPageState extends State<SignUpPage> {
             msg: jsonResponse['data']['msg'] != null ? jsonResponse['data']['msg'] : "An error occured",
             doneButtonText: 'Okay',
             barrierDismissible: false,
-            cancelButtonFn: null,
             doneButtonFn: null,
           );
         }
@@ -203,9 +202,7 @@ class SignUpPageState extends State<SignUpPage> {
           context: context,
           msg: err.toString(),
           barrierDismissible: false,
-          cancelButtonFn: null,
           doneButtonFn: null,
-          doneButtonIcon: Icons.replay,
         );
       }
     } else {

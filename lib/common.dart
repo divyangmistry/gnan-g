@@ -131,34 +131,28 @@ class CommonFunction {
     return null;
   }
 
-  static displayErrorDialog({
-    @required BuildContext context,
-    String msg}) {
-    if(msg == null)
-      msg = "Something Wrong Happen, Please try again after some time or contact to " + AppConstant.MBA_MAILID;
+  static displayErrorDialog({@required BuildContext context, String msg}) {
+    if (msg == null)
+      msg =
+          "Something Wrong Happen, Please try again after some time or contact to " +
+              AppConstant.MBA_MAILID;
     alertDialog(
       context: context,
       msg: msg,
       barrierDismissible: false,
-      cancelButtonFn: null,
       doneButtonFn: null,
-      doneButtonIcon: Icons.replay,
     );
   }
 
   // common Alert dialog
   static alertDialog({
     @required BuildContext context,
+    String type = 'error', // 'success' || 'error'
     String title,
     @required String msg,
     bool showDoneButton = true,
-    IconData doneButtonIcon = Icons.done,
-    String doneButtonText = 'Try Again',
+    String doneButtonText = 'Okeh...',
     @required Function doneButtonFn,
-    bool showCancel = false,
-    IconData cancelButtonIcon = Icons.close,
-    String cancelButtonText = 'Cancel',
-    @required Function cancelButtonFn,
     bool barrierDismissible = true,
     AlertDialog Function() builder,
   }) {
@@ -168,85 +162,67 @@ class CommonFunction {
       builder: (_) {
         return AlertDialog(
           shape: new RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30.0),
+            borderRadius: BorderRadius.circular(25.0),
           ),
-          title:
-              title != null ? Text(title, textAlign: TextAlign.center) : null,
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
+              Icon(type == 'error' ? Icons.mood_bad : Icons.tag_faces,
+                  size: 100),
+              SizedBox(height: 20),
               Text(
-                msg,
-                style: TextStyle(color: Colors.blueGrey),
+                title != null
+                    ? title
+                    : type == 'error' ? 'Oh No!' : 'Congratulations',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: kQuizErrorRed,
+                ),
+                textScaleFactor: 1.5,
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 25),
+                child: Text(
+                  msg != null
+                      ? msg
+                      : type == 'error'
+                          ? "Looks like your lack of \n Imagination ! "
+                          : "Looks like today is your luckyday ... !!",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: Colors.blueGrey, height: 1.5),
+                  textScaleFactor: 1.1,
+                ),
               ),
               SizedBox(height: 20.0),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  showCancel
-                      ? FlatButton(
-                          shape: new RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30.0),
-                            side: BorderSide(color: kQuizMain50),
+                  FlatButton(
+                    padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+                    color: kQuizErrorRed,
+                    child: Row(
+                      children: <Widget>[
+                        Text(
+                          doneButtonText != null
+                              ? doneButtonText
+                              : type == 'error' ? "Okeh..." : "Hooray!",
+                          textScaleFactor: 1.2,
+                          style: TextStyle(
+                            color: kQuizBackgroundWhite,
                           ),
-                          child: Row(
-                            children: <Widget>[
-                              Icon(
-                                cancelButtonIcon,
-                                size: 22.0,
-                                color: kQuizBrown900,
-                              ),
-                              SizedBox(
-                                width: 5.0,
-                              ),
-                              Text(
-                                cancelButtonText,
-                                style: TextStyle(color: kQuizBrown900),
-                              )
-                            ],
-                          ),
-                          onPressed: cancelButtonFn != null
-                              ? cancelButtonFn
-                              : () {
-                                  Navigator.pop(context);
-                                  return false;
-                                },
                         )
-                      : new Container(width: 0, height: 0),
-                  showCancel
-                      ? SizedBox(
-                          width: 10.0,
-                        )
-                      : new Container(width: 0, height: 0),
-                  showDoneButton
-                      ? FlatButton(
-                          color: kQuizBrown900,
-                          child: Row(
-                            children: <Widget>[
-                              Icon(
-                                doneButtonIcon,
-                                size: 22.0,
-                                color: kQuizBackgroundWhite,
-                              ),
-                              SizedBox(
-                                width: 5.0,
-                              ),
-                              Text(
-                                doneButtonText,
-                                style: TextStyle(
-                                  color: kQuizBackgroundWhite,
-                                ),
-                              )
-                            ],
-                          ),
-                          onPressed: doneButtonFn != null
-                              ? doneButtonFn
-                              : () {
-                                  Navigator.pop(context);
-                                },
-                        )
-                      : new Container(width: 0, height: 0),
+                      ],
+                    ),
+                    onPressed: doneButtonFn != null
+                        ? doneButtonFn
+                        : () {
+                            Navigator.pop(context);
+                          },
+                  ),
                 ],
               ),
             ],

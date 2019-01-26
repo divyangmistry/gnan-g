@@ -105,10 +105,8 @@ class OtpVerifyPageState extends State<OtpVerifyPage> {
       } else {
         CommonFunction.alertDialog(
           context: context,
-          title: 'Eroor',
           msg: "OTP is not valid, Please try again.",
           doneButtonFn: null,
-          cancelButtonFn: null,
         );
       }
     } else {

@@ -231,7 +231,6 @@ class LoginPageState extends State<LoginPage> {
             msg: jsonResponse['data']['msg'],
             doneButtonText: 'Okay',
             barrierDismissible: false,
-            cancelButtonFn: null,
             doneButtonFn: null,
           );
         }
@@ -242,9 +241,7 @@ class LoginPageState extends State<LoginPage> {
           context: context,
           msg: err.toString(),
           barrierDismissible: false,
-          cancelButtonFn: null,
           doneButtonFn: onClickDone,
-          doneButtonIcon: Icons.replay,
         );
       }
     } else {
@@ -279,7 +276,6 @@ class LoginPageState extends State<LoginPage> {
               : "An error occured.",
           doneButtonText: 'Okay',
           barrierDismissible: false,
-          cancelButtonFn: null,
           doneButtonFn: null,
         );
       }
@@ -290,7 +286,6 @@ class LoginPageState extends State<LoginPage> {
         context: context,
         msg: err.toString(),
         barrierDismissible: false,
-        cancelButtonFn: null,
         doneButtonFn: null,
       );
     }

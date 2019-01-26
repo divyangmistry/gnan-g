@@ -17,21 +17,20 @@ class ResponseParser {
       appResponse = AppResponse.fromJson(json.decode(res.body));
       if (showDialog && appResponse.status != WSConstant.SUCCESS_CODE) {
         CommonFunction.alertDialog(
-            context: context,
-            msg: appResponse.data['msg'],
-            doneButtonFn: null,
-            cancelButtonFn: null);
+          context: context,
+          msg: appResponse.data['msg'],
+          doneButtonFn: null,
+        );
       }
     } else {
-      appResponse =
-          AppResponse(status: res.statusCode, message:"");
+      appResponse = AppResponse(status: res.statusCode, message: "");
       if (showDialog) {
         CommonFunction.alertDialog(
-            context: context,
-            msg: "Internal Server Error, Please contact to " +
-                AppConstant.MBA_MAILID.toString(),
-            doneButtonFn: null,
-            cancelButtonFn: null);
+          context: context,
+          msg: "Internal Server Error, Please contact to " +
+              AppConstant.MBA_MAILID.toString(),
+          doneButtonFn: null,
+        );
       }
     }
     return appResponse;
