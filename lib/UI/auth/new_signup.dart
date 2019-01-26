@@ -1,4 +1,6 @@
 // Package import
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:kon_banega_mokshadhipati/UI/auth/new_otp.dart';
@@ -168,24 +170,27 @@ class SignUpPageState extends State<SignUpPage> {
     if (_formKey.currentState.validate()) {
       try {
         _formKey.currentState.save();
-        Map<String, dynamic> data = {'mht_id': _mhtId, 'password': _mobile};
+        Map<String, dynamic> data = {'mht_id': _mhtId, 'mobile': _mobile};
         Response res = await _api.postApi(url: '/validate_user', data: data);
-        AppResponse appResponse =
-            ResponseParser.parseResponse(context: context, res: res);
-        if (appResponse.status == WSConstant.SUCCESS_CODE) {
-          SignUpSession signUpSession =
-              SignUpSession.fromJson(appResponse.data);
+        Map<String, dynamic> jsonResponse = json.decode(res.body);
+        print(jsonResponse);
+        if (res.statusCode == 200) {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) =>
-                  new OtpVerifyPage(signUpSession: signUpSession),
+              builder: (context) => new OtpVerifyPage(
+                    otp: jsonResponse['data']['otp'],
+                    userData: jsonResponse,
+                    fromForgotPassword: false,
+                  ),
             ),
           );
         } else {
           CommonFunction.alertDialog(
             context: context,
-            msg: appResponse.message,
+            title: 'Error - ' + res.statusCode.toString(),
+            msg: jsonResponse['data']['msg'] != null ? jsonResponse['data']['msg'] : "An error occured",
+            doneButtonText: 'Okay',
             barrierDismissible: false,
             cancelButtonFn: null,
             doneButtonFn: null,

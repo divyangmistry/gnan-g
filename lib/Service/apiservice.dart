@@ -6,12 +6,24 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 class ApiService {
-  final _apiUrl = 'http://192.168.43.23:3000';
+  // final _apiUrl = 'http://192.168.43.23:3000';
   // final _apiUrl = 'http://192.168.1.103:3000';
+  final _apiUrl = 'http://104.211.88.75:3000'; // live API
 
   Map<String, String> headers = {'content-type': 'application/json'};
 
   bool enableMock = false;
+
+  ApiService() {
+    checkLogin();
+  }
+
+  checkLogin() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    if (pref.getBool('b_isUserLoggedIn') != null && pref.getBool('b_isUserLoggedIn')) {
+      appendTokenToHeader(pref.getString('token'));
+    }
+  }
 
   /// Common HTTP Requests
 
@@ -29,7 +41,8 @@ class ApiService {
   /// * [data] - API body
   Future<http.Response> postApi(
       {@required String url, @required Map<String, dynamic> data}) async {
-        print(_apiUrl + url);
+    print(_apiUrl + url);
+    print(data);
     http.Response res = await http.post(_apiUrl + url,
         body: json.encode(data), headers: headers);
     return res;

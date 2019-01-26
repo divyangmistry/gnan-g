@@ -1,14 +1,11 @@
 // Package import
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
-import 'package:kon_banega_mokshadhipati/constans/wsconstants.dart';
-import 'package:kon_banega_mokshadhipati/notification/notifcation_setup.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // File import
-import '../../model/appresponse.dart';
-import '../../utils/response_parser.dart';
+import '../../notification/notifcation_setup.dart';
 import '../../common.dart';
 import '../../Service/apiservice.dart';
 import '../../colors.dart';
@@ -83,7 +80,7 @@ class LoginPageState extends State<LoginPage> {
               new AccentColorOverride(
                 color: kQuizBrown900,
                 child: new TextFormField(
-                  // validator: cf.passwordValidation,
+                  validator: CommonFunction.passwordValidation,
                   decoration: InputDecoration(
                     labelText: 'Password',
                     hintText: 'Enter Password',
@@ -217,20 +214,22 @@ class LoginPageState extends State<LoginPage> {
       try {
         Map<String, dynamic> data = {'mht_id': _mhtId, 'password': _password};
         Response res = await _api.postApi(url: '/login', data: data);
-        AppResponse appResponse =
-            ResponseParser.parseResponse(context: context, res: res);
-        if (appResponse.status == WSConstant.SUCCESS_CODE) {
+        Map<String, dynamic> jsonResponse = json.decode(res.body);
+        if (res.statusCode == 200) {
           SharedPreferences pref = await SharedPreferences.getInstance();
           pref.setString('user_info', res.body);
+          pref.setString('token', jsonResponse['data']['token']);
           pref.setBool(SharedPrefConstant.b_isUserLoggedIn, true);
-          print(appResponse.data['user_info']);
-          _api.appendTokenToHeader(appResponse.data['token']);
+          print(jsonResponse['data']['user_info']);
+          _api.appendTokenToHeader(jsonResponse['data']['token']);
           NotificationSetup.setupNotification();
-          _loadUserState(appResponse.data['mhtId']);
+          _loadUserState(this._mhtId);
         } else {
           CommonFunction.alertDialog(
             context: context,
-            msg: appResponse.message,
+            title: 'Error - ' + res.statusCode.toString(),
+            msg: jsonResponse['data']['msg'],
+            doneButtonText: 'Okay',
             barrierDismissible: false,
             cancelButtonFn: null,
             doneButtonFn: null,
@@ -262,18 +261,23 @@ class LoginPageState extends State<LoginPage> {
     try {
       var data = {'mhtid': mhtId};
       Response res = await _api.postApi(url: '/user_state', data: data);
-      AppResponse appResponse =
-          ResponseParser.parseResponse(context: context, res: res);
-      if (appResponse.status == WSConstant.SUCCESS_CODE) {
+      Map<String, dynamic> jsonResponse = json.decode(res.body);
+      print('********');
+      print(jsonResponse);
+      if (res.statusCode == 200) {
         print('IN LOGIN ::: userstateStr :::');
-        print(appResponse.data['results']['quiz_levels'][0]['imagepath']);
-        UserState userState = UserState.fromJson(appResponse.data['results']);
+        UserState userState =
+            UserState.fromJson(jsonResponse['data']['results']);
         CacheData.userState = userState;
         Navigator.pushReplacementNamed(context, '/level_new');
       } else {
         CommonFunction.alertDialog(
           context: context,
-          msg: appResponse.message,
+          title: 'Error - ' + res.statusCode.toString(),
+          msg: jsonResponse['data']['msg'] != null
+              ? jsonResponse['data']['msg']
+              : "An error occured.",
+          doneButtonText: 'Okay',
           barrierDismissible: false,
           cancelButtonFn: null,
           doneButtonFn: null,

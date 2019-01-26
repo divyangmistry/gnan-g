@@ -1,10 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
-import 'package:kon_banega_mokshadhipati/constans/wsconstants.dart';
-import 'package:kon_banega_mokshadhipati/model/appresponse.dart';
-import 'package:kon_banega_mokshadhipati/model/signupsession.dart';
-import 'package:kon_banega_mokshadhipati/utils/response_parser.dart';
 import '../../UI/auth/new_otp.dart';
 import '../../Service/apiservice.dart';
 import '../../common.dart';
@@ -97,21 +93,23 @@ class ForgotPasswordState extends State<ForgotPassword> {
         _formKey.currentState.save();
         Map<String, dynamic> data = {'mht_id': _mhtId};
         Response res = await _api.postApi(url: '/forgot_password', data: data);
-        AppResponse appResponse = ResponseParser.parseResponse(context: context, res: res);
-        if (appResponse.status == WSConstant.SUCCESS_CODE) {
-          SignUpSession signUpSession = SignUpSession.fromJson(appResponse.data);
+        Map<String, dynamic> jsonResponse = json.decode(res.body);
+        print(jsonResponse);
+        if (res.statusCode == 200) {
           Navigator.pop(context);
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
               builder: (context) =>
-                  new OtpVerifyPage(signUpSession: signUpSession, fromForgotPassword: true,),
+                  new OtpVerifyPage(otp: jsonResponse['data']['otp'], userData: jsonResponse, fromForgotPassword: true,),
             ),
           );
         } else {
           CommonFunction.alertDialog(
             context: context,
-            msg: appResponse.message,
+            title: 'Error - ' + res.statusCode.toString(),
+            msg: jsonResponse['data']['msg'] != null ? jsonResponse['data']['msg'] : "An error occured",
+            doneButtonText: 'Okay',
             barrierDismissible: false,
             cancelButtonFn: null,
             doneButtonFn: null,

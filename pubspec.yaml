@@ -18,7 +18,7 @@ dependencies:
   shared_preferences: "0.4.3"
   http: "0.11.3+17"
   flame: "0.10.0"
-  onesignal: "^1.0.0"
+  onesignal: "1.0.0"
   firebase_core:
   firebase_messaging: 0.2.1
 
@@ -50,9 +50,6 @@ flutter:
     - images/logo.png
     - images/bkg.jpg
     - images/login.jpg
-    - images/face.jpg
-    - images/rank2.jpg
-    - images/rank3.jpg
     - images/logo1.png
     - assets/audio/music/CV-01Trimantra.mp3
     - assets/audio/music/Pac man dies.mp3

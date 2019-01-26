@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../colors.dart';
 
 class InroPage extends StatefulWidget {
@@ -7,7 +8,6 @@ class InroPage extends StatefulWidget {
 }
 
 class InroPageState extends State<InroPage> {
-  
   List<Widget> slides = [
     Container(
       child: Column(
@@ -112,7 +112,8 @@ class InroPageState extends State<InroPage> {
                         child: RaisedButton(
                           padding: EdgeInsets.all(20),
                           onPressed: () {
-                            Navigator.pushReplacementNamed(context, '/login_new');
+                            Navigator.pushReplacementNamed(
+                                context, '/login_new');
                           },
                           child: Text(
                             'DIVE INTO GAME',

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../common.dart';
 import '../colors.dart';
+import '../Service/apiservice.dart';
 
 class GameLevelPage extends StatefulWidget {
   @override
@@ -8,6 +9,9 @@ class GameLevelPage extends StatefulWidget {
 }
 
 class GameLevelPageState extends State<GameLevelPage> {
+
+  ApiService _api = new ApiService();
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -58,7 +62,9 @@ class GameLevelPageState extends State<GameLevelPage> {
             color: Colors.white,
           ),
           () {
-            Navigator.pushNamed(context, '/rules');
+            _api.logout();
+            // Navigator.pushNamed(context, '/rules');
+            Navigator.pushReplacementNamed(context, '/login_new');
           },
         ),
       ],

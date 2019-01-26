@@ -12,8 +12,9 @@ import '../../Service/apiservice.dart';
 
 class RegisterPage2 extends StatefulWidget {
   final bool fromForgotPassword;
+  final Map<String, dynamic> userData;
 
-  RegisterPage2({this.fromForgotPassword = false});
+  RegisterPage2({this.userData, this.fromForgotPassword = false});
   @override
   State<StatefulWidget> createState() => new RegisterPage2State();
 }
@@ -27,7 +28,6 @@ class RegisterPage2State extends State<RegisterPage2> {
   final _passwordController = new TextEditingController();
   final _verifyPasswordController = new TextEditingController();
   CommonFunction cf = new CommonFunction();
-  SignUpSession signUpSession = new SignUpSession();
 
   @override
   Widget build(BuildContext context) {
@@ -205,10 +205,9 @@ class RegisterPage2State extends State<RegisterPage2> {
 
   _resetPassword() async {
     try {
-      SignUpSession signUpSession = new SignUpSession();
       Map<String, dynamic> data = {
-        'mht_id': signUpSession.data['mht_id'],
-        'password': signUpSession.data['password'],
+        'mht_id': widget.userData['data']['data']['mht_id'],
+        'password': _passwordController.text,
       };
       Response res = await _api.postApi(url: '/update_password', data: data);
       AppResponse appResponse =
@@ -254,13 +253,16 @@ class RegisterPage2State extends State<RegisterPage2> {
               textScaleFactor: 1.5,
             ),
             SizedBox(height: 30),
-            titleAndData('Name : ', signUpSession.data['name']),
+            titleAndData('Name : ', widget.userData['data']['data']['name']),
             SizedBox(height: 15),
-            titleAndData('Mobile no. : ', signUpSession.data['mobile']),
+            titleAndData(
+                'Mobile no. : ', widget.userData['data']['data']['mobile']),
             SizedBox(height: 15),
-            titleAndData('Email id : ', signUpSession.data['email']),
+            titleAndData(
+                'Email id : ', widget.userData['data']['data']['email']),
             SizedBox(height: 15),
-            titleAndData('Center : ', signUpSession.data['center']),
+            titleAndData(
+                'Center : ', widget.userData['data']['data']['center']),
           ],
         ),
       ),
