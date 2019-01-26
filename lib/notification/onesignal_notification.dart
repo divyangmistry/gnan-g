@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
 import 'dart:async';
 
-//import OneSignal
+import 'package:flutter/material.dart';
+import 'package:kon_banega_mokshadhipati/common.dart';
 import 'package:onesignal/onesignal.dart';
 
 class OneSignalNotification {
@@ -13,55 +13,67 @@ class OneSignalNotification {
   static bool _requireConsent = true;
 
   // Platform messages are asynchronous, so we initialize in an async method.
-  static Future<void> setupOneSignalNotification() async {
+  static Future<void> setupOneSignalNotification({BuildContext context}) async {
     //OneSignal.shared.setLogLevel(OSLogLevel.debug, OSLogLevel.debug);
+    try {
+      OneSignal.shared.setRequiresUserPrivacyConsent(_requireConsent);
 
-    OneSignal.shared.setRequiresUserPrivacyConsent(_requireConsent);
+      var settings = {
+        OSiOSSettings.autoPrompt: false,
+        OSiOSSettings.promptBeforeOpeningPushUrl: true
+      };
 
-    var settings = {
-      OSiOSSettings.autoPrompt: false,
-      OSiOSSettings.promptBeforeOpeningPushUrl: true
-    };
+      OneSignal.shared.setNotificationReceivedHandler((notification) {
+        print(
+            "Received notification: \n${notification.jsonRepresentation().replaceAll("\\n", "\n")}");
+      });
 
-    OneSignal.shared.setNotificationReceivedHandler((notification) {
-      print(
-          "Received notification: \n${notification.jsonRepresentation().replaceAll("\\n", "\n")}");
-    });
+      OneSignal.shared
+          .setNotificationOpenedHandler((OSNotificationOpenedResult result) {
+        print(
+            "Opened notification: \n${result.notification.jsonRepresentation().replaceAll("\\n", "\n")}");
+      });
 
-    OneSignal.shared
-        .setNotificationOpenedHandler((OSNotificationOpenedResult result) {
-      print(
-          "Opened notification: \n${result.notification.jsonRepresentation().replaceAll("\\n", "\n")}");
-    });
+      OneSignal.shared
+          .setSubscriptionObserver((OSSubscriptionStateChanges changes) {
+        print("SUBSCRIPTION STATE CHANGED: ${changes.jsonRepresentation()}");
+      });
 
-    OneSignal.shared
-        .setSubscriptionObserver((OSSubscriptionStateChanges changes) {
-      print("SUBSCRIPTION STATE CHANGED: ${changes.jsonRepresentation()}");
-    });
+      OneSignal.shared
+          .setPermissionObserver((OSPermissionStateChanges changes) {
+        print("PERMISSION STATE CHANGED: ${changes.jsonRepresentation()}");
+      });
 
-    OneSignal.shared.setPermissionObserver((OSPermissionStateChanges changes) {
-      print("PERMISSION STATE CHANGED: ${changes.jsonRepresentation()}");
-    });
+      OneSignal.shared.setEmailSubscriptionObserver(
+          (OSEmailSubscriptionStateChanges changes) {
+        print(
+            "EMAIL SUBSCRIPTION STATE CHANGED ${changes.jsonRepresentation()}");
+      });
 
-    OneSignal.shared.setEmailSubscriptionObserver(
-            (OSEmailSubscriptionStateChanges changes) {
-          print("EMAIL SUBSCRIPTION STATE CHANGED ${changes.jsonRepresentation()}");
-        });
+      // NOTE: Replace with your own app ID from https://www.onesignal.com
+      await OneSignal.shared.init(ONESIGANL_APPID, iOSSettings: settings);
 
-    // NOTE: Replace with your own app ID from https://www.onesignal.com
-    await OneSignal.shared
-        .init(ONESIGANL_APPID, iOSSettings: settings);
+      OneSignal.shared
+          .setInFocusDisplayType(OSNotificationDisplayType.notification);
 
-    OneSignal.shared
-        .setInFocusDisplayType(OSNotificationDisplayType.notification);
+      OneSignal.shared.consentGranted(true);
 
-    OneSignal.shared.getPermissionSubscriptionState().then((status) {
-      print(status.jsonRepresentation());
-      var playerId = status.subscriptionStatus.userId;
-      print(playerId);
-    });
-    OneSignal.shared.consentGranted(true);
-    bool requiresConsent = await OneSignal.shared.requiresUserPrivacyConsent();
+      await OneSignal.shared.getPermissionSubscriptionState().then((status) {
+        print(status.jsonRepresentation());
+        var playerId = status.subscriptionStatus.userId;
+        print(playerId);
+      });
+
+      bool requiresConsent =
+          await OneSignal.shared.requiresUserPrivacyConsent();
+    } catch (err) {
+      print(err);
+      if (context != null) {
+        print('CATCH :: ');
+        print(err);
+        CommonFunction.displayErrorDialog(context: context, msg: err.toString());
+      }
+    }
   }
 
   void _handleGetTags() {

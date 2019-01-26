@@ -22,8 +22,6 @@ class LoginPage extends StatefulWidget {
 }
 
 class LoginPageState extends State<LoginPage> {
-  CommonFunction cf = new CommonFunction();
-
   final _formKey = GlobalKey<FormState>();
   bool _autoValidate = false;
   bool _obscureText = true;
@@ -65,7 +63,7 @@ class LoginPageState extends State<LoginPage> {
               new AccentColorOverride(
                 color: kQuizBrown900,
                 child: new TextFormField(
-                  validator: cf.mhtIdValidation,
+                  validator: CommonFunction.mhtIdValidation,
                   decoration: InputDecoration(
                     labelText: 'Mht Id',
                     hintText: 'Enter Mht Id no.',
@@ -230,7 +228,7 @@ class LoginPageState extends State<LoginPage> {
           NotificationSetup.setupNotification();
           _loadUserState(appResponse.data['mhtId']);
         } else {
-          cf.alertDialog(
+          CommonFunction.alertDialog(
             context: context,
             msg: appResponse.message,
             barrierDismissible: false,
@@ -241,7 +239,7 @@ class LoginPageState extends State<LoginPage> {
       } catch (err) {
         print('CATCH 1 :: ');
         print(err);
-        cf.alertDialog(
+        CommonFunction.alertDialog(
           context: context,
           msg: err.toString(),
           barrierDismissible: false,
@@ -273,7 +271,7 @@ class LoginPageState extends State<LoginPage> {
         CacheData.userState = userState;
         Navigator.pushReplacementNamed(context, '/level_new');
       } else {
-        cf.alertDialog(
+        CommonFunction.alertDialog(
           context: context,
           msg: appResponse.message,
           barrierDismissible: false,
@@ -284,7 +282,7 @@ class LoginPageState extends State<LoginPage> {
     } catch (err) {
       print('CATCH 2 :: ');
       print(err);
-      cf.alertDialog(
+      CommonFunction.alertDialog(
         context: context,
         msg: err.toString(),
         barrierDismissible: false,

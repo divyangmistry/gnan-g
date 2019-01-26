@@ -58,7 +58,7 @@ class ForgotPasswordState extends State<ForgotPassword> {
               new AccentColorOverride(
                 color: kQuizBrown900,
                 child: new TextFormField(
-                  validator: cf.mhtIdValidation,
+                  validator: CommonFunction.mhtIdValidation,
                   decoration: InputDecoration(
                     labelText: 'Mht Id',
                     hintText: 'Enter Mht Id no.',
@@ -109,7 +109,7 @@ class ForgotPasswordState extends State<ForgotPassword> {
             ),
           );
         } else {
-          cf.alertDialog(
+          CommonFunction.alertDialog(
             context: context,
             msg: appResponse.message,
             barrierDismissible: false,
@@ -120,7 +120,7 @@ class ForgotPasswordState extends State<ForgotPassword> {
       } catch (err) {
         print('CATCH :: ');
         print(err);
-        cf.alertDialog(
+        CommonFunction.alertDialog(
           context: context,
           msg: err.toString(),
           barrierDismissible: false,

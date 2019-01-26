@@ -1,47 +1,36 @@
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
-
 import 'package:kon_banega_mokshadhipati/Service/apiservice.dart';
-import 'package:kon_banega_mokshadhipati/UI/forgot_password.dart';
 import 'package:kon_banega_mokshadhipati/UI/game_level.dart';
-import 'package:kon_banega_mokshadhipati/UI/game_page.dart';
-import 'package:kon_banega_mokshadhipati/UI/leaderboar.dart';
-import 'package:kon_banega_mokshadhipati/UI/level_ui.dart';
-import 'package:kon_banega_mokshadhipati/UI/login_ui.dart';
-import 'package:kon_banega_mokshadhipati/UI/new_login.dart';
-import 'package:kon_banega_mokshadhipati/UI/profile.dart';
-import 'package:kon_banega_mokshadhipati/UI/register_page.dart';
-import 'package:kon_banega_mokshadhipati/UI/rules.dart';
-import 'package:kon_banega_mokshadhipati/UI/send_otp_page.dart';
-import 'package:kon_banega_mokshadhipati/UI/simple_game.dart';
-import 'package:kon_banega_mokshadhipati/UI/leaderboard.dart';
-import 'package:kon_banega_mokshadhipati/model/cacheData.dart';
-import 'package:kon_banega_mokshadhipati/model/user_state.dart';
 import 'package:kon_banega_mokshadhipati/UI/intro/intro.dart';
+import 'package:kon_banega_mokshadhipati/UI/profile.dart';
 import 'package:kon_banega_mokshadhipati/constans/wsconstants.dart';
 import 'package:kon_banega_mokshadhipati/model/appresponse.dart';
+import 'package:kon_banega_mokshadhipati/model/cacheData.dart';
+import 'package:kon_banega_mokshadhipati/model/user_state.dart';
+import 'package:kon_banega_mokshadhipati/notification/notifcation_setup.dart';
 import 'package:kon_banega_mokshadhipati/utils/response_parser.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Service/apiservice.dart';
-import 'UI/game/mainGame.dart';
-import 'UI/level/levelList.dart';
-import 'UI/auth/register_new.dart';
+import 'UI/auth/forgot_password.dart';
+import 'UI/auth/new_login.dart';
 import 'UI/auth/new_otp.dart';
 import 'UI/auth/new_signup.dart';
-import 'UI/auth/forgot_password.dart';
-import 'UI/game_level.dart';
+import 'UI/auth/register_new.dart';
 import 'UI/game/leaderboar.dart';
-import 'UI/auth/new_login.dart';
-import 'UI/profile.dart';
-import 'UI/others/rules.dart';
+import 'UI/game/mainGame.dart';
 import 'UI/game/simple_game.dart';
+import 'UI/game_level.dart';
+import 'UI/level/levelList.dart';
+import 'UI/others/rules.dart';
 import 'UI/others/terms&condition.dart';
+import 'UI/profile.dart';
+import 'colors.dart';
 import 'model/cacheData.dart';
 import 'model/user_state.dart';
-
-import 'colors.dart';
 
 class QuizApp extends StatefulWidget {
   @override

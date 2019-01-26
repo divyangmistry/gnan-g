@@ -68,7 +68,7 @@ class RegisterPage2State extends State<RegisterPage2> {
                 color: kQuizBrown900,
                 child: new TextFormField(
                   controller: _passwordController,
-                  validator: cf.passwordValidation,
+                  validator: CommonFunction.passwordValidation,
                   decoration: InputDecoration(
                     labelText: 'Password',
                     hintText: 'Enter Password',
@@ -183,7 +183,7 @@ class RegisterPage2State extends State<RegisterPage2> {
         Navigator.pop(context);
         Navigator.pushReplacementNamed(context, '/gameStart');
       } else {
-        cf.alertDialog(
+        CommonFunction.alertDialog(
           context: context,
           msg: appResponse.message,
           barrierDismissible: false,
@@ -192,7 +192,7 @@ class RegisterPage2State extends State<RegisterPage2> {
         );
       }
     } catch (err) {
-      cf.alertDialog(
+      CommonFunction.alertDialog(
         context: context,
         msg: err.toString(),
         barrierDismissible: false,
@@ -219,7 +219,7 @@ class RegisterPage2State extends State<RegisterPage2> {
         Navigator.pop(context);
         Navigator.pushReplacementNamed(context, '/gameStart');
       } else {
-        cf.alertDialog(
+        CommonFunction.alertDialog(
           context: context,
           msg: appResponse.message,
           barrierDismissible: false,
@@ -228,7 +228,7 @@ class RegisterPage2State extends State<RegisterPage2> {
         );
       }
     } catch (err) {
-      cf.alertDialog(
+      CommonFunction.alertDialog(
         context: context,
         msg: err.toString(),
         barrierDismissible: false,

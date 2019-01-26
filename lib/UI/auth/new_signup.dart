@@ -19,7 +19,6 @@ class SignUpPage extends StatefulWidget {
 
 class SignUpPageState extends State<SignUpPage> {
   final _formKey = GlobalKey<FormState>();
-  CommonFunction cf = new CommonFunction();
   bool _autoValidate = false;
   ApiService _api = new ApiService();
   String _mhtId;
@@ -59,7 +58,7 @@ class SignUpPageState extends State<SignUpPage> {
               new AccentColorOverride(
                 color: kQuizBrown900,
                 child: new TextFormField(
-                  validator: cf.mhtIdValidation,
+                  validator: CommonFunction.mhtIdValidation,
                   decoration: InputDecoration(
                     labelText: 'Mht Id',
                     hintText: 'Enter Mht Id no.',
@@ -79,7 +78,7 @@ class SignUpPageState extends State<SignUpPage> {
               new AccentColorOverride(
                 color: kQuizBrown900,
                 child: new TextFormField(
-                  validator: cf.mobileValidation,
+                  validator: CommonFunction.mobileValidation,
                   decoration: InputDecoration(
                     labelText: 'Mobile no.',
                     hintText: 'Enter Mobile no.',
@@ -184,7 +183,7 @@ class SignUpPageState extends State<SignUpPage> {
             ),
           );
         } else {
-          cf.alertDialog(
+          CommonFunction.alertDialog(
             context: context,
             msg: appResponse.message,
             barrierDismissible: false,
@@ -195,7 +194,7 @@ class SignUpPageState extends State<SignUpPage> {
       } catch (err) {
         print('CATCH :: ');
         print(err);
-        cf.alertDialog(
+        CommonFunction.alertDialog(
           context: context,
           msg: err.toString(),
           barrierDismissible: false,

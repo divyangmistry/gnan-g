@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kon_banega_mokshadhipati/constans/appconstant.dart';
 import 'colors.dart';
 
 // For override color for Form input
@@ -86,7 +87,7 @@ class CustomLoading extends StatelessWidget {
 // All common functions
 class CommonFunction {
   // mhtId Validation
-  String mhtIdValidation(value) {
+  static String mhtIdValidation(value) {
     if (value.isEmpty) {
       return 'Mht ID is required';
     } else if (value.length != 6) {
@@ -96,7 +97,7 @@ class CommonFunction {
   }
 
   // password Validation
-  String passwordValidation(value) {
+  static String passwordValidation(value) {
     Pattern pattern =
         r'(?=^.{6,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$';
     RegExp regex = new RegExp(pattern);
@@ -111,7 +112,7 @@ class CommonFunction {
   }
 
   // otp Validation
-  String otpValidation(String value) {
+  static String otpValidation(String value) {
     if (value.isEmpty) {
       return 'OTP is required';
     } else if (value.length != 6) {
@@ -121,7 +122,7 @@ class CommonFunction {
   }
 
   // mobile Validation
-  String mobileValidation(value) {
+  static String mobileValidation(value) {
     if (value.isEmpty) {
       return 'Mobile no. is required';
     } else if (value.length != 10) {
@@ -130,8 +131,23 @@ class CommonFunction {
     return null;
   }
 
+  static displayErrorDialog({
+    @required BuildContext context,
+    String msg}) {
+    if(msg == null)
+      msg = "Something Wrong Happen, Please try again after some time or contact to " + AppConstant.MBA_MAILID;
+    alertDialog(
+      context: context,
+      msg: msg,
+      barrierDismissible: false,
+      cancelButtonFn: null,
+      doneButtonFn: null,
+      doneButtonIcon: Icons.replay,
+    );
+  }
+
   // common Alert dialog
-  alertDialog({
+  static alertDialog({
     @required BuildContext context,
     String title,
     @required String msg,

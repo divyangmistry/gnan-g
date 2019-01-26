@@ -15,12 +15,11 @@ class ResponseParser {
     @required Response res,
     bool showDialog = true
   }) {
-    CommonFunction cf = new CommonFunction();
     AppResponse appResponse;
     if (res.statusCode == 200) {
       appResponse = AppResponse.fromJson(json.decode(res.body));
       if (showDialog && appResponse.status != WSConstant.SUCCESS_CODE) {
-        cf.alertDialog(context: context,
+        CommonFunction.alertDialog(context: context,
             msg: appResponse.message,
             doneButtonFn: null,
             cancelButtonFn: null);
@@ -28,7 +27,7 @@ class ResponseParser {
     } else {
       appResponse = AppResponse(status: res.statusCode, message: "");
       if (showDialog) {
-        cf.alertDialog(context: context,
+        CommonFunction.alertDialog(context: context,
             msg: "Internal Server Error, Please contact to " +
                 AppConstant.MBA_MAILID.toString(),
             doneButtonFn: null,

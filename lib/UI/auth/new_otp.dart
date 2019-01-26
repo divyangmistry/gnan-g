@@ -55,7 +55,7 @@ class OtpVerifyPageState extends State<OtpVerifyPage> {
               new AccentColorOverride(
                 color: kQuizBrown900,
                 child: new TextFormField(
-                  validator: cf.otpValidation,
+                  validator: CommonFunction.otpValidation,
                   decoration: InputDecoration(
                     labelText: 'OTP',
                     hintText: 'Enter OTP',
@@ -101,7 +101,7 @@ class OtpVerifyPageState extends State<OtpVerifyPage> {
           ),
         );
       } else {
-        cf.alertDialog(
+        CommonFunction.alertDialog(
           context: context,
           title: 'Eroor',
           msg: "OTP is not valid, Please try again.",
