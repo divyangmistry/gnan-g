@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flame/flame.dart';
 import 'package:flutter/material.dart';
+import 'package:kon_banega_mokshadhipati/UI/widgets/base_state.dart';
 import 'package:kon_banega_mokshadhipati/model/cacheData.dart';
 import 'package:kon_banega_mokshadhipati/model/user_state.dart';
 import '../../colors.dart';
@@ -14,8 +15,7 @@ class NewLevelPage extends StatefulWidget {
   State<StatefulWidget> createState() => new NewLevelPageState();
 }
 
-class NewLevelPageState extends State<NewLevelPage> {
-  bool display = true;
+class NewLevelPageState extends BaseState<NewLevelPage> {
 
   @override
   void initState() {
@@ -31,19 +31,17 @@ class NewLevelPageState extends State<NewLevelPage> {
   }
 
   Future<Null> loadData() async {
+    isLoading = true;
     const timeOut = const Duration(seconds: 2);
     new Timer(timeOut, () {
       setState(() {
         // TODO : Load levels
-        display = false;
+        isLoading = false;
       });
     });
   }
 
-  Widget _pageToDisplay() {
-    if (display) {
-      return CustomLoading();
-    } else {
+  Widget pageToDisplay() {
       return new SafeArea(
         child: Column(
           children: <Widget>[
@@ -87,17 +85,7 @@ class NewLevelPageState extends State<NewLevelPage> {
         ),
       );
     }
-  }
 
-  @override
-  Widget build(BuildContext context) {
-    return new Scaffold(
-      backgroundColor: kQuizSurfaceWhite,
-      body: new BackgroundGredient(
-        child: _pageToDisplay(),
-      ),
-    );
-  }
 }
 
 class LevelList extends StatelessWidget {
