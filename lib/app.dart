@@ -64,8 +64,7 @@ class _QuizAppState extends State<QuizApp> {
   _getInitData(_result, mobile) async {
     if (_result) {
       _defaultHome = new GameLevelPage();
-      var data = {'user_mob': mobile};
-      Response res = await _api.getUserState(json.encode(data));
+      Response res = await _api.getUserState(mhtId: mobile);
       AppResponse appResponse = ResponseParser.parseResponse(context: context, res: res);
       if (appResponse.status == WSConstant.SUCCESS_CODE) {
         Map<String, dynamic> userstateStr = appResponse.data['results'];

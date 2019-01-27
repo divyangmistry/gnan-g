@@ -8,7 +8,7 @@ import '../../Service/apiservice.dart';
 class OtpVerifyPage extends StatefulWidget {
   final int otp;
   final bool fromForgotPassword;
-  final Map<String, dynamic> userData;
+  final UserData userData;
 
   OtpVerifyPage({this.otp, this.userData, this.fromForgotPassword = false});
   @override
@@ -106,7 +106,6 @@ class OtpVerifyPageState extends State<OtpVerifyPage> {
         CommonFunction.alertDialog(
           context: context,
           msg: "OTP is not valid, Please try again.",
-          doneButtonFn: null,
         );
       }
     } else {

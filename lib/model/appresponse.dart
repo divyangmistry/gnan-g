@@ -1,7 +1,7 @@
 class AppResponse{
   int status;
   String message;
-  Map<String,dynamic> data;
+  dynamic data;
 
   AppResponse({
     this.status,this.message,this.data,
@@ -15,7 +15,7 @@ class AppResponse{
     );
   }
 
-  Map<String, dynamic> toJson() => {
+  dynamic toJson() => {
     'status': status,
     'message': message,
     'data': data,

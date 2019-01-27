@@ -1,6 +1,9 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'package:kon_banega_mokshadhipati/model/appresponse.dart';
+import 'package:kon_banega_mokshadhipati/model/signupsession.dart';
+import 'package:kon_banega_mokshadhipati/utils/response_parser.dart';
 import '../../UI/auth/new_otp.dart';
 import '../../Service/apiservice.dart';
 import '../../common.dart';
@@ -91,37 +94,23 @@ class ForgotPasswordState extends State<ForgotPassword> {
     if (_formKey.currentState.validate()) {
       try {
         _formKey.currentState.save();
-        Map<String, dynamic> data = {'mht_id': _mhtId};
-        Response res = await _api.postApi(url: '/forgot_password', data: data);
-        Map<String, dynamic> jsonResponse = json.decode(res.body);
-        print(jsonResponse);
-        if (res.statusCode == 200) {
+        Response res = await _api.forgotPassword(mhtId: _mhtId);
+        AppResponse appResponse = ResponseParser.parseResponse(context: context, res: res);
+        if (appResponse.status == 200) {
+          SignUpSession signUpSession = SignUpSession.fromJson(appResponse.data);
           Navigator.pop(context);
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
               builder: (context) =>
-                  new OtpVerifyPage(otp: jsonResponse['data']['otp'], userData: jsonResponse, fromForgotPassword: true,),
+                  new OtpVerifyPage(otp: signUpSession.otp, userData: signUpSession.userData, fromForgotPassword: true,),
             ),
-          );
-        } else {
-          CommonFunction.alertDialog(
-            context: context,
-            title: 'Error - ' + res.statusCode.toString(),
-            msg: jsonResponse['data']['msg'] != null ? jsonResponse['data']['msg'] : "An error occured",
-            barrierDismissible: false,
-            doneButtonFn: null,
           );
         }
       } catch (err) {
         print('CATCH :: ');
         print(err);
-        CommonFunction.alertDialog(
-          context: context,
-          msg: err.toString(),
-          barrierDismissible: false,
-          doneButtonFn: null,
-        );
+        CommonFunction.displayErrorDialog(context: context, msg: err.toString());
       }
     } else {
       _autoValidate = true;

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kon_banega_mokshadhipati/constans/appconstant.dart';
+import 'package:kon_banega_mokshadhipati/constans/message_constant.dart';
 import 'colors.dart';
 
 // For override color for Form input
@@ -167,14 +168,11 @@ class CommonFunction {
 
   static displayErrorDialog({@required BuildContext context, String msg}) {
     if (msg == null)
-      msg =
-          "Something Wrong Happen, Please try again after some time or contact to " +
-              AppConstant.MBA_MAILID;
+      msg = MessageConstant.COMMON_ERROR_MSG;
     alertDialog(
       context: context,
       msg: msg,
       barrierDismissible: false,
-      doneButtonFn: null,
     );
   }
 
@@ -186,7 +184,7 @@ class CommonFunction {
     @required String msg,
     bool showDoneButton = true,
     String doneButtonText = 'Okeh...',
-    @required Function doneButtonFn,
+    Function doneButtonFn,
     bool barrierDismissible = true,
     AlertDialog Function() builder,
   }) {

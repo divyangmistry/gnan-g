@@ -38,6 +38,9 @@ class Question {
     }*/
   }
 
+  static List<Question> fromJsonArray(List<Map<String,dynamic>> json) {
+    return json.map((Map model)=> Question.fromJson(model)).toList();
+  }
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['question_st'] = this.index;
