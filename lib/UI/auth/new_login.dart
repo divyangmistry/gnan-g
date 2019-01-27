@@ -1,6 +1,7 @@
 // Package import
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'package:kon_banega_mokshadhipati/constans/wsconstants.dart';
 import 'package:kon_banega_mokshadhipati/model/appresponse.dart';
 import 'package:kon_banega_mokshadhipati/model/userinfo.dart';
 import 'package:kon_banega_mokshadhipati/utils/response_parser.dart';
@@ -216,8 +217,9 @@ class LoginPageState extends State<LoginPage> {
       print('PASSWORD : ${this._password}');
       try {
         Response res = await _api.login(mhtId: _mhtId, password: _password);
-        AppResponse appResponse = ResponseParser.parseResponse(context: context, res: res);
-        if (appResponse.status == 200) {
+        AppResponse appResponse =
+            ResponseParser.parseResponse(context: context, res: res);
+        if (appResponse.status == WSConstant.SUCCESS_CODE) {
           UserInfo userInfo = UserInfo.fromJson(appResponse.data);
           SharedPreferences pref = await SharedPreferences.getInstance();
           pref.setString('user_info', userInfo.toJson().toString());
@@ -231,7 +233,8 @@ class LoginPageState extends State<LoginPage> {
       } catch (err) {
         print('CATCH 1 :: ');
         print(err);
-        CommonFunction.displayErrorDialog(context: context, msg:err.toString());
+        CommonFunction.displayErrorDialog(
+            context: context, msg: err.toString());
       }
     } else {
       _autoValidate = true;
@@ -246,8 +249,9 @@ class LoginPageState extends State<LoginPage> {
   _loadUserState(mhtId) async {
     try {
       Response res = await _api.getUserState(mhtId: mhtId);
-      AppResponse appResponse = ResponseParser.parseResponse(context: context, res: res);
-      if (appResponse.status == 200) {
+      AppResponse appResponse =
+          ResponseParser.parseResponse(context: context, res: res);
+      if (appResponse.status == WSConstant.SUCCESS_CODE) {
         print('IN LOGIN ::: userstateStr :::');
         UserState userState = UserState.fromJson(appResponse.data['results']);
         CacheData.userState = userState;

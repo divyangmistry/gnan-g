@@ -14,13 +14,15 @@ class ResponseParser {
       @required Response res,
       bool showDialog = true}) {
     AppResponse appResponse = AppResponse.fromJson(json.decode(res.body));
-    if(appResponse.status == 0 || appResponse.status == null)
+    if (appResponse.status == 0 || appResponse.status == null)
       appResponse.status = res.statusCode;
     if (showDialog && appResponse.status != WSConstant.SUCCESS_CODE) {
       CommonFunction.alertDialog(
         context: context,
         title: 'Error - ' + appResponse.status.toString(),
-        msg: appResponse.message != null ? appResponse.message : MessageConstant.COMMON_ERROR_MSG,
+        msg: appResponse.message != null
+            ? appResponse.message
+            : MessageConstant.COMMON_ERROR_MSG,
         doneButtonText: 'Okay',
       );
     }

@@ -34,27 +34,27 @@ class SimpleGameState extends State<SimpleGame> {
       userLives = CacheData.userState.currentStat.lives;
     print('USER LIVES :::::::::');
     print(userLives);
-    _loadAllQuestions(level);
+    // _loadAllQuestions(level);
   }
 
-  _loadAllQuestions(int level) {
-    currentState = CacheData.userState.currentStat;
-    _api.getQuestions(level, 0, currentState.totalQues).then((res) {
-      setState(() {
-        if (res.statusCode == 200) {
-          String questionList = res.body;
-          print(utf8.decode(res.bodyBytes));
-          List<dynamic> d1 = json.decode(questionList);
-          questions = d1.map((queJson) => Question.fromJson(queJson)).toList();
-          print(questions);
-          question = questions.getRange(0, 1).first;
-          currentQueIndex = 0;
-        } else {
-          //_showError(json.decode(res.body)['msg'], true);
-        }
-      });
-    });
-  }
+  // _loadAllQuestions(int level) {
+  //   currentState = CacheData.userState.currentStat;
+  //   _api.getQuestions(level, 0, currentState.totalQues).then((res) {
+  //     setState(() {
+  //       if (res.statusCode == 200) {
+  //         String questionList = res.body;
+  //         print(utf8.decode(res.bodyBytes));
+  //         List<dynamic> d1 = json.decode(questionList);
+  //         questions = d1.map((queJson) => Question.fromJson(queJson)).toList();
+  //         print(questions);
+  //         question = questions.getRange(0, 1).first;
+  //         currentQueIndex = 0;
+  //       } else {
+  //         //_showError(json.decode(res.body)['msg'], true);
+  //       }
+  //     });
+  //   });
+  // }
 
   _reInit() {
     isGivenCorrectAns = false;

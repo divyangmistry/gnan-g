@@ -5,6 +5,7 @@ import 'package:http/http.dart';
 import 'package:kon_banega_mokshadhipati/Service/apiservice.dart';
 import 'package:kon_banega_mokshadhipati/UI/game_level.dart';
 import 'package:kon_banega_mokshadhipati/UI/intro/intro.dart';
+import 'package:kon_banega_mokshadhipati/UI/leaderboard.dart';
 import 'package:kon_banega_mokshadhipati/UI/profile.dart';
 import 'package:kon_banega_mokshadhipati/constans/wsconstants.dart';
 import 'package:kon_banega_mokshadhipati/model/appresponse.dart';
@@ -39,7 +40,7 @@ class QuizApp extends StatefulWidget {
 
 class _QuizAppState extends State<QuizApp> {
   // Widget _defaultHome = new LoginPage();
-  Widget _defaultHome = new IntroPage();
+  Widget _defaultHome = new LeaderBoard();
 
   ApiService _api = new ApiService();
 
@@ -97,7 +98,7 @@ class _QuizAppState extends State<QuizApp> {
         '/gameStart': (BuildContext context) => new GameLevelPage(),
         '/rules': (BuildContext context) => new RulesPagePage(),
         '/profile': (BuildContext context) => new ProfilePagePage(),
-        '/leaderboard': (BuildContext context) => new LeaderboarPagePage(),
+        '/leaderboard': (BuildContext context) => new LeaderBoard(),
         '/t&c': (BuildContext context) => new TermsAndConditionPage(),
       },
     );

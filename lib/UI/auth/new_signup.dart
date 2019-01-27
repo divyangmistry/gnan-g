@@ -170,10 +170,13 @@ class SignUpPageState extends State<SignUpPage> {
     if (_formKey.currentState.validate()) {
       try {
         _formKey.currentState.save();
-        Response res = await _api.validateUser(mhtId: _mhtId, mobileNo: _mobile);
-        AppResponse appResponse = ResponseParser.parseResponse(context: context, res: res);
+        Response res =
+            await _api.validateUser(mhtId: _mhtId, mobileNo: _mobile);
+        AppResponse appResponse =
+            ResponseParser.parseResponse(context: context, res: res);
         if (appResponse.status == 200) {
-          SignUpSession signUpSession = SignUpSession.fromJson(appResponse.data);
+          SignUpSession signUpSession =
+              SignUpSession.fromJson(appResponse.data);
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
@@ -188,7 +191,10 @@ class SignUpPageState extends State<SignUpPage> {
       } catch (err) {
         print('CATCH :: ');
         print(err);
-        CommonFunction.displayErrorDialog(context: context, msg: err.toString());
+        CommonFunction.displayErrorDialog(
+          context: context,
+          msg: err.toString(),
+        );
       }
     } else {
       _autoValidate = true;

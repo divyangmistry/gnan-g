@@ -16,7 +16,7 @@ class ApiService {
   bool enableMock = false;
 
   ApiService() {
-    //checkLogin();
+    checkLogin();
   }
 
   checkLogin() async {
