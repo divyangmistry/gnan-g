@@ -13,11 +13,10 @@ class ApiService {
   final _apiUrl = 'http://104.211.88.75:3000'; // live API
 
   Map<String, String> headers = {'content-type': 'application/json'};
-
   bool enableMock = false;
 
   ApiService() {
-    checkLogin();
+    //checkLogin();
   }
 
   checkLogin() async {
@@ -44,6 +43,7 @@ class ApiService {
   /// * [data] - API body
   Future<http.Response> postApi(
       {@required String url, @required Map<String, dynamic> data}) async {
+    await checkLogin();
     String postUrl = _apiUrl + url;
     print('Post Url:' + postUrl + '\tReq:' + data.toString());
     http.Response res = await http.post(_apiUrl + url,
@@ -96,7 +96,7 @@ class ApiService {
   }
 
   Future<http.Response> getUserState({@required String mhtId}) async {
-    var data = {'mhtid': mhtId};
+    var data = {'mht_id': mhtId};
     http.Response res = await postApi(url: '/user_state', data: data);
     return res;
   }
@@ -109,14 +109,10 @@ class ApiService {
 
 
   // Get Question Detail
-  Future<http.Response> getQuestions(int level, int from, int to) async {
+  Future<http.Response> getQuestions({@required int level, int from, int to}) async {
     var data;
     data = {'level': level, 'QuestionFrom': from};
-    http.Response res = await http.post(_apiUrl + '/questions',
-        body: json.encode(data), headers: headers);
-    //String questionList =
-    //    "[\r\n   {\r\n       \"question_st\": 1,\r\n       \"question_type\": \"MCQ\",\r\n       \"question\": \"What is question?\",\r\n       \"options\": [\r\n           {\r\n               \"option_number\": 1,\r\n               \"option\": \"a\"\r\n           },\r\n           {\r\n               \"option_number\": 2,\r\n               \"option\": \"b\"\r\n           },\r\n           {\r\n               \"option_number\": 3,\r\n               \"option\": \"c\"\r\n           },\r\n           {\r\n               \"option_number\": 4,\r\n               \"option\": \"d\"\r\n           }\r\n       ],\r\n       \"score\": 1,\r\n       \"level\": 1,\r\n       \"answer\": \"d\"\r\n   },\r\n   {\r\n       \"question_st\": 2,\r\n       \"question_type\": \"MCQ\",\r\n       \"question\": \"What is question?\",\r\n       \"options\": [\r\n           {\r\n               \"option_number\": 1,\r\n               \"option\": \"a\"\r\n           },\r\n           {\r\n               \"option_number\": 2,\r\n               \"option\": \"b\"\r\n           },\r\n           {\r\n               \"option_number\": 3,\r\n               \"option\": \"c\"\r\n           },\r\n           {\r\n               \"option_number\": 4,\r\n               \"option\": \"d\"\r\n           }\r\n       ],\r\n       \"score\": 1,\r\n       \"level\": 1,\r\n       \"answer\": \"d\"\r\n   },\r\n   {\r\n       \"question_st\": 3,\r\n       \"question_type\": \"MCQ\",\r\n       \"question\": \"What is question?\",\r\n       \"options\": [\r\n           {\r\n               \"option_number\": 1,\r\n               \"option\": \"a\"\r\n           },\r\n           {\r\n               \"option_number\": 2,\r\n               \"option\": \"b\"\r\n           },\r\n           {\r\n               \"option_number\": 3,\r\n               \"option\": \"c\"\r\n           },\r\n           {\r\n               \"option_number\": 4,\r\n               \"option\": \"d\"\r\n           }\r\n       ],\r\n       \"score\": 1,\r\n       \"level\": 1,\r\n       \"answer\": \"d\"\r\n   },\r\n   {\r\n       \"question_st\": 4,\r\n       \"question_type\": \"MCQ\",\r\n       \"question\": \"What is question?\",\r\n       \"options\": [\r\n           {\r\n               \"option_number\": 1,\r\n               \"option\": \"a\"\r\n           },\r\n           {\r\n               \"option_number\": 2,\r\n               \"option\": \"b\"\r\n           },\r\n           {\r\n               \"option_number\": 3,\r\n               \"option\": \"c\"\r\n           },\r\n           {\r\n               \"option_number\": 4,\r\n               \"option\": \"d\"\r\n           }\r\n       ],\r\n       \"score\": 1,\r\n       \"level\": 1,\r\n       \"answer\": \"d\"\r\n   }\r\n]";
-    //return http.Response(questionList, 200);
+    http.Response res = await postApi(url: '/questions', data: data);
     return res;
   }
 

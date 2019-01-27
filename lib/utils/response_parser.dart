@@ -13,12 +13,9 @@ class ResponseParser {
       {@required BuildContext context,
       @required Response res,
       bool showDialog = true}) {
-    AppResponse appResponse;
-    if (res.statusCode == 200) {
-      appResponse = AppResponse.fromJson(json.decode(res.body));
-    } else {
-      appResponse = AppResponse(status: res.statusCode);
-    }
+    AppResponse appResponse = AppResponse.fromJson(json.decode(res.body));
+    if(appResponse.status == 0 || appResponse.status == null)
+      appResponse.status = res.statusCode;
     if (showDialog && appResponse.status != WSConstant.SUCCESS_CODE) {
       CommonFunction.alertDialog(
         context: context,
