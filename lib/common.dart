@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kon_banega_mokshadhipati/UI/puzzle/main.dart';
 import 'package:kon_banega_mokshadhipati/constans/appconstant.dart';
 import 'package:kon_banega_mokshadhipati/constans/message_constant.dart';
 import 'colors.dart';
@@ -138,14 +139,12 @@ class CommonFunction {
       height: 40,
       padding: EdgeInsets.only(right: 10, left: 10),
       decoration: BoxDecoration(
-        color: kQuizSurfaceWhite,
-        borderRadius: BorderRadius.circular(10),
-        boxShadow: [BoxShadow(
-          color: Colors.black,
-          blurRadius: 5.0,
-          offset: Offset(-2, 2)
-        )]
-      ),
+          color: kQuizSurfaceWhite,
+          borderRadius: BorderRadius.circular(10),
+          boxShadow: [
+            BoxShadow(
+                color: Colors.black, blurRadius: 5.0, offset: Offset(-2, 2))
+          ]),
       child: new Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -167,8 +166,7 @@ class CommonFunction {
   }
 
   static displayErrorDialog({@required BuildContext context, String msg}) {
-    if (msg == null)
-      msg = MessageConstant.COMMON_ERROR_MSG;
+    if (msg == null) msg = MessageConstant.COMMON_ERROR_MSG;
     alertDialog(
       context: context,
       msg: msg,
