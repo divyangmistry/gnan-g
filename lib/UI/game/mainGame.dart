@@ -63,60 +63,51 @@ class MainGamePageState extends State<MainGamePage> {
       bottomNavigationBar: BottomAppBar(
         color: kBackgroundGrediant1,
         elevation: 10.0,
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Container(
-              child: IconButton(
-                icon: Icon(
-                  Icons.menu,
-                  color: kQuizBackgroundWhite,
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Container(
+                child: IconButton(
+                  icon: Icon(
+                    Icons.menu,
+                    color: kQuizBackgroundWhite,
+                  ),
+                  onPressed: () {
+                    showModalBottomSheet(
+                        builder: (BuildContext context) => _bottomDrawer(),
+                        context: context);
+                  },
                 ),
-                onPressed: () {
-                  showModalBottomSheet(
-                      builder: (BuildContext context) => _bottomDrawer(),
-                      context: context);
-                },
               ),
-            ),
-            Container(
-              child: Row(
-                children: <Widget>[
-                  Text(
-                    'Lives : ',
-                    style: TextStyle(color: kQuizBackgroundWhite),
-                  ),
-                  Container(
-                    height: 25,
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      scrollDirection: Axis.horizontal,
-                      itemCount: userLives,
-                      itemBuilder: (BuildContext context, int index) {
-                        return Icon(
-                          Icons.account_circle,
-                          color: kQuizBackgroundWhite,
-                        );
-                      },
+              Container(
+                child: Row(
+                  children: <Widget>[
+                    Text(
+                      'Lives : ',
+                      style: TextStyle(color: kQuizBackgroundWhite),
                     ),
-                  ),
-                ],
+                    Container(
+                      height: 25,
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        scrollDirection: Axis.horizontal,
+                        itemCount: userLives,
+                        itemBuilder: (BuildContext context, int index) {
+                          return Icon(
+                            Icons.account_circle,
+                            color: kQuizBackgroundWhite,
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: new FloatingActionButton.extended(
-        onPressed: () {
-          trueAnswer
-              ? Flame.audio.play('music/party_horn-Mike_Koenig-76599891.mp3')
-              : Flame.audio.play('music/Pac man dies.mp3');
-        },
-        backgroundColor: kQuizMain400,
-        icon: Icon(Icons.done),
-        label: Text('SUBMIT'),
       ),
     );
   }
@@ -348,6 +339,9 @@ class MainGamePageState extends State<MainGamePage> {
             option = [false, false, false, false];
             option[index] = !option[index];
             option[3] == true ? trueAnswer = true : trueAnswer = false;
+            trueAnswer
+                ? Flame.audio.play('music/party_horn-Mike_Koenig-76599891.mp3')
+                : Flame.audio.play('music/Pac man dies.mp3');
           });
         },
         height: 50,
