@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../colors.dart';
 
-class InroPage extends StatefulWidget {
+class IntroPage extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => new InroPageState();
+  State<StatefulWidget> createState() => new IntroPageState();
 }
 
-class InroPageState extends State<InroPage> {
+class IntroPageState extends State<IntroPage> {
   List<Widget> slides = [
     Container(
       child: Column(
@@ -111,7 +111,9 @@ class InroPageState extends State<InroPage> {
                         width: double.infinity,
                         child: RaisedButton(
                           padding: EdgeInsets.all(20),
-                          onPressed: () {
+                          onPressed: () async {
+                            SharedPreferences pref = await SharedPreferences.getInstance();
+                            pref.setBool('intro', true);
                             Navigator.pushReplacementNamed(
                                 context, '/login_new');
                           },
