@@ -39,8 +39,8 @@ class QuizApp extends StatefulWidget {
 }
 
 class _QuizAppState extends State<QuizApp> {
-  // Widget _defaultHome = new LoginPage();
-  Widget _defaultHome = new LeaderBoard();
+  Widget _defaultHome = new LoginPage();
+  // Widget _defaultHome = new NewLevelPage();
 
   ApiService _api = new ApiService();
 

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flame/flame.dart';
 import 'package:flutter/material.dart';
 import 'package:kon_banega_mokshadhipati/model/cacheData.dart';
 import 'package:kon_banega_mokshadhipati/model/user_state.dart';
@@ -51,9 +52,15 @@ class NewLevelPageState extends State<NewLevelPage> {
               // mainAxisAlignment: MainAxisAlignment.s,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                SizedBox(width: 20,),
-                Expanded(child: Container(),),
-                Container(width: 60,),
+                SizedBox(
+                  width: 20,
+                ),
+                Expanded(
+                  child: Container(),
+                ),
+                Container(
+                  width: 60,
+                ),
                 new Text(
                   'LEVELS',
                   textScaleFactor: 1.5,
@@ -62,11 +69,16 @@ class NewLevelPageState extends State<NewLevelPage> {
                       color: kQuizSurfaceWhite,
                       letterSpacing: 4),
                 ),
-                Expanded(child: Container(),),
-                Container(
-                  child: CommonFunction.pointsUI(point: '120'),
+                Expanded(
+                  child: Container(),
                 ),
-                SizedBox(width: 20,)
+                Container(
+                  child: CommonFunction.pointsUI(
+                      point: CacheData.userInfo.totalscore.toString()),
+                ),
+                SizedBox(
+                  width: 20,
+                )
               ],
             ),
             new SizedBox(height: 20),

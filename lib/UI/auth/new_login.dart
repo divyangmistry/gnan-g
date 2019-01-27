@@ -221,6 +221,7 @@ class LoginPageState extends State<LoginPage> {
             ResponseParser.parseResponse(context: context, res: res);
         if (appResponse.status == WSConstant.SUCCESS_CODE) {
           UserInfo userInfo = UserInfo.fromJson(appResponse.data);
+          CacheData.userInfo = userInfo;
           SharedPreferences pref = await SharedPreferences.getInstance();
           pref.setString('user_info', userInfo.toJson().toString());
           pref.setString('token', userInfo.token);
