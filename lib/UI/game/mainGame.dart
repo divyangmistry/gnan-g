@@ -46,14 +46,16 @@ class MainGamePageState extends BaseState<MainGamePage> {
     _loadData();
     // Flame.audio.play('music/bensound-epic.mp3');
   }
-    _loadData() {
+
+  _loadData() {
     isLoading = true;
     currentState = CacheData.userState.currentStat;
     _loadAllQuestions(widget.level.levelIndex);
   }
 
   _loadAllQuestions(int level) async {
-    Response res = await _api.getQuestions(level: level, from: currentState.queSt);
+    Response res =
+        await _api.getQuestions(level: level, from: currentState.queSt);
     AppResponse appResponse =
         ResponseParser.parseResponse(context: context, res: res);
     if (appResponse.status == 200) {
@@ -69,11 +71,13 @@ class MainGamePageState extends BaseState<MainGamePage> {
 
   _displayAnswerResponseDialog() {
     showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) {
-            AnswerResponseDialog.getAnswerResponseDialog(isSelectedAnsCorrect: isGivenCorrectAns);
-      },);
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        AnswerResponseDialog.getAnswerResponseDialog(
+            isSelectedAnsCorrect: isGivenCorrectAns);
+      },
+    );
   }
 
   void onOKButtonClick(bool isCompletedLevel) {
@@ -112,13 +116,14 @@ class MainGamePageState extends BaseState<MainGamePage> {
         if (userLives > 1) {
           userLives = userLives - 1;
         } else {}
-          //return _gameOverDialogBox();
+        //return _gameOverDialogBox();
       }
       bool isCompletedLevel = false;
       if (currentQueIndex == questions.length - 1) isCompletedLevel = true;
       //_dialogBox(isGivenCorrectAns, isCompletedLevel);
     });
   }
+
   @override
   Widget pageToDisplay() {
     return new Scaffold(
@@ -425,13 +430,14 @@ class MainGamePageState extends BaseState<MainGamePage> {
     List<Widget> list = [];
     int i = 0;
     question.options.forEach((option) {
-      if(option != null) {
+      if (option != null) {
         list.add(new SizedBox(height: 20));
         list.add(getOptionWidget(option.option, i++));
       }
     });
     return list;
   }
+
   Widget getOptionWidget(String text, index) {
     return new SizedBox(
       width: double.infinity,
