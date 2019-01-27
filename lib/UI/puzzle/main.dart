@@ -7,15 +7,7 @@ import 'package:kon_banega_mokshadhipati/UI/puzzle/config/ui.dart';
 import 'package:kon_banega_mokshadhipati/UI/puzzle/play_games.dart';
 import 'package:kon_banega_mokshadhipati/UI/puzzle/widgets/game/page.dart';
 
-// class GameOfFifteen extends StatefulWidget {
-//   @override
-//   State<StatefulWidget> createState() {
-//     // TODO: implement createState
-//     return GameOfFifteenState();
-//   }
-// }
-
-class GameOfFifteenState extends StatelessWidget {
+class GameOfFifteen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build

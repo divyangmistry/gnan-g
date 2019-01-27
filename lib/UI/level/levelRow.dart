@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kon_banega_mokshadhipati/UI/game/mainGame.dart';
+import 'package:kon_banega_mokshadhipati/UI/puzzle/main.dart';
 import '../../colors.dart';
 import '../../model/quizlevel.dart';
 
@@ -84,7 +85,9 @@ class LevelCardRow extends StatelessWidget {
                   style: TextStyle(color: kQuizMain50),
                 ),
                 new Text(
-                  levelDetails.totalPoints != null ? levelDetails.totalPoints.toString() : "",
+                  levelDetails.totalPoints != null
+                      ? levelDetails.totalPoints.toString()
+                      : "",
                   style: TextStyle(color: kQuizMain400),
                 ),
               ],
@@ -106,8 +109,8 @@ class LevelCardRow extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => new MainGamePage(
-                    level: levelDetails,
+              builder: (context) => new GameOfFifteen(
+                  // level: levelDetails,
                   ),
             ),
           );
