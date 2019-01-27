@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:kon_banega_mokshadhipati/UI/game/answer_response_dialog.dart';
 import 'package:kon_banega_mokshadhipati/model/cacheData.dart';
 import 'package:kon_banega_mokshadhipati/model/current_stat.dart';
 import '../../Service/apiservice.dart';
@@ -28,33 +29,35 @@ class SimpleGameState extends State<SimpleGame> {
   int currentQueIndex;
   ApiService _api = new ApiService();
   CurrentState currentState;
-
+  bool isCompletedLevel = false;
   SimpleGameState(int level) {
     if (CacheData.userState.currentStat.lives != null)
       userLives = CacheData.userState.currentStat.lives;
     print('USER LIVES :::::::::');
     print(userLives);
-    // _loadAllQuestions(level);
+    _loadAllQuestions(level);
   }
 
-  // _loadAllQuestions(int level) {
-  //   currentState = CacheData.userState.currentStat;
-  //   _api.getQuestions(level, 0, currentState.totalQues).then((res) {
-  //     setState(() {
-  //       if (res.statusCode == 200) {
-  //         String questionList = res.body;
-  //         print(utf8.decode(res.bodyBytes));
-  //         List<dynamic> d1 = json.decode(questionList);
-  //         questions = d1.map((queJson) => Question.fromJson(queJson)).toList();
-  //         print(questions);
-  //         question = questions.getRange(0, 1).first;
-  //         currentQueIndex = 0;
-  //       } else {
-  //         //_showError(json.decode(res.body)['msg'], true);
-  //       }
-  //     });
-  //   });
-  // }
+  _loadAllQuestions(int level) {
+    currentState = CacheData.userState.currentStat;
+    _api
+        .getQuestions(level: level, from: 0, to: currentState.totalQues)
+        .then((res) {
+      setState(() {
+        if (res.statusCode == 200) {
+          String questionList = res.body;
+          print(utf8.decode(res.bodyBytes));
+          List<dynamic> d1 = json.decode(questionList);
+          questions = d1.map((queJson) => Question.fromJson(queJson)).toList();
+          print(questions);
+          question = questions.getRange(0, 1).first;
+          currentQueIndex = 0;
+        } else {
+          //_showError(json.decode(res.body)['msg'], true);
+        }
+      });
+    });
+  }
 
   _reInit() {
     isGivenCorrectAns = false;
@@ -64,7 +67,7 @@ class SimpleGameState extends State<SimpleGame> {
 
   void _onOptionSelect(index) {
     setState(() {
-      correctAnsIndex = question.answer - 1;
+      correctAnsIndex = question.answerIndex;
       selectedAnsIndex = index;
       if (selectedAnsIndex == correctAnsIndex) {
         isGivenCorrectAns = true;
@@ -78,7 +81,7 @@ class SimpleGameState extends State<SimpleGame> {
           return _gameOverDialogBox();
       }
       totalAnswers = totalAnswers + 1;
-      bool isCompletedLevel = false;
+
       if (currentQueIndex == questions.length - 1) isCompletedLevel = true;
       _dialogBox(isGivenCorrectAns, isCompletedLevel);
     });
@@ -139,74 +142,19 @@ class SimpleGameState extends State<SimpleGame> {
         });
   }
 
-  void _dialogBox(isSelectedAnsCorrect, isCompletedLevel) {
-    String msg = "";
-    if (isCompletedLevel) {
-      msg = "Level " + currentState.level.toString() + " is Completed";
-    } else {
-      if (isSelectedAnsCorrect)
-        msg = "You gave correct answer";
-      else
-        msg = "You gave wrong answer";
-    }
-
-    showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) {
-          return AlertDialog(
-            shape: new RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(7.0),
-            ),
-            title: new Text(
-              isSelectedAnsCorrect ? 'Success!' : 'LOL !',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  color: isSelectedAnsCorrect ? Colors.green : Colors.red,
-                  fontSize: 30.0,
-                  fontWeight: FontWeight.w800),
-            ),
-            content: new Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                new Text(msg,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: Colors.blueGrey,
-                        fontSize: 18.0,
-                        fontStyle: FontStyle.italic,
-                        fontWeight: FontWeight.w300)),
-                SizedBox(height: 20.0),
-                new FlatButton.icon(
-                    icon: isSelectedAnsCorrect
-                        ? Icon(
-                            Icons.done,
-                            color: Colors.green,
-                          )
-                        : Icon(Icons.close, color: Colors.red),
-                    label: new Text('Next',
-                        style: TextStyle(
-                            color: isSelectedAnsCorrect
-                                ? Colors.green
-                                : Colors.red)),
-                    shape: new RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5.0),
-                        side: BorderSide(color: Colors.grey)),
-                    onPressed: () {
-                      Navigator.pop(context);
-                      setState(() {
-                        if (!isCompletedLevel) {
-                          _reInit();
-                          _loadNextQuestion();
-                        } else {
-                          Navigator.pushReplacementNamed(context, '/level');
-                        }
-                      });
-                    }),
-              ],
-            ),
-          );
-        });
+  _dialogBox(bool isSelectedAnsCorrect, bool isCompletedLevel) {
+    AnswerResponseDialog.getAnswerResponseDialog(isSelectedAnsCorrect: isSelectedAnsCorrect, doneButtonFn: onOKButtonClick);
+  }
+  void onOKButtonClick(bool isCompletedLevel) {
+    Navigator.pop(context);
+    setState(() {
+      if (!isCompletedLevel) {
+        _reInit();
+        _loadNextQuestion();
+      } else {
+        Navigator.pushReplacementNamed(context, '/level');
+      }
+    });
   }
 
   _loadNextQuestion() {
@@ -327,7 +275,7 @@ class SimpleGameState extends State<SimpleGame> {
             ),
             new Center(
               child: new Text(
-                "QUESTION " + question.index.toString(),
+                "QUESTION " + question.questionSt.toString(),
                 style: TextStyle(
                     color: Colors.blueGrey,
                     fontSize: 20.0,
@@ -343,7 +291,7 @@ class SimpleGameState extends State<SimpleGame> {
               padding: EdgeInsets.all(20.0),
               child: new Center(
                 child: new Text(
-                  question.text,
+                  question.question,
                   style: TextStyle(
                       color: Colors.blueGrey,
                       fontSize: 20.0,

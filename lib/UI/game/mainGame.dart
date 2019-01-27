@@ -1,10 +1,19 @@
 import 'package:flame/flame.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
+import 'package:kon_banega_mokshadhipati/Service/apiservice.dart';
+import 'package:kon_banega_mokshadhipati/UI/game/answer_response_dialog.dart';
+import 'package:kon_banega_mokshadhipati/UI/widgets/base_state.dart';
+import 'package:kon_banega_mokshadhipati/model/appresponse.dart';
 import 'package:kon_banega_mokshadhipati/model/cacheData.dart';
-import '../../model/quizlevel.dart';
+import 'package:kon_banega_mokshadhipati/model/current_stat.dart';
+import 'package:kon_banega_mokshadhipati/model/question.dart';
+import 'package:kon_banega_mokshadhipati/utils/response_parser.dart';
+
 import '../../colors.dart';
 import '../../common.dart';
+import '../../model/quizlevel.dart';
 
 class MainGamePage extends StatefulWidget {
   final QuizLevel level;
@@ -15,21 +24,103 @@ class MainGamePage extends StatefulWidget {
   State<StatefulWidget> createState() => new MainGamePageState();
 }
 
-class MainGamePageState extends State<MainGamePage> {
+class MainGamePageState extends BaseState<MainGamePage> {
   bool clickAns = false;
   List<bool> option = [false, false, false, false];
   int userLives = 3;
   bool trueAnswer = false;
-
+  bool _changeTheme = false;
+  bool _showLivesBanner = false;
+  List<Question> questions;
+  Question question;
+  int currentQueIndex;
+  bool isGivenCorrectAns = false;
+  int correctAnsIndex = -1;
+  int selectedAnsIndex = -1;
+  ApiService _api = new ApiService();
+  CurrentState currentState;
   @override
   void initState() {
     print(widget.level);
     super.initState();
+    _loadData();
     // Flame.audio.play('music/bensound-epic.mp3');
   }
+    _loadData() {
+    isLoading = true;
+    currentState = CacheData.userState.currentStat;
+    _loadAllQuestions(widget.level.levelIndex);
+  }
 
+  _loadAllQuestions(int level) async {
+    Response res = await _api.getQuestions(level: level, from: currentState.queSt);
+    AppResponse appResponse =
+        ResponseParser.parseResponse(context: context, res: res);
+    if (appResponse.status == 200) {
+      questions = Question.fromJsonArray(appResponse.data);
+      print(questions);
+      setState(() {
+        question = questions.getRange(0, 1).first;
+        currentQueIndex = 0;
+        isLoading = false;
+      });
+    }
+  }
+
+  _displayAnswerResponseDialog() {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) {
+            AnswerResponseDialog.getAnswerResponseDialog(isSelectedAnsCorrect: isGivenCorrectAns);
+      },);
+  }
+
+  void onOKButtonClick(bool isCompletedLevel) {
+    Navigator.pop(context);
+    setState(() {
+      if (!isCompletedLevel) {
+        _reInit();
+        _loadNextQuestion();
+      } else {
+        Navigator.pushReplacementNamed(context, '/level');
+      }
+    });
+  }
+
+  _loadNextQuestion() {
+    if (currentQueIndex < questions.length - 1) {
+      currentQueIndex++;
+      question = questions.getRange(currentQueIndex, currentQueIndex + 1).first;
+    } else {}
+  }
+
+  _reInit() {
+    isGivenCorrectAns = false;
+    correctAnsIndex = -1;
+    selectedAnsIndex = -1;
+  }
+
+  void _onOptionSelect(index) {
+    setState(() {
+      correctAnsIndex = question.answerIndex;
+      selectedAnsIndex = index;
+      if (selectedAnsIndex == correctAnsIndex) {
+        isGivenCorrectAns = true;
+      } else {
+        isGivenCorrectAns = false;
+        if (userLives > 1) {
+          userLives = userLives - 1;
+        } else {}
+          //return _gameOverDialogBox();
+      }
+      bool isCompletedLevel = false;
+      if (currentQueIndex == questions.length - 1) isCompletedLevel = true;
+      //_dialogBox(isGivenCorrectAns, isCompletedLevel);
+    });
+  }
   @override
-  Widget build(BuildContext context) {
+  Widget pageToDisplay() {
     return new Scaffold(
       body: new BackgroundGredient(
         child: SafeArea(
@@ -43,7 +134,7 @@ class MainGamePageState extends State<MainGamePage> {
               Container(
                 alignment: Alignment(0, -0.30),
                 child: Text(
-                  'When do you want to here your Rundown ?',
+                  ((question != null) ? question.question : ''),
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: kQuizBackgroundWhite,
@@ -312,7 +403,7 @@ class MainGamePageState extends State<MainGamePage> {
         crossAxisAlignment: CrossAxisAlignment.center,
         verticalDirection: VerticalDirection.down,
         mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
+        /*children: <Widget>[
           new SizedBox(height: 30),
           options('Option 1', 0),
           new SizedBox(height: 20),
@@ -324,12 +415,24 @@ class MainGamePageState extends State<MainGamePage> {
             child: options('Option 4', 3),
             alignment: Alignment.bottomCenter,
           ),
-        ],
+        ]*/
+        children: getOptionsWidget(),
       ),
     );
   }
 
-  Widget options(String text, index) {
+  List<Widget> getOptionsWidget() {
+    List<Widget> list = [];
+    int i = 0;
+    question.options.forEach((option) {
+      if(option != null) {
+        list.add(new SizedBox(height: 20));
+        list.add(getOptionWidget(option.option, i++));
+      }
+    });
+    return list;
+  }
+  Widget getOptionWidget(String text, index) {
     return new SizedBox(
       width: double.infinity,
       child: new MaterialButton(
