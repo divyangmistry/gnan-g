@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kon_banega_mokshadhipati/model/cacheData.dart';
 import '../common.dart';
 import '../colors.dart';
 import '../Service/apiservice.dart';
@@ -9,31 +10,32 @@ class GameLevelPage extends StatefulWidget {
 }
 
 class GameLevelPageState extends State<GameLevelPage> {
-
   ApiService _api = new ApiService();
 
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
       backgroundColor: kQuizSurfaceWhite,
-      body: new SafeArea(
-        child: new ListView(
-          padding: EdgeInsets.symmetric(horizontal: 30.0,vertical: 20.0),
-          children: <Widget>[
-            _gameBar(),
-            SizedBox(
-              height: 20.0,
-            ),
-            _userCard(),
-            SizedBox(
-              height: 20.0,
-            ),
-            _bonusRoundInfo(),
-            SizedBox(
-              height: 20.0,
-            ),
-            _bottomButtons(),
-          ],
+      body: BackgroundGredient(
+        child: new SafeArea(
+          child: new ListView(
+            padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 20.0),
+            children: <Widget>[
+              _gameBar(),
+              SizedBox(
+                height: 20.0,
+              ),
+              _userCard(),
+              SizedBox(
+                height: 20.0,
+              ),
+              _bonusRoundInfo(),
+              SizedBox(
+                height: 20.0,
+              ),
+              _bottomButtons(),
+            ],
+          ),
         ),
       ),
     );
@@ -43,9 +45,10 @@ class GameLevelPageState extends State<GameLevelPage> {
     return new Row(
       children: <Widget>[
         _iconButton(
-          Icon(Icons.person_outline, color: Colors.white),
+          Icon(Icons.power_settings_new, color: Colors.white),
           () {
-            Navigator.pushNamed(context, '/profile');
+            Navigator.pop(context);
+            Navigator.pushReplacementNamed(context, '/login_new');
           },
         ),
         new Expanded(
@@ -62,9 +65,7 @@ class GameLevelPageState extends State<GameLevelPage> {
             color: Colors.white,
           ),
           () {
-            _api.logout();
-            // Navigator.pushNamed(context, '/rules');
-            Navigator.pushReplacementNamed(context, '/login_new');
+            Navigator.pushNamed(context, '/rules');
           },
         ),
       ],
@@ -130,14 +131,14 @@ class GameLevelPageState extends State<GameLevelPage> {
             Navigator.pushNamed(context, '/leaderboard');
           },
         ),
-        SizedBox(width: 10.0),
-        _button(
-          'Play GAME',
-          Icons.play_circle_filled,
-          () {
-            Navigator.pushNamed(context, '/gamePage');
-          },
-        ),
+        // SizedBox(width: 10.0),
+        // _button(
+        //   'Play GAME',
+        //   Icons.play_circle_filled,
+        //   () {
+        //     Navigator.pushNamed(context, '/gamePage');
+        //   },
+        // ),
       ],
     );
   }
@@ -214,7 +215,7 @@ class GameLevelPageState extends State<GameLevelPage> {
               height: 50,
             ),
             new Text(
-              'Milan Vadher',
+              CacheData.userInfo.name,
               textScaleFactor: 1.5,
               style: TextStyle(
                 fontWeight: FontWeight.w200,
@@ -226,11 +227,12 @@ class GameLevelPageState extends State<GameLevelPage> {
             ),
             new Row(
               children: <Widget>[
-                _scoreData('Points', '\$10'),
+                _scoreData(
+                    'Points', '\$' + CacheData.userInfo.totalscore.toString()),
                 CustomVerticalDivider(height: 60),
-                _scoreData('Rank', '15th'),
+                _scoreData('Rank', '4th'),
                 CustomVerticalDivider(height: 60),
-                _scoreData('Lives', '05'),
+                _scoreData('Lives', CacheData.userInfo.lives.toString()),
               ],
             ),
           ],
@@ -273,20 +275,13 @@ class GameLevelPageState extends State<GameLevelPage> {
   }
 
   Widget _userAvatar() {
-    return new Container(
-      width: 100.0,
-      height: 100.0,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: Colors.white54,
-        image: DecorationImage(
-          fit: BoxFit.fill,
-          image: NetworkImage(
-              'https://avatars2.githubusercontent.com/u/16611246?s=400&v=4'),
-        ),
+    return CircleAvatar(
+      maxRadius: 50,
+      child: CircleAvatar(
+        maxRadius: 45,
+        backgroundImage: AssetImage('images/face.jpg'),
       ),
+      backgroundColor: kQuizBrown900,
     );
   }
 }
-
-

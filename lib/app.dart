@@ -1,27 +1,13 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
-import 'package:kon_banega_mokshadhipati/Service/apiservice.dart';
 import 'package:kon_banega_mokshadhipati/UI/game_level.dart';
-import 'package:kon_banega_mokshadhipati/UI/intro/intro.dart';
 import 'package:kon_banega_mokshadhipati/UI/leaderboard.dart';
 import 'package:kon_banega_mokshadhipati/UI/profile.dart';
-import 'package:kon_banega_mokshadhipati/constans/wsconstants.dart';
-import 'package:kon_banega_mokshadhipati/model/appresponse.dart';
-import 'package:kon_banega_mokshadhipati/model/cacheData.dart';
-import 'package:kon_banega_mokshadhipati/model/user_state.dart';
-import 'package:kon_banega_mokshadhipati/notification/notifcation_setup.dart';
-import 'package:kon_banega_mokshadhipati/utils/response_parser.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-import 'Service/apiservice.dart';
 import 'UI/auth/forgot_password.dart';
 import 'UI/auth/new_login.dart';
 import 'UI/auth/new_otp.dart';
 import 'UI/auth/new_signup.dart';
 import 'UI/auth/register_new.dart';
-import 'UI/game/leaderboar.dart';
 import 'UI/game/mainGame.dart';
 import 'UI/game/simple_game.dart';
 import 'UI/game_level.dart';
@@ -30,61 +16,26 @@ import 'UI/others/rules.dart';
 import 'UI/others/terms&condition.dart';
 import 'UI/profile.dart';
 import 'colors.dart';
-import 'model/cacheData.dart';
-import 'model/user_state.dart';
 
 class QuizApp extends StatefulWidget {
+  final Widget defaultHome;
+  QuizApp({@required this.defaultHome});
+
   @override
   _QuizAppState createState() => _QuizAppState();
 }
 
 class _QuizAppState extends State<QuizApp> {
-  Widget _defaultHome = new LoginPage();
-  // Widget _defaultHome = new NewLevelPage();
-
-  ApiService _api = new ApiService();
-
   @override
   void initState() {
-    // _checkLoginStatus();
     super.initState();
-  }
-
-  _checkLoginStatus() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool _isLogin = prefs.getBool('b_isUserLoggedIn') == null
-        ? false
-        : prefs.getBool('b_isUserLoggedIn');
-
-    if (_isLogin) {
-      _getInitData(_isLogin,
-          json.decode(prefs.getString('user_info'))['user_info']['mobile']);
-    }
-  }
-
-  _getInitData(_result, mobile) async {
-    if (_result) {
-      _defaultHome = new GameLevelPage();
-      Response res = await _api.getUserState(mhtId: mobile);
-      AppResponse appResponse = ResponseParser.parseResponse(context: context, res: res);
-      if (appResponse.status == WSConstant.SUCCESS_CODE) {
-        Map<String, dynamic> userstateStr = appResponse.data['results'];
-        print('IN MAIN ::: userstateStr :::');
-        print(userstateStr);
-        UserState userState = UserState.fromJson(userstateStr);
-        CacheData.userState = userState;
-        _defaultHome = new NewLevelPage();
-      } else {
-        _defaultHome = new LoginPage();
-      }
-    }
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Quiz',
-      home: _defaultHome,
+      home: widget.defaultHome,
       theme: _kQuizTheme,
       routes: <String, WidgetBuilder>{
         '/simpleGame': (BuildContext context) => new SimpleGame(),

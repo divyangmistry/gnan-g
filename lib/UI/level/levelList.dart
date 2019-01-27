@@ -16,7 +16,6 @@ class NewLevelPage extends StatefulWidget {
 }
 
 class NewLevelPageState extends BaseState<NewLevelPage> {
-
   @override
   void initState() {
     super.initState();
@@ -42,22 +41,27 @@ class NewLevelPageState extends BaseState<NewLevelPage> {
   }
 
   Widget pageToDisplay() {
-      return new SafeArea(
-        child: Column(
-          children: <Widget>[
-            new SizedBox(height: 20),
-            new Row(
-              // mainAxisAlignment: MainAxisAlignment.s,
+    return new SafeArea(
+      child: Column(
+        children: <Widget>[
+          new SizedBox(height: 20),
+          new Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                SizedBox(
-                  width: 20,
-                ),
-                Expanded(
-                  child: Container(),
-                ),
-                Container(
-                  width: 60,
+                new RaisedButton(
+                  padding: EdgeInsets.all(10),
+                  shape: CircleBorder(),
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/gameStart');
+                  },
+                  child: Icon(
+                    Icons.person_outline,
+                    size: 25,
+                    color: kQuizSurfaceWhite,
+                  ),
                 ),
                 new Text(
                   'LEVELS',
@@ -67,25 +71,18 @@ class NewLevelPageState extends BaseState<NewLevelPage> {
                       color: kQuizSurfaceWhite,
                       letterSpacing: 4),
                 ),
-                Expanded(
-                  child: Container(),
+                CommonFunction.pointsUI(
+                  point: CacheData.userInfo.totalscore.toString(),
                 ),
-                Container(
-                  child: CommonFunction.pointsUI(
-                      point: CacheData.userInfo.totalscore.toString()),
-                ),
-                SizedBox(
-                  width: 20,
-                )
               ],
             ),
-            new SizedBox(height: 20),
-            new LevelList(),
-          ],
-        ),
-      );
-    }
-
+          ),
+          new SizedBox(height: 20),
+          new LevelList(),
+        ],
+      ),
+    );
+  }
 }
 
 class LevelList extends StatelessWidget {

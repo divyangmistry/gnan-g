@@ -223,7 +223,7 @@ class LoginPageState extends State<LoginPage> {
           UserInfo userInfo = UserInfo.fromJson(appResponse.data);
           CacheData.userInfo = userInfo;
           SharedPreferences pref = await SharedPreferences.getInstance();
-          pref.setString('user_info', userInfo.toJson().toString());
+          pref.setString('user_info', res.body);
           pref.setString('token', userInfo.token);
           pref.setBool(SharedPrefConstant.b_isUserLoggedIn, true);
           print(userInfo);
@@ -254,6 +254,8 @@ class LoginPageState extends State<LoginPage> {
           ResponseParser.parseResponse(context: context, res: res);
       if (appResponse.status == WSConstant.SUCCESS_CODE) {
         print('IN LOGIN ::: userstateStr :::');
+        SharedPreferences pref = await SharedPreferences.getInstance();
+        pref.setString('userState', res.body);
         UserState userState = UserState.fromJson(appResponse.data['results']);
         CacheData.userState = userState;
         Navigator.pushReplacementNamed(context, '/level_new');
