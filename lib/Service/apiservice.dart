@@ -95,7 +95,7 @@ class ApiService {
     return res;
   }
 
-  Future<http.Response> getUserState({@required String mhtId}) async {
+  Future<http.Response> getUserState({@required int mhtId}) async {
     var data = {'mht_id': mhtId};
     http.Response res = await postApi(url: '/user_state', data: data);
     return res;

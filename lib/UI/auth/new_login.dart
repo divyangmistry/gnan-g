@@ -229,7 +229,7 @@ class LoginPageState extends State<LoginPage> {
           print(userInfo);
           _api.appendTokenToHeader(userInfo.token);
           NotificationSetup.setupNotification();
-          _loadUserState(this._mhtId);
+          _loadUserState(int.parse(this._mhtId));
         }
       } catch (err) {
         print('CATCH 1 :: ');
@@ -247,7 +247,7 @@ class LoginPageState extends State<LoginPage> {
     Navigator.pop(context);
   }
 
-  _loadUserState(mhtId) async {
+  _loadUserState(int mhtId) async {
     try {
       Response res = await _api.getUserState(mhtId: mhtId);
       AppResponse appResponse =

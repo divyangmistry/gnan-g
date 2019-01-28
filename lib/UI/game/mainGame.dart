@@ -205,7 +205,17 @@ class MainGamePageState extends BaseState<MainGamePage> {
           ),
         ),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: FloatingActionButton.extended(
+        icon: Icon(Icons.help_outline),
+        label: Text('Get Hint'),
+        onPressed: _getHint,
+      ),
     );
+  }
+
+  void _getHint() {
+    CommonFunction.alertDialog(context: context,msg: question.reference, type: 'success', doneButtonText: 'Hooray!', title: 'Here is your hint ...', barrierDismissible: false);
   }
 
   Widget titleBar() {

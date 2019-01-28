@@ -206,7 +206,7 @@ class CommonFunction {
                     : type == 'error' ? 'Oh No!' : 'Congratulations',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: kQuizErrorRed,
+                  color: type == 'error' ? kQuizErrorRed : Colors.green[600],
                 ),
                 textScaleFactor: 1.5,
               ),
@@ -233,7 +233,7 @@ class CommonFunction {
                 children: <Widget>[
                   FlatButton(
                     padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
-                    color: kQuizErrorRed,
+                    color: type == 'error' ? kQuizErrorRed : Colors.green[600],
                     child: Row(
                       children: <Widget>[
                         Text(

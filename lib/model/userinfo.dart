@@ -35,22 +35,22 @@ class UserInfo {
       this.token});
 
   UserInfo.fromJson(Map<String, dynamic> json) {
-    lives = json['lives'];
-    isactive = json['isactive'];
-    sId = json['_id'];
-    mobile = json['mobile'];
-    password = json['password'];
-    name = json['name'];
-    email = json['email'];
-    mhtId = json['mht_id'];
-    center = json['center'];
-    bonus = json['bonus'];
-    questionId = json['question_id'];
-    totalscore = json['totalscore'];
-    updatedAt = json['updatedAt'];
-    createdAt = json['createdAt'];
-    iV = json['__v'];
-    token = json['token'];
+      lives = json['lives'];
+      isactive = json['isactive'];
+      sId = json['_id'];
+      mobile = json['mobile'];
+      password = json['password'];
+      name = json['name'];
+      email = json['email'];
+      mhtId = json['mht_id'];
+      center = json['center'];
+      bonus = json['bonus'];
+      questionId = json['question_id'];
+      totalscore = json['totalscore'];
+      updatedAt = json['updatedAt'];
+      createdAt = json['createdAt'];
+      iV = json['__v'];
+      token = json['token'];
   }
 
   Map<String, dynamic> toJson() {
