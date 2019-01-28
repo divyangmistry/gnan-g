@@ -27,6 +27,7 @@ _checkLoginStatus() async {
       ? false
       : prefs.getBool('b_isUserLoggedIn');
   if (_isLogin) {
+    print(json.decode(prefs.getString('user_info'))['data']);
     UserInfo userInfo =
         UserInfo.fromJson(json.decode(prefs.getString('user_info'))['data']);
     CacheData.userInfo = userInfo;
@@ -36,7 +37,7 @@ _checkLoginStatus() async {
   }
 }
 
-_loadUserState(mhtId) async {
+_loadUserState(int mhtId) async {
   try {
     Response res = await _api.getUserState(mhtId: mhtId);
     if (res.statusCode == WSConstant.SUCCESS_CODE) {
