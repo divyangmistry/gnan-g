@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kon_banega_mokshadhipati/UI/game_level.dart';
 import 'package:kon_banega_mokshadhipati/UI/leaderboard.dart';
 import 'package:kon_banega_mokshadhipati/UI/profile.dart';
+import 'package:kon_banega_mokshadhipati/UI/puzzle/main.dart';
 
 import 'UI/auth/forgot_password.dart';
 import 'UI/auth/new_login.dart';
@@ -51,6 +52,7 @@ class _QuizAppState extends State<QuizApp> {
         '/profile': (BuildContext context) => new ProfilePagePage(),
         '/leaderboard': (BuildContext context) => new LeaderBoard(),
         '/t&c': (BuildContext context) => new TermsAndConditionPage(),
+        '/gameOf15': (BuildContext context) => new GameOfFifteen(),
       },
     );
   }

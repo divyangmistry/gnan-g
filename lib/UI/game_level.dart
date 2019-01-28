@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:kon_banega_mokshadhipati/Service/apiservice.dart';
 import 'package:kon_banega_mokshadhipati/model/cacheData.dart';
 import '../common.dart';
 import '../colors.dart';
-import '../Service/apiservice.dart';
 
 class GameLevelPage extends StatefulWidget {
   @override
@@ -10,6 +10,7 @@ class GameLevelPage extends StatefulWidget {
 }
 
 class GameLevelPageState extends State<GameLevelPage> {
+  
   ApiService _api = new ApiService();
 
   @override
@@ -47,6 +48,7 @@ class GameLevelPageState extends State<GameLevelPage> {
         _iconButton(
           Icon(Icons.power_settings_new, color: Colors.white),
           () {
+            _api.logout();
             Navigator.pop(context);
             Navigator.pushReplacementNamed(context, '/login_new');
           },
@@ -131,14 +133,14 @@ class GameLevelPageState extends State<GameLevelPage> {
             Navigator.pushNamed(context, '/leaderboard');
           },
         ),
-        // SizedBox(width: 10.0),
-        // _button(
-        //   'Play GAME',
-        //   Icons.play_circle_filled,
-        //   () {
-        //     Navigator.pushNamed(context, '/gamePage');
-        //   },
-        // ),
+        SizedBox(width: 10.0),
+        _button(
+          'Play Puzzle',
+          Icons.play_circle_filled,
+          () {
+            Navigator.pushNamed(context, '/gameOf15');
+          },
+        ),
       ],
     );
   }

@@ -1,12 +1,7 @@
-import 'dart:async';
-import 'package:flame/flame.dart';
 import 'package:flutter/material.dart';
-import 'package:kon_banega_mokshadhipati/UI/widgets/base_state.dart';
 import 'package:kon_banega_mokshadhipati/model/cacheData.dart';
-import 'package:kon_banega_mokshadhipati/model/user_state.dart';
 import '../../colors.dart';
 import 'levelRow.dart';
-import '../../model/quizlevel.dart';
 import '../../common.dart';
 // import 'package:flame/flame.dart';
 
@@ -15,11 +10,10 @@ class NewLevelPage extends StatefulWidget {
   State<StatefulWidget> createState() => new NewLevelPageState();
 }
 
-class NewLevelPageState extends BaseState<NewLevelPage> {
+class NewLevelPageState extends State<NewLevelPage> {
   @override
   void initState() {
     super.initState();
-    loadData();
     // Flame.audio.play('music/CV-01Trimantra.mp3');
   }
 
@@ -27,17 +21,6 @@ class NewLevelPageState extends BaseState<NewLevelPage> {
   void dipose() {
     super.dispose();
     // Flame.audio.clear('music/CV-01Trimantra.mp3');
-  }
-
-  Future<Null> loadData() async {
-    isLoading = true;
-    const timeOut = const Duration(seconds: 2);
-    new Timer(timeOut, () {
-      setState(() {
-        // TODO : Load levels
-        isLoading = false;
-      });
-    });
   }
 
   Widget pageToDisplay() {
@@ -80,6 +63,15 @@ class NewLevelPageState extends BaseState<NewLevelPage> {
           new SizedBox(height: 20),
           new LevelList(),
         ],
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: BackgroundGredient(
+        child: pageToDisplay(),
       ),
     );
   }
