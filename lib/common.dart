@@ -1,7 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:kon_banega_mokshadhipati/UI/puzzle/main.dart';
 import 'package:kon_banega_mokshadhipati/constans/appconstant.dart';
 import 'package:kon_banega_mokshadhipati/constans/message_constant.dart';
+import 'package:kon_banega_mokshadhipati/model/cacheData.dart';
+import 'package:kon_banega_mokshadhipati/model/userinfo.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'colors.dart';
 
 // For override color for Form input
@@ -131,6 +136,11 @@ class CommonFunction {
       return 'Enter Valid Mobile no.';
     }
     return null;
+  }
+
+  static saveUserInfo() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.setString('user_info', json.encode(CacheData.userInfo.toJson()));
   }
 
   // points ui

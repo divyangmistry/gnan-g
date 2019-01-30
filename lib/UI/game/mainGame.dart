@@ -5,11 +5,15 @@ import 'package:http/http.dart';
 import 'package:kon_banega_mokshadhipati/Service/apiservice.dart';
 import 'package:kon_banega_mokshadhipati/UI/game/answer_response_dialog.dart';
 import 'package:kon_banega_mokshadhipati/UI/widgets/base_state.dart';
+import 'package:kon_banega_mokshadhipati/constans/wsconstants.dart';
 import 'package:kon_banega_mokshadhipati/model/appresponse.dart';
 import 'package:kon_banega_mokshadhipati/model/cacheData.dart';
 import 'package:kon_banega_mokshadhipati/model/current_stat.dart';
 import 'package:kon_banega_mokshadhipati/model/question.dart';
+import 'package:kon_banega_mokshadhipati/model/userinfo.dart';
+import 'package:kon_banega_mokshadhipati/model/validateQuestion.dart';
 import 'package:kon_banega_mokshadhipati/utils/response_parser.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../colors.dart';
 import '../../common.dart';
@@ -27,10 +31,8 @@ class MainGamePage extends StatefulWidget {
 class MainGamePageState extends BaseState<MainGamePage> {
   bool clickAns = false;
   List<bool> option = [false, false, false, false];
-  int userLives = 3;
+  int userLives = CacheData.userInfo.lives;
   bool trueAnswer = false;
-  bool _changeTheme = false;
-  bool _showLivesBanner = false;
   List<Question> questions;
   Question question;
   int currentQueIndex;
@@ -69,17 +71,6 @@ class MainGamePageState extends BaseState<MainGamePage> {
     }
   }
 
-  _displayAnswerResponseDialog() {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) {
-        AnswerResponseDialog.getAnswerResponseDialog(
-            isSelectedAnsCorrect: isGivenCorrectAns);
-      },
-    );
-  }
-
   void onOKButtonClick(bool isCompletedLevel) {
     Navigator.pop(context);
     setState(() {
@@ -93,6 +84,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
   }
 
   _loadNextQuestion() {
+    Navigator.pop(context);
     if (currentQueIndex < questions.length - 1) {
       currentQueIndex++;
       question = questions.getRange(currentQueIndex, currentQueIndex + 1).first;
@@ -105,23 +97,78 @@ class MainGamePageState extends BaseState<MainGamePage> {
     selectedAnsIndex = -1;
   }
 
-  void _onOptionSelect(index) {
-    setState(() {
-      correctAnsIndex = question.answerIndex;
-      selectedAnsIndex = index;
-      if (selectedAnsIndex == correctAnsIndex) {
-        isGivenCorrectAns = true;
-      } else {
-        isGivenCorrectAns = false;
-        if (userLives > 1) {
-          userLives = userLives - 1;
-        } else {}
-        //return _gameOverDialogBox();
+  void _onOptionSelect({int index, String answer}) async {
+    try {
+      Map<String, dynamic> data = {
+        "question_id": question.questionId,
+        "mht_id": CacheData.userInfo.mhtId,
+        "answer": answer,
+        "level": 1
+      };
+      Response res = await _api.postApi(url: '/validate_answer', data: data);
+      AppResponse appResponse =
+          ResponseParser.parseResponse(context: context, res: res);
+      if (appResponse.status == WSConstant.SUCCESS_CODE) {
+        option = [false, false, false, false];
+        ValidateQuestion validateQuestion =
+            ValidateQuestion.fromJson(appResponse.data);
+        if (validateQuestion.answerStatus) {
+          setState(() {
+            userLives = validateQuestion.lives;
+            CacheData.userInfo.lives = userLives;
+            CacheData.userInfo.totalscore = validateQuestion.totalscore;
+          });
+          isGivenCorrectAns = true;
+          CommonFunction.alertDialog(
+            context: context,
+            msg: 'Your answer is correct !!',
+            type: 'success',
+            barrierDismissible: false,
+            doneButtonFn: _loadNextQuestion,
+          );
+        } else {
+          isGivenCorrectAns = false;
+          setState(() {
+            userLives = validateQuestion.lives;
+            CacheData.userInfo.lives = userLives;
+            CacheData.userInfo.totalscore = validateQuestion.totalscore;
+          });
+          if (userLives == 1) {
+            CommonFunction.alertDialog(
+              context: context,
+              msg: 'You have only 1 Life remaining. Now you can access hint.',
+              barrierDismissible: false,
+            );
+          }
+          if (userLives == 0) {
+            CommonFunction.alertDialog(
+              context: context,
+              msg: 'Game-over',
+              barrierDismissible: false,
+              doneButtonFn: () {
+                Navigator.pop(context);
+                Navigator.pop(context);
+              }
+            );
+          }
+        }
+        if (currentQueIndex == questions.length - 1) {
+          CommonFunction.alertDialog(
+            context: context,
+            msg: 'Level ' + question.level.toString() + ' completed !! ',
+            barrierDismissible: false,
+            type: 'success',
+          );
+        }
       }
-      bool isCompletedLevel = false;
-      if (currentQueIndex == questions.length - 1) isCompletedLevel = true;
-      //_dialogBox(isGivenCorrectAns, isCompletedLevel);
-    });
+    } catch (err) {
+      print('CATCH VALIDATE QUESTION :: ');
+      print(err);
+      CommonFunction.displayErrorDialog(
+        context: context,
+        msg: err.toString(),
+      );
+    }
   }
 
   @override
@@ -206,16 +253,47 @@ class MainGamePageState extends BaseState<MainGamePage> {
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: FloatingActionButton.extended(
-        icon: Icon(Icons.help_outline),
-        label: Text('Get Hint'),
-        onPressed: _getHint,
-      ),
+      floatingActionButton: userLives <= 1
+          ? FloatingActionButton.extended(
+              icon: Icon(Icons.help_outline),
+              label: Text('Get Hint'),
+              onPressed: _getHint,
+            )
+          : null,
     );
   }
 
-  void _getHint() {
-    CommonFunction.alertDialog(context: context,msg: question.reference, type: 'success', doneButtonText: 'Hooray!', title: 'Here is your hint ...', barrierDismissible: false);
+  void _getHint() async {
+    try {
+      Map<String, dynamic> data = {
+        "question_id": question.questionId,
+        "mht_id": CacheData.userInfo.mhtId
+      };
+      Response res = await _api.postApi(url: '/hint_question', data: data);
+      AppResponse appResponse =
+          ResponseParser.parseResponse(context: context, res: res);
+      if (appResponse.status == WSConstant.SUCCESS_CODE) {
+        UserInfo userInfo = UserInfo.fromJson(appResponse.data);
+        setState(() {
+          CacheData.userInfo = userInfo;
+        });
+        SharedPreferences pref = await SharedPreferences.getInstance();
+        pref.setString('user_info', res.body);
+        print('FROM HINT :: ');
+        print(res.body);
+        CommonFunction.alertDialog(
+            context: context,
+            msg: question.reference,
+            type: 'success',
+            doneButtonText: 'Hooray!',
+            title: 'Here is your hint ...',
+            barrierDismissible: false);
+      }
+    } catch (err) {
+      print('CATCH IN HINT :: ');
+      print(err);
+      CommonFunction.displayErrorDialog(context: context, msg: err.toString());
+    }
   }
 
   Widget titleBar() {
@@ -455,10 +533,10 @@ class MainGamePageState extends BaseState<MainGamePage> {
         elevation: 5,
         onPressed: () {
           setState(() {
+            _onOptionSelect(index: index, answer: text);
             option = [false, false, false, false];
             option[index] = !option[index];
-            option[3] == true ? trueAnswer = true : trueAnswer = false;
-            trueAnswer
+            index == question.answerIndex
                 ? Flame.audio.play('music/party_horn-Mike_Koenig-76599891.mp3')
                 : Flame.audio.play('music/Pac man dies.mp3');
           });

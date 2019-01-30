@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:kon_banega_mokshadhipati/UI/game/mainGame.dart';
+import 'package:kon_banega_mokshadhipati/UI/puzzle/main.dart';
+import 'package:kon_banega_mokshadhipati/common.dart';
+import 'package:kon_banega_mokshadhipati/model/cacheData.dart';
 import '../../colors.dart';
 import '../../model/quizlevel.dart';
 
@@ -105,14 +108,33 @@ class LevelCardRow extends StatelessWidget {
         onTap: () {
           print('LEVEL DETAILS :: ');
           print(levelDetails);
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => new MainGamePage(
-                level: levelDetails,
+          if (CacheData.userInfo.lives > 0) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => new MainGamePage(
+                      level: levelDetails,
+                    ),
               ),
-            ),
-          );
+            );
+          } else {
+            CommonFunction.alertDialog(
+              context: context,
+              msg:
+                  'You don\'t have enough lifes.\nYou can earn points and get life from puzzeles',
+              barrierDismissible: false,
+              doneButtonText: 'Play puzzle',
+              doneButtonFn: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => new GameOfFifteen(),
+                  ),
+                );
+              },
+            );
+          }
         },
         child: new Stack(
           children: <Widget>[
