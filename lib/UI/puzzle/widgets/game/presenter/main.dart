@@ -102,7 +102,7 @@ class GamePresenterWidgetState extends State<GamePresenterWidget>
       steps = 0;
       // Initialize empty board with a classic
       // pattern.
-      const size = 4;
+      const size = 3;
       board = _createBoard(size);
     }
 

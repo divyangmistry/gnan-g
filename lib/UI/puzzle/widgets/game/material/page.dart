@@ -9,6 +9,7 @@ import 'package:kon_banega_mokshadhipati/UI/puzzle/widgets/game/material/steps.d
 import 'package:kon_banega_mokshadhipati/UI/puzzle/widgets/game/material/stopwatch.dart';
 import 'package:kon_banega_mokshadhipati/UI/puzzle/widgets/game/presenter/main.dart';
 import 'package:kon_banega_mokshadhipati/UI/puzzle/widgets/icons/app.dart';
+import 'package:kon_banega_mokshadhipati/common.dart';
 
 class GameMaterialPage extends StatelessWidget {
   @override
@@ -30,83 +31,88 @@ class GameMaterialPage extends StatelessWidget {
 
     final fabWidget = _buildFab(context);
     final boardWidget = _buildBoard(context);
-    return OrientationBuilder(builder: (context, orientation) {
-      final statusWidget = Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          GameStopwatchWidget(
-            time: presenter.time,
-            fontSize: orientation == Orientation.landscape && !isLargeScreen
-                ? 56.0
-                : 72.0,
-          ),
-          GameStepsWidget(
-            steps: presenter.steps,
-          ),
-        ],
-      );
+    return WillPopScope(
+      onWillPop: () {
+        CommonFunction.alertDialog(
+          msg: 'You will not get LIFE if you leave this PUZZLE !',
+          title: 'Do you Really want to go back ?',
+          context: context,
+          doneButtonText: 'Yes',
+          doneButtonFn: () {
+            Navigator.pop(context);
+          },
+        );
+      },
+      child: OrientationBuilder(builder: (context, orientation) {
+        final statusWidget = Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            GameStopwatchWidget(
+              time: presenter.time,
+              fontSize: orientation == Orientation.landscape && !isLargeScreen
+                  ? 56.0
+                  : 72.0,
+            ),
+            GameStepsWidget(
+              steps: presenter.steps,
+            ),
+          ],
+        );
 
-      if (orientation == Orientation.portrait) {
-        //
-        // Portrait layout
-        //
-        return Scaffold(
-          body: SafeArea(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                isTallScreen
-                    ? Container(
-                        height: 56,
-                        child: Center(
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              const AppIcon(size: 24.0),
-                              const SizedBox(width: 16.0),
-                              Text(
-                                'Game of Fifteen',
-                                style: Theme.of(context).textTheme.title,
-                              ),
-                            ],
-                          ),
-                        ),
-                      )
-                    : const SizedBox(height: 0),
-                Expanded(
-                  child: Center(
-                    child: statusWidget,
+        if (orientation == Orientation.portrait) {
+          //
+          // Portrait layout
+          //
+          return Scaffold(
+            body: SafeArea(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  SizedBox(
+                    height: 20.0,
                   ),
-                ),
-                boardWidget,
-                isLargeScreen && isTallScreen
-                    ? const SizedBox(height: 116.0)
-                    : const SizedBox(height: 72.0),
-              ],
+                  Text(
+                    'Solve this PUZZLE to get LIFE !',
+                    style: Theme.of(context).textTheme.title,
+                  ),
+                  Expanded(
+                    child: Center(
+                      child: statusWidget,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 50.0,
+                  ),
+                  boardWidget,
+                  isLargeScreen && isTallScreen
+                      ? const SizedBox(height: 116.0)
+                      : const SizedBox(height: 72.0),
+                ],
+              ),
             ),
-          ),
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerFloat,
-          floatingActionButton: fabWidget,
-        );
-      } else {
-        //
-        // Landscape layout
-        //
-        return Scaffold(
-          body: SafeArea(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                boardWidget,
-                statusWidget,
-              ],
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerFloat,
+            floatingActionButton: fabWidget,
+          );
+        } else {
+          //
+          // Landscape layout
+          //
+          return Scaffold(
+            body: SafeArea(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  boardWidget,
+                  statusWidget,
+                ],
+              ),
             ),
-          ),
-          floatingActionButton: fabWidget,
-        );
-      }
-    });
+            floatingActionButton: fabWidget,
+          );
+        }
+      }),
+    );
   }
 
   Widget _buildBoard(final BuildContext context) {
@@ -147,40 +153,43 @@ class GameMaterialPage extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        const SizedBox(width: 64.0),
-        GamePlayStopButton(
-          isPlaying: presenter.isPlaying(),
-          onTap: () {
-            presenter.playStop();
-          },
-        ),
-        const SizedBox(width: 16.0),
+        // const SizedBox(width: 64.0),
         Container(
-          width: 48,
-          height: 48,
-          child: Material(
-            elevation: 0.0,
-            color: Colors.transparent,
-            shape: CircleBorder(),
-            child: InkWell(
-              onTap: () {
-                // Show the modal bottom sheet on
-                // tap on "More" icon.
-                showModalBottomSheet<void>(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return createMoreBottomSheet(context,
-                        psize: presenter.board.size, call: (size) {
-                      presenter.resize(size);
-                    });
-                  },
-                );
-              },
-              customBorder: CircleBorder(),
-              child: Icon(Icons.more_vert),
-            ),
+          alignment: Alignment.bottomCenter,
+          child: GamePlayStopButton(
+            isPlaying: presenter.isPlaying(),
+            onTap: () {
+              presenter.playStop();
+            },
           ),
-        ),
+        )
+        // const SizedBox(width: 16.0),
+        // Container(
+        //   width: 48,
+        //   height: 48,
+        //   child: Material(
+        //     elevation: 0.0,
+        //     color: Colors.transparent,
+        //     shape: CircleBorder(),
+        //     child: InkWell(
+        //       onTap: () {
+        //         // Show the modal bottom sheet on
+        //         // tap on "More" icon.
+        //         showModalBottomSheet<void>(
+        //           context: context,
+        //           builder: (BuildContext context) {
+        //             return createMoreBottomSheet(context,
+        //                 psize: presenter.board.size, call: (size) {
+        //               presenter.resize(size);
+        //             });
+        //           },
+        //         );
+        //       },
+        //       customBorder: CircleBorder(),
+        //       child: Icon(Icons.more_vert),
+        //     ),
+        //   ),
+        // ),
       ],
     );
   }
