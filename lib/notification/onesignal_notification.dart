@@ -139,11 +139,11 @@ class OneSignalNotification {
 
   void _handleSetExternalUserId() {
     print("Setting external user ID");
-    OneSignal.shared.setExternalUserId(_externalUserId);
+//    OneSignal.shared.setExternalUserId(_externalUserId);
   }
 
   void _handleRemoveExternalUserId() {
-    OneSignal.shared.removeExternalUserId();
+//    OneSignal.shared.removeExternalUserId();
   }
 
   void _handleSendNotification() async {

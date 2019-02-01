@@ -36,11 +36,16 @@ class LeaderBoardState extends State<LeaderBoard> {
       padding: EdgeInsets.all(16),
       child: Row(
         children: <Widget>[
-          Text(
-            rank.toString(),
-            style: TextStyle(
-                fontSize: 24.0,
-                fontWeight: FontWeight.bold
+          SizedBox(
+            width: 22,
+            child: Container(
+              child: Text(
+                rank.toString(),
+                style: TextStyle(
+                    fontSize: 24.0,
+                    fontWeight: FontWeight.bold
+                ),
+              ),
             ),
           ),
           Container(
@@ -200,7 +205,7 @@ class LeaderBoardState extends State<LeaderBoard> {
         Divider(),
         _buildLeaderRow(2, "Nikola Tesla", 83, Icons.face, 'images/rank2.jpg'),
         Divider(),
-        _buildLeaderRow(3, "MBA", 56, Icons.face, 'images/rank3.jpg'),
+        _buildLeaderRow(10, "MBA", 56, Icons.face, 'images/rank3.jpg'),
       ],
     );
 
