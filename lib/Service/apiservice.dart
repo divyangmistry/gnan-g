@@ -23,6 +23,18 @@ class ApiService {
     return res;
   }
 
+  /// HTTP Get request for leaders
+  ///
+  /// * [url] - API endpoint url e.g. : '/login'
+  Future<http.Response> getLeadersApi(@required String MHTID) async {
+    String url = '/leaders';
+    Map<String, String> leaderHeaders;
+    leaderHeaders = new Map.from(headers);
+    leaderHeaders['mht_id'] = MHTID;
+    http.Response res = await http.get(_apiUrl + url, headers: leaderHeaders);
+    return res;
+  }
+
   /// HTTP Post request
   ///
   /// * [url] - API endpoint url e.g. : '/login'

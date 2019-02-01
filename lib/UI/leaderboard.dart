@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:kon_banega_mokshadhipati/Service/apiservice.dart';
+import '../colors.dart';
 
 class LeaderBoard extends StatefulWidget {
   @override
@@ -7,7 +11,26 @@ class LeaderBoard extends StatefulWidget {
 }
 
 class LeaderBoardState extends State<LeaderBoard> {
-  
+  ApiService _api = new ApiService();
+  final List leaders = [];
+  int userRank = 0;
+  int userScore = 0;
+
+  LeaderBoardState() {
+    _loadLeadersAndRank();
+  }
+
+  _loadLeadersAndRank() {
+    _api.appendTokenToHeader('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtaHRfaWQiOjU1NTU1LCJpYXQiOjE1NDg0NzU1MzB9.VCwGHoZYtQKqdrUHQc5dQcyJ2xWpUm3pgx9ZuZWUWp8');
+    _api
+        .getLeadersApi('99999')
+        .then((res) {
+          Map resBody = json.decode(res.body);
+          debugPrint("Response: " + resBody.toString());
+          userRank = resBody["data"]["userRank"];
+    });
+  }
+
   Container _buildLeaderRow(int rank, String name, int points, IconData icon, String imagePath) {
     return Container(
       padding: EdgeInsets.all(16),
@@ -149,7 +172,7 @@ class LeaderBoardState extends State<LeaderBoard> {
     }
     return "th";
   }
-  
+
   @override
   Widget build(BuildContext context) {
 
@@ -166,7 +189,7 @@ class LeaderBoardState extends State<LeaderBoard> {
               ),
             ),
           ),
-          _buildUserRow(1, 83456, 'image/face.jpg')
+          _buildUserRow(userRank, userScore, 'image/face.jpg')
         ],
       )
     );
