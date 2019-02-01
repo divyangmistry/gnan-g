@@ -119,14 +119,28 @@ class MainGamePageState extends BaseState<MainGamePage> {
             CacheData.userInfo.totalscore = validateQuestion.totalscore;
           });
           isGivenCorrectAns = true;
-          CommonFunction.alertDialog(
-            context: context,
-            msg: 'Your answer is correct !!',
-            type: 'success',
-            barrierDismissible: false,
-            doneButtonFn: _loadNextQuestion,
-          );
+          Flame.audio.play('music/party_horn-Mike_Koenig-76599891.mp3');
+          if (currentQueIndex == questions.length - 1) {
+            CommonFunction.alertDialog(
+                context: context,
+                msg: 'Level ' + question.level.toString() + ' completed !! ',
+                barrierDismissible: false,
+                type: 'success',
+                doneButtonFn: () {
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                });
+          } else {
+            CommonFunction.alertDialog(
+              context: context,
+              msg: 'Your answer is correct !!',
+              type: 'success',
+              barrierDismissible: false,
+              doneButtonFn: _loadNextQuestion,
+            );
+          }
         } else {
+          Flame.audio.play('music/Pac man dies.mp3');
           isGivenCorrectAns = false;
           setState(() {
             userLives = validateQuestion.lives;
@@ -142,23 +156,14 @@ class MainGamePageState extends BaseState<MainGamePage> {
           }
           if (userLives == 0) {
             CommonFunction.alertDialog(
-              context: context,
-              msg: 'Game-over',
-              barrierDismissible: false,
-              doneButtonFn: () {
-                Navigator.pop(context);
-                Navigator.pop(context);
-              }
-            );
+                context: context,
+                msg: 'Game-over',
+                barrierDismissible: false,
+                doneButtonFn: () {
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                });
           }
-        }
-        if (currentQueIndex == questions.length - 1) {
-          CommonFunction.alertDialog(
-            context: context,
-            msg: 'Level ' + question.level.toString() + ' completed !! ',
-            barrierDismissible: false,
-            type: 'success',
-          );
         }
       }
     } catch (err) {
@@ -322,6 +327,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
         ),
         Container(
           child: CommonFunction.pointsUI(
+            context: context,
             point: CacheData.userInfo.totalscore.toString(),
           ),
         ),
@@ -536,9 +542,6 @@ class MainGamePageState extends BaseState<MainGamePage> {
             _onOptionSelect(index: index, answer: text);
             option = [false, false, false, false];
             option[index] = !option[index];
-            index == question.answerIndex
-                ? Flame.audio.play('music/party_horn-Mike_Koenig-76599891.mp3')
-                : Flame.audio.play('music/Pac man dies.mp3');
           });
         },
         height: 50,

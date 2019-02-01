@@ -118,22 +118,35 @@ class LevelCardRow extends StatelessWidget {
               ),
             );
           } else {
-            CommonFunction.alertDialog(
-              context: context,
-              msg:
-                  'You don\'t have enough lifes.\nYou can earn points and get life from puzzeles',
-              barrierDismissible: false,
-              doneButtonText: 'Play puzzle',
-              doneButtonFn: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => new GameOfFifteen(),
-                  ),
-                );
-              },
-            );
+            if (CacheData.userInfo.totalscore > 100) {
+              CommonFunction.alertDialog(
+                context: context,
+                msg:
+                    'You don\'t have enough points.\nYou can earn life from 100 Points',
+                barrierDismissible: false,
+                doneButtonText: 'Get Life',
+                doneButtonFn: () {
+                  Navigator.pop(context);
+                },
+              );
+            } else {
+              CommonFunction.alertDialog(
+                context: context,
+                msg:
+                    'You don\'t have enough lifes.\nYou can earn points and get life from puzzeles',
+                barrierDismissible: false,
+                doneButtonText: 'Play puzzle',
+                doneButtonFn: () {
+                  Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => new GameOfFifteen(),
+                    ),
+                  );
+                },
+              );
+            }
           }
         },
         child: new Stack(

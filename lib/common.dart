@@ -1,11 +1,16 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
+import 'package:kon_banega_mokshadhipati/Service/apiservice.dart';
 import 'package:kon_banega_mokshadhipati/UI/puzzle/main.dart';
 import 'package:kon_banega_mokshadhipati/constans/appconstant.dart';
 import 'package:kon_banega_mokshadhipati/constans/message_constant.dart';
+import 'package:kon_banega_mokshadhipati/constans/wsconstants.dart';
+import 'package:kon_banega_mokshadhipati/model/appresponse.dart';
 import 'package:kon_banega_mokshadhipati/model/cacheData.dart';
 import 'package:kon_banega_mokshadhipati/model/userinfo.dart';
+import 'package:kon_banega_mokshadhipati/utils/response_parser.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'colors.dart';
 
@@ -93,6 +98,8 @@ class CustomLoading extends StatelessWidget {
 
 // All common functions
 class CommonFunction {
+  static ApiService _api = new ApiService();
+
   // mhtId Validation
   static String mhtIdValidation(value) {
     if (value.isEmpty) {
@@ -144,35 +151,62 @@ class CommonFunction {
   }
 
   // points ui
-  static Widget pointsUI({String point = '100'}) {
-    return new Container(
-      height: 40,
-      padding: EdgeInsets.only(right: 10, left: 10),
-      decoration: BoxDecoration(
-          color: kQuizSurfaceWhite,
-          borderRadius: BorderRadius.circular(10),
-          boxShadow: [
-            BoxShadow(
-                color: Colors.black, blurRadius: 5.0, offset: Offset(-2, 2))
-          ]),
-      child: new Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          SizedBox(width: 1),
-          Text(
-            point,
-            style: TextStyle(
-              color: kQuizMain400,
+  static Widget pointsUI(
+      {@required BuildContext context, String point = '100'}) {
+    return GestureDetector(
+      child: new Container(
+        height: 40,
+        padding: EdgeInsets.only(right: 10, left: 10),
+        decoration: BoxDecoration(
+            color: kQuizSurfaceWhite,
+            borderRadius: BorderRadius.circular(10),
+            boxShadow: [
+              BoxShadow(
+                  color: Colors.black, blurRadius: 5.0, offset: Offset(-2, 2))
+            ]),
+        child: new Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            SizedBox(width: 1),
+            Text(
+              point,
+              style: TextStyle(
+                color: kQuizMain400,
+              ),
+              textScaleFactor: 1.5,
             ),
-            textScaleFactor: 1.5,
-          ),
-          SizedBox(width: 5),
-          Image.asset('images/coin.png', height: 20),
-        ],
+            SizedBox(width: 5),
+            Image.asset('images/coin.png', height: 20),
+          ],
+        ),
       ),
+      onTap: () {
+        CommonFunction.alertDialog(
+          context: context,
+          msg: 'You can buy life from 100 points.',
+          doneButtonText: 'Yes take it',
+          type: 'success',
+          title: 'Oh Yeah ..',
+          barrierDismissible: false,
+          showCancelButton: true,
+          doneButtonFn: () {
+            _getLife(context);
+          },
+        );
+      },
     );
+  }
+
+  static _getLife(BuildContext context) async {
+    Map<String, dynamic> data = {'mht_id': CacheData.userInfo.mhtId};
+    Response res = await _api.postApi(data: data, url: '/req_life');
+    AppResponse appResponse =
+        ResponseParser.parseResponse(context: context, res: res);
+    if (appResponse.status == WSConstant.SUCCESS_CODE) {
+      // TODO : IMPLEMENT res
+    }
   }
 
   static displayErrorDialog({@required BuildContext context, String msg}) {
@@ -194,6 +228,7 @@ class CommonFunction {
     String doneButtonText = 'Okeh...',
     Function doneButtonFn,
     bool barrierDismissible = true,
+    bool showCancelButton = false,
     AlertDialog Function() builder,
   }) {
     showDialog(
@@ -263,6 +298,29 @@ class CommonFunction {
                             Navigator.pop(context);
                           },
                   ),
+                  showCancelButton ? SizedBox(width: 10) : new Container(),
+                  showCancelButton
+                      ? FlatButton(
+                          padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+                          color: kQuizErrorRed,
+                          child: Row(
+                            children: <Widget>[
+                              Text(
+                                "Cancel",
+                                textScaleFactor: 1.2,
+                                style: TextStyle(
+                                  color: kQuizBackgroundWhite,
+                                ),
+                              )
+                            ],
+                          ),
+                          onPressed: doneButtonFn != null
+                              ? doneButtonFn
+                              : () {
+                                  Navigator.pop(context);
+                                },
+                        )
+                      : new Container(),
                 ],
               ),
             ],
