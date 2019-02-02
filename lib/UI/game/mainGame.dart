@@ -9,6 +9,7 @@ import 'package:kon_banega_mokshadhipati/model/appresponse.dart';
 import 'package:kon_banega_mokshadhipati/model/cacheData.dart';
 import 'package:kon_banega_mokshadhipati/model/current_stat.dart';
 import 'package:kon_banega_mokshadhipati/model/question.dart';
+import 'package:kon_banega_mokshadhipati/model/user_score_state.dart';
 import 'package:kon_banega_mokshadhipati/model/userinfo.dart';
 import 'package:kon_banega_mokshadhipati/model/validateQuestion.dart';
 import 'package:kon_banega_mokshadhipati/utils/response_parser.dart';
@@ -275,9 +276,9 @@ class MainGamePageState extends BaseState<MainGamePage> {
       AppResponse appResponse =
           ResponseParser.parseResponse(context: context, res: res);
       if (appResponse.status == WSConstant.SUCCESS_CODE) {
-        UserInfo userInfo = UserInfo.fromJson(appResponse.data);
+        UserScoreState userScoreState = UserScoreState.fromJson(appResponse.data);
         setState(() {
-          CacheData.userInfo = userInfo;
+          userScoreState.updateSessionScore();
         });
         SharedPreferences pref = await SharedPreferences.getInstance();
         pref.setString('user_info', res.body);
