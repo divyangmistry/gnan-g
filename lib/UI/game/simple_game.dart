@@ -31,17 +31,17 @@ class SimpleGameState extends State<SimpleGame> {
   CurrentState currentState;
   bool isCompletedLevel = false;
   SimpleGameState(int level) {
-    if (CacheData.userState.currentStat.lives != null)
-      userLives = CacheData.userState.currentStat.lives;
+    if (CacheData.userState.lives != null)
+      userLives = CacheData.userState.lives;
     print('USER LIVES :::::::::');
     print(userLives);
     _loadAllQuestions(level);
   }
 
   _loadAllQuestions(int level) {
-    currentState = CacheData.userState.currentStat;
+    currentState = CacheData.userState.currentState;
     _api
-        .getQuestions(level: level, from: 0, to: currentState.totalQues)
+        .getQuestions(level: level, from: 0, to: currentState.totalQuestions)
         .then((res) {
       setState(() {
         if (res.statusCode == 200) {

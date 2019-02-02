@@ -56,7 +56,7 @@ class NewLevelPageState extends State<NewLevelPage> {
                 ),
                 CommonFunction.pointsUI(
                   context: context,
-                  point: CacheData.userInfo.totalscore.toString(),
+                  point: CacheData.userState.totalscore.toString(),
                 ),
               ],
             ),

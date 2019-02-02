@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:kon_banega_mokshadhipati/Service/apiservice.dart';
-import 'package:kon_banega_mokshadhipati/UI/game/answer_response_dialog.dart';
 import 'package:kon_banega_mokshadhipati/UI/widgets/base_state.dart';
 import 'package:kon_banega_mokshadhipati/constans/wsconstants.dart';
 import 'package:kon_banega_mokshadhipati/model/appresponse.dart';
@@ -51,13 +50,15 @@ class MainGamePageState extends BaseState<MainGamePage> {
 
   _loadData() {
     isLoading = true;
-    currentState = CacheData.userState.currentStat;
+    currentState = CacheData.userState.currentState;
+    print('currentState ::::::::: ');
+    print(currentState);
     _loadAllQuestions(widget.level.levelIndex);
   }
 
   _loadAllQuestions(int level) async {
     Response res =
-        await _api.getQuestions(level: level, from: currentState.queSt);
+        await _api.getQuestions(level: level, from: currentState.questionSt);
     AppResponse appResponse =
         ResponseParser.parseResponse(context: context, res: res);
     if (appResponse.status == 200) {
@@ -328,7 +329,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
         Container(
           child: CommonFunction.pointsUI(
             context: context,
-            point: CacheData.userInfo.totalscore.toString(),
+            point: CacheData.userState.totalscore.toString(),
           ),
         ),
       ],

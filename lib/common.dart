@@ -314,11 +314,9 @@ class CommonFunction {
                               )
                             ],
                           ),
-                          onPressed: doneButtonFn != null
-                              ? doneButtonFn
-                              : () {
-                                  Navigator.pop(context);
-                                },
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
                         )
                       : new Container(),
                 ],

@@ -87,8 +87,8 @@ class LevelCardRow extends StatelessWidget {
                   style: TextStyle(color: kQuizMain50),
                 ),
                 new Text(
-                  levelDetails.totalPoints != null
-                      ? levelDetails.totalPoints.toString()
+                  levelDetails.totalscores != null
+                      ? levelDetails.totalscores.toString()
                       : "",
                   style: TextStyle(color: kQuizMain400),
                 ),
