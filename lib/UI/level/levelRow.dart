@@ -108,7 +108,7 @@ class LevelCardRow extends StatelessWidget {
         onTap: () {
           print('LEVEL DETAILS :: ');
           print(levelDetails);
-          if (CacheData.userInfo.lives > 0) {
+          if (CacheData.userState.lives > 0) {
             Navigator.push(
               context,
               MaterialPageRoute(
@@ -118,7 +118,7 @@ class LevelCardRow extends StatelessWidget {
               ),
             );
           } else {
-            if (CacheData.userInfo.totalscore > 100) {
+            if (CacheData.userState.totalscore > 100) {
               CommonFunction.alertDialog(
                 context: context,
                 msg:

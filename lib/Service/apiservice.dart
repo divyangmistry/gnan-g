@@ -116,6 +116,37 @@ class ApiService {
     return res;
   }
 
+  Future<http.Response> requestLife({@required int mhtId}) async {
+    Map<String, dynamic> data = {'mht_id': mhtId};
+    http.Response res = await postApi(url: '/req_life', data: data);
+    return res;
+  }
+
+  Future<http.Response> hintTaken({
+    @required int questionId,
+    @required int mhtId,
+  }) async {
+    Map<String, dynamic> data = {"question_id": questionId, "mht_id": mhtId};
+    http.Response res = await postApi(url: '/hint_question', data: data);
+    return res;
+  }
+
+  Future<http.Response> validateAnswer({
+    @required int questionId,
+    @required int mhtId,
+    @required answer,
+    @required int level,
+  }) async {
+    Map<String, dynamic> data = {
+      "question_id": questionId,
+      "mht_id": mhtId,
+      "answer": answer,
+      "level": 1
+    };
+    http.Response res = await postApi(url: '/validate_answer', data: data);
+    return res;
+  }
+
   // Logout
   Future<void> logout() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();

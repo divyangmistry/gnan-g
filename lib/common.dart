@@ -200,8 +200,7 @@ class CommonFunction {
   }
 
   static _getLife(BuildContext context) async {
-    Map<String, dynamic> data = {'mht_id': CacheData.userInfo.mhtId};
-    Response res = await _api.postApi(data: data, url: '/req_life');
+    Response res = await _api.requestLife(mhtId: CacheData.userInfo.mhtId);
     AppResponse appResponse =
         ResponseParser.parseResponse(context: context, res: res);
     if (appResponse.status == WSConstant.SUCCESS_CODE) {

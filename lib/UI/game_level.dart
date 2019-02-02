@@ -230,11 +230,11 @@ class GameLevelPageState extends State<GameLevelPage> {
             new Row(
               children: <Widget>[
                 _scoreData(
-                    'Points', '\$' + CacheData.userInfo.totalscore.toString()),
+                    'Points', '\$' + CacheData.userState.totalscore.toString()),
                 CustomVerticalDivider(height: 60),
                 _scoreData('Rank', '4th'),
                 CustomVerticalDivider(height: 60),
-                _scoreData('Lives', CacheData.userInfo.lives.toString()),
+                _scoreData('Lives', CacheData.userState.lives.toString()),
               ],
             ),
           ],

@@ -42,11 +42,7 @@ class LeaderBoardState extends State<LeaderBoard> {
         });
       }
     } catch (err) {
-      CommonFunction.alertDialog(
-        context: context,
-        msg: err.toString(),
-        barrierDismissible: false,
-      );
+      CommonFunction.displayErrorDialog(context: context, msg: err.toString());
     }
   }
 

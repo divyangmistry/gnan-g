@@ -30,7 +30,7 @@ class MainGamePage extends StatefulWidget {
 class MainGamePageState extends BaseState<MainGamePage> {
   bool clickAns = false;
   List<bool> option = [false, false, false, false];
-  int userLives = CacheData.userInfo.lives;
+  int userLives = CacheData.userState.lives;
   bool trueAnswer = false;
   List<Question> questions;
   Question question;
@@ -100,13 +100,12 @@ class MainGamePageState extends BaseState<MainGamePage> {
 
   void _onOptionSelect({int index, String answer}) async {
     try {
-      Map<String, dynamic> data = {
-        "question_id": question.questionId,
-        "mht_id": CacheData.userInfo.mhtId,
-        "answer": answer,
-        "level": 1
-      };
-      Response res = await _api.postApi(url: '/validate_answer', data: data);
+      Response res = await _api.validateAnswer(
+        questionId: question.questionId,
+        mhtId: CacheData.userInfo.mhtId,
+        answer: answer,
+        level: 1,
+      );
       AppResponse appResponse =
           ResponseParser.parseResponse(context: context, res: res);
       if (appResponse.status == WSConstant.SUCCESS_CODE) {
@@ -116,8 +115,8 @@ class MainGamePageState extends BaseState<MainGamePage> {
         if (validateQuestion.answerStatus) {
           setState(() {
             userLives = validateQuestion.lives;
-            CacheData.userInfo.lives = userLives;
-            CacheData.userInfo.totalscore = validateQuestion.totalscore;
+            CacheData.userState.lives = userLives;
+            CacheData.userState.totalscore = validateQuestion.totalscore;
           });
           isGivenCorrectAns = true;
           Flame.audio.play('music/party_horn-Mike_Koenig-76599891.mp3');
@@ -145,8 +144,8 @@ class MainGamePageState extends BaseState<MainGamePage> {
           isGivenCorrectAns = false;
           setState(() {
             userLives = validateQuestion.lives;
-            CacheData.userInfo.lives = userLives;
-            CacheData.userInfo.totalscore = validateQuestion.totalscore;
+            CacheData.userState.lives = userLives;
+            CacheData.userState.totalscore = validateQuestion.totalscore;
           });
           if (userLives == 1) {
             CommonFunction.alertDialog(
@@ -271,11 +270,8 @@ class MainGamePageState extends BaseState<MainGamePage> {
 
   void _getHint() async {
     try {
-      Map<String, dynamic> data = {
-        "question_id": question.questionId,
-        "mht_id": CacheData.userInfo.mhtId
-      };
-      Response res = await _api.postApi(url: '/hint_question', data: data);
+      Response res = await _api.hintTaken(
+          questionId: question.questionId, mhtId: CacheData.userInfo.mhtId);
       AppResponse appResponse =
           ResponseParser.parseResponse(context: context, res: res);
       if (appResponse.status == WSConstant.SUCCESS_CODE) {
