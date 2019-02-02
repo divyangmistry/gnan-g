@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart';
 import 'package:kon_banega_mokshadhipati/constans/sharedpref_constant.dart';
+import 'package:kon_banega_mokshadhipati/model/cacheData.dart';
 import 'package:kon_banega_mokshadhipati/model/signupsession.dart';
 import 'package:meta/meta.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -14,10 +15,6 @@ class ApiService {
 
   Map<String, String> headers = {'content-type': 'application/json'};
   bool enableMock = false;
-
-  ApiService() {
-    checkLogin();
-  }
 
   checkLogin() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
@@ -33,6 +30,7 @@ class ApiService {
   ///
   /// * [url] - API endpoint url e.g. : '/login'
   Future<http.Response> getApi({@required String url}) async {
+    await checkLogin();
     http.Response res = await http.get(_apiUrl + url, headers: headers);
     return res;
   }
@@ -58,10 +56,12 @@ class ApiService {
   /// * [token] - For authenticate api
   appendTokenToHeader(token) {
     headers['x-access-token'] = token;
+    headers['mht_id'] = CacheData.userInfo.mhtId.toString();
     print(headers);
   }
 
-  Future<http.Response> validateUser({@required String mhtId,@required String mobileNo}) async {
+  Future<http.Response> validateUser(
+      {@required String mhtId, @required String mobileNo}) async {
     Map<String, dynamic> data = {'mht_id': mhtId, 'mobile': mobileNo};
     Response res = await postApi(url: '/validate_user', data: data);
     return res;
@@ -74,8 +74,8 @@ class ApiService {
     return res;
   }
 
-
-  Future<http.Response> updatePassword({@required int mhtId, @required String password}) async {
+  Future<http.Response> updatePassword(
+      {@required int mhtId, @required String password}) async {
     Map<String, dynamic> data = {'mht_id': mhtId, 'password': password};
     Response res = await postApi(url: '/update_password', data: data);
     return res;
@@ -86,7 +86,6 @@ class ApiService {
     Response res = await postApi(url: '/update_password', data: data);
     return res;
   }
-
 
   // Edit Profile
   Future<http.Response> profileUpdate(data) async {
@@ -101,15 +100,16 @@ class ApiService {
     return res;
   }
 
-  Future<http.Response> login({@required String mhtId, @required String password}) async {
+  Future<http.Response> login(
+      {@required String mhtId, @required String password}) async {
     Map<String, dynamic> data = {'mht_id': mhtId, 'password': password};
     http.Response res = await postApi(url: '/login', data: data);
     return res;
   }
 
-
   // Get Question Detail
-  Future<http.Response> getQuestions({@required int level, int from, int to}) async {
+  Future<http.Response> getQuestions(
+      {@required int level, int from, int to}) async {
     var data;
     data = {'level': level, 'QuestionFrom': from};
     http.Response res = await postApi(url: '/questions', data: data);

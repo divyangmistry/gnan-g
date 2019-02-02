@@ -1,5 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:http/http.dart';
+import 'package:kon_banega_mokshadhipati/Service/apiservice.dart';
+import 'package:kon_banega_mokshadhipati/common.dart';
+import 'package:kon_banega_mokshadhipati/constans/wsconstants.dart';
+import 'package:kon_banega_mokshadhipati/model/appresponse.dart';
+import 'package:kon_banega_mokshadhipati/model/cacheData.dart';
+import 'package:kon_banega_mokshadhipati/model/leaders.dart';
+import 'package:kon_banega_mokshadhipati/utils/response_parser.dart';
 import '../colors.dart';
 
 class LeaderBoard extends StatefulWidget {
@@ -8,50 +16,101 @@ class LeaderBoard extends StatefulWidget {
 }
 
 class LeaderBoardState extends State<LeaderBoard> {
-  Container _buildLeaderRow(
-      int rank, String name, int points, IconData icon, String imagePath) {
-    return Container(
-      padding: EdgeInsets.all(16),
-      child: Row(
-        children: <Widget>[
-          Text(
-            rank.toString(),
-            style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
-          ),
-          Container(
-            padding: EdgeInsets.fromLTRB(18, 0, 12, 0),
-            child: Container(
-              width: 50,
-              height: 50,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: kQuizMain50,
-                image: DecorationImage(
-                  fit: BoxFit.fill,
-                  image: AssetImage(imagePath),
+  
+  ApiService _api = new ApiService();
+  
+  List<Leaders> leaderList;
+  int _userRank = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadLeadersAndRank();
+  }
+
+  _loadLeadersAndRank() async {
+    try {
+      Response res = await _api.getApi(url: '/leaders');
+      AppResponse appResponse =
+          ResponseParser.parseResponse(context: context, res: res);
+      if (appResponse.status == WSConstant.SUCCESS_CODE) {
+        LeaderList leaders = LeaderList.fromJson(appResponse.data);
+        setState(() {
+          leaderList = leaders.leaders;
+          print(leaderList);
+          _userRank = leaders.userRank;
+        });
+      }
+    } catch (err) {
+      CommonFunction.alertDialog(
+        context: context,
+        msg: err.toString(),
+        barrierDismissible: false,
+      );
+    }
+  }
+
+  Widget _buildLeaderRow(int rank, String name, int points, IconData icon,
+      String imagePath, int mhtId) {
+    return Column(
+      children: <Widget>[
+        Container(
+          padding: EdgeInsets.all(16),
+          child: Row(
+            children: <Widget>[
+              Text(
+                rank.toString(),
+                style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+              ),
+              CacheData.userInfo.mhtId == mhtId
+                  ? Padding(
+                      padding: EdgeInsets.fromLTRB(18, 0, 12, 0),
+                      child: CircleAvatar(
+                        backgroundColor: kQuizBrown900,
+                        minRadius: 25,
+                        child: CircleAvatar(
+                          minRadius: 22,
+                          backgroundImage: AssetImage(imagePath),
+                        ),
+                      ),
+                    )
+                  : Container(
+                      padding: EdgeInsets.fromLTRB(18, 0, 12, 0),
+                      child: Container(
+                        width: 50,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: kQuizMain50,
+                          image: DecorationImage(
+                            fit: BoxFit.fill,
+                            image: AssetImage(imagePath),
+                          ),
+                        ),
+                      ),
+                    ),
+              Expanded(
+                child: Text(
+                  name,
+                  style: TextStyle(fontSize: 18),
                 ),
               ),
-            ),
+              Container(
+                padding: EdgeInsets.fromLTRB(0, 0, 6, 0),
+                child: Text(
+                  points.toString(),
+                  style: TextStyle(fontSize: 32.0, fontWeight: FontWeight.bold),
+                ),
+              )
+            ],
           ),
-          Expanded(
-            child: Text(
-              name,
-              style: TextStyle(fontSize: 18),
-            ),
-          ),
-          Container(
-            padding: EdgeInsets.fromLTRB(0, 0, 6, 0),
-            child: Text(
-              points.toString(),
-              style: TextStyle(fontSize: 32.0, fontWeight: FontWeight.bold),
-            ),
-          )
-        ],
-      ),
+        ),
+        new Divider(),
+      ],
     );
   }
 
-  Container _buildUserRow(int rank, int points, String picPath) {
+  Widget _buildUserRow(int rank, int points, String picPath) {
     return Container(
       padding: EdgeInsets.all(16),
       child: Row(
@@ -65,15 +124,9 @@ class LeaderBoardState extends State<LeaderBoard> {
                 crossAxisAlignment: CrossAxisAlignment.baseline,
                 textBaseline: TextBaseline.alphabetic,
                 children: <Widget>[
+                  Rank(rank: _userRank),
                   Text(
-                    rank.toString(),
-                    style: TextStyle(
-                      fontSize: 32,
-                      color: kQuizSurfaceWhite,
-                    ),
-                  ),
-                  Text(
-                    getOrdinalOfNumber(rank),
+                    getOrdinalOfNumber(_userRank),
                     style: TextStyle(
                       color: kQuizSurfaceWhite,
                     ),
@@ -155,31 +208,48 @@ class LeaderBoardState extends State<LeaderBoard> {
               ),
             ),
           ),
-          _buildUserRow(1, 83456, 'image/face.jpg')
+          _buildUserRow(1, CacheData.userState.totalscore, 'image/face.jpg')
         ],
       ),
     );
+    return leaderList != null
+        ? new Scaffold(
+            appBar: AppBar(
+              bottom: PreferredSize(
+                  child: topSection, preferredSize: Size(100, 100)),
+              backgroundColor: kQuizMain400,
+            ),
+            body: ListView.builder(
+              itemCount: leaderList.length,
+              itemBuilder: (BuildContext context, int index) {
+                return _buildLeaderRow(
+                  index + 1,
+                  leaderList[index].name,
+                  leaderList[index].totalscore,
+                  Icons.face,
+                  'images/rank2.jpg',
+                  leaderList[index].mhtId,
+                );
+              },
+            ),
+          )
+        : new Scaffold(
+            body: new Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
+  }
+}
 
-    Widget leaderSection = Column(
-      children: <Widget>[
-        _buildLeaderRow(1, "If we have a very long name ", 83456, Icons.face,
-            'images/face.jpg'),
-        Divider(),
-        _buildLeaderRow(2, "Nikola Tesla", 83, Icons.face, 'images/rank2.jpg'),
-        Divider(),
-        _buildLeaderRow(3, "MBA", 56, Icons.face, 'images/rank3.jpg'),
-      ],
-    );
+class Rank extends StatelessWidget {
+  Rank({Key key, this.rank: 0}) : super(key: key);
 
-    debugPaintSizeEnabled = false;
-    return new Scaffold(
-      appBar: AppBar(
-        bottom: PreferredSize(child: topSection, preferredSize: Size(100, 100)),
-        backgroundColor: kQuizMain400,
-      ),
-      body: ListView(
-        children: <Widget>[leaderSection],
-      ),
+  final int rank;
+
+  Widget build(BuildContext context) {
+    return Text(
+      rank.toString(),
+      style: TextStyle(fontSize: 32, color: Colors.white),
     );
   }
 }
