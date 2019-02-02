@@ -53,7 +53,6 @@ class ApiService {
   /// * [token] - For authenticate api
   appendTokenToHeader(token) {
     headers['x-access-token'] = token;
-    print(headers);
   }
 
   // Login

@@ -7,16 +7,16 @@ import '../colors.dart';
 
 class LeaderBoard extends StatefulWidget {
   @override
-  LeaderBoardState createState() => new LeaderBoardState();
+  _LeaderBoardState createState() => new _LeaderBoardState();
 }
 
-class LeaderBoardState extends State<LeaderBoard> {
+class _LeaderBoardState extends State<LeaderBoard> {
   ApiService _api = new ApiService();
   final List leaders = [];
-  int userRank = 0;
-  int userScore = 0;
+  int _userRank = 0;
+  int _userScore = 0;
 
-  LeaderBoardState() {
+  _LeaderBoardState() {
     _loadLeadersAndRank();
   }
 
@@ -25,9 +25,11 @@ class LeaderBoardState extends State<LeaderBoard> {
     _api
         .getLeadersApi('99999')
         .then((res) {
-          Map resBody = json.decode(res.body);
-          debugPrint("Response: " + resBody.toString());
-          userRank = resBody["data"]["userRank"];
+      Map resBody = json.decode(res.body);
+      debugPrint("Response: " + resBody.toString());
+      setState(() {
+        _userRank = resBody["data"]["userRank"];
+      });
     });
   }
 
@@ -101,14 +103,8 @@ class LeaderBoardState extends State<LeaderBoard> {
                 crossAxisAlignment: CrossAxisAlignment.baseline,
                 textBaseline: TextBaseline.alphabetic,
                 children: <Widget>[
-                  Text(
-                    rank.toString(),
-                    style: TextStyle(
-                      fontSize: 32,
-                      color: Colors.white
-                    ),
-                  ),
-                  Text(getOrdinalOfNumber(rank),
+                  Rank(rank: _userRank),
+                  Text(getOrdinalOfNumber(_userRank),
                     style: TextStyle(
                         color: Colors.white
                     ),)
@@ -119,19 +115,19 @@ class LeaderBoardState extends State<LeaderBoard> {
 //          Expanded(
 //            flex: 33,
 //            child:
-            Container(
+          Container(
 //                padding: EdgeInsets.symmetric(horizontal: 36),
-              width: 64,
-              height: 64,
-              decoration: BoxDecoration(
+            width: 64,
+            height: 64,
+            decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: Colors.white54,
                 image: DecorationImage(
                   fit: BoxFit.fill,
                   image: AssetImage('images/face.jpg')
                 )
-              ),
             ),
+          ),
 //          ),
           Expanded(
             flex: 33,
@@ -194,7 +190,7 @@ class LeaderBoardState extends State<LeaderBoard> {
               ),
             ),
           ),
-          _buildUserRow(userRank, userScore, 'image/face.jpg')
+          _buildUserRow(_userRank, _userScore, 'image/face.jpg')
         ],
       )
     );
@@ -222,6 +218,23 @@ class LeaderBoardState extends State<LeaderBoard> {
         ],
       ),
 //      ),
+    );
+  }
+}
+
+class Rank extends StatelessWidget {
+  Rank({Key key, this.rank: 0})
+      : super(key: key);
+
+  final int rank;
+
+  Widget build(BuildContext context) {
+    return Text(
+      rank.toString(),
+      style: TextStyle(
+          fontSize: 32,
+          color: Colors.white
+      ),
     );
   }
 }
