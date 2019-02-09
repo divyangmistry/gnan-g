@@ -40,6 +40,7 @@ import 'UI/game/simple_game.dart';
 import 'UI/others/terms&condition.dart';
 import 'model/cacheData.dart';
 import 'model/user_state.dart';
+import 'UI/game/pikachar.dart';
 
 import 'colors.dart';
 
@@ -50,7 +51,7 @@ class QuizApp extends StatefulWidget {
 
 class _QuizAppState extends State<QuizApp> {
   // Widget _defaultHome = new LoginPage();
-  Widget _defaultHome = new InroPage();
+  Widget _defaultHome = new Pikachar();
 
   ApiService _api = new ApiService();
 
