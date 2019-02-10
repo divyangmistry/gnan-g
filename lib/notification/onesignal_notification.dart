@@ -2,18 +2,19 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:kon_banega_mokshadhipati/common.dart';
+import 'package:kon_banega_mokshadhipati/model/userinfo.dart';
 import 'package:onesignal/onesignal.dart';
 
 class OneSignalNotification {
-  static final String ONESIGANL_APPID = "92246c90-f7d7-4a28-b765-11aa85b9e3f1";
-  static String _emailAddress;
-  static String _externalUserId;
+  static final String ONESIGANL_APPID = "92246c90-f7d7-4a28-b765-11aa85b9e3f1"; //Live
+  //static final String ONESIGANL_APPID = '4bbded36-e7f0-4794-89b7-fa69c84bad8d'; // Demo
 
   // CHANGE THIS parameter to true if you want to test GDPR privacy consent
   static bool _requireConsent = true;
 
   // Platform messages are asynchronous, so we initialize in an async method.
-  static Future<void> setupOneSignalNotification({BuildContext context}) async {
+  static Future<void> setupOneSignalNotification(
+      {BuildContext context, UserInfo userInfo}) async {
     //OneSignal.shared.setLogLevel(OSLogLevel.debug, OSLogLevel.debug);
     try {
       OneSignal.shared.setRequiresUserPrivacyConsent(_requireConsent);
@@ -64,16 +65,46 @@ class OneSignalNotification {
         print(playerId);
       });
 
-      bool requiresConsent =
-          await OneSignal.shared.requiresUserPrivacyConsent();
+      if (userInfo != null) {
+        Map<String, dynamic> tags = Map();
+        tags['mhtId'] = userInfo.mhtId;
+        tags['mobile'] = userInfo.mobile;
+        tags['name'] = userInfo.name;
+        _sendTags(tags);
+        if (userInfo.mhtId != null)
+          _setExternalUserId(userInfo.mhtId.toString());
+      }
+      //bool requiresConsent = await OneSignal.shared.requiresUserPrivacyConsent();
     } catch (err) {
       print(err);
       if (context != null) {
         print('CATCH :: ');
         print(err);
-        CommonFunction.displayErrorDialog(context: context, msg: err.toString());
+        CommonFunction.displayErrorDialog(
+            context: context, msg: err.toString());
       }
     }
+  }
+
+  static void _setEmail(String emailAddress) {
+    if (emailAddress == null) return;
+    OneSignal.shared.setEmail(email: emailAddress).whenComplete(() {
+      print("Successfully set email");
+    }).catchError((error) {
+      print("Failed to set email with error: $error");
+    });
+  }
+
+  static void _sendTags(Map<String, dynamic> tags) {
+    OneSignal.shared.sendTags(tags).then((response) {
+      print("Successfully sent tags with response: $response");
+    }).catchError((error) {
+      print("Encountered an error sending tags: $error");
+    });
+  }
+
+  static void _setExternalUserId(String externalUserId) {
+    OneSignal.shared.setExternalUserId(externalUserId);
   }
 
   void _handleGetTags() {
@@ -82,15 +113,6 @@ class OneSignalNotification {
       print("$tags");
     }).catchError((error) {
       print("$error");
-    });
-  }
-
-  void _handleSendTags() {
-    print("Sending tags");
-    OneSignal.shared.sendTag("test2", "val2").then((response) {
-      print("Successfully sent tags with response: $response");
-    }).catchError((error) {
-      print("Encountered an error sending tags: $error");
     });
   }
 
@@ -105,18 +127,6 @@ class OneSignalNotification {
     print("Getting permissionSubscriptionState");
     OneSignal.shared.getPermissionSubscriptionState().then((status) {
       print(status.jsonRepresentation());
-    });
-  }
-
-  void _handleSetEmail() {
-    if (_emailAddress == null) return;
-
-    print("Setting email");
-
-    OneSignal.shared.setEmail(email: _emailAddress).whenComplete(() {
-      print("Successfully set email");
-    }).catchError((error) {
-      print("Failed to set email with error: $error");
     });
   }
 

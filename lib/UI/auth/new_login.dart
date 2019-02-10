@@ -228,7 +228,7 @@ class LoginPageState extends State<LoginPage> {
           pref.setBool(SharedPrefConstant.b_isUserLoggedIn, true);
           print(userInfo);
           _api.appendTokenToHeader(userInfo.token);
-          NotificationSetup.setupNotification();
+          NotificationSetup.setupNotification(userInfo: userInfo);
           _loadUserState(int.parse(this._mhtId));
         }
       } catch (err) {
