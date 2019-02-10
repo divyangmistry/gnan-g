@@ -276,7 +276,8 @@ class MainGamePageState extends BaseState<MainGamePage> {
       AppResponse appResponse =
           ResponseParser.parseResponse(context: context, res: res);
       if (appResponse.status == WSConstant.SUCCESS_CODE) {
-        UserScoreState userScoreState = UserScoreState.fromJson(appResponse.data);
+        UserScoreState userScoreState =
+            UserScoreState.fromJson(appResponse.data);
         setState(() {
           userScoreState.updateSessionScore();
         });

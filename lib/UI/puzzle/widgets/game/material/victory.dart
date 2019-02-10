@@ -72,27 +72,27 @@ class GameVictoryDialog extends StatelessWidget {
       ),
       actions: <Widget>[
         // usually buttons at the bottom of the dialog
+        // new FlatButton(
+        //   child: new Text("Leaderboard"),
+        //   onPressed: () {
+        //     final playGames = PlayGamesContainer.of(context);
+        //     playGames.showLeaderboard(
+        //       key: PlayGames.getLeaderboardOfSize(result.size),
+        //     );
+        //   },
+        // ),
+        // new FlatButton(
+        //   child: new Text("Share"),
+        //   onPressed: () {
+        //     Share.share("I have solved the Game of Fifteen's "
+        //         "${result.size}x${result.size} puzzle in $timeFormatted "
+        //         "with just ${result.steps} steps! Check it out: $URL_REPOSITORY");
+        //   },
+        // ),
         new FlatButton(
-          child: new Text("Leaderboard"),
+          child: new Text("Voo Hoo, YOU DID IT !"),
           onPressed: () {
-            final playGames = PlayGamesContainer.of(context);
-            playGames.showLeaderboard(
-              key: PlayGames.getLeaderboardOfSize(result.size),
-            );
-          },
-        ),
-        new FlatButton(
-          child: new Text("Share"),
-          onPressed: () {
-            Share.share("I have solved the Game of Fifteen's "
-                "${result.size}x${result.size} puzzle in $timeFormatted "
-                "with just ${result.steps} steps! Check it out: $URL_REPOSITORY");
-          },
-        ),
-        new FlatButton(
-          child: new Text("Close"),
-          onPressed: () {
-            Navigator.of(context).pop();
+            Navigator.of(context).popAndPushNamed('/level_new');
           },
         ),
       ],

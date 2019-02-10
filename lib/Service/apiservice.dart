@@ -122,6 +122,20 @@ class ApiService {
     return res;
   }
 
+  // Puzzle Completed
+  Future<http.Response> puzzleCompleted(
+      {@required int mhtId,
+      @required String puzzle_type,
+      @required String puzzle_name}) async {
+    Map<String, dynamic> data = {
+      'mht_id': mhtId,
+      'puzzle_type': puzzle_type,
+      'puzzle_name': puzzle_name
+    };
+    http.Response res = await postApi(url: '/puzzle_completed', data: data);
+    return res;
+  }
+
   Future<http.Response> hintTaken({
     @required int questionId,
     @required int mhtId,

@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'dart:convert';
 
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:kon_banega_mokshadhipati/Service/apiservice.dart';
@@ -7,21 +9,34 @@ import 'package:kon_banega_mokshadhipati/UI/auth/new_login.dart';
 import 'package:kon_banega_mokshadhipati/UI/intro/intro.dart';
 import 'package:kon_banega_mokshadhipati/UI/level/levelList.dart';
 import 'package:kon_banega_mokshadhipati/app.dart';
+import 'package:kon_banega_mokshadhipati/common.dart';
 import 'package:kon_banega_mokshadhipati/constans/wsconstants.dart';
 import 'package:kon_banega_mokshadhipati/model/cacheData.dart';
 import 'package:kon_banega_mokshadhipati/model/user_state.dart';
 import 'package:kon_banega_mokshadhipati/model/userinfo.dart';
+import 'package:kon_banega_mokshadhipati/no-internet-page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 ApiService _api = new ApiService();
 Widget _defaultHome = new LoginPage();
+StreamSubscription<ConnectivityResult> _subscription;
 
 void main() async {
-  await _checkLoginStatus();
+  Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
+    print(result);
+    if (result == ConnectivityResult.none) {
+      print(' ------> inside NO internet ! <------');
+      _defaultHome = NoInternetPage();
+    } else {
+      _checkLoginStatus();
+    }
+  });
+  // await _checkLoginStatus();
   runApp(QuizApp(defaultHome: _defaultHome));
 }
 
 _checkLoginStatus() async {
+  print(' ------> inside internet <------');
   SharedPreferences prefs = await SharedPreferences.getInstance();
   bool _isLogin = prefs.getBool('b_isUserLoggedIn') == null
       ? false
@@ -53,4 +68,8 @@ _loadUserState(int mhtId) async {
     print('CATCH 2 :: ERROR IN MAIN :: ');
     print(err);
   }
+}
+
+dispose() {
+  _subscription.cancel();
 }
