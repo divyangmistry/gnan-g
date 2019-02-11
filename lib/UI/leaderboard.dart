@@ -8,6 +8,7 @@ import 'package:kon_banega_mokshadhipati/model/appresponse.dart';
 import 'package:kon_banega_mokshadhipati/model/cacheData.dart';
 import 'package:kon_banega_mokshadhipati/model/leaders.dart';
 import 'package:kon_banega_mokshadhipati/utils/response_parser.dart';
+
 import '../colors.dart';
 
 class LeaderBoard extends StatefulWidget {
@@ -85,6 +86,47 @@ class LeaderBoardState extends State<LeaderBoard> {
                         ),
                       ),
                     ),
+              Expanded(
+                child: Text(
+                  name,
+                  style: TextStyle(fontSize: 18),
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.fromLTRB(0, 0, 6, 0),
+                child: Text(
+                  points.toString(),
+                  style: TextStyle(fontSize: 32.0, fontWeight: FontWeight.bold),
+                ),
+              )
+            ],
+          ),
+        ),
+        new Divider(),
+      ],
+    );
+  }
+
+  Widget _buildCityRow(int rank, String name, int points, IconData icon,
+      String imagePath, int mhtId) {
+    return Column(
+      children: <Widget>[
+        Container(
+          padding: EdgeInsets.all(16),
+          child: Row(
+            children: <Widget>[
+              Text(
+                rank.toString(),
+                style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+              ),
+              Padding(
+                padding: EdgeInsets.fromLTRB(18, 0, 12, 0),
+                child: CircleAvatar(
+                  backgroundColor: kQuizBrown900,
+                  minRadius: 25,
+                  child: new Text(name[0]),
+                ),
+              ),
               Expanded(
                 child: Text(
                   name,
@@ -197,7 +239,7 @@ class LeaderBoardState extends State<LeaderBoard> {
           Container(
             padding: EdgeInsets.all(16),
             child: Text(
-              'Leaderboard',
+              'Players',
               style: TextStyle(
                 fontSize: 25,
                 color: kQuizSurfaceWhite,
@@ -208,32 +250,81 @@ class LeaderBoardState extends State<LeaderBoard> {
         ],
       ),
     );
-    return leaderList != null
+    Scaffold playerTab = leaderList != null
         ? new Scaffold(
-            appBar: AppBar(
-              bottom: PreferredSize(
-                  child: topSection, preferredSize: Size(100, 100)),
-              backgroundColor: kQuizMain400,
-            ),
-            body: ListView.builder(
-              itemCount: leaderList.length,
-              itemBuilder: (BuildContext context, int index) {
-                return _buildLeaderRow(
-                  index + 1,
-                  leaderList[index].name,
-                  leaderList[index].totalscore,
-                  Icons.face,
-                  'images/rank2.jpg',
-                  leaderList[index].mhtId,
-                );
-              },
-            ),
-          )
-        : new Scaffold(
-            body: new Center(
-              child: CircularProgressIndicator(),
-            ),
+      appBar: AppBar(
+        bottom: PreferredSize(
+            child: topSection, preferredSize: Size(100, 100)),
+        backgroundColor: kQuizMain400,
+      ),
+      body: ListView.builder(
+        itemCount: leaderList.length,
+        itemBuilder: (BuildContext context, int index) {
+          return _buildLeaderRow(
+            index + 1,
+            leaderList[index].name,
+            leaderList[index].totalscore,
+            Icons.face,
+            'images/rank2.jpg',
+            leaderList[index].mhtId,
           );
+        },
+      ),
+    )
+        : new Scaffold(
+      body: new Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
+    Scaffold cityTab = leaderList != null
+        ? new Scaffold(
+      appBar: AppBar(
+        bottom: PreferredSize(
+            child: topSection, preferredSize: Size(100, 100)),
+        backgroundColor: kQuizMain400,
+      ),
+      body: ListView.builder(
+        itemCount: leaderList.length,
+        itemBuilder: (BuildContext context, int index) {
+          return _buildCityRow(
+            index + 1,
+            leaderList[index].name,
+            leaderList[index].totalscore,
+            Icons.face,
+            'images/rank2.jpg',
+            leaderList[index].mhtId,
+          );
+        },
+      ),
+    )
+        : new Scaffold(
+      body: new Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
+    return MaterialApp(
+      home: DefaultTabController(
+        length: 2,
+        child: Scaffold(
+          appBar: AppBar(
+            bottom: TabBar(
+              tabs: [
+                Tab(icon: Icon(Icons.directions_car)),
+                Tab(icon: Icon(Icons.directions_transit))
+              ],
+            ),
+            title: Text('LeaderBoard'),
+          ),
+          body: TabBarView(
+            children: [
+              //Icon(Icons.directions_car),
+              playerTab,
+              cityTab
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
 
@@ -246,6 +337,34 @@ class Rank extends StatelessWidget {
     return Text(
       rank.toString(),
       style: TextStyle(fontSize: 32, color: Colors.white),
+    );
+  }
+}
+
+class TabPanel extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: DefaultTabController(
+        length: 2,
+        child: Scaffold(
+          appBar: AppBar(
+            bottom: TabBar(
+              tabs: [
+                Tab(icon: Icon(Icons.directions_car)),
+                Tab(icon: Icon(Icons.directions_transit))
+              ],
+            ),
+            title: Text('Tabs Demo'),
+          ),
+          body: TabBarView(
+            children: [
+              Icon(Icons.directions_car),
+              Icon(Icons.directions_transit)
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
