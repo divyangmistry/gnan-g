@@ -18,7 +18,7 @@ dependencies:
   shared_preferences: "0.4.3"
   http: "0.11.3+17"
   flame: "0.10.0"
-  onesignal: "1.0.0"
+  onesignal: "1.0.5"
   firebase_core:
   firebase_messaging: "0.2.1"
 
