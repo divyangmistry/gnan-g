@@ -4,6 +4,7 @@ import 'package:kon_banega_mokshadhipati/UI/game_level.dart';
 import 'package:kon_banega_mokshadhipati/UI/leaderboard.dart';
 import 'package:kon_banega_mokshadhipati/UI/profile.dart';
 import 'package:kon_banega_mokshadhipati/UI/puzzle/main.dart';
+import 'package:kon_banega_mokshadhipati/common.dart';
 import 'package:kon_banega_mokshadhipati/no-internet-page.dart';
 
 import 'UI/auth/forgot_password.dart';
@@ -32,24 +33,26 @@ class _QuizAppState extends State<QuizApp> {
   @override
   void initState() {
     super.initState();
-    checInternetConnection();
   }
 
-  checInternetConnection() {
+  checInternetConnection(BuildContext context) {
     Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
       print(result);
       if (result == ConnectivityResult.none) {
         print(' ------> inside NO internet !, inside APP.dart Page <------');
-        widget.defaultHome = NoInternetPage();
+        CommonFunction.alertDialog(
+            context: context, msg: 'NO INTERNNET CONNECTION !');
+        // widget.defaultHome = NoInternetPage();
       } else {
         print(' ------> inside internet !, inside APP.dart Page <------');
-        widget.defaultHome = LoginPage();
+        // widget.defaultHome = LoginPage();
       }
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    checInternetConnection(context);
     return MaterialApp(
       title: 'Quiz',
       home: widget.defaultHome,

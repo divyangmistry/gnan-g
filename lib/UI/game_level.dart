@@ -10,7 +10,6 @@ class GameLevelPage extends StatefulWidget {
 }
 
 class GameLevelPageState extends State<GameLevelPage> {
-  
   ApiService _api = new ApiService();
 
   @override
@@ -176,9 +175,15 @@ class GameLevelPageState extends State<GameLevelPage> {
     return Expanded(
       child: Column(
         children: <Widget>[
-          Icon(
-            icon,
-            size: 40.0,
+          IconButton(
+            icon: Icon(Icons.access_time),
+            onPressed: () {
+              print(' ----> SHOW USER DATA ! <----');
+
+              CommonFunction.alertDialog(
+                  context: context, msg: CacheData.userState.toString());
+            },
+            // size: 40.0,
             color: kQuizBrown900,
           ),
           SizedBox(

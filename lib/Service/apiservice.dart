@@ -56,7 +56,7 @@ class ApiService {
   /// * [token] - For authenticate api
   appendTokenToHeader(token) {
     headers['x-access-token'] = token;
-    headers['mht_id'] = CacheData.userInfo.mhtId.toString();
+    // headers['mht_id'] = CacheData.userInfo.mhtId.toString();
     print(headers);
   }
 

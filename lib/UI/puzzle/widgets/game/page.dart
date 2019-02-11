@@ -20,6 +20,7 @@ import 'package:kon_banega_mokshadhipati/utils/response_parser.dart';
 class GamePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    _puzzleCompletedApiCall(context);
     final rootWidget = _buildRoot(context);
     return GamePresenterWidget(
       child: rootWidget,
@@ -49,12 +50,15 @@ class GamePage extends StatelessWidget {
           mhtId: CacheData.userInfo.mhtId,
           puzzle_name: WSConstant.PUZZLE_NAME_GAME_OF_15,
           puzzle_type: WSConstant.PUZZLE_TYPE_GAME_OF_15_3);
-
+      print('----> $res inside page.dart <----');
       AppResponse appResponse =
           ResponseParser.parseResponse(res: res, context: context);
 
       if (appResponse.status == WSConstant.SUCCESS_CODE) {
-        UserScoreState.fromJson(appResponse.data).updateSessionScore();
+        UserScoreState userDATA = UserScoreState.fromJson(appResponse.data);
+        print('----> $userDATA inside page.dart <----');
+        userDATA.updateSessionScore();
+        // UserScoreState.fromJson(appResponse.data).updateSessionScore();
       }
     } catch (e) {}
   }

@@ -65,4 +65,5 @@ class UserInfo {
     data['token'] = this.token;
     return data;
   }
+
 }
