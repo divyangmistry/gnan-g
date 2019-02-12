@@ -11,6 +11,15 @@ class GameLevelPage extends StatefulWidget {
 
 class GameLevelPageState extends State<GameLevelPage> {
   ApiService _api = new ApiService();
+  bool _isloading = true;
+
+  GameLevelPageState() {
+    new Future.delayed(new Duration(seconds: 4), () {
+      setState(() {
+        _isloading = false;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,23 +27,26 @@ class GameLevelPageState extends State<GameLevelPage> {
       backgroundColor: kQuizSurfaceWhite,
       body: BackgroundGredient(
         child: new SafeArea(
-          child: new ListView(
-            padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 20.0),
-            children: <Widget>[
-              _gameBar(),
-              SizedBox(
-                height: 20.0,
-              ),
-              _userCard(),
-              SizedBox(
-                height: 20.0,
-              ),
-              _bonusRoundInfo(),
-              SizedBox(
-                height: 20.0,
-              ),
-              _bottomButtons(),
-            ],
+          child: CustomLoading(
+            isLoading: _isloading,
+            child: new ListView(
+              padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 20.0),
+              children: <Widget>[
+                _gameBar(),
+                SizedBox(
+                  height: 20.0,
+                ),
+                _userCard(),
+                SizedBox(
+                  height: 20.0,
+                ),
+                _bonusRoundInfo(),
+                SizedBox(
+                  height: 20.0,
+                ),
+                _bottomButtons(),
+              ],
+            ),
           ),
         ),
       ),

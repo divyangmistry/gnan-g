@@ -13,6 +13,7 @@ import 'package:SheelQuotient/model/userinfo.dart';
 import 'package:SheelQuotient/utils/response_parser.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'colors.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 // For override color for Form input
 class AccentColorOverride extends StatelessWidget {
@@ -76,17 +77,30 @@ class BackgroundGredient extends StatelessWidget {
 
 // App Loading Indicator
 class CustomLoading extends StatelessWidget {
+  final bool isLoading;
+  final Widget child;
+  CustomLoading({@required this.isLoading, @required this.child});
   @override
   Widget build(BuildContext context) {
-    return new Container(
-      child: Opacity(
-        opacity: 0.5,
-        child: Scaffold(
-          body: new Center(
-            child: new CircularProgressIndicator(),
-          ),
-        ),
-      ),
+    return new Stack(
+      children: <Widget>[
+        child,
+        isLoading ? new Stack(
+          children: [
+            new Opacity(
+              opacity: 0.5,
+              child:
+                  const ModalBarrier(dismissible: false, color: kQuizBrown900),
+            ),
+            new Center(
+              child: SpinKitThreeBounce(
+                color: kQuizBackgroundWhite,
+                size: 50.0,
+              ),
+            ),
+          ],
+        ) : new Container(),
+      ],
     );
   }
 }
@@ -321,6 +335,27 @@ class CommonFunction {
                 ],
               ),
             ],
+          ),
+        );
+      },
+    );
+  }
+
+  // common Alert dialog
+  static loadingDialog({@required BuildContext context}) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) {
+        return Theme(
+          data: ThemeData(
+            dialogBackgroundColor: Color(0xFFFFFF),
+          ),
+          child: AlertDialog(
+            content: SpinKitThreeBounce(
+              color: kQuizBackgroundWhite,
+              size: 50.0,
+            ),
           ),
         );
       },
