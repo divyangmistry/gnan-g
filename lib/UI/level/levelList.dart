@@ -86,8 +86,12 @@ class LevelList extends StatelessWidget {
         child: new ListView.builder(
           itemExtent: 160.0,
           itemCount: CacheData.userState.quizLevels.length,
-          itemBuilder: (_, index) =>
-              new LevelCardRow(CacheData.userState.quizLevels[index]),
+          itemBuilder: (_, index) {
+            print('CacheData.userState :: ');
+            print(CacheData.userState.currentState.level);
+            print(index + 1);
+            return new LevelCardRow(CacheData.userState.quizLevels[index], CacheData.userState.currentState.level == index + 1 ? false : true);
+          },
         ),
       ),
     );
