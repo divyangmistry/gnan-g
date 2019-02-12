@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:kon_banega_mokshadhipati/common.dart';
-import 'package:kon_banega_mokshadhipati/model/userinfo.dart';
+import 'package:SheelQuotient/common.dart';
+import 'package:SheelQuotient/model/userinfo.dart';
 import 'package:onesignal/onesignal.dart';
 
 class OneSignalNotification {

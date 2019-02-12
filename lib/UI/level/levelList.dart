@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kon_banega_mokshadhipati/model/cacheData.dart';
+import 'package:SheelQuotient/model/cacheData.dart';
 import '../../colors.dart';
 import 'levelRow.dart';
 import '../../common.dart';

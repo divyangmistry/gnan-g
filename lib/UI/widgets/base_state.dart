@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:kon_banega_mokshadhipati/colors.dart';
-import 'package:kon_banega_mokshadhipati/common.dart';
+import 'package:SheelQuotient/colors.dart';
+import 'package:SheelQuotient/common.dart';
 
 abstract class BaseState<T extends StatefulWidget> extends State<T> {
   bool isLoading;

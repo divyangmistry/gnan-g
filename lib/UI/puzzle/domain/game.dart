@@ -1,7 +1,7 @@
 import 'dart:math';
 
-import 'package:kon_banega_mokshadhipati/UI/puzzle/data/board.dart';
-import 'package:kon_banega_mokshadhipati/UI/puzzle/data/chip.dart';
+import 'package:SheelQuotient/UI/puzzle/data/board.dart';
+import 'package:SheelQuotient/UI/puzzle/data/chip.dart';
 import 'package:meta/meta.dart';
 
 abstract class Game {

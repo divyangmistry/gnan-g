@@ -2,11 +2,11 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
-import 'package:kon_banega_mokshadhipati/common.dart';
-import 'package:kon_banega_mokshadhipati/constans/appconstant.dart';
-import 'package:kon_banega_mokshadhipati/constans/message_constant.dart';
-import 'package:kon_banega_mokshadhipati/constans/wsconstants.dart';
-import 'package:kon_banega_mokshadhipati/model/appresponse.dart';
+import 'package:SheelQuotient/common.dart';
+import 'package:SheelQuotient/constans/appconstant.dart';
+import 'package:SheelQuotient/constans/message_constant.dart';
+import 'package:SheelQuotient/constans/wsconstants.dart';
+import 'package:SheelQuotient/model/appresponse.dart';
 
 class ResponseParser {
   static AppResponse parseResponse(

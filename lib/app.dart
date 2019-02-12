@@ -1,11 +1,11 @@
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
-import 'package:kon_banega_mokshadhipati/UI/game_level.dart';
-import 'package:kon_banega_mokshadhipati/UI/leaderboard.dart';
-import 'package:kon_banega_mokshadhipati/UI/profile.dart';
-import 'package:kon_banega_mokshadhipati/UI/puzzle/main.dart';
-import 'package:kon_banega_mokshadhipati/common.dart';
-import 'package:kon_banega_mokshadhipati/no-internet-page.dart';
+import 'package:SheelQuotient/UI/game_level.dart';
+import 'package:SheelQuotient/UI/leaderboard.dart';
+import 'package:SheelQuotient/UI/profile.dart';
+import 'package:SheelQuotient/UI/puzzle/main.dart';
+import 'package:SheelQuotient/common.dart';
+import 'package:SheelQuotient/no-internet-page.dart';
 
 import 'UI/auth/forgot_password.dart';
 import 'UI/auth/new_login.dart';
@@ -54,7 +54,7 @@ class _QuizAppState extends State<QuizApp> {
   Widget build(BuildContext context) {
     checInternetConnection(context);
     return MaterialApp(
-      title: 'Quiz',
+      title: 'Sheel Quotient',
       home: widget.defaultHome,
       theme: _kQuizTheme,
       routes: <String, WidgetBuilder>{

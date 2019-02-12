@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:kon_banega_mokshadhipati/UI/puzzle/data/result.dart';
-import 'package:kon_banega_mokshadhipati/UI/puzzle/links.dart';
-import 'package:kon_banega_mokshadhipati/UI/puzzle/play_games.dart';
-import 'package:kon_banega_mokshadhipati/UI/puzzle/widgets/game/format.dart';
+import 'package:SheelQuotient/UI/puzzle/data/result.dart';
+import 'package:SheelQuotient/UI/puzzle/links.dart';
+import 'package:SheelQuotient/UI/puzzle/play_games.dart';
+import 'package:SheelQuotient/UI/puzzle/widgets/game/format.dart';
 import 'package:share/share.dart';
 
 class GameVictoryDialog extends StatelessWidget {

@@ -2,14 +2,14 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:kon_banega_mokshadhipati/UI/puzzle/widgets/game/board.dart';
-import 'package:kon_banega_mokshadhipati/UI/puzzle/widgets/game/material/control.dart';
-import 'package:kon_banega_mokshadhipati/UI/puzzle/widgets/game/material/sheets.dart';
-import 'package:kon_banega_mokshadhipati/UI/puzzle/widgets/game/material/steps.dart';
-import 'package:kon_banega_mokshadhipati/UI/puzzle/widgets/game/material/stopwatch.dart';
-import 'package:kon_banega_mokshadhipati/UI/puzzle/widgets/game/presenter/main.dart';
-import 'package:kon_banega_mokshadhipati/UI/puzzle/widgets/icons/app.dart';
-import 'package:kon_banega_mokshadhipati/common.dart';
+import 'package:SheelQuotient/UI/puzzle/widgets/game/board.dart';
+import 'package:SheelQuotient/UI/puzzle/widgets/game/material/control.dart';
+import 'package:SheelQuotient/UI/puzzle/widgets/game/material/sheets.dart';
+import 'package:SheelQuotient/UI/puzzle/widgets/game/material/steps.dart';
+import 'package:SheelQuotient/UI/puzzle/widgets/game/material/stopwatch.dart';
+import 'package:SheelQuotient/UI/puzzle/widgets/game/presenter/main.dart';
+import 'package:SheelQuotient/UI/puzzle/widgets/icons/app.dart';
+import 'package:SheelQuotient/common.dart';
 
 class GameMaterialPage extends StatelessWidget {
   @override

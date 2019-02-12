@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:kon_banega_mokshadhipati/UI/puzzle/utils/serializable.dart';
+import 'package:SheelQuotient/UI/puzzle/utils/serializable.dart';
 
 class PointSerializableWrapper extends Point<int> implements Serializable {
   PointSerializableWrapper(Point<int> point) : super(point.x, point.y);

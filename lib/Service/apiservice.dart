@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart';
-import 'package:kon_banega_mokshadhipati/constans/sharedpref_constant.dart';
-import 'package:kon_banega_mokshadhipati/model/cacheData.dart';
-import 'package:kon_banega_mokshadhipati/model/signupsession.dart';
+import 'package:SheelQuotient/constans/sharedpref_constant.dart';
+import 'package:SheelQuotient/model/cacheData.dart';
+import 'package:SheelQuotient/model/signupsession.dart';
 import 'package:meta/meta.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;

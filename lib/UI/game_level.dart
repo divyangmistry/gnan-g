@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:kon_banega_mokshadhipati/Service/apiservice.dart';
-import 'package:kon_banega_mokshadhipati/model/cacheData.dart';
+import 'package:SheelQuotient/Service/apiservice.dart';
+import 'package:SheelQuotient/model/cacheData.dart';
 import '../common.dart';
 import '../colors.dart';
 

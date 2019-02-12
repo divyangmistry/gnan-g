@@ -1,8 +1,8 @@
 import 'dart:async';
-import 'package:kon_banega_mokshadhipati/UI/puzzle/widgets/game/format.dart';
+import 'package:SheelQuotient/UI/puzzle/widgets/game/format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:kon_banega_mokshadhipati/UI/puzzle/widgets/icons/stopwatch.dart';
+import 'package:SheelQuotient/UI/puzzle/widgets/icons/stopwatch.dart';
 
 /// Widget shows the current time of
 /// a game.

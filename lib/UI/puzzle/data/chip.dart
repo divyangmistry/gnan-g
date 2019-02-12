@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:kon_banega_mokshadhipati/UI/puzzle/utils/serializable.dart';
+import 'package:SheelQuotient/UI/puzzle/utils/serializable.dart';
 import 'package:meta/meta.dart';
 
 import 'point.dart';

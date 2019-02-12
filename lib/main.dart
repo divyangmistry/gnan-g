@@ -5,17 +5,17 @@ import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart';
-import 'package:kon_banega_mokshadhipati/Service/apiservice.dart';
-import 'package:kon_banega_mokshadhipati/UI/auth/new_login.dart';
-import 'package:kon_banega_mokshadhipati/UI/intro/intro.dart';
-import 'package:kon_banega_mokshadhipati/UI/level/levelList.dart';
-import 'package:kon_banega_mokshadhipati/app.dart';
-import 'package:kon_banega_mokshadhipati/common.dart';
-import 'package:kon_banega_mokshadhipati/constans/wsconstants.dart';
-import 'package:kon_banega_mokshadhipati/model/cacheData.dart';
-import 'package:kon_banega_mokshadhipati/model/user_state.dart';
-import 'package:kon_banega_mokshadhipati/model/userinfo.dart';
-import 'package:kon_banega_mokshadhipati/no-internet-page.dart';
+import 'package:SheelQuotient/Service/apiservice.dart';
+import 'package:SheelQuotient/UI/auth/new_login.dart';
+import 'package:SheelQuotient/UI/intro/intro.dart';
+import 'package:SheelQuotient/UI/level/levelList.dart';
+import 'package:SheelQuotient/app.dart';
+import 'package:SheelQuotient/common.dart';
+import 'package:SheelQuotient/constans/wsconstants.dart';
+import 'package:SheelQuotient/model/cacheData.dart';
+import 'package:SheelQuotient/model/user_state.dart';
+import 'package:SheelQuotient/model/userinfo.dart';
+import 'package:SheelQuotient/no-internet-page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 ApiService _api = new ApiService();
@@ -36,7 +36,7 @@ _checkLoginStatus() async {
   if (connectivityResult == ConnectivityResult.none) {
     print(' ------> inside NO internet ! <------');
     _defaultHome = NoInternetPage();
-  } else if (connectivityResult == ConnectivityResult.wifi) {
+  } else if (connectivityResult == ConnectivityResult.wifi || connectivityResult == ConnectivityResult.mobile) {
     print(' ------> inside internet <------');
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool _isLogin = prefs.getBool('b_isUserLoggedIn') == null

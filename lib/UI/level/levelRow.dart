@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:kon_banega_mokshadhipati/UI/game/mainGame.dart';
-import 'package:kon_banega_mokshadhipati/UI/puzzle/main.dart';
-import 'package:kon_banega_mokshadhipati/common.dart';
-import 'package:kon_banega_mokshadhipati/model/cacheData.dart';
+import 'package:SheelQuotient/UI/game/mainGame.dart';
+import 'package:SheelQuotient/UI/puzzle/main.dart';
+import 'package:SheelQuotient/common.dart';
+import 'package:SheelQuotient/model/cacheData.dart';
 import '../../colors.dart';
 import '../../model/quizlevel.dart';
 

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
-import 'package:kon_banega_mokshadhipati/constans/wsconstants.dart';
-import 'package:kon_banega_mokshadhipati/model/appresponse.dart';
-import 'package:kon_banega_mokshadhipati/utils/response_parser.dart';
+import 'package:SheelQuotient/constans/wsconstants.dart';
+import 'package:SheelQuotient/model/appresponse.dart';
+import 'package:SheelQuotient/utils/response_parser.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../model/signupsession.dart';
-import 'package:kon_banega_mokshadhipati/notification/notifcation_setup.dart';
+import 'package:SheelQuotient/notification/notifcation_setup.dart';
 import '../../colors.dart';
 import '../../common.dart';
 import '../../Service/apiservice.dart';

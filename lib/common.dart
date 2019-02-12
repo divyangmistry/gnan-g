@@ -2,15 +2,15 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
-import 'package:kon_banega_mokshadhipati/Service/apiservice.dart';
-import 'package:kon_banega_mokshadhipati/UI/puzzle/main.dart';
-import 'package:kon_banega_mokshadhipati/constans/appconstant.dart';
-import 'package:kon_banega_mokshadhipati/constans/message_constant.dart';
-import 'package:kon_banega_mokshadhipati/constans/wsconstants.dart';
-import 'package:kon_banega_mokshadhipati/model/appresponse.dart';
-import 'package:kon_banega_mokshadhipati/model/cacheData.dart';
-import 'package:kon_banega_mokshadhipati/model/userinfo.dart';
-import 'package:kon_banega_mokshadhipati/utils/response_parser.dart';
+import 'package:SheelQuotient/Service/apiservice.dart';
+import 'package:SheelQuotient/UI/puzzle/main.dart';
+import 'package:SheelQuotient/constans/appconstant.dart';
+import 'package:SheelQuotient/constans/message_constant.dart';
+import 'package:SheelQuotient/constans/wsconstants.dart';
+import 'package:SheelQuotient/model/appresponse.dart';
+import 'package:SheelQuotient/model/cacheData.dart';
+import 'package:SheelQuotient/model/userinfo.dart';
+import 'package:SheelQuotient/utils/response_parser.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'colors.dart';
 
