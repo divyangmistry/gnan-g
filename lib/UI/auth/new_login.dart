@@ -239,6 +239,10 @@ class LoginPageState extends State<LoginPage> {
           _api.appendTokenToHeader(userInfo.token);
           NotificationSetup.setupNotification(userInfo: userInfo);
           _loadUserState(int.parse(this._mhtId));
+        } else {
+          setState(() {
+            _isLoading = false;
+          });
         }
       } catch (err) {
         print('CATCH 1 :: ');
