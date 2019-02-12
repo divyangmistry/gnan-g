@@ -24,6 +24,7 @@ class LoginPage extends StatefulWidget {
 
 class LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
+  bool _isLoading = false;
   bool _autoValidate = false;
   bool _obscureText = true;
   ApiService _api = new ApiService();
@@ -37,99 +38,104 @@ class LoginPageState extends State<LoginPage> {
       autovalidate: _autoValidate,
       child: new Scaffold(
         backgroundColor: kQuizSurfaceWhite,
-        body: SafeArea(
-          child: new ListView(
-            padding: EdgeInsets.symmetric(horizontal: 30.0),
-            children: <Widget>[
-              new SizedBox(height: 40.0),
-              new Column(
-                children: <Widget>[
-                  new Image.asset(
-                    'images/logo1.png',
-                    height: 150,
-                  ),
-                  new SizedBox(height: 30.0),
-                  new Text(
-                    'SIGN IN',
-                    textScaleFactor: 1.5,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w800,
+        body: CustomLoading(
+          isLoading: _isLoading,
+          child: SafeArea(
+            child: new ListView(
+              padding: EdgeInsets.symmetric(horizontal: 30.0),
+              children: <Widget>[
+                new SizedBox(height: 40.0),
+                new Column(
+                  children: <Widget>[
+                    new Image.asset(
+                      'images/logo1.png',
+                      height: 150,
                     ),
-                  ),
-                ],
-              ),
-              new SizedBox(
-                height: 50.0,
-              ),
-              new AccentColorOverride(
-                color: kQuizBrown900,
-                child: new TextFormField(
-                  validator: CommonFunction.mhtIdValidation,
-                  decoration: InputDecoration(
-                    labelText: 'Mht Id',
-                    hintText: 'Enter Mht Id no.',
-                    prefixIcon: Icon(
-                      Icons.person_outline,
-                      color: kQuizBrown900,
-                    ),
-                    filled: true,
-                  ),
-                  onSaved: (String value) {
-                    _mhtId = value;
-                  },
-                  keyboardType: TextInputType.numberWithOptions(),
-                ),
-              ),
-              new SizedBox(height: 20.0),
-              new AccentColorOverride(
-                color: kQuizBrown900,
-                child: new TextFormField(
-                  validator: CommonFunction.passwordValidation,
-                  decoration: InputDecoration(
-                    labelText: 'Password',
-                    hintText: 'Enter Password',
-                    prefixIcon: Icon(
-                      Icons.vpn_key,
-                      color: kQuizBrown900,
-                    ),
-                    filled: true,
-                    suffixIcon: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          _obscureText = !_obscureText;
-                        });
-                      },
-                      child: Icon(
-                        _obscureText ? Icons.visibility_off : Icons.visibility,
-                        semanticLabel:
-                            _obscureText ? 'show password' : 'hide password',
-                        color: kQuizBrown900,
+                    new SizedBox(height: 30.0),
+                    new Text(
+                      'SIGN IN',
+                      textScaleFactor: 1.5,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w800,
                       ),
                     ),
+                  ],
+                ),
+                new SizedBox(
+                  height: 50.0,
+                ),
+                new AccentColorOverride(
+                  color: kQuizBrown900,
+                  child: new TextFormField(
+                    validator: CommonFunction.mhtIdValidation,
+                    decoration: InputDecoration(
+                      labelText: 'Mht Id',
+                      hintText: 'Enter Mht Id no.',
+                      prefixIcon: Icon(
+                        Icons.person_outline,
+                        color: kQuizBrown900,
+                      ),
+                      filled: true,
+                    ),
+                    onSaved: (String value) {
+                      _mhtId = value;
+                    },
+                    keyboardType: TextInputType.numberWithOptions(),
                   ),
-                  onSaved: (String value) {
-                    _password = value;
-                  },
-                  obscureText: _obscureText,
                 ),
-              ),
-              new SizedBox(height: 20.0),
-              new RaisedButton(
-                child: Text(
-                  'SIGN IN',
-                  style: TextStyle(color: Colors.white),
+                new SizedBox(height: 20.0),
+                new AccentColorOverride(
+                  color: kQuizBrown900,
+                  child: new TextFormField(
+                    validator: CommonFunction.passwordValidation,
+                    decoration: InputDecoration(
+                      labelText: 'Password',
+                      hintText: 'Enter Password',
+                      prefixIcon: Icon(
+                        Icons.vpn_key,
+                        color: kQuizBrown900,
+                      ),
+                      filled: true,
+                      suffixIcon: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _obscureText = !_obscureText;
+                          });
+                        },
+                        child: Icon(
+                          _obscureText
+                              ? Icons.visibility_off
+                              : Icons.visibility,
+                          semanticLabel:
+                              _obscureText ? 'show password' : 'hide password',
+                          color: kQuizBrown900,
+                        ),
+                      ),
+                    ),
+                    onSaved: (String value) {
+                      _password = value;
+                    },
+                    obscureText: _obscureText,
+                  ),
                 ),
-                elevation: 4.0,
-                padding: EdgeInsets.all(20.0),
-                onPressed: _submit,
-              ),
-              new SizedBox(height: 15.0),
-              _forgotPasswordBox(),
-              new SizedBox(height: 20.0),
-              _signupBox(),
-              new SizedBox(height: 5.0),
-              _termsAndCondition(),
-            ],
+                new SizedBox(height: 20.0),
+                new RaisedButton(
+                  child: Text(
+                    'SIGN IN',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  elevation: 4.0,
+                  padding: EdgeInsets.all(20.0),
+                  onPressed: _submit,
+                ),
+                new SizedBox(height: 15.0),
+                _forgotPasswordBox(),
+                new SizedBox(height: 20.0),
+                _signupBox(),
+                new SizedBox(height: 5.0),
+                _termsAndCondition(),
+              ],
+            ),
           ),
         ),
       ),
@@ -211,6 +217,9 @@ class LoginPageState extends State<LoginPage> {
 
   void _submit() async {
     if (_formKey.currentState.validate()) {
+      setState(() {
+        _isLoading = true;
+      });
       _formKey.currentState.save();
       print('LOGIN DATA');
       print('MOBILE : ${this._mhtId}');
@@ -234,6 +243,9 @@ class LoginPageState extends State<LoginPage> {
       } catch (err) {
         print('CATCH 1 :: ');
         print(err);
+        setState(() {
+          _isLoading = false;
+        });
         CommonFunction.displayErrorDialog(
             context: context, msg: err.toString());
       }

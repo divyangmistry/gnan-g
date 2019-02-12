@@ -30,6 +30,7 @@ class MainGamePage extends StatefulWidget {
 
 class MainGamePageState extends BaseState<MainGamePage> {
   bool clickAns = false;
+  bool isLoading = false;
   List<bool> option = [false, false, false, false];
   int userLives = CacheData.userState.lives;
   bool trueAnswer = false;
@@ -180,32 +181,35 @@ class MainGamePageState extends BaseState<MainGamePage> {
   @override
   Widget pageToDisplay() {
     return new Scaffold(
-      body: new BackgroundGredient(
-        child: SafeArea(
-          child: new ListView(
-            padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
-            children: <Widget>[
-              titleBar(),
-              SizedBox(
-                height: MediaQuery.of(context).size.height / 8,
-              ),
-              Container(
-                alignment: Alignment(0, -0.30),
-                child: Text(
-                  ((question != null) ? question.question : ''),
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: kQuizBackgroundWhite,
-                    height: 1.5,
-                  ),
-                  textScaleFactor: 1.6,
+      body: CustomLoading(
+        isLoading: isLoading,
+        child: new BackgroundGredient(
+          child: SafeArea(
+            child: new ListView(
+              padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
+              children: <Widget>[
+                titleBar(),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height / 8,
                 ),
-              ),
-              new Container(
-                padding: EdgeInsets.all(50),
-                child: questionUi(),
-              ),
-            ],
+                Container(
+                  alignment: Alignment(0, -0.30),
+                  child: Text(
+                    ((question != null) ? question.question : ''),
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: kQuizBackgroundWhite,
+                      height: 1.5,
+                    ),
+                    textScaleFactor: 1.6,
+                  ),
+                ),
+                new Container(
+                  padding: EdgeInsets.all(50),
+                  child: questionUi(),
+                ),
+              ],
+            ),
           ),
         ),
       ),

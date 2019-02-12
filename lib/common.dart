@@ -340,25 +340,4 @@ class CommonFunction {
       },
     );
   }
-
-  // common Alert dialog
-  static loadingDialog({@required BuildContext context}) {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (_) {
-        return Theme(
-          data: ThemeData(
-            dialogBackgroundColor: Color(0xFFFFFF),
-          ),
-          child: AlertDialog(
-            content: SpinKitThreeBounce(
-              color: kQuizBackgroundWhite,
-              size: 50.0,
-            ),
-          ),
-        );
-      },
-    );
-  }
 }
