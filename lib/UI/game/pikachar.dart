@@ -5,6 +5,7 @@ import '../../colors.dart';
 
 List<String> _optionChars = [];
 AnswerTiles ansTiles;
+List<OptionTile> opTiles;
 Map _answerChars = {
   "length": 6,
   "indexToInsert": 0,
@@ -25,12 +26,12 @@ class _PikacharState extends State<Pikachar> {
   @override
   void initState() {
     super.initState();
-    _optionChars = ['સિ', 'મં', 'ધ', 'ર', 'સ્વા', 'મી'];
+    // todo: Set the optionChars to come from API
+    _optionChars = ['સી', 'મં', 'ધ', 'ર', 'સ્વા', 'મી'];
   }
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     ansTiles = new AnswerTiles();
     return new Container(
         child: Scaffold(
@@ -49,6 +50,7 @@ class _PikacharState extends State<Pikachar> {
           floatingActionButton: FloatingActionButton.extended(
             onPressed: () {
               //TODO: Implement submit
+              //TODO: Submit button should be inactive till all answer tiles are full
             },
             icon: Icon(Icons.done),
             label: Text('SUBMIT'),
@@ -126,7 +128,7 @@ class _PikacharState extends State<Pikachar> {
   }
 
   List<StatefulWidget> createOptionTiles() {
-    List<StatefulWidget> opTiles = List<StatefulWidget>();
+    opTiles = List<OptionTile>();
     for (int i = 0; i < _optionChars.length; i++) {
       var opTile = new OptionTile(i, _optionChars[i]);
       opTiles.add(opTile);
@@ -156,10 +158,18 @@ class _PikacharState extends State<Pikachar> {
 class OptionTile extends StatefulWidget {
   int index;
   String char;
+  _OptionTileState st;
 
   OptionTile(this.index, this.char);
 
-  _OptionTileState createState() => _OptionTileState(this.index, this.char);
+  void rtrnCharFromAnswer() {
+    st.rtrnCharFromAnswer();
+  }
+
+  _OptionTileState createState() {
+    st = _OptionTileState(this.index, this.char);
+    return st;
+  }
 }
 
 class _OptionTileState extends State<OptionTile> {
@@ -177,11 +187,8 @@ class _OptionTileState extends State<OptionTile> {
 
   void tileTapped() {
     if (!isActive) {
-      // TODO: Call method of answerChars to add char
       if (ansTiles.addCharToAnswer(char, index)) {
         setState(() {
-          // TODO: Convert OptionTile to a statefulwidget so changes in the state
-          // reflect on UI.
           isActive = true;
         });
       }
@@ -209,7 +216,6 @@ class _OptionTileState extends State<OptionTile> {
   }
 
   Widget build(BuildContext context) {
-    // TODO: implement build
     return new GestureDetector(
         onTap: tileTapped,
         child: Card(
@@ -231,6 +237,10 @@ class _OptionTileState extends State<OptionTile> {
 }
 
 class AnswerTiles extends StatefulWidget {
+  //todo: @Milan: Please check, is calling methods of state from statefulwidget
+  // the correct way, because setState can only be called from State.
+  // Or is there another way? I had to hack it this way as I didn't know any
+  // other way. This is not working with hot reload, the state becomes null.
   _AnswerTilesState st;
 
   _AnswerTilesState createState() {
@@ -238,19 +248,34 @@ class AnswerTiles extends StatefulWidget {
     return st;
   }
 
-  bool addCharToAnswer(String char, int index) {
-    return st.addChar(char, index);
+  /// Set the index to insert to the first blank answer tile
+  /// Needs to be called after removing or adding an answer tile
+  void findIndexToInsert() {
+    for (int i = 0; i < _answerChars["length"]; i++) {
+      if (_answerChars[i] == "" || _answerChars[i] == " ") {
+        _answerChars["indexToInsert"] = i;
+        break;
+      }
+    }
+  }
+
+  /// Adds the char to the answer tiles
+  bool addCharToAnswer(String char, int opTileIndex) {
+    return st.addChar(char, opTileIndex);
   }
 }
 
 class _AnswerTilesState extends State<AnswerTiles> {
-  bool addChar(char, index) {
-    // TODO: Check if the answer tiles are full, if yes then just return false
+  List<AnswerTile> aTiles;
+
+  bool addChar(char, opTileIndex) {
     int i = _answerChars["indexToInsert"];
-    setState(() {
-      _answerChars["indexToInsert"]++;
-      _answerChars[i] = char;
-    });
+    if (i >= _answerChars["length"]) {
+      return false;
+    } else {
+      aTiles[i].setOpIndex(i, char, opTileIndex);
+    }
+    ansTiles.findIndexToInsert();
     return true;
   }
 
@@ -265,21 +290,29 @@ class _AnswerTilesState extends State<AnswerTiles> {
   }
 
   createAnswerTiles() {
-    List<StatefulWidget> opTiles = List<StatefulWidget>();
+    aTiles = List<AnswerTile>();
     for (int i = 0; i < _answerChars["length"]; i++) {
       var opTile = new AnswerTile(i);
-      opTiles.add(opTile);
+      aTiles.add(opTile);
     }
-    return opTiles;
+    return aTiles;
   }
 }
 
 class AnswerTile extends StatefulWidget {
   int index;
+  _AnswerTileState st;
 
   AnswerTile(this.index);
 
-  _AnswerTileState createState() => new _AnswerTileState(this.index);
+  void setOpIndex(int i, String char, int opTileIndex) {
+    st.setOpIndex(i, char, opTileIndex);
+  }
+
+  _AnswerTileState createState() {
+    st = new _AnswerTileState(this.index);
+    return st;
+  }
 }
 
 class _AnswerTileState extends State<AnswerTile> {
@@ -289,9 +322,23 @@ class _AnswerTileState extends State<AnswerTile> {
 
   _AnswerTileState(this.index);
 
+  void setOpIndex(int i, String char, int opTileIndex) {
+    this.indexOfOption = opTileIndex;
+    setState(() {
+      _answerChars["indexToInsert"]++;
+      _answerChars[i] = char;
+    });
+  }
+
   void answerTileTapped() {
-    // TODO: Implement tile tapped function
-    // 1. Return the char to index of option
+    if (indexOfOption != null) {
+      opTiles[indexOfOption].rtrnCharFromAnswer();
+      indexOfOption = null;
+      setState(() {
+        _answerChars[index] = " ";
+      });
+      ansTiles.findIndexToInsert();
+    }
   }
 
   Widget build(BuildContext context) {
