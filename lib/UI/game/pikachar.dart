@@ -4,8 +4,9 @@ import '../../common.dart';
 import '../../colors.dart';
 
 List<String> _optionChars = [];
+int rowTilesLimit = 6; // What is the max no. of tiles in a row
 AnswerTiles ansTiles;
-List<OptionTile> opTiles;
+List<OptionTile> opTiles = List<OptionTile>();
 Map _answerChars = {
   "length": 6,
   "indexToInsert": 0,
@@ -27,7 +28,23 @@ class _PikacharState extends State<Pikachar> {
   void initState() {
     super.initState();
     // todo: Set the optionChars to come from API
-    _optionChars = ['સી', 'મં', 'ધ', 'ર', 'સ્વા', 'મી'];
+    _optionChars = [
+      'સી',
+      'મં',
+      'ધ',
+      'ર',
+      'સ્વા',
+      'મી',
+      'દા',
+      'દા',
+      'ભ',
+      'ગ',
+      'વા',
+      'ન',
+      'ની',
+      'રૂ',
+      'મા'
+    ];
   }
 
   @override
@@ -41,8 +58,7 @@ class _PikacharState extends State<Pikachar> {
                     children: <Widget>[
                       question(),
                       ansTiles,
-                      optionTilesOne(),
-                      optionTilesTwo(),
+                      optionTiles(),
                     ],
                   ))),
           floatingActionButtonLocation: FloatingActionButtonLocation
@@ -101,39 +117,40 @@ class _PikacharState extends State<Pikachar> {
     );
   }
 
-  Widget optionTilesOne() {
-    return new Container(
+  Widget optionTiles() {
+    return new Column(
+      children: createOptionRows(),
+    );
+  }
+
+  List<Widget> createOptionRows() {
+    List<Widget> cols = new List<Widget>();
+    for (int i = 0; i < _optionChars.length; i = i + rowTilesLimit) {
+      var optRow = optionRow(i);
+      cols.add(optRow);
+    }
+    return cols;
+  }
+
+  Widget optionRow(int i) {
+    return Container(
       padding: EdgeInsets.all(20),
       child: Row(
-        children: createOptionTiles(),
+        children: createOptionTiles(i),
         mainAxisAlignment: MainAxisAlignment.spaceAround,
       ),
     );
   }
 
-  Widget optionTilesTwo() {
-    return new Container(
-      padding: EdgeInsets.all(20),
-      child: Row(
-        children: <Widget>[
-          optionTile('દા', 0),
-          optionTile('દા', 1),
-          optionTile('ભ', 2),
-          optionTile('ગ', 3),
-          optionTile('વા', 4),
-        ],
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-      ),
-    );
-  }
-
-  List<StatefulWidget> createOptionTiles() {
-    opTiles = List<OptionTile>();
-    for (int i = 0; i < _optionChars.length; i++) {
+  List<StatefulWidget> createOptionTiles(int startingIndex) {
+    List<OptionTile> tempOpTiles = List<OptionTile>();
+    for (int i = startingIndex; i < _optionChars.length &&
+        i < startingIndex + rowTilesLimit; i++) {
       var opTile = new OptionTile(i, _optionChars[i]);
       opTiles.add(opTile);
+      tempOpTiles.add(opTile);
     }
-    return opTiles;
+    return tempOpTiles;
   }
 
   Widget optionTile(String text, int index) {
