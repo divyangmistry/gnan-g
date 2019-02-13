@@ -156,7 +156,7 @@ class ApiService {
       "question_id": questionId,
       "mht_id": mhtId,
       "answer": answer,
-      "level": 1
+      "level": level
     };
     http.Response res = await postApi(url: '/validate_answer', data: data);
     return res;

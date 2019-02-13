@@ -14,7 +14,7 @@ class GameLevelPageState extends State<GameLevelPage> {
   bool _isloading = true;
 
   GameLevelPageState() {
-    new Future.delayed(new Duration(seconds: 4), () {
+    new Future.delayed(new Duration(seconds: 2), () {
       setState(() {
         _isloading = false;
       });

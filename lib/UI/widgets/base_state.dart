@@ -9,17 +9,12 @@ abstract class BaseState<T extends StatefulWidget> extends State<T> {
     return new Scaffold(
       backgroundColor: kQuizSurfaceWhite,
       body: new BackgroundGredient(
-        child: _body(),
+        child: CustomLoading(
+          child: !isLoading ? pageToDisplay() : new Container(),
+          isLoading: isLoading,
+        ),
       ),
     );
-  }
-
-  Widget _body() {
-    if (isLoading) {
-      return CustomLoading();
-    } else {
-      return pageToDisplay();
-    }
   }
 
   Widget pageToDisplay();
