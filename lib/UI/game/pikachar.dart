@@ -4,6 +4,7 @@ import '../../common.dart';
 import '../../colors.dart';
 
 List<String> _optionChars = [];
+AnswerTiles ansTiles;
 Map _answerChars = {
   "length": 6,
   "indexToInsert": 0,
@@ -30,6 +31,7 @@ class _PikacharState extends State<Pikachar> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
+    ansTiles = new AnswerTiles();
     return new Container(
         child: Scaffold(
           body: new BackgroundGredient(
@@ -37,7 +39,7 @@ class _PikacharState extends State<Pikachar> {
                   child: Column(
                     children: <Widget>[
                       question(),
-                      AnswerTiles(),
+                      ansTiles,
                       optionTilesOne(),
                       optionTilesTwo(),
                     ],
@@ -123,11 +125,11 @@ class _PikacharState extends State<Pikachar> {
     );
   }
 
-  List<GestureDetector> createOptionTiles() {
-    List<GestureDetector> opTiles = List<GestureDetector>();
+  List<StatefulWidget> createOptionTiles() {
+    List<StatefulWidget> opTiles = List<StatefulWidget>();
     for (int i = 0; i < _optionChars.length; i++) {
-      var opTile = new OptionTile(i, _optionChars[i], setState);
-      opTiles.add(opTile.getWidget());
+      var opTile = new OptionTile(i, _optionChars[i]);
+      opTiles.add(opTile);
     }
     return opTiles;
   }
@@ -151,30 +153,38 @@ class _PikacharState extends State<Pikachar> {
   }
 }
 
-class OptionTile {
+class OptionTile extends StatefulWidget {
+  int index;
+  String char;
+
+  OptionTile(this.index, this.char);
+
+  _OptionTileState createState() => _OptionTileState(this.index, this.char);
+}
+
+class _OptionTileState extends State<OptionTile> {
   int index;
   String char;
   bool isActive = false;
-  var ss;
 
-  OptionTile(this.index, this.char, this.ss);
+  _OptionTileState(this.index, this.char);
 
   void rtrnCharFromAnswer() {
-    isActive = false;
+    setState(() {
+      isActive = false;
+    });
   }
 
   void tileTapped() {
     if (!isActive) {
-      // TODO: add char to answer Chars
-      int i = _answerChars["indexToInsert"];
-      _answerChars["indexToInsert"]++;
-      // @Milan: Please check this, is this the correct way to do it? I have passed setState from the stateful widget to this class as a hack
-      this.ss(() {
-        _answerChars[i] = char;
-        // TODO: Convert OptionTile to a statefulwidget so changes in the state
-        // reflect on UI.
-        isActive = true;
-      });
+      // TODO: Call method of answerChars to add char
+      if (ansTiles.addCharToAnswer(char, index)) {
+        setState(() {
+          // TODO: Convert OptionTile to a statefulwidget so changes in the state
+          // reflect on UI.
+          isActive = true;
+        });
+      }
     }
   }
 
@@ -197,17 +207,53 @@ class OptionTile {
         )
     );
   }
+
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return new GestureDetector(
+        onTap: tileTapped,
+        child: Card(
+          elevation: 5,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(5)),
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+            child: Text(
+              this.char,
+              textScaleFactor: 3,
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ),
+          color: isActive ? kQuizMain50 : kQuizBackgroundWhite,
+        )
+    );
+  }
 }
 
 class AnswerTiles extends StatefulWidget {
-  _AnswerTilesState createState() => new _AnswerTilesState();
+  _AnswerTilesState st;
 
-  bool addCharToAnswer(String char) {
+  _AnswerTilesState createState() {
+    st = new _AnswerTilesState();
+    return st;
+  }
 
+  bool addCharToAnswer(String char, int index) {
+    return st.addChar(char, index);
   }
 }
 
 class _AnswerTilesState extends State<AnswerTiles> {
+  bool addChar(char, index) {
+    // TODO: Check if the answer tiles are full, if yes then just return false
+    int i = _answerChars["indexToInsert"];
+    setState(() {
+      _answerChars["indexToInsert"]++;
+      _answerChars[i] = char;
+    });
+    return true;
+  }
+
   Widget build(BuildContext context) {
     return new Container(
         padding: EdgeInsets.symmetric(horizontal: 20, vertical: 50),
