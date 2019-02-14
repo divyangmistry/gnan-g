@@ -29,21 +29,8 @@ class _PikacharState extends State<Pikachar> {
     super.initState();
     // todo: Set the optionChars to come from API
     _optionChars = [
-      'સી',
-      'મં',
-      'ધ',
-      'ર',
-      'સ્વા',
-      'મી',
-      'દા',
-      'દા',
-      'ભ',
-      'ગ',
-      'વા',
-      'ન',
-      'ની',
-      'રૂ',
-      'મા'
+      'સી', 'મં', 'ધ', 'ર', 'સ્વા', 'મી', 'દા', 'દા', 'ભ', 'ગ', 'વા',
+      'ન', 'ની', 'રૂ', 'મા'
     ];
   }
 
@@ -51,27 +38,26 @@ class _PikacharState extends State<Pikachar> {
   Widget build(BuildContext context) {
     ansTiles = new AnswerTiles();
     return new Container(
-        child: Scaffold(
-          body: new BackgroundGredient(
-              child: SafeArea(
-                  child: Column(
-                    children: <Widget>[
-                      question(),
-                      ansTiles,
-                      optionTiles(),
-                    ],
-                  ))),
-          floatingActionButtonLocation: FloatingActionButtonLocation
-              .centerFloat,
-          floatingActionButton: FloatingActionButton.extended(
-            onPressed: () {
-              //TODO: Implement submit
-              //TODO: Submit button should be inactive till all answer tiles are full
-            },
-            icon: Icon(Icons.done),
-            label: Text('SUBMIT'),
-          ),
-        )
+      child: Scaffold(
+        body: new BackgroundGredient(
+          child: SafeArea(
+            child: Column(
+              children: <Widget>[
+                question(),
+                ansTiles,
+                optionTiles(),
+              ],
+            ))),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        floatingActionButton: FloatingActionButton.extended(
+          onPressed: () {
+            //TODO: Implement submit
+            //TODO: Submit button should be inactive till all answer tiles are full
+          },
+          icon: Icon(Icons.done),
+          label: Text('SUBMIT'),
+        ),
+      )
     );
   }
 
@@ -91,18 +77,17 @@ class _PikacharState extends State<Pikachar> {
 
   Widget answerTiles() {
     return new Container(
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 50),
-        child: Row(
-          children: <Widget>[
-            answerTile(),
-            answerTile(),
-            answerTile(),
-            answerTile(),
-            answerTile(),
-          ],
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-        )
-    );
+      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 50),
+      child: Row(
+        children: <Widget>[
+          answerTile(),
+          answerTile(),
+          answerTile(),
+          answerTile(),
+          answerTile(),
+        ],
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+      ));
   }
 
   Widget answerTile() {
@@ -145,7 +130,7 @@ class _PikacharState extends State<Pikachar> {
   List<StatefulWidget> createOptionTiles(int startingIndex) {
     List<OptionTile> tempOpTiles = List<OptionTile>();
     for (int i = startingIndex; i < _optionChars.length &&
-        i < startingIndex + rowTilesLimit; i++) {
+      i < startingIndex + rowTilesLimit; i++) {
       var opTile = new OptionTile(i, _optionChars[i]);
       opTiles.add(opTile);
       tempOpTiles.add(opTile);
@@ -155,19 +140,18 @@ class _PikacharState extends State<Pikachar> {
 
   Widget optionTile(String text, int index) {
     return new GestureDetector(
-        child: Card(
-            elevation: 5,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(5)),
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-              child: Text(
-                text,
-                textScaleFactor: 3,
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-            )
+      child: Card(
+        elevation: 5,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+          child: Text(
+            text,
+            textScaleFactor: 3,
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
         )
+      )
     );
   }
 }
@@ -214,41 +198,39 @@ class _OptionTileState extends State<OptionTile> {
 
   Widget getWidget() {
     return new GestureDetector(
-        onTap: tileTapped,
-        child: Card(
-            elevation: 5,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(5)),
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-              child: Text(
-                this.char,
-                textScaleFactor: 3,
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-            ),
-          color: isActive ? kQuizMain50 : kQuizBackgroundWhite,
-        )
+      onTap: tileTapped,
+      child: Card(
+        elevation: 5,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+          child: Text(
+            this.char,
+            textScaleFactor: 3,
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+        ),
+        color: isActive ? kQuizMain50 : kQuizBackgroundWhite,
+      )
     );
   }
 
   Widget build(BuildContext context) {
     return new GestureDetector(
-        onTap: tileTapped,
-        child: Card(
-          elevation: 5,
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(5)),
-          child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-            child: Text(
-              this.char,
-              textScaleFactor: 3,
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
+      onTap: tileTapped,
+      child: Card(
+        elevation: 5,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+          child: Text(
+            this.char,
+            textScaleFactor: 3,
+            style: TextStyle(fontWeight: FontWeight.bold),
           ),
-          color: isActive ? kQuizMain50 : kQuizBackgroundWhite,
-        )
+        ),
+        color: isActive ? kQuizMain50 : kQuizBackgroundWhite,
+      )
     );
   }
 }
@@ -298,11 +280,11 @@ class _AnswerTilesState extends State<AnswerTiles> {
 
   Widget build(BuildContext context) {
     return new Container(
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 50),
-        child: Row(
-          children: createAnswerTiles(),
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-        )
+      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 50),
+      child: Row(
+        children: createAnswerTiles(),
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+      )
     );
   }
 
@@ -370,9 +352,7 @@ class _AnswerTileState extends State<AnswerTile> {
             _answerChars[index],
             textScaleFactor: 3,
             style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: kQuizSurfaceWhite
-            ),
+              fontWeight: FontWeight.bold, color: kQuizSurfaceWhite),
           ),
         ),
         color: kQuizMain400,
