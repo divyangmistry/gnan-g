@@ -18,7 +18,7 @@ class LeaderBoard extends StatefulWidget {
 class LeaderBoardState extends State<LeaderBoard> {
   
   ApiService _api = new ApiService();
-  
+
   List<Leaders> leaderList;
   int _userRank = 0;
 
