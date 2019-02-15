@@ -1,18 +1,20 @@
 import 'dart:convert';
 
+import 'package:SheelQuotient/model/user_score_state.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
-import 'package:kon_banega_mokshadhipati/Service/apiservice.dart';
-import 'package:kon_banega_mokshadhipati/UI/puzzle/main.dart';
-import 'package:kon_banega_mokshadhipati/constans/appconstant.dart';
-import 'package:kon_banega_mokshadhipati/constans/message_constant.dart';
-import 'package:kon_banega_mokshadhipati/constans/wsconstants.dart';
-import 'package:kon_banega_mokshadhipati/model/appresponse.dart';
-import 'package:kon_banega_mokshadhipati/model/cacheData.dart';
-import 'package:kon_banega_mokshadhipati/model/userinfo.dart';
-import 'package:kon_banega_mokshadhipati/utils/response_parser.dart';
+import 'package:SheelQuotient/Service/apiservice.dart';
+import 'package:SheelQuotient/UI/puzzle/main.dart';
+import 'package:SheelQuotient/constans/appconstant.dart';
+import 'package:SheelQuotient/constans/message_constant.dart';
+import 'package:SheelQuotient/constans/wsconstants.dart';
+import 'package:SheelQuotient/model/appresponse.dart';
+import 'package:SheelQuotient/model/cacheData.dart';
+import 'package:SheelQuotient/model/userinfo.dart';
+import 'package:SheelQuotient/utils/response_parser.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'colors.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 // For override color for Form input
 class AccentColorOverride extends StatelessWidget {
@@ -76,17 +78,32 @@ class BackgroundGredient extends StatelessWidget {
 
 // App Loading Indicator
 class CustomLoading extends StatelessWidget {
+  final bool isLoading;
+  final Widget child;
+  CustomLoading({@required this.isLoading, @required this.child});
   @override
   Widget build(BuildContext context) {
-    return new Container(
-      child: Opacity(
-        opacity: 0.5,
-        child: Scaffold(
-          body: new Center(
-            child: new CircularProgressIndicator(),
-          ),
-        ),
-      ),
+    return new Stack(
+      children: <Widget>[
+        !isLoading ? child : new Container(),
+        isLoading
+            ? new Stack(
+                children: [
+                  new Opacity(
+                    opacity: 0.5,
+                    child: const ModalBarrier(
+                        dismissible: false, color: kQuizBrown900),
+                  ),
+                  new Center(
+                    child: SpinKitThreeBounce(
+                      color: kQuizBackgroundWhite,
+                      size: 50.0,
+                    ),
+                  ),
+                ],
+              )
+            : new Container(),
+      ],
     );
   }
 }
@@ -200,11 +217,17 @@ class CommonFunction {
   }
 
   static _getLife(BuildContext context) async {
-    Response res = await _api.requestLife(mhtId: CacheData.userInfo.mhtId);
-    AppResponse appResponse =
-        ResponseParser.parseResponse(context: context, res: res);
-    if (appResponse.status == WSConstant.SUCCESS_CODE) {
-      // TODO : IMPLEMENT res
+    try {
+      Response res = await _api.requestLife(mhtId: CacheData.userInfo.mhtId);
+      AppResponse appResponse =
+          ResponseParser.parseResponse(context: context, res: res);
+      if (appResponse.status == WSConstant.SUCCESS_CODE) {
+        UserScoreState userState = UserScoreState.fromJson(appResponse.data);
+        userState.updateSessionScore();
+        Navigator.pop(context);
+      }
+    } catch (e) {
+      CommonFunction.displayErrorDialog(context: context, msg: e.toString());
     }
   }
 

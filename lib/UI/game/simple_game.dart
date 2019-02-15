@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:kon_banega_mokshadhipati/UI/game/answer_response_dialog.dart';
-import 'package:kon_banega_mokshadhipati/model/cacheData.dart';
-import 'package:kon_banega_mokshadhipati/model/current_stat.dart';
+import 'package:SheelQuotient/UI/game/answer_response_dialog.dart';
+import 'package:SheelQuotient/model/cacheData.dart';
+import 'package:SheelQuotient/model/current_stat.dart';
 import '../../Service/apiservice.dart';
 import '../../model/question.dart';
 

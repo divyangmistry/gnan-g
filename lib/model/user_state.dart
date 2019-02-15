@@ -1,5 +1,5 @@
-import 'package:kon_banega_mokshadhipati/model/current_stat.dart';
-import 'package:kon_banega_mokshadhipati/model/quizlevel.dart';
+import 'package:SheelQuotient/model/current_stat.dart';
+import 'package:SheelQuotient/model/quizlevel.dart';
 
 class UserState {
   List<QuizLevel> quizLevels;
@@ -55,9 +55,13 @@ class UserState {
     return data;
   }
 
+  // @override
+  // String toString() {
+  //   return 'CompletedLevel{quizLevels: $quizLevels, completed: $completed, current: $currentState, totalscore: $totalscore, lives: $lives}';
+  // } ---> ORIGINAL <----
   @override
   String toString() {
-    return 'CompletedLevel{quizLevels: $quizLevels, completed: $completed, current: $currentState, totalscore: $totalscore, lives: $lives}';
+    return 'CompletedLevel{ totalscore: $totalscore, lives: $lives}';
   }
 }
 

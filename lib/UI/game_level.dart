@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:kon_banega_mokshadhipati/Service/apiservice.dart';
-import 'package:kon_banega_mokshadhipati/model/cacheData.dart';
+import 'package:SheelQuotient/Service/apiservice.dart';
+import 'package:SheelQuotient/model/cacheData.dart';
 import '../common.dart';
 import '../colors.dart';
 
@@ -10,8 +10,16 @@ class GameLevelPage extends StatefulWidget {
 }
 
 class GameLevelPageState extends State<GameLevelPage> {
-  
   ApiService _api = new ApiService();
+  bool _isloading = true;
+
+  GameLevelPageState() {
+    new Future.delayed(new Duration(seconds: 2), () {
+      setState(() {
+        _isloading = false;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,23 +27,26 @@ class GameLevelPageState extends State<GameLevelPage> {
       backgroundColor: kQuizSurfaceWhite,
       body: BackgroundGredient(
         child: new SafeArea(
-          child: new ListView(
-            padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 20.0),
-            children: <Widget>[
-              _gameBar(),
-              SizedBox(
-                height: 20.0,
-              ),
-              _userCard(),
-              SizedBox(
-                height: 20.0,
-              ),
-              _bonusRoundInfo(),
-              SizedBox(
-                height: 20.0,
-              ),
-              _bottomButtons(),
-            ],
+          child: CustomLoading(
+            isLoading: _isloading,
+            child: new ListView(
+              padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 20.0),
+              children: <Widget>[
+                _gameBar(),
+                SizedBox(
+                  height: 20.0,
+                ),
+                _userCard(),
+                SizedBox(
+                  height: 20.0,
+                ),
+                _bonusRoundInfo(),
+                SizedBox(
+                  height: 20.0,
+                ),
+                _bottomButtons(),
+              ],
+            ),
           ),
         ),
       ),
@@ -176,9 +187,15 @@ class GameLevelPageState extends State<GameLevelPage> {
     return Expanded(
       child: Column(
         children: <Widget>[
-          Icon(
-            icon,
-            size: 40.0,
+          IconButton(
+            icon: Icon(Icons.access_time),
+            onPressed: () {
+              print(' ----> SHOW USER DATA ! <----');
+
+              CommonFunction.alertDialog(
+                  context: context, msg: CacheData.userState.toString());
+            },
+            // size: 40.0,
             color: kQuizBrown900,
           ),
           SizedBox(

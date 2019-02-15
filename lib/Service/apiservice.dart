@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart';
-import 'package:kon_banega_mokshadhipati/constans/sharedpref_constant.dart';
-import 'package:kon_banega_mokshadhipati/model/cacheData.dart';
-import 'package:kon_banega_mokshadhipati/model/signupsession.dart';
+import 'package:SheelQuotient/constans/sharedpref_constant.dart';
+import 'package:SheelQuotient/model/cacheData.dart';
+import 'package:SheelQuotient/model/signupsession.dart';
 import 'package:meta/meta.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -56,7 +56,8 @@ class ApiService {
   /// * [token] - For authenticate api
   appendTokenToHeader(token) {
     headers['x-access-token'] = token;
-    headers['mht_id'] = CacheData.userInfo.mhtId.toString();
+    if(CacheData.userInfo != null && CacheData.userInfo.mhtId != null)
+      headers['mht_id'] = CacheData.userInfo.mhtId.toString();
     print(headers);
   }
 
@@ -122,6 +123,20 @@ class ApiService {
     return res;
   }
 
+  // Puzzle Completed
+  Future<http.Response> puzzleCompleted(
+      {@required int mhtId,
+      @required String puzzle_type,
+      @required String puzzle_name}) async {
+    Map<String, dynamic> data = {
+      'mht_id': mhtId,
+      'puzzle_type': puzzle_type,
+      'puzzle_name': puzzle_name
+    };
+    http.Response res = await postApi(url: '/puzzle_completed', data: data);
+    return res;
+  }
+
   Future<http.Response> hintTaken({
     @required int questionId,
     @required int mhtId,
@@ -141,7 +156,7 @@ class ApiService {
       "question_id": questionId,
       "mht_id": mhtId,
       "answer": answer,
-      "level": 1
+      "level": level
     };
     http.Response res = await postApi(url: '/validate_answer', data: data);
     return res;

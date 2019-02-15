@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:kon_banega_mokshadhipati/UI/puzzle/data/result.dart';
-import 'package:kon_banega_mokshadhipati/UI/puzzle/links.dart';
-import 'package:kon_banega_mokshadhipati/UI/puzzle/play_games.dart';
-import 'package:kon_banega_mokshadhipati/UI/puzzle/widgets/game/format.dart';
+import 'package:SheelQuotient/UI/puzzle/data/result.dart';
+import 'package:SheelQuotient/UI/puzzle/links.dart';
+import 'package:SheelQuotient/UI/puzzle/play_games.dart';
+import 'package:SheelQuotient/UI/puzzle/widgets/game/format.dart';
 import 'package:share/share.dart';
 
 class GameVictoryDialog extends StatelessWidget {
@@ -72,27 +72,27 @@ class GameVictoryDialog extends StatelessWidget {
       ),
       actions: <Widget>[
         // usually buttons at the bottom of the dialog
+        // new FlatButton(
+        //   child: new Text("Leaderboard"),
+        //   onPressed: () {
+        //     final playGames = PlayGamesContainer.of(context);
+        //     playGames.showLeaderboard(
+        //       key: PlayGames.getLeaderboardOfSize(result.size),
+        //     );
+        //   },
+        // ),
+        // new FlatButton(
+        //   child: new Text("Share"),
+        //   onPressed: () {
+        //     Share.share("I have solved the Game of Fifteen's "
+        //         "${result.size}x${result.size} puzzle in $timeFormatted "
+        //         "with just ${result.steps} steps! Check it out: $URL_REPOSITORY");
+        //   },
+        // ),
         new FlatButton(
-          child: new Text("Leaderboard"),
+          child: new Text("Voo Hoo, YOU DID IT !"),
           onPressed: () {
-            final playGames = PlayGamesContainer.of(context);
-            playGames.showLeaderboard(
-              key: PlayGames.getLeaderboardOfSize(result.size),
-            );
-          },
-        ),
-        new FlatButton(
-          child: new Text("Share"),
-          onPressed: () {
-            Share.share("I have solved the Game of Fifteen's "
-                "${result.size}x${result.size} puzzle in $timeFormatted "
-                "with just ${result.steps} steps! Check it out: $URL_REPOSITORY");
-          },
-        ),
-        new FlatButton(
-          child: new Text("Close"),
-          onPressed: () {
-            Navigator.of(context).pop();
+            Navigator.of(context).popAndPushNamed('/level_new');
           },
         ),
       ],

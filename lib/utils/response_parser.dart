@@ -1,12 +1,15 @@
 import 'dart:convert';
 
+import 'package:SheelQuotient/model/cacheData.dart';
+import 'package:SheelQuotient/model/user_state.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
-import 'package:kon_banega_mokshadhipati/common.dart';
-import 'package:kon_banega_mokshadhipati/constans/appconstant.dart';
-import 'package:kon_banega_mokshadhipati/constans/message_constant.dart';
-import 'package:kon_banega_mokshadhipati/constans/wsconstants.dart';
-import 'package:kon_banega_mokshadhipati/model/appresponse.dart';
+import 'package:SheelQuotient/common.dart';
+import 'package:SheelQuotient/constans/appconstant.dart';
+import 'package:SheelQuotient/constans/message_constant.dart';
+import 'package:SheelQuotient/constans/wsconstants.dart';
+import 'package:SheelQuotient/model/appresponse.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ResponseParser {
   static AppResponse parseResponse(
@@ -29,3 +32,23 @@ class ResponseParser {
     return appResponse;
   }
 }
+
+// _loadUserState(int mhtId) async {
+//     try {
+//       Response res = await _api.getUserState(mhtId: mhtId);
+//       AppResponse appResponse =
+//           ResponseParser.parseResponse(context: context, res: res);
+//       if (appResponse.status == WSConstant.SUCCESS_CODE) {
+//         print('IN LOGIN ::: userstateStr :::');
+//         SharedPreferences pref = await SharedPreferences.getInstance();
+//         pref.setString('userState', res.body);
+//         UserState userState = UserState.fromJson(appResponse.data['results']);
+//         CacheData.userState = userState;
+//         Navigator.pushReplacementNamed(context, '/level_new');
+//       }
+//     } catch (err) {
+//       print('CATCH 2 :: ');
+//       print(err);
+//       CommonFunction.displayErrorDialog(context: context, msg: err.toString());
+//     }
+//   }

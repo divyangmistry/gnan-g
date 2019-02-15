@@ -1,8 +1,11 @@
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
-import 'package:kon_banega_mokshadhipati/UI/game_level.dart';
-import 'package:kon_banega_mokshadhipati/UI/leaderboard.dart';
-import 'package:kon_banega_mokshadhipati/UI/profile.dart';
-import 'package:kon_banega_mokshadhipati/UI/puzzle/main.dart';
+import 'package:SheelQuotient/UI/game_level.dart';
+import 'package:SheelQuotient/UI/leaderboard.dart';
+import 'package:SheelQuotient/UI/profile.dart';
+import 'package:SheelQuotient/UI/puzzle/main.dart';
+import 'package:SheelQuotient/common.dart';
+import 'package:SheelQuotient/no-internet-page.dart';
 
 import 'UI/auth/forgot_password.dart';
 import 'UI/auth/new_login.dart';
@@ -19,7 +22,7 @@ import 'UI/profile.dart';
 import 'colors.dart';
 
 class QuizApp extends StatefulWidget {
-  final Widget defaultHome;
+  Widget defaultHome;
   QuizApp({@required this.defaultHome});
 
   @override
@@ -32,10 +35,26 @@ class _QuizAppState extends State<QuizApp> {
     super.initState();
   }
 
+  checInternetConnection(BuildContext context) {
+    Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
+      print(result);
+      if (result == ConnectivityResult.none) {
+        print(' ------> inside NO internet !, inside APP.dart Page <------');
+        CommonFunction.alertDialog(
+            context: context, msg: 'NO INTERNNET CONNECTION !');
+        // widget.defaultHome = NoInternetPage();
+      } else {
+        print(' ------> inside internet !, inside APP.dart Page <------');
+        // widget.defaultHome = LoginPage();
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    checInternetConnection(context);
     return MaterialApp(
-      title: 'Quiz',
+      title: 'Sheel Quotient',
       home: widget.defaultHome,
       theme: _kQuizTheme,
       routes: <String, WidgetBuilder>{

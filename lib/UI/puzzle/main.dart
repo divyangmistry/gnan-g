@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:kon_banega_mokshadhipati/UI/puzzle/config/ui.dart';
-import 'package:kon_banega_mokshadhipati/UI/puzzle/play_games.dart';
-import 'package:kon_banega_mokshadhipati/UI/puzzle/widgets/game/page.dart';
+import 'package:SheelQuotient/UI/puzzle/config/ui.dart';
+import 'package:SheelQuotient/UI/puzzle/play_games.dart';
+import 'package:SheelQuotient/UI/puzzle/widgets/game/page.dart';
 
 class GameOfFifteen extends StatelessWidget {
   @override

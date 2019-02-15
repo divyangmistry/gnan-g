@@ -1,18 +1,19 @@
+import 'package:SheelQuotient/model/user_state.dart';
 import 'package:flame/flame.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
-import 'package:kon_banega_mokshadhipati/Service/apiservice.dart';
-import 'package:kon_banega_mokshadhipati/UI/widgets/base_state.dart';
-import 'package:kon_banega_mokshadhipati/constans/wsconstants.dart';
-import 'package:kon_banega_mokshadhipati/model/appresponse.dart';
-import 'package:kon_banega_mokshadhipati/model/cacheData.dart';
-import 'package:kon_banega_mokshadhipati/model/current_stat.dart';
-import 'package:kon_banega_mokshadhipati/model/question.dart';
-import 'package:kon_banega_mokshadhipati/model/user_score_state.dart';
-import 'package:kon_banega_mokshadhipati/model/userinfo.dart';
-import 'package:kon_banega_mokshadhipati/model/validateQuestion.dart';
-import 'package:kon_banega_mokshadhipati/utils/response_parser.dart';
+import 'package:SheelQuotient/Service/apiservice.dart';
+import 'package:SheelQuotient/UI/widgets/base_state.dart';
+import 'package:SheelQuotient/constans/wsconstants.dart';
+import 'package:SheelQuotient/model/appresponse.dart';
+import 'package:SheelQuotient/model/cacheData.dart';
+import 'package:SheelQuotient/model/current_stat.dart';
+import 'package:SheelQuotient/model/question.dart';
+import 'package:SheelQuotient/model/user_score_state.dart';
+import 'package:SheelQuotient/model/userinfo.dart';
+import 'package:SheelQuotient/model/validateQuestion.dart';
+import 'package:SheelQuotient/utils/response_parser.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'pikachar.dart';
 
@@ -31,6 +32,7 @@ class MainGamePage extends StatefulWidget {
 
 class MainGamePageState extends BaseState<MainGamePage> {
   bool clickAns = false;
+  bool isLoading = false;
   List<bool> option = [false, false, false, false];
   int userLives = CacheData.userState.lives;
   bool trueAnswer = false;
@@ -89,8 +91,11 @@ class MainGamePageState extends BaseState<MainGamePage> {
   _loadNextQuestion() {
     Navigator.pop(context);
     if (currentQueIndex < questions.length - 1) {
-      currentQueIndex++;
-      question = questions.getRange(currentQueIndex, currentQueIndex + 1).first;
+      setState(() {
+        currentQueIndex++;
+        question =
+            questions.getRange(currentQueIndex, currentQueIndex + 1).first;
+      });
     } else {}
   }
 
@@ -106,7 +111,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
         questionId: question.questionId,
         mhtId: CacheData.userInfo.mhtId,
         answer: answer,
-        level: 1,
+        level: CacheData.userState.currentState.level,
       );
       AppResponse appResponse =
           ResponseParser.parseResponse(context: context, res: res);
@@ -115,10 +120,11 @@ class MainGamePageState extends BaseState<MainGamePage> {
         ValidateQuestion validateQuestion =
             ValidateQuestion.fromJson(appResponse.data);
         if (validateQuestion.answerStatus) {
+          print('***************');
+          print(validateQuestion);
           setState(() {
             userLives = validateQuestion.lives;
-            CacheData.userState.lives = userLives;
-            CacheData.userState.totalscore = validateQuestion.totalscore;
+            validateQuestion.updateSessionScore();
           });
           isGivenCorrectAns = true;
           Flame.audio.play('music/party_horn-Mike_Koenig-76599891.mp3');
@@ -129,8 +135,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
                 barrierDismissible: false,
                 type: 'success',
                 doneButtonFn: () {
-                  Navigator.pop(context);
-                  Navigator.pop(context);
+                  _loadUserState(CacheData.userInfo.mhtId);
                 });
           } else {
             CommonFunction.alertDialog(
@@ -142,12 +147,16 @@ class MainGamePageState extends BaseState<MainGamePage> {
             );
           }
         } else {
+          CommonFunction.alertDialog(
+            context: context,
+            msg: 'Your answer is wrong !!',
+            barrierDismissible: false,
+          );
           Flame.audio.play('music/Pac man dies.mp3');
           isGivenCorrectAns = false;
           setState(() {
             userLives = validateQuestion.lives;
-            CacheData.userState.lives = userLives;
-            CacheData.userState.totalscore = validateQuestion.totalscore;
+            validateQuestion.updateSessionScore();
           });
           if (userLives == 1) {
             CommonFunction.alertDialog(
@@ -164,6 +173,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
                 doneButtonFn: () {
                   Navigator.pop(context);
                   Navigator.pop(context);
+                  Navigator.pop(context);
                 });
           }
         }
@@ -178,36 +188,60 @@ class MainGamePageState extends BaseState<MainGamePage> {
     }
   }
 
+  _loadUserState(int mhtId) async {
+    try {
+      Response res = await _api.getUserState(mhtId: mhtId);
+      AppResponse appResponse =
+          ResponseParser.parseResponse(context: context, res: res);
+      if (appResponse.status == WSConstant.SUCCESS_CODE) {
+        print('IN LOGIN ::: userstateStr :::');
+        SharedPreferences pref = await SharedPreferences.getInstance();
+        pref.setString('userState', res.body);
+        UserState userState = UserState.fromJson(appResponse.data['results']);
+        CacheData.userState = userState;
+        Navigator.pop(context);
+        Navigator.pop(context);
+      }
+    } catch (err) {
+      print('CATCH 2 :: ');
+      print(err);
+      CommonFunction.displayErrorDialog(context: context, msg: err.toString());
+    }
+  }
+
   @override
   Widget pageToDisplay() {
     return new Scaffold(
-      body: new BackgroundGredient(
-        child: SafeArea(
-          child: question.questionType == "MCQ" ? new ListView(
-            padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
-            children: <Widget>[
-              titleBar(),
-              SizedBox(
-                height: MediaQuery.of(context).size.height / 8,
-              ),
-              Container(
-                alignment: Alignment(0, -0.30),
-                child: Text(
-                  ((question != null) ? question.question : ''),
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: kQuizBackgroundWhite,
-                    height: 1.5,
-                  ),
-                  textScaleFactor: 1.6,
+      body: CustomLoading(
+        isLoading: isLoading,
+        child: new BackgroundGredient(
+          child: SafeArea(
+            child: question.questionType == "MCQ" ? new ListView(
+              padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
+              children: <Widget>[
+                titleBar(),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height / 16,
                 ),
-              ),
-              new Container(
-                padding: EdgeInsets.all(50),
-                child: questionUi(),
-              ),
-            ],
-          ) : new Pikachar(),
+                Container(
+                  alignment: Alignment(0, -0.30),
+                  child: Text(
+                    ((question != null) ? question.question : ''),
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: kQuizBackgroundWhite,
+                      height: 1.5,
+                    ),
+                    textScaleFactor: 1.6,
+                  ),
+                ),
+                new Container(
+                  padding: EdgeInsets.fromLTRB(50, 30, 50, 50),
+                  child: questionUi(),
+                ),
+              ],
+            ) : new Pikachar(),
+          ),
         ),
       ),
       bottomNavigationBar: BottomAppBar(
@@ -259,7 +293,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
           ),
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: userLives <= 1
           ? FloatingActionButton.extended(
               icon: Icon(Icons.help_outline),
@@ -277,7 +311,8 @@ class MainGamePageState extends BaseState<MainGamePage> {
       AppResponse appResponse =
           ResponseParser.parseResponse(context: context, res: res);
       if (appResponse.status == WSConstant.SUCCESS_CODE) {
-        UserScoreState userScoreState = UserScoreState.fromJson(appResponse.data);
+        UserScoreState userScoreState =
+            UserScoreState.fromJson(appResponse.data);
         setState(() {
           userScoreState.updateSessionScore();
         });
@@ -370,19 +405,19 @@ class MainGamePageState extends BaseState<MainGamePage> {
               style: TextStyle(color: kQuizMain50, height: 1.3),
             ),
             dense: true,
-            trailing: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Text(
-                  2.toString(),
-                  textScaleFactor: 2,
-                ),
-                Text(
-                  getOrdinalOfNumber(2),
-                  style: TextStyle(height: 2),
-                ),
-              ],
-            ),
+            // trailing: Row(
+            //   mainAxisSize: MainAxisSize.min,
+            //   children: <Widget>[
+            //     Text(
+            //       2.toString(),
+            //       textScaleFactor: 2,
+            //     ),
+            //     Text(
+            //       getOrdinalOfNumber(2),
+            //       style: TextStyle(height: 2),
+            //     ),
+            //   ],
+            // ),
             contentPadding: EdgeInsets.symmetric(horizontal: 25),
           ),
           SizedBox(
@@ -413,10 +448,6 @@ class MainGamePageState extends BaseState<MainGamePage> {
                 height: 100,
               ),
               lifeline(Icons.star_half, '50 - 50'),
-              CustomVerticalDivider(
-                height: 100,
-              ),
-              lifeline(Icons.group, 'Audiance poll'),
             ],
           ),
           SizedBox(
@@ -501,19 +532,6 @@ class MainGamePageState extends BaseState<MainGamePage> {
         crossAxisAlignment: CrossAxisAlignment.center,
         verticalDirection: VerticalDirection.down,
         mainAxisSize: MainAxisSize.min,
-        /*children: <Widget>[
-          new SizedBox(height: 30),
-          options('Option 1', 0),
-          new SizedBox(height: 20),
-          options('Option 2', 1),
-          new SizedBox(height: 20),
-          options('Option 3', 2),
-          new SizedBox(height: 20),
-          Container(
-            child: options('Option 4', 3),
-            alignment: Alignment.bottomCenter,
-          ),
-        ]*/
         children: getOptionsWidget(),
       ),
     );

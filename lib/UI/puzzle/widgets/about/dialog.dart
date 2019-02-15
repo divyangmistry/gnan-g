@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:kon_banega_mokshadhipati/UI/puzzle/links.dart';
-import 'package:kon_banega_mokshadhipati/UI/puzzle/utils/url.dart';
+import 'package:SheelQuotient/UI/puzzle/links.dart';
+import 'package:SheelQuotient/UI/puzzle/utils/url.dart';
 
 class AboutDialog extends StatelessWidget {
   @override

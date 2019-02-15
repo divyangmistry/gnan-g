@@ -1,5 +1,5 @@
-import 'package:kon_banega_mokshadhipati/model/user_state.dart';
-import 'package:kon_banega_mokshadhipati/model/userinfo.dart';
+import 'package:SheelQuotient/model/user_state.dart';
+import 'package:SheelQuotient/model/userinfo.dart';
 
 import 'quizlevel.dart';
 class CacheData {

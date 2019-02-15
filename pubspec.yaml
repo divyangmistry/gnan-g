@@ -1,4 +1,4 @@
-name: kon_banega_mokshadhipati
+name: SheelQuotient
 description: A new Flutter project.
 
 # The following defines the version and build number for your application.
@@ -18,9 +18,10 @@ dependencies:
   shared_preferences: "0.4.3"
   http: "0.11.3+17"
   flame: "0.10.0"
-  onesignal: "1.0.0"
+  onesignal: "1.0.5"
   firebase_core:
   firebase_messaging: "0.2.1"
+  flutter_spinkit: "3.1.0"
 
   # For Puzzle -
   # cupertino_icons: ^0.1.2
@@ -30,6 +31,7 @@ dependencies:
   color: any
   rxdart: "0.20.0"
   encrypt: "1.0.0+1"
+  connectivity: "0.3.2"
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
