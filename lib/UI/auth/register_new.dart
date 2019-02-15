@@ -172,7 +172,7 @@ class RegisterPage2State extends State<RegisterPage2> {
         pref.setString('user_info', res.body);
         NotificationSetup.setupNotification();
         Navigator.pop(context);
-        Navigator.pushReplacementNamed(context, '/gameStart');
+        Navigator.pushReplacementNamed(context, '/level_new');
       }
     } catch (err) {
       CommonFunction.displayErrorDialog(context: context, msg: err.toString());
@@ -187,7 +187,7 @@ class RegisterPage2State extends State<RegisterPage2> {
         SharedPreferences pref = await SharedPreferences.getInstance();
         pref.setString('user_info', res.body);
         Navigator.pop(context);
-        Navigator.pushReplacementNamed(context, '/gameStart');
+        Navigator.pushReplacementNamed(context, '/level_new');
       }
     } catch (err) {
       CommonFunction.displayErrorDialog(context: context, msg: err.toString());
