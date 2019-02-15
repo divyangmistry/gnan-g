@@ -14,6 +14,7 @@ import 'package:kon_banega_mokshadhipati/model/userinfo.dart';
 import 'package:kon_banega_mokshadhipati/model/validateQuestion.dart';
 import 'package:kon_banega_mokshadhipati/utils/response_parser.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'pikachar.dart';
 
 import '../../colors.dart';
 import '../../common.dart';
@@ -182,7 +183,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
     return new Scaffold(
       body: new BackgroundGredient(
         child: SafeArea(
-          child: new ListView(
+          child: question.questionType == "MCQ" ? new ListView(
             padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
             children: <Widget>[
               titleBar(),
@@ -206,7 +207,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
                 child: questionUi(),
               ),
             ],
-          ),
+          ) : new Pikachar(),
         ),
       ),
       bottomNavigationBar: BottomAppBar(

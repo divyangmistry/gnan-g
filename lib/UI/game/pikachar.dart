@@ -37,27 +37,12 @@ class _PikacharState extends State<Pikachar> {
   @override
   Widget build(BuildContext context) {
     ansTiles = new AnswerTiles();
-    return new Container(
-      child: Scaffold(
-        body: new BackgroundGredient(
-          child: SafeArea(
-            child: Column(
+    return new Column(
               children: <Widget>[
                 question(),
                 ansTiles,
                 optionTiles(),
               ],
-            ))),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        floatingActionButton: FloatingActionButton.extended(
-          onPressed: () {
-            //TODO: Implement submit
-            //TODO: Submit button should be inactive till all answer tiles are full
-          },
-          icon: Icon(Icons.done),
-          label: Text('SUBMIT'),
-        ),
-      )
     );
   }
 
