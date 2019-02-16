@@ -3,10 +3,10 @@ import 'dart:math';
 
 import 'package:encrypt/encrypt.dart';
 import 'package:flutter/widgets.dart';
-import 'package:SheelQuotient/UI/puzzle/data/board.dart';
-import 'package:SheelQuotient/UI/puzzle/data/result.dart';
-import 'package:SheelQuotient/UI/puzzle/domain/game.dart';
-import 'package:SheelQuotient/UI/puzzle/utils/serializable.dart';
+import 'package:GnanG/UI/puzzle/data/board.dart';
+import 'package:GnanG/UI/puzzle/data/result.dart';
+import 'package:GnanG/UI/puzzle/domain/game.dart';
+import 'package:GnanG/UI/puzzle/utils/serializable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class GamePresenterWidget extends StatefulWidget {

@@ -2,14 +2,14 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:SheelQuotient/UI/puzzle/widgets/game/board.dart';
-import 'package:SheelQuotient/UI/puzzle/widgets/game/material/control.dart';
-import 'package:SheelQuotient/UI/puzzle/widgets/game/material/sheets.dart';
-import 'package:SheelQuotient/UI/puzzle/widgets/game/material/steps.dart';
-import 'package:SheelQuotient/UI/puzzle/widgets/game/material/stopwatch.dart';
-import 'package:SheelQuotient/UI/puzzle/widgets/game/presenter/main.dart';
-import 'package:SheelQuotient/UI/puzzle/widgets/icons/app.dart';
-import 'package:SheelQuotient/common.dart';
+import 'package:GnanG/UI/puzzle/widgets/game/board.dart';
+import 'package:GnanG/UI/puzzle/widgets/game/material/control.dart';
+import 'package:GnanG/UI/puzzle/widgets/game/material/sheets.dart';
+import 'package:GnanG/UI/puzzle/widgets/game/material/steps.dart';
+import 'package:GnanG/UI/puzzle/widgets/game/material/stopwatch.dart';
+import 'package:GnanG/UI/puzzle/widgets/game/presenter/main.dart';
+import 'package:GnanG/UI/puzzle/widgets/icons/app.dart';
+import 'package:GnanG/common.dart';
 
 class GameMaterialPage extends StatelessWidget {
   @override

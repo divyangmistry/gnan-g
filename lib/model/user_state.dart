@@ -1,5 +1,5 @@
-import 'package:SheelQuotient/model/current_stat.dart';
-import 'package:SheelQuotient/model/quizlevel.dart';
+import 'package:GnanG/model/current_stat.dart';
+import 'package:GnanG/model/quizlevel.dart';
 
 class UserState {
   List<QuizLevel> quizLevels;

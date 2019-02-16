@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart' hide Chip;
-import 'package:SheelQuotient/UI/puzzle/data/chip.dart';
+import 'package:GnanG/UI/puzzle/data/chip.dart';
 
 class ChipWidget extends StatelessWidget {
   final Chip chip;

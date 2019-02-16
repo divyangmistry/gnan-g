@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:SheelQuotient/UI/auth/register_new.dart';
-import 'package:SheelQuotient/model/signupsession.dart';
+import 'package:GnanG/UI/auth/register_new.dart';
+import 'package:GnanG/model/signupsession.dart';
 import '../../colors.dart';
 import '../../common.dart';
 import '../../Service/apiservice.dart';

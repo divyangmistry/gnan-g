@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart' hide AboutDialog;
 import 'package:flutter/widgets.dart';
-import 'package:SheelQuotient/UI/puzzle/config/ui.dart';
-import 'package:SheelQuotient/UI/puzzle/links.dart';
-import 'package:SheelQuotient/UI/puzzle/utils/url.dart';
-import 'package:SheelQuotient/UI/puzzle/widgets/about/dialog.dart';
-import 'package:SheelQuotient/UI/puzzle/widgets/game/presenter/main.dart';
+import 'package:GnanG/UI/puzzle/config/ui.dart';
+import 'package:GnanG/UI/puzzle/links.dart';
+import 'package:GnanG/UI/puzzle/utils/url.dart';
+import 'package:GnanG/UI/puzzle/widgets/about/dialog.dart';
+import 'package:GnanG/UI/puzzle/widgets/game/presenter/main.dart';
 
 Widget createMoreBottomSheet(
   BuildContext context, {

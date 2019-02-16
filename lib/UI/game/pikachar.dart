@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kon_banega_mokshadhipati/colors.dart';
+import '../../colors.dart';
 import '../../common.dart';
 import '../../colors.dart';
 
@@ -37,7 +37,7 @@ class _PikacharState extends State<Pikachar> {
   @override
   Widget build(BuildContext context) {
     ansTiles = new AnswerTiles();
-    return new Column(
+    return new ListView(
               children: <Widget>[
                 question(),
                 ansTiles,

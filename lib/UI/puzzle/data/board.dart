@@ -1,7 +1,7 @@
 import 'dart:math';
 
-import 'package:SheelQuotient/UI/puzzle/data/point.dart';
-import 'package:SheelQuotient/UI/puzzle/utils/serializable.dart';
+import 'package:GnanG/UI/puzzle/data/point.dart';
+import 'package:GnanG/UI/puzzle/utils/serializable.dart';
 import 'package:meta/meta.dart';
 
 import 'chip.dart';

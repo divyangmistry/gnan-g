@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:SheelQuotient/UI/game/answer_response_dialog.dart';
-import 'package:SheelQuotient/model/cacheData.dart';
-import 'package:SheelQuotient/model/current_stat.dart';
+import 'package:GnanG/UI/game/answer_response_dialog.dart';
+import 'package:GnanG/model/cacheData.dart';
+import 'package:GnanG/model/current_stat.dart';
 import '../../Service/apiservice.dart';
 import '../../model/question.dart';
 

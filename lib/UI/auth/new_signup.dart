@@ -3,11 +3,11 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
-import 'package:SheelQuotient/UI/auth/new_otp.dart';
-import 'package:SheelQuotient/constans/wsconstants.dart';
-import 'package:SheelQuotient/model/appresponse.dart';
-import 'package:SheelQuotient/model/signupsession.dart';
-import 'package:SheelQuotient/utils/response_parser.dart';
+import 'package:GnanG/UI/auth/new_otp.dart';
+import 'package:GnanG/constans/wsconstants.dart';
+import 'package:GnanG/model/appresponse.dart';
+import 'package:GnanG/model/signupsession.dart';
+import 'package:GnanG/utils/response_parser.dart';
 
 // File import
 import '../../common.dart';

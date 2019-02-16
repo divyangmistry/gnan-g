@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:SheelQuotient/UI/puzzle/utils/serializable.dart';
+import 'package:GnanG/UI/puzzle/utils/serializable.dart';
 import 'package:meta/meta.dart';
 
 import 'point.dart';

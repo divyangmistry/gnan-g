@@ -2,9 +2,9 @@ import 'dart:math';
 
 import 'package:flutter/material.dart' hide Chip;
 import 'package:flutter/widgets.dart';
-import 'package:SheelQuotient/UI/puzzle/data/board.dart';
-import 'package:SheelQuotient/UI/puzzle/data/chip.dart';
-import 'package:SheelQuotient/UI/puzzle/widgets/game/chip.dart';
+import 'package:GnanG/UI/puzzle/data/board.dart';
+import 'package:GnanG/UI/puzzle/data/chip.dart';
+import 'package:GnanG/UI/puzzle/widgets/game/chip.dart';
 
 class BoardWidget extends StatefulWidget {
   final Board board;

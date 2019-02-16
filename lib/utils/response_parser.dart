@@ -1,14 +1,14 @@
 import 'dart:convert';
 
-import 'package:SheelQuotient/model/cacheData.dart';
-import 'package:SheelQuotient/model/user_state.dart';
+import 'package:GnanG/model/cacheData.dart';
+import 'package:GnanG/model/user_state.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
-import 'package:SheelQuotient/common.dart';
-import 'package:SheelQuotient/constans/appconstant.dart';
-import 'package:SheelQuotient/constans/message_constant.dart';
-import 'package:SheelQuotient/constans/wsconstants.dart';
-import 'package:SheelQuotient/model/appresponse.dart';
+import 'package:GnanG/common.dart';
+import 'package:GnanG/constans/appconstant.dart';
+import 'package:GnanG/constans/message_constant.dart';
+import 'package:GnanG/constans/wsconstants.dart';
+import 'package:GnanG/model/appresponse.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ResponseParser {

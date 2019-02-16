@@ -1,6 +1,6 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:SheelQuotient/common.dart';
+import 'package:GnanG/common.dart';
 
 class FirebaseNotification {
   static FirebaseMessaging firebaseMessaging = new FirebaseMessaging();

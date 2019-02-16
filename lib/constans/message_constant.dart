@@ -1,4 +1,4 @@
-import 'package:SheelQuotient/constans/appconstant.dart';
+import 'package:GnanG/constans/appconstant.dart';
 
 class MessageConstant {
   static final String COMMON_ERROR_MSG =

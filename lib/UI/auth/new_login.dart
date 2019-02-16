@@ -1,10 +1,10 @@
 // Package import
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
-import 'package:SheelQuotient/constans/wsconstants.dart';
-import 'package:SheelQuotient/model/appresponse.dart';
-import 'package:SheelQuotient/model/userinfo.dart';
-import 'package:SheelQuotient/utils/response_parser.dart';
+import 'package:GnanG/constans/wsconstants.dart';
+import 'package:GnanG/model/appresponse.dart';
+import 'package:GnanG/model/userinfo.dart';
+import 'package:GnanG/utils/response_parser.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 

@@ -1,4 +1,4 @@
-import 'package:SheelQuotient/model/cacheData.dart';
+import 'package:GnanG/model/cacheData.dart';
 
 class UserScoreState {
   int lives;

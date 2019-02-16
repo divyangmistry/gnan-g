@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:http/http.dart';
-import 'package:SheelQuotient/Service/apiservice.dart';
-import 'package:SheelQuotient/common.dart';
-import 'package:SheelQuotient/constans/wsconstants.dart';
-import 'package:SheelQuotient/model/appresponse.dart';
-import 'package:SheelQuotient/model/cacheData.dart';
-import 'package:SheelQuotient/model/leaders.dart';
-import 'package:SheelQuotient/utils/response_parser.dart';
+import 'package:GnanG/Service/apiservice.dart';
+import 'package:GnanG/common.dart';
+import 'package:GnanG/constans/wsconstants.dart';
+import 'package:GnanG/model/appresponse.dart';
+import 'package:GnanG/model/cacheData.dart';
+import 'package:GnanG/model/leaders.dart';
+import 'package:GnanG/utils/response_parser.dart';
 import '../colors.dart';
 
 class LeaderBoard extends StatefulWidget {

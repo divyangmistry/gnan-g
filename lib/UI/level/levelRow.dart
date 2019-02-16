@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:SheelQuotient/UI/game/mainGame.dart';
-import 'package:SheelQuotient/UI/puzzle/main.dart';
-import 'package:SheelQuotient/common.dart';
-import 'package:SheelQuotient/model/cacheData.dart';
+import 'package:GnanG/UI/game/mainGame.dart';
+import 'package:GnanG/UI/puzzle/main.dart';
+import 'package:GnanG/common.dart';
+import 'package:GnanG/model/cacheData.dart';
 import '../../colors.dart';
 import '../../model/quizlevel.dart';
 
