@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:kon_banega_mokshadhipati/UI/auth/register_new.dart';
-import 'package:kon_banega_mokshadhipati/model/signupsession.dart';
+import 'package:SheelQuotient/UI/auth/register_new.dart';
+import 'package:SheelQuotient/model/signupsession.dart';
 import '../../colors.dart';
 import '../../common.dart';
 import '../../Service/apiservice.dart';

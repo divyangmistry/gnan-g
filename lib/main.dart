@@ -1,4 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:kon_banega_mokshadhipati/app.dart';
+import 'package:SheelQuotient/app.dart';
 
 void main() => runApp(QuizApp());

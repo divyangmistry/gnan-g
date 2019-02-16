@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:kon_banega_mokshadhipati/constans/sharedpref_constant.dart';
+import 'package:SheelQuotient/constans/sharedpref_constant.dart';
 import 'package:meta/meta.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;

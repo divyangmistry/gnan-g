@@ -1,8 +1,8 @@
 // Package import
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
-import 'package:kon_banega_mokshadhipati/constans/wsconstants.dart';
-import 'package:kon_banega_mokshadhipati/notification/notifcation_setup.dart';
+import 'package:SheelQuotient/constans/wsconstants.dart';
+import 'package:SheelQuotient/notification/notifcation_setup.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 

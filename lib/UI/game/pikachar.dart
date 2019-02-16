@@ -1,24 +1,40 @@
 import 'package:flutter/material.dart';
-import 'package:kon_banega_mokshadhipati/colors.dart';
-import '../../common.dart';
+import 'package:SheelQuotient/model/question.dart';
+import 'package:SheelQuotient/colors.dart';
 import '../../colors.dart';
 
 List<String> _optionChars = [];
+String questionText = 'This is a Pikachar style question where you tap on character tiles?';
 int rowTilesLimit = 6; // What is the max no. of tiles in a row
 AnswerTiles ansTiles;
 List<OptionTile> opTiles = List<OptionTile>();
 Map _answerChars = {
   "length": 6,
-  "indexToInsert": 0,
-  0: " ",
-  1: " ",
-  2: " ",
-  3: " ",
-  4: " ",
-  5: " ",
+  "indexToInsert": 0
 };
 
+void setAnswerCharsFromData(Answer ans) {
+  int lengthOfAnswer = ans.answer.length;
+  print(lengthOfAnswer);
+  _answerChars['length'] = lengthOfAnswer;
+  for (int i = 0; i < lengthOfAnswer; i++) {
+    _answerChars[i] = " ";
+  }
+}
+
 class Pikachar extends StatefulWidget {
+  String questText = questionText;
+  List<String> optionChars;
+  Answer answer;
+
+  Pikachar(this.questText, this.optionChars) {
+    Map<String, dynamic> jsonData = new Map<String, dynamic>();
+    jsonData['_id'] = "5c66f999810d7b757e179d96";
+    jsonData['answer'] = "મહાવીર ભગવાન";
+
+    this.answer = new Answer.fromJson(jsonData);
+  }
+
   @override
   _PikacharState createState() => new _PikacharState();
 }
@@ -28,36 +44,27 @@ class _PikacharState extends State<Pikachar> {
   void initState() {
     super.initState();
     // todo: Set the optionChars to come from API
-    _optionChars = [
-      'સી', 'મં', 'ધ', 'ર', 'સ્વા', 'મી', 'દા', 'દા', 'ભ', 'ગ', 'વા',
-      'ન', 'ની', 'રૂ', 'મા'
-    ];
+    if (widget.optionChars != null) {
+      _optionChars = widget.optionChars;
+    } else {
+      _optionChars = [
+        'સી', 'મં', 'ધ', 'ર', 'સ્વા', 'મી', 'દા', 'દા', 'ભ', 'ગ', 'વા',
+        'ન', 'ની', 'રૂ', 'મા'
+      ];
+    }
+    print(widget.answer);
+    setAnswerCharsFromData(widget.answer);
   }
 
   @override
   Widget build(BuildContext context) {
     ansTiles = new AnswerTiles();
-    return new Container(
-      child: Scaffold(
-        body: new BackgroundGredient(
-          child: SafeArea(
-            child: Column(
+    return new ListView(
               children: <Widget>[
                 question(),
                 ansTiles,
                 optionTiles(),
               ],
-            ))),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        floatingActionButton: FloatingActionButton.extended(
-          onPressed: () {
-            //TODO: Implement submit
-            //TODO: Submit button should be inactive till all answer tiles are full
-          },
-          icon: Icon(Icons.done),
-          label: Text('SUBMIT'),
-        ),
-      )
     );
   }
 
@@ -65,7 +72,7 @@ class _PikacharState extends State<Pikachar> {
     return new Container(
       padding: EdgeInsets.fromLTRB(20, 150, 20, 0),
       child: Text(
-        'This is a Pikachar style question where you tap on character tiles?',
+        widget.questText,
         textAlign: TextAlign.center,
         style: TextStyle(
           color: kQuizBackgroundWhite,

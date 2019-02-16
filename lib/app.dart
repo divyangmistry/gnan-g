@@ -2,26 +2,32 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 
-import 'package:kon_banega_mokshadhipati/Service/apiservice.dart';
-import 'package:kon_banega_mokshadhipati/UI/auth/forgot_password.dart';
-import 'package:kon_banega_mokshadhipati/UI/game_level.dart';
-//import 'package:kon_banega_mokshadhipati/UI/game_page.dart';
-import 'package:kon_banega_mokshadhipati/UI/game/leaderboar.dart';
-//import 'package:kon_banega_mokshadhipati/UI/level_ui.dart';
-//import 'package:kon_banega_mokshadhipati/UI/login_ui.dart';
-//import 'package:kon_banega_mokshadhipati/UI/new_login.dart';
-import 'package:kon_banega_mokshadhipati/UI/profile.dart';
-//import 'package:kon_banega_mokshadhipati/UI/register_page.dart';
-//import 'package:kon_banega_mokshadhipati/UI/rules.dart';
-//import 'package:kon_banega_mokshadhipati/UI/send_otp_page.dart';
-//import 'package:kon_banega_mokshadhipati/UI/simple_game.dart';
-import 'package:kon_banega_mokshadhipati/UI/leaderboard.dart';
-import 'package:kon_banega_mokshadhipati/model/cacheData.dart';
-import 'package:kon_banega_mokshadhipati/model/user_state.dart';
-import 'package:kon_banega_mokshadhipati/UI/intro/intro.dart';
-import 'package:kon_banega_mokshadhipati/constans/wsconstants.dart';
-import 'package:kon_banega_mokshadhipati/model/appresponse.dart';
-import 'package:kon_banega_mokshadhipati/utils/response_parser.dart';
+import 'model/question.dart';
+import 'common.dart';
+
+import 'package:SheelQuotient/Service/apiservice.dart';
+import 'package:SheelQuotient/UI/auth/forgot_password.dart';
+import 'package:SheelQuotient/UI/game_level.dart';
+
+//import 'package:SheelQuotient/UI/game_page.dart';
+import 'package:SheelQuotient/UI/game/leaderboar.dart';
+
+//import 'package:SheelQuotient/UI/level_ui.dart';
+//import 'package:SheelQuotient/UI/login_ui.dart';
+//import 'package:SheelQuotient/UI/new_login.dart';
+import 'package:SheelQuotient/UI/profile.dart';
+
+//import 'package:SheelQuotient/UI/register_page.dart';
+//import 'package:SheelQuotient/UI/rules.dart';
+//import 'package:SheelQuotient/UI/send_otp_page.dart';
+//import 'package:SheelQuotient/UI/simple_game.dart';
+import 'package:SheelQuotient/UI/leaderboard.dart';
+import 'package:SheelQuotient/model/cacheData.dart';
+import 'package:SheelQuotient/model/user_state.dart';
+import 'package:SheelQuotient/UI/intro/intro.dart';
+import 'package:SheelQuotient/constans/wsconstants.dart';
+import 'package:SheelQuotient/model/appresponse.dart';
+import 'package:SheelQuotient/utils/response_parser.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Service/apiservice.dart';
@@ -51,7 +57,48 @@ class QuizApp extends StatefulWidget {
 
 class _QuizAppState extends State<QuizApp> {
   // Widget _defaultHome = new LoginPage();
-  Widget _defaultHome = new Pikachar();
+  Widget _defaultHome = new Container(
+    child: Scaffold(
+      body: new BackgroundGredient(
+        child: SafeArea(
+          child: Pikachar(
+            'પાંચમું મહાવ્રત ક્યાં તીર્થંકર ભગવાને આપ્યું હતું?', ["ભ",
+          "ન",
+          "મ",
+          "મ",
+          "વા",
+          "વી",
+          "ના",
+          "લ્લિ",
+          "હા",
+          "ન",
+          "ભ",
+          "ગ",
+          "ર",
+          "થ",
+          "ગ",
+          "વા",
+          "ભ",
+          "ન",
+          "મ",
+          "મ",
+          "વા",
+          "વી",
+          "ના",
+          "લ્લિ",
+          "હા",
+          "ન",
+          "ભ",
+          "ગ",
+          "ર",
+          "થ",
+          "ગ",
+          "વા"
+          ]))
+      )
+    )
+  );
+
 
   ApiService _api = new ApiService();
 

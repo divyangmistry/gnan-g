@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:kon_banega_mokshadhipati/Service/apiservice.dart';
+import 'package:SheelQuotient/Service/apiservice.dart';
 import '../colors.dart';
 
 class LeaderBoard extends StatefulWidget {

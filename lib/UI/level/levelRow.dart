@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kon_banega_mokshadhipati/UI/game/mainGame.dart';
+import 'package:SheelQuotient/UI/game/mainGame.dart';
 import '../../colors.dart';
 import '../../model/quizlevel.dart';
 

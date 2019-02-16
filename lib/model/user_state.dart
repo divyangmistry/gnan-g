@@ -1,7 +1,5 @@
-
-
-import 'package:kon_banega_mokshadhipati/model/current_stat.dart';
-import 'package:kon_banega_mokshadhipati/model/quizlevel.dart';
+import 'package:SheelQuotient/model/current_stat.dart';
+import 'package:SheelQuotient/model/quizlevel.dart';
 
 class UserState {
 

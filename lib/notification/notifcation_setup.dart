@@ -1,4 +1,4 @@
-import 'package:kon_banega_mokshadhipati/notification/onesignal_notification.dart';
+import 'package:SheelQuotient/notification/onesignal_notification.dart';
 
 class NotificationSetup {
   static void setupNotification() {
