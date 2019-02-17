@@ -258,12 +258,14 @@ class AnswerRows extends StatefulWidget {
   /// Set the index to insert to the first blank answer tile
   /// Needs to be called after removing or adding an answer tile
   void findIndexToInsert() {
-    for (int i = 0; i < _answerChars["length"]; i++) {
+    int i = 0;
+    for (; i < _answerChars["length"]; i++) {
       if (_answerChars[i] == "" || _answerChars[i] == " ") {
-        _answerChars["indexToInsert"] = i;
         break;
       }
     }
+    // If all tiles full, then indexToInsert set to length + 1
+    _answerChars["indexToInsert"] = i;
   }
 
   /// Adds the char to the answer tiles
