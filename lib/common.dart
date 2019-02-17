@@ -125,8 +125,6 @@ class CommonFunction {
   static String mhtIdValidation(value) {
     if (value.isEmpty) {
       return 'Mht ID is required';
-    } else if (value.length != 6) {
-      return 'Mht ID must have 6 digit';
     }
     return null;
   }
@@ -160,8 +158,6 @@ class CommonFunction {
   static String mobileValidation(value) {
     if (value.isEmpty) {
       return 'Mobile no. is required';
-    } else if (value.length != 10) {
-      return 'Enter Valid Mobile no.';
     }
     return null;
   }

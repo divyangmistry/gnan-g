@@ -1,3 +1,6 @@
+import 'package:GnanG/constans/sharedpref_constant.dart';
+import 'package:GnanG/model/cacheData.dart';
+import 'package:GnanG/model/userinfo.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:GnanG/constans/wsconstants.dart';
@@ -166,10 +169,15 @@ class RegisterPage2State extends State<RegisterPage2> {
     try {
       widget.userData.password = _passwordController.text.toString();
       Response res = await _api.register(userData: widget.userData);
-      AppResponse appResponse = ResponseParser.parseResponse(context: context, res: res);
+      AppResponse appResponse =
+          ResponseParser.parseResponse(context: context, res: res);
       if (appResponse.status == WSConstant.SUCCESS_CODE) {
+        UserInfo userInfo = UserInfo.fromJson(appResponse.data);
+        CacheData.userInfo = userInfo;
         SharedPreferences pref = await SharedPreferences.getInstance();
         pref.setString('user_info', res.body);
+        pref.setString('token', userInfo.token);
+        pref.setBool(SharedPrefConstant.b_isUserLoggedIn, true);
         NotificationSetup.setupNotification();
         Navigator.pop(context);
         Navigator.pushReplacementNamed(context, '/level_new');
@@ -181,8 +189,10 @@ class RegisterPage2State extends State<RegisterPage2> {
 
   _resetPassword() async {
     try {
-      Response res = await _api.updatePassword(mhtId: widget.userData.mhtId, password: _passwordController.text);
-      AppResponse appResponse = ResponseParser.parseResponse(context: context, res: res);
+      Response res = await _api.updatePassword(
+          mhtId: widget.userData.mhtId, password: _passwordController.text);
+      AppResponse appResponse =
+          ResponseParser.parseResponse(context: context, res: res);
       if (appResponse.status == WSConstant.SUCCESS_CODE) {
         SharedPreferences pref = await SharedPreferences.getInstance();
         pref.setString('user_info', res.body);
@@ -211,14 +221,11 @@ class RegisterPage2State extends State<RegisterPage2> {
             SizedBox(height: 30),
             titleAndData('Name : ', widget.userData.name),
             SizedBox(height: 15),
-            titleAndData(
-                'Mobile no. : ', widget.userData.mobile),
+            titleAndData('Mobile no. : ', widget.userData.mobile),
             SizedBox(height: 15),
-            titleAndData(
-                'Email id : ', widget.userData.email),
+            titleAndData('Email id : ', widget.userData.email),
             SizedBox(height: 15),
-            titleAndData(
-                'Center : ', widget.userData.center),
+            titleAndData('Center : ', widget.userData.center),
           ],
         ),
       ),

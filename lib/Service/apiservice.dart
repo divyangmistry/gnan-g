@@ -84,7 +84,7 @@ class ApiService {
 
   Future<http.Response> forgotPassword({@required String mhtId}) async {
     Map<String, dynamic> data = {'mht_id': mhtId};
-    Response res = await postApi(url: '/update_password', data: data);
+    Response res = await postApi(url: '/forgot_password', data: data);
     return res;
   }
 
