@@ -1,3 +1,4 @@
+import 'package:GnanG/UI/animation/success.dart';
 import 'package:flutter/material.dart';
 import 'package:GnanG/Service/apiservice.dart';
 import 'package:GnanG/model/cacheData.dart';
@@ -14,7 +15,7 @@ class GameLevelPageState extends State<GameLevelPage> {
   bool _isloading = true;
 
   GameLevelPageState() {
-    new Future.delayed(new Duration(seconds: 2), () {
+    new Future.delayed(new Duration(seconds: 1), () {
       setState(() {
         _isloading = false;
       });
@@ -78,7 +79,13 @@ class GameLevelPageState extends State<GameLevelPage> {
             color: Colors.white,
           ),
           () {
-            Navigator.pushNamed(context, '/rules');
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => new SucessAnimationPage(),
+              ),
+            );
+            // Navigator.pushNamed(context, '/rules');
           },
         ),
       ],
@@ -191,7 +198,6 @@ class GameLevelPageState extends State<GameLevelPage> {
             icon: Icon(Icons.access_time),
             onPressed: () {
               print(' ----> SHOW USER DATA ! <----');
-
               CommonFunction.alertDialog(
                   context: context, msg: CacheData.userState.toString());
             },

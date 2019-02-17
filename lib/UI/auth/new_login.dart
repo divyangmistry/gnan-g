@@ -40,6 +40,7 @@ class LoginPageState extends State<LoginPage> {
         backgroundColor: kQuizSurfaceWhite,
         body: CustomLoading(
           isLoading: _isLoading,
+          isOverlay: true,
           child: SafeArea(
             child: new ListView(
               padding: EdgeInsets.symmetric(horizontal: 30.0),
@@ -238,7 +239,14 @@ class LoginPageState extends State<LoginPage> {
           print(userInfo);
           _api.appendTokenToHeader(userInfo.token);
           NotificationSetup.setupNotification(userInfo: userInfo);
-          _loadUserState(int.parse(this._mhtId));
+          bool result = await CommonFunction.loadUserState(context, int.parse(_mhtId));
+          if (result) {
+            Navigator.pushReplacementNamed(context, '/level_new');
+          } else {
+            setState(() {
+              _isLoading = false;
+            });
+          }
         } else {
           setState(() {
             _isLoading = false;
@@ -263,23 +271,26 @@ class LoginPageState extends State<LoginPage> {
     Navigator.pop(context);
   }
 
-  _loadUserState(int mhtId) async {
-    try {
-      Response res = await _api.getUserState(mhtId: mhtId);
-      AppResponse appResponse =
-          ResponseParser.parseResponse(context: context, res: res);
-      if (appResponse.status == WSConstant.SUCCESS_CODE) {
-        print('IN LOGIN ::: userstateStr :::');
-        SharedPreferences pref = await SharedPreferences.getInstance();
-        pref.setString('userState', res.body);
-        UserState userState = UserState.fromJson(appResponse.data['results']);
-        CacheData.userState = userState;
-        Navigator.pushReplacementNamed(context, '/level_new');
-      }
-    } catch (err) {
-      print('CATCH 2 :: ');
-      print(err);
-      CommonFunction.displayErrorDialog(context: context, msg: err.toString());
-    }
-  }
+  // _loadUserState(int mhtId) async {
+  //   try {
+  //     Response res = await _api.getUserState(mhtId: mhtId);
+  //     AppResponse appResponse =
+  //         ResponseParser.parseResponse(context: context, res: res);
+  //     if (appResponse.status == WSConstant.SUCCESS_CODE) {
+  //       print('IN LOGIN ::: userstateStr :::');
+  //       SharedPreferences pref = await SharedPreferences.getInstance();
+  //       await pref.setString('userState', res.body);
+  //       UserState userState = UserState.fromJson(appResponse.data['results']);
+  //       CacheData.userState = userState;
+  //       Navigator.pushReplacementNamed(context, '/level_new');
+  //     }
+  //   } catch (err) {
+  //     setState(() {
+  //       _isLoading = false;
+  //     });
+  //     print('CATCH 2 :: ');
+  //     print(err);
+  //     CommonFunction.displayErrorDialog(context: context, msg: err.toString());
+  //   }
+  // }
 }

@@ -40,12 +40,10 @@ class _QuizAppState extends State<QuizApp> {
       print(result);
       if (result == ConnectivityResult.none) {
         print(' ------> inside NO internet !, inside APP.dart Page <------');
-        CommonFunction.alertDialog(
-            context: context, msg: 'NO INTERNNET CONNECTION !');
-        // widget.defaultHome = NoInternetPage();
+        widget.defaultHome = NoInternetPage();
       } else {
         print(' ------> inside internet !, inside APP.dart Page <------');
-        // widget.defaultHome = LoginPage();
+        widget.defaultHome = LoginPage();
       }
     });
   }

@@ -28,12 +28,8 @@ class UserState {
         completed.add(new CompletedLevel.fromJson(v));
       });
     }
-    if (json['current'] != null) {
-      List<CurrentState> current = new List<CurrentState>();
-      json['current'].forEach((v) {
-        current.add(new CurrentState.fromJson(v));
-      });
-      if (current.isNotEmpty) currentState = current.first;
+    if (json['current'] != null && json['current'][0] != null) {
+      currentState = new CurrentState.fromJson(json['current'][0]);
     }
     totalscore = json['totalscore'];
     lives = json['lives'];

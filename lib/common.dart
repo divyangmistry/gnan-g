@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:GnanG/model/user_score_state.dart';
+import 'package:GnanG/model/user_state.dart';
+import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:GnanG/Service/apiservice.dart';
@@ -80,12 +82,14 @@ class BackgroundGredient extends StatelessWidget {
 class CustomLoading extends StatelessWidget {
   final bool isLoading;
   final Widget child;
-  CustomLoading({@required this.isLoading, @required this.child});
+  final bool isOverlay;
+  CustomLoading(
+      {@required this.isLoading, @required this.child, this.isOverlay = false});
   @override
   Widget build(BuildContext context) {
     return new Stack(
       children: <Widget>[
-        !isLoading ? child : new Container(),
+        isOverlay ? child : !isLoading ? child : new Container(),
         isLoading
             ? new Stack(
                 children: [
@@ -240,6 +244,31 @@ class CommonFunction {
     );
   }
 
+  static loadUserState(BuildContext context, int mhtId) async {
+      Response res = await _api.getUserState(mhtId: mhtId);
+      AppResponse appResponse =
+          ResponseParser.parseResponse(context: context, res: res);
+    try {
+      if (appResponse.status == WSConstant.SUCCESS_CODE) {
+        print('IN LOGIN ::: userstateStr :::');
+        SharedPreferences pref = await SharedPreferences.getInstance();
+        print('res.body :: ');
+        print(res.body);
+        pref.setString('userState', res.body);
+        UserState userState = UserState.fromJson(appResponse.data['results']);
+        CacheData.userState = userState;
+        return true;
+      }
+    } catch (err) {
+      print('CATCH 2 :: ');
+      print(err);
+      var data = res.body;
+      print(data);
+      CommonFunction.displayErrorDialog(context: context, msg: err.toString());
+      return false;
+    }
+  }
+
   // common Alert dialog
   static alertDialog({
     @required BuildContext context,
@@ -264,18 +293,13 @@ class CommonFunction {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              Icon(type == 'error' ? Icons.mood_bad : Icons.tag_faces,
-                  size: 100),
-              SizedBox(height: 20),
-              Text(
-                title != null
-                    ? title
-                    : type == 'error' ? 'Oh No!' : 'Congratulations',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: type == 'error' ? kQuizErrorRed : Colors.green[600],
+              Container(
+                height: 150,
+                width: 150,
+                child: FlareActor(
+                  'assets/animation/Teddy.flr',
+                  animation: type == 'success' ? "success" : 'fail',
                 ),
-                textScaleFactor: 1.5,
               ),
               SizedBox(
                 height: 20,

@@ -1,4 +1,3 @@
-import 'package:GnanG/model/user_state.dart';
 import 'package:flame/flame.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +10,6 @@ import 'package:GnanG/model/cacheData.dart';
 import 'package:GnanG/model/current_stat.dart';
 import 'package:GnanG/model/question.dart';
 import 'package:GnanG/model/user_score_state.dart';
-import 'package:GnanG/model/userinfo.dart';
 import 'package:GnanG/model/validateQuestion.dart';
 import 'package:GnanG/utils/response_parser.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -33,6 +31,7 @@ class MainGamePage extends StatefulWidget {
 class MainGamePageState extends BaseState<MainGamePage> {
   bool clickAns = false;
   bool isLoading = false;
+  bool isOverlay = false;
   List<bool> option = [false, false, false, false];
   int userLives = CacheData.userState.lives;
   bool trueAnswer = false;
@@ -49,7 +48,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
     print(widget.level);
     super.initState();
     _loadData();
-    // Flame.audio.play('music/bensound-epic.mp3');
+    // Flame.audio.play('music/bensound-epic.mp3', volume: 0.5);
   }
 
   _loadData() {
@@ -120,8 +119,6 @@ class MainGamePageState extends BaseState<MainGamePage> {
         ValidateQuestion validateQuestion =
             ValidateQuestion.fromJson(appResponse.data);
         if (validateQuestion.answerStatus) {
-          print('***************');
-          print(validateQuestion);
           setState(() {
             userLives = validateQuestion.lives;
             validateQuestion.updateSessionScore();
@@ -134,8 +131,26 @@ class MainGamePageState extends BaseState<MainGamePage> {
                 msg: 'Level ' + question.level.toString() + ' completed !! ',
                 barrierDismissible: false,
                 type: 'success',
-                doneButtonFn: () {
-                  _loadUserState(CacheData.userInfo.mhtId);
+                doneButtonFn: () async {
+                  setState(() {
+                    isOverlay = true;
+                    isLoading = true;
+                  });
+                  bool result = await CommonFunction.loadUserState(
+                      context, CacheData.userInfo.mhtId);
+                  if (result) {
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                    setState(() {
+                      isLoading = false;
+                      isOverlay = false;
+                    });
+                  } else {
+                    setState(() {
+                      isLoading = false;
+                      isOverlay = false;
+                    });
+                  }
                 });
           } else {
             CommonFunction.alertDialog(
@@ -188,27 +203,6 @@ class MainGamePageState extends BaseState<MainGamePage> {
     }
   }
 
-  _loadUserState(int mhtId) async {
-    try {
-      Response res = await _api.getUserState(mhtId: mhtId);
-      AppResponse appResponse =
-          ResponseParser.parseResponse(context: context, res: res);
-      if (appResponse.status == WSConstant.SUCCESS_CODE) {
-        print('IN LOGIN ::: userstateStr :::');
-        SharedPreferences pref = await SharedPreferences.getInstance();
-        pref.setString('userState', res.body);
-        UserState userState = UserState.fromJson(appResponse.data['results']);
-        CacheData.userState = userState;
-        Navigator.pop(context);
-        Navigator.pop(context);
-      }
-    } catch (err) {
-      print('CATCH 2 :: ');
-      print(err);
-      CommonFunction.displayErrorDialog(context: context, msg: err.toString());
-    }
-  }
-
   @override
   Widget pageToDisplay() {
     return new Scaffold(
@@ -216,31 +210,33 @@ class MainGamePageState extends BaseState<MainGamePage> {
         isLoading: isLoading,
         child: new BackgroundGredient(
           child: SafeArea(
-            child: question.questionType == "MCQ" ? new ListView(
-              padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
-              children: <Widget>[
-                titleBar(),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height / 16,
-                ),
-                Container(
-                  alignment: Alignment(0, -0.30),
-                  child: Text(
-                    ((question != null) ? question.question : ''),
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: kQuizBackgroundWhite,
-                      height: 1.5,
-                    ),
-                    textScaleFactor: 1.6,
-                  ),
-                ),
-                new Container(
-                  padding: EdgeInsets.fromLTRB(50, 30, 50, 50),
-                  child: questionUi(),
-                ),
-              ],
-            ) : new Pikachar(),
+            child: question.questionType == "MCQ"
+                ? new ListView(
+                    padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
+                    children: <Widget>[
+                      titleBar(),
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height / 16,
+                      ),
+                      Container(
+                        alignment: Alignment(0, -0.30),
+                        child: Text(
+                          ((question != null) ? question.question : ''),
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: kQuizBackgroundWhite,
+                            height: 1.5,
+                          ),
+                          textScaleFactor: 1.6,
+                        ),
+                      ),
+                      new Container(
+                        padding: EdgeInsets.fromLTRB(50, 30, 50, 50),
+                        child: questionUi(),
+                      ),
+                    ],
+                  )
+                : new Pikachar(),
           ),
         ),
       ),
@@ -305,34 +301,35 @@ class MainGamePageState extends BaseState<MainGamePage> {
   }
 
   void _getHint() async {
-    try {
-      Response res = await _api.hintTaken(
-          questionId: question.questionId, mhtId: CacheData.userInfo.mhtId);
-      AppResponse appResponse =
-          ResponseParser.parseResponse(context: context, res: res);
-      if (appResponse.status == WSConstant.SUCCESS_CODE) {
-        UserScoreState userScoreState =
-            UserScoreState.fromJson(appResponse.data);
-        setState(() {
-          userScoreState.updateSessionScore();
-        });
-        SharedPreferences pref = await SharedPreferences.getInstance();
-        pref.setString('user_info', res.body);
-        print('FROM HINT :: ');
-        print(res.body);
-        CommonFunction.alertDialog(
-            context: context,
-            msg: question.reference,
-            type: 'success',
-            doneButtonText: 'Hooray!',
-            title: 'Here is your hint ...',
-            barrierDismissible: false);
-      }
-    } catch (err) {
-      print('CATCH IN HINT :: ');
-      print(err);
-      CommonFunction.displayErrorDialog(context: context, msg: err.toString());
-    }
+    CommonFunction.loadUserState(context, CacheData.userInfo.mhtId);
+    // try {
+    //   Response res = await _api.hintTaken(
+    //       questionId: question.questionId, mhtId: CacheData.userInfo.mhtId);
+    //   AppResponse appResponse =
+    //       ResponseParser.parseResponse(context: context, res: res);
+    //   if (appResponse.status == WSConstant.SUCCESS_CODE) {
+    //     UserScoreState userScoreState =
+    //         UserScoreState.fromJson(appResponse.data);
+    //     setState(() {
+    //       userScoreState.updateSessionScore();
+    //     });
+    //     SharedPreferences pref = await SharedPreferences.getInstance();
+    //     pref.setString('user_info', res.body);
+    //     print('FROM HINT :: ');
+    //     print(res.body);
+    //     CommonFunction.alertDialog(
+    //         context: context,
+    //         msg: question.reference,
+    //         type: 'success',
+    //         doneButtonText: 'Hooray!',
+    //         title: 'Here is your hint ...',
+    //         barrierDismissible: false);
+    //   }
+    // } catch (err) {
+    //   print('CATCH IN HINT :: ');
+    //   print(err);
+    //   CommonFunction.displayErrorDialog(context: context, msg: err.toString());
+    // }
   }
 
   Widget titleBar() {

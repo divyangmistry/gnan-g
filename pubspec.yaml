@@ -22,6 +22,7 @@ dependencies:
   firebase_core:
   firebase_messaging: "0.2.1"
   flutter_spinkit: "3.1.0"
+  flare_flutter: "1.0.7"
 
   # For Puzzle -
   # cupertino_icons: ^0.1.2
@@ -70,6 +71,9 @@ flutter:
     - assets/audio/music/Pac man dies.mp3
     - assets/audio/music/party_horn-Mike_Koenig-76599891.mp3
     - assets/audio/music/bensound-epic.mp3
+    - assets/animation/noInternet.flr
+    - assets/animation/Teddy.flr
+    - assets/animation/Dancing.flr
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
