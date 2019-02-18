@@ -41,7 +41,8 @@ class GameLevelPageState extends State<GameLevelPage> {
                 SizedBox(
                   height: 20.0,
                 ),
-                _bonusRoundInfo(),
+                _profileData(),
+                // _bonusRoundInfo(),
                 SizedBox(
                   height: 20.0,
                 ),
@@ -105,6 +106,69 @@ class GameLevelPageState extends State<GameLevelPage> {
           ),
         ],
       ),
+    );
+  }
+
+  _profileData() {
+    return new Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+      margin: EdgeInsets.symmetric(vertical: 10),
+      color: Colors.grey[50],
+      elevation: 4,
+      child: new Padding(
+        padding: EdgeInsets.all(30),
+        child: new Column(
+          children: <Widget>[
+            Text(
+              'Profile data',
+              textScaleFactor: 1.5,
+              style: TextStyle(
+                color: kQuizMain400,
+              ),
+            ),
+            SizedBox(height: 15),
+            new Divider(),
+            SizedBox(height: 15),
+            titleAndData('Mobile no. : ', CacheData.userInfo.mobile),
+            SizedBox(height: 15),
+            titleAndData(
+                'Email id : ',
+                CacheData.userInfo.email != null
+                    ? CacheData.userInfo.email
+                    : ""),
+            SizedBox(height: 15),
+            titleAndData('Center : ', CacheData.userInfo.center),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget titleAndData(String title, String data) {
+    return new Column(
+      children: <Widget>[
+        new Row(
+          children: <Widget>[
+            new Container(
+              width: MediaQuery.of(context).size.width / 3,
+              child: new Text(
+                title,
+                textScaleFactor: 1.1,
+                style: TextStyle(
+                  color: kQuizMain50,
+                ),
+              ),
+            ),
+            new Text(
+              data,
+              textScaleFactor: 1.2,
+              style: TextStyle(
+                color: kQuizMain400,
+              ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 
@@ -254,8 +318,6 @@ class GameLevelPageState extends State<GameLevelPage> {
               children: <Widget>[
                 _scoreData(
                     'Points', '\$' + CacheData.userState.totalscore.toString()),
-                CustomVerticalDivider(height: 60),
-                _scoreData('Rank', '4th'),
                 CustomVerticalDivider(height: 60),
                 _scoreData('Lives', CacheData.userState.lives.toString()),
               ],
