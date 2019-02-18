@@ -33,6 +33,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
   bool isLoading = false;
   bool isOverlay = false;
   List<bool> option = [false, false, false, false];
+  List<bool> fiftyFifty = [true, true, true, true];
   int userLives = CacheData.userState.lives;
   bool trueAnswer = false;
   List<Question> questions;
@@ -440,11 +441,11 @@ class MainGamePageState extends BaseState<MainGamePage> {
           new Row(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              lifeline(Icons.call, 'Phone a Friend'),
+              lifeline(Icons.call, 'Phone a Friend', _phoneAFriend),
               CustomVerticalDivider(
                 height: 100,
               ),
-              lifeline(Icons.star_half, '50 - 50'),
+              lifeline(Icons.star_half, '50 - 50', _fiftyFifty),
             ],
           ),
           SizedBox(
@@ -484,7 +485,15 @@ class MainGamePageState extends BaseState<MainGamePage> {
     );
   }
 
-  Widget lifeline(IconData icon, String lifelineName) {
+  _phoneAFriend() {
+    print('Phone a Friend');
+  }
+
+  _fiftyFifty() {
+    print('50-50');
+  }
+
+  Widget lifeline(IconData icon, String lifelineName, Function fn) {
     return Expanded(
       child: Column(
         children: <Widget>[
@@ -496,7 +505,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
               icon,
               size: 30,
             ),
-            onPressed: () {},
+            onPressed: fn,
           ),
           SizedBox(height: 20),
           Text(
@@ -549,7 +558,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
   Widget getOptionWidget(String text, index) {
     return new SizedBox(
       width: double.infinity,
-      child: new MaterialButton(
+      child: index != 4 ? new MaterialButton(
         elevation: 5,
         onPressed: () {
           setState(() {
@@ -584,6 +593,8 @@ class MainGamePageState extends BaseState<MainGamePage> {
           ],
         ),
         color: option[index] ? kQuizMain400 : kQuizBackgroundWhite,
+      ) : new Container(
+        height: 50,
       ),
     );
   }
