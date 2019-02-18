@@ -241,7 +241,7 @@ class LoginPageState extends State<LoginPage> {
           NotificationSetup.setupNotification(userInfo: userInfo);
           bool result = await CommonFunction.loadUserState(context, int.parse(_mhtId));
           if (result) {
-            Navigator.pushReplacementNamed(context, '/level_new');
+            Navigator.pushReplacementNamed(context, '/gameMainPage');
           } else {
             setState(() {
               _isLoading = false;

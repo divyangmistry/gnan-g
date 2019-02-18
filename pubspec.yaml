@@ -74,6 +74,7 @@ flutter:
     - assets/animation/noInternet.flr
     - assets/animation/Teddy.flr
     - assets/animation/Dancing.flr
+    - assets/animation/leaderboard.flr
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
