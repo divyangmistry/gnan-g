@@ -33,7 +33,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
   bool isLoading = false;
   bool isOverlay = false;
   List<bool> option = [false, false, false, false];
-  List<bool> fiftyFifty = [true, true, true, true];
+  List<int> fiftyFifty = [0,3];
   int userLives = CacheData.userState.lives;
   bool trueAnswer = false;
   List<Question> questions;
@@ -558,7 +558,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
   Widget getOptionWidget(String text, index) {
     return new SizedBox(
       width: double.infinity,
-      child: index != 4 ? new MaterialButton(
+      child: index != fiftyFifty.contains(index) ? new MaterialButton(
         elevation: 5,
         onPressed: () {
           setState(() {

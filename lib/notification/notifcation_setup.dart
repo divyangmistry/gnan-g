@@ -1,11 +1,15 @@
-import 'package:flutter/material.dart';
+import 'package:GnanG/Service/apiservice.dart';
 import 'package:GnanG/model/userinfo.dart';
 import 'package:GnanG/notification/firebase_notification.dart';
 import 'package:GnanG/notification/onesignal_notification.dart';
+import 'package:flutter/material.dart';
+
 
 class NotificationSetup {
-  static void setupNotification({BuildContext context, UserInfo userInfo}) {
-    FirebaseNotification.setupFBNotification(context: context);
-    OneSignalNotification.setupOneSignalNotification(context: context, userInfo: userInfo);
+  static ApiService _apiService = ApiService();
+  static void setupNotification({BuildContext context, UserInfo userInfo}) async {
+    String fbToken = await FirebaseNotification.setupFBNotification(context: context);
+    String oneSiganlPlayerId = await OneSignalNotification.setupOneSignalNotification(context: context, userInfo: userInfo);
+    await _apiService.updateNotificationToken(mhtId: userInfo.mhtId, fbToken: fbToken, oneSignalToken: oneSiganlPlayerId);
   }
 }

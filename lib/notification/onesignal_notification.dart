@@ -13,8 +13,9 @@ class OneSignalNotification {
   static bool _requireConsent = true;
 
   // Platform messages are asynchronous, so we initialize in an async method.
-  static Future<void> setupOneSignalNotification(
+  static Future<String> setupOneSignalNotification(
       {BuildContext context, UserInfo userInfo}) async {
+    String playerId;
     //OneSignal.shared.setLogLevel(OSLogLevel.debug, OSLogLevel.debug);
     try {
       OneSignal.shared.setRequiresUserPrivacyConsent(_requireConsent);
@@ -59,11 +60,11 @@ class OneSignalNotification {
 
       OneSignal.shared.consentGranted(true);
 
-      await OneSignal.shared.getPermissionSubscriptionState().then((status) {
-        print(status.jsonRepresentation());
-        var playerId = status.subscriptionStatus.userId;
-        print(playerId);
-      });
+      OSPermissionSubscriptionState status =  await OneSignal.shared.getPermissionSubscriptionState();
+      print(status.jsonRepresentation());
+      playerId = status.subscriptionStatus.userId;
+      print(playerId);
+
 
       if (userInfo != null) {
         Map<String, dynamic> tags = Map();
@@ -84,6 +85,7 @@ class OneSignalNotification {
             context: context, msg: err.toString());
       }
     }
+    return playerId;
   }
 
   static void _setEmail(String emailAddress) {

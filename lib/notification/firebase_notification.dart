@@ -5,7 +5,7 @@ import 'package:GnanG/common.dart';
 class FirebaseNotification {
   static FirebaseMessaging firebaseMessaging = new FirebaseMessaging();
 
-  static void setupFBNotification({BuildContext context}) {
+  static Future<String> setupFBNotification({BuildContext context}) async {
     try {
       firebaseMessaging.configure(
           onLaunch: (Map<String, dynamic> msg) {
@@ -30,9 +30,8 @@ class FirebaseNotification {
           IosNotificationSettings setting) {
         print('IOS Setting');
       });
-      firebaseMessaging.getToken().then((token) {
-        print(token);
-      });
+      String token = await firebaseMessaging.getToken();
+      return token;
     } catch (err) {
       print(err);
       print(err);
@@ -42,5 +41,6 @@ class FirebaseNotification {
         CommonFunction.displayErrorDialog(context: context, msg: err.toString());
       }
     }
+    return null;
   }
 }

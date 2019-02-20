@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:GnanG/main.dart';
 import 'package:GnanG/model/user_score_state.dart';
 import 'package:GnanG/model/user_state.dart';
 import 'package:flare_flutter/flare_actor.dart';
@@ -225,6 +226,7 @@ class CommonFunction {
         UserScoreState userState = UserScoreState.fromJson(appResponse.data);
         userState.updateSessionScore();
         Navigator.pop(context);
+        main();
       }
     } catch (e) {
       CommonFunction.displayErrorDialog(context: context, msg: e.toString());
