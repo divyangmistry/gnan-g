@@ -137,6 +137,19 @@ class ApiService {
     return res;
   }
 
+  Future<http.Response> updateNotificationToken(
+      {@required int mhtId,
+        @required String fbToken,
+        @required String oneSignalToken}) async {
+    Map<String, dynamic> data = {
+      'mht_id': mhtId,
+      'fb_token': fbToken,
+      'onesignal_token': oneSignalToken
+    };
+    http.Response res = await postApi(url: '/update_notification_token', data: data);
+    return res;
+  }
+
   Future<http.Response> hintTaken({
     @required int questionId,
     @required int mhtId,
