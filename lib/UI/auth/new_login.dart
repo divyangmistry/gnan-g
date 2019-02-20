@@ -241,6 +241,8 @@ class LoginPageState extends State<LoginPage> {
           NotificationSetup.setupNotification(userInfo: userInfo);
           bool result = await CommonFunction.loadUserState(context, int.parse(_mhtId));
           if (result) {
+            print('CacheData.userState in login :: ');
+            print(CacheData.userState.currentState.level);
             Navigator.pushReplacementNamed(context, '/level_new');
           } else {
             setState(() {
