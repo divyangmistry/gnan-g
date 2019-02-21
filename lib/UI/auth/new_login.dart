@@ -243,7 +243,7 @@ class LoginPageState extends State<LoginPage> {
           if (result) {
             print('CacheData.userState in login :: ');
             print(CacheData.userState.currentState.level);
-            Navigator.pushReplacementNamed(context, '/level_new');
+            Navigator.pushReplacementNamed(context, '/gameMainPage');
           } else {
             setState(() {
               _isLoading = false;

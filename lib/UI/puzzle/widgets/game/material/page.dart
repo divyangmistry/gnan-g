@@ -31,87 +31,89 @@ class GameMaterialPage extends StatelessWidget {
 
     final fabWidget = _buildFab(context);
     final boardWidget = _buildBoard(context);
-    return WillPopScope(
-      onWillPop: () {
-        CommonFunction.alertDialog(
-          msg: 'You will not get LIFE if you leave this PUZZLE !',
-          title: 'Do you Really want to go back ?',
-          context: context,
-          doneButtonText: 'Yes',
-          doneButtonFn: () {
-            Navigator.pop(context);
-          },
-        );
-      },
-      child: OrientationBuilder(builder: (context, orientation) {
-        final statusWidget = Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            GameStopwatchWidget(
-              time: presenter.time,
-              fontSize: orientation == Orientation.landscape && !isLargeScreen
-                  ? 56.0
-                  : 72.0,
-            ),
-            GameStepsWidget(
-              steps: presenter.steps,
-            ),
-          ],
-        );
+    return BackgroundGredient(
+      child: WillPopScope(
+        onWillPop: () {
+          CommonFunction.alertDialog(
+            msg: 'You will not get LIFE if you leave this PUZZLE !',
+            title: 'Do you Really want to go back ?',
+            context: context,
+            doneButtonText: 'Yes',
+            doneButtonFn: () {
+              Navigator.pop(context);
+            },
+          );
+        },
+        child: OrientationBuilder(builder: (context, orientation) {
+          final statusWidget = Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              GameStopwatchWidget(
+                time: presenter.time,
+                fontSize: orientation == Orientation.landscape && !isLargeScreen
+                    ? 56.0
+                    : 72.0,
+              ),
+              GameStepsWidget(
+                steps: presenter.steps,
+              ),
+            ],
+          );
 
-        if (orientation == Orientation.portrait) {
-          //
-          // Portrait layout
-          //
-          return Scaffold(
-            body: SafeArea(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  SizedBox(
-                    height: 20.0,
-                  ),
-                  Text(
-                    'Solve this PUZZLE to get LIFE !',
-                    style: Theme.of(context).textTheme.title,
-                  ),
-                  Expanded(
-                    child: Center(
-                      child: statusWidget,
+          if (orientation == Orientation.portrait) {
+            //
+            // Portrait layout
+            //
+            return Scaffold(
+              body: SafeArea(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    SizedBox(
+                      height: 20.0,
                     ),
-                  ),
-                  SizedBox(
-                    height: 50.0,
-                  ),
-                  boardWidget,
-                  isLargeScreen && isTallScreen
-                      ? const SizedBox(height: 116.0)
-                      : const SizedBox(height: 72.0),
-                ],
+                    Text(
+                      'Solve this PUZZLE to get LIFE !',
+                      style: Theme.of(context).textTheme.title,
+                    ),
+                    Expanded(
+                      child: Center(
+                        child: statusWidget,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 50.0,
+                    ),
+                    boardWidget,
+                    isLargeScreen && isTallScreen
+                        ? const SizedBox(height: 116.0)
+                        : const SizedBox(height: 72.0),
+                  ],
+                ),
               ),
-            ),
-            floatingActionButtonLocation:
-                FloatingActionButtonLocation.centerFloat,
-            floatingActionButton: fabWidget,
-          );
-        } else {
-          //
-          // Landscape layout
-          //
-          return Scaffold(
-            body: SafeArea(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  boardWidget,
-                  statusWidget,
-                ],
+              floatingActionButtonLocation:
+                  FloatingActionButtonLocation.centerFloat,
+              floatingActionButton: fabWidget,
+            );
+          } else {
+            //
+            // Landscape layout
+            //
+            return Scaffold(
+              body: SafeArea(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    boardWidget,
+                    statusWidget,
+                  ],
+                ),
               ),
-            ),
-            floatingActionButton: fabWidget,
-          );
-        }
-      }),
+              floatingActionButton: fabWidget,
+            );
+          }
+        }),
+      ),
     );
   }
 

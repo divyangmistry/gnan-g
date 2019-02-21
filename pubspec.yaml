@@ -33,6 +33,7 @@ dependencies:
   rxdart: "0.20.0"
   encrypt: "1.0.0+1"
   connectivity: "0.3.2"
+  nima: ^1.0.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -74,6 +75,19 @@ flutter:
     - assets/animation/noInternet.flr
     - assets/animation/Teddy.flr
     - assets/animation/Dancing.flr
+    - assets/animation/leaderboard.flr
+    - assets/animation/person_floating.flr
+    - assets/11-14-asset-1-gotham
+    - assets/11-14-asset-2-gotham
+    - assets/11-14-asset-3-gotham
+    - assets/11-14-asset-4-gotham
+    - assets/11-14-asset-5-gotham
+    - assets/11-14-asset-6-gotham
+    - assets/11-14-asset-7-gotham
+    - assets/11-14-asset-8-gotham
+    - assets/11-14-asset-9-gotham
+    - assets/11-14-asset-10-gotham
+    - assets/bonus.nma2d
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

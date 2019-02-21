@@ -1,3 +1,4 @@
+import 'package:GnanG/UI/game/game_main_page.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:GnanG/UI/game_level.dart';
@@ -57,6 +58,7 @@ class _QuizAppState extends State<QuizApp> {
       theme: _kQuizTheme,
       routes: <String, WidgetBuilder>{
         '/simpleGame': (BuildContext context) => new SimpleGame(),
+        '/gameMainPage': (BuildContext context) => new GameMainPage(),
         '/game_new': (BuildContext context) => new MainGamePage(),
         '/level_new': (BuildContext context) => new NewLevelPage(),
         '/login_new': (BuildContext context) => new LoginPage(),

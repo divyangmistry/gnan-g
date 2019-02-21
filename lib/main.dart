@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:GnanG/UI/game/game_main_page.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -36,7 +37,8 @@ _checkLoginStatus() async {
   if (connectivityResult == ConnectivityResult.none) {
     print(' ------> inside NO internet ! <------');
     _defaultHome = NoInternetPage();
-  } else if (connectivityResult == ConnectivityResult.wifi || connectivityResult == ConnectivityResult.mobile) {
+  } else if (connectivityResult == ConnectivityResult.wifi ||
+      connectivityResult == ConnectivityResult.mobile) {
     print(' ------> inside internet <------');
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool _isLogin = prefs.getBool('b_isUserLoggedIn') == null
@@ -71,7 +73,7 @@ _loadUserState(int mhtId) async {
       UserState userState =
           UserState.fromJson(json.decode(res.body)['data']['results']);
       CacheData.userState = userState;
-      _defaultHome = NewLevelPage();
+      _defaultHome = GameMainPage();
     }
   } catch (err) {
     print('CATCH 2 :: ERROR IN MAIN :: ');
