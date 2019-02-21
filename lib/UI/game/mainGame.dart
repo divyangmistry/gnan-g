@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flame/flame.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -33,7 +35,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
   bool isLoading = false;
   bool isOverlay = false;
   List<bool> option = [false, false, false, false];
-  List<int> fiftyFifty = [0,3];
+  List<int> fiftyFifty = [];
   int userLives = CacheData.userState.lives;
   bool trueAnswer = false;
   List<Question> questions;
@@ -92,6 +94,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
     Navigator.pop(context);
     if (currentQueIndex < questions.length - 1) {
       setState(() {
+        fiftyFifty = [];
         currentQueIndex++;
         question =
             questions.getRange(currentQueIndex, currentQueIndex + 1).first;
@@ -491,6 +494,15 @@ class MainGamePageState extends BaseState<MainGamePage> {
 
   _fiftyFifty() {
     print('50-50');
+    var rng = new Random();
+    while (fiftyFifty.length < 3) {
+      int temp = rng.nextInt(3);
+      if (temp != question.answerIndex) {
+        setState(() {
+          fiftyFifty.add(temp);
+        });
+      }
+    }
   }
 
   Widget lifeline(IconData icon, String lifelineName, Function fn) {
@@ -558,44 +570,47 @@ class MainGamePageState extends BaseState<MainGamePage> {
   Widget getOptionWidget(String text, index) {
     return new SizedBox(
       width: double.infinity,
-      child: index != fiftyFifty.contains(index) ? new MaterialButton(
-        elevation: 5,
-        onPressed: () {
-          setState(() {
-            _onOptionSelect(index: index, answer: text);
-            option = [false, false, false, false];
-            option[index] = !option[index];
-          });
-        },
-        height: 50,
-        child: Row(
-          children: <Widget>[
-            option[index]
-                ? new Container(
-                    width: 0,
-                    child: Icon(
-                      Icons.check_circle,
-                      size: 25,
-                      color: kQuizBackgroundWhite,
+      child: !fiftyFifty.contains(index)
+          ? new MaterialButton(
+              elevation: 5,
+              onPressed: () {
+                setState(() {
+                  _onOptionSelect(index: index, answer: text);
+                  option = [false, false, false, false];
+                  option[index] = !option[index];
+                });
+              },
+              height: 50,
+              child: Row(
+                children: <Widget>[
+                  option[index]
+                      ? new Container(
+                          width: 0,
+                          child: Icon(
+                            Icons.check_circle,
+                            size: 25,
+                            color: kQuizBackgroundWhite,
+                          ),
+                        )
+                      : new Container(),
+                  Expanded(
+                    child: Text(
+                      text,
+                      textScaleFactor: 1.1,
+                      style: TextStyle(
+                        color:
+                            option[index] ? kQuizBackgroundWhite : kQuizMain400,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
-                  )
-                : new Container(),
-            Expanded(
-              child: Text(
-                text,
-                textScaleFactor: 1.1,
-                style: TextStyle(
-                  color: option[index] ? kQuizBackgroundWhite : kQuizMain400,
-                ),
-                textAlign: TextAlign.center,
+                  ),
+                ],
               ),
+              color: option[index] ? kQuizMain400 : kQuizBackgroundWhite,
+            )
+          : new Container(
+              height: 50,
             ),
-          ],
-        ),
-        color: option[index] ? kQuizMain400 : kQuizBackgroundWhite,
-      ) : new Container(
-        height: 50,
-      ),
     );
   }
 }
