@@ -117,12 +117,12 @@ class GameMainPageState extends State<GameMainPage> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
                 Container(
-                  height: 180,
+                  height: 150,
                   width: 150,
-                  child: new NimaActor("assets/bonus",
-                      alignment: Alignment.center,
-                      fit: BoxFit.contain,
-                      animation: "Idle"),
+                  child: FlareActor(
+                    'assets/animation/bonus.flr',
+                    animation: 'Notification Loop',
+                  ),
                 ),
                 Container(
                   child: Text(
