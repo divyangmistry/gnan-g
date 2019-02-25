@@ -84,3 +84,28 @@ class Answer {
   }
 
 }
+
+class PikacharAnswer {
+  String sId;
+  List<List> answer;
+
+  PikacharAnswer({this.sId, this.answer});
+
+  PikacharAnswer.fromJson(Map<String, dynamic> json) {
+    sId = json['_id'];
+    answer = json['answer'];
+  }
+
+//  Map<String, dynamic> toJson() {
+//    final Map<String, dynamic> data = new Map<String, dynamic>();
+//    data['_id'] = this.sId;
+//    data['answer'] = this.answer;
+//    return data;
+//  }
+
+  @override
+  String toString() {
+    return 'Answer{answer: $answer}';
+  }
+
+}

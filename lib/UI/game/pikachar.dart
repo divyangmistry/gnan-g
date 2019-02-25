@@ -14,7 +14,7 @@ Map _answerChars = {
   "indexToInsert": 0
 };
 
-void setAnswerCharsFromData(Answer ans) {
+void setAnswerCharsFromData(PikacharAnswer ans) {
   int lengthOfAnswer = ans.answer.length;
   print(lengthOfAnswer);
   _answerChars['length'] = lengthOfAnswer;
@@ -26,14 +26,17 @@ void setAnswerCharsFromData(Answer ans) {
 class Pikachar extends StatefulWidget {
   String questText = questionText;
   List<String> optionChars;
-  Answer answer;
+  PikacharAnswer answer;
 
   Pikachar(this.questText, this.optionChars) {
     Map<String, dynamic> jsonData = new Map<String, dynamic>();
     jsonData['_id'] = "5c66f999810d7b757e179d96";
-    jsonData['answer'] = "મહાવીર ભગવાન";
+    jsonData['answer'] = [
+      ["મ", "હા" , "વી", "ર"],
+      ["ભ", "ગ", "વા" , "ન"]
+    ];
 
-    this.answer = new Answer.fromJson(jsonData);
+    this.answer = new PikacharAnswer.fromJson(jsonData);
   }
 
   @override
