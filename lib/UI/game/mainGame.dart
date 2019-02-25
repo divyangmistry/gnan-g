@@ -305,35 +305,35 @@ class MainGamePageState extends BaseState<MainGamePage> {
   }
 
   void _getHint() async {
-    CommonFunction.loadUserState(context, CacheData.userInfo.mhtId);
-    // try {
-    //   Response res = await _api.hintTaken(
-    //       questionId: question.questionId, mhtId: CacheData.userInfo.mhtId);
-    //   AppResponse appResponse =
-    //       ResponseParser.parseResponse(context: context, res: res);
-    //   if (appResponse.status == WSConstant.SUCCESS_CODE) {
-    //     UserScoreState userScoreState =
-    //         UserScoreState.fromJson(appResponse.data);
-    //     setState(() {
-    //       userScoreState.updateSessionScore();
-    //     });
-    //     SharedPreferences pref = await SharedPreferences.getInstance();
-    //     pref.setString('user_info', res.body);
-    //     print('FROM HINT :: ');
-    //     print(res.body);
-    //     CommonFunction.alertDialog(
-    //         context: context,
-    //         msg: question.reference,
-    //         type: 'success',
-    //         doneButtonText: 'Hooray!',
-    //         title: 'Here is your hint ...',
-    //         barrierDismissible: false);
-    //   }
-    // } catch (err) {
-    //   print('CATCH IN HINT :: ');
-    //   print(err);
-    //   CommonFunction.displayErrorDialog(context: context, msg: err.toString());
-    // }
+    // CommonFunction.loadUserState(context, CacheData.userInfo.mhtId);
+    try {
+      Response res = await _api.hintTaken(
+          questionId: question.questionId, mhtId: CacheData.userInfo.mhtId);
+      AppResponse appResponse =
+          ResponseParser.parseResponse(context: context, res: res);
+      if (appResponse.status == WSConstant.SUCCESS_CODE) {
+        UserScoreState userScoreState =
+            UserScoreState.fromJson(appResponse.data);
+        setState(() {
+          userScoreState.updateSessionScore();
+        });
+        SharedPreferences pref = await SharedPreferences.getInstance();
+        pref.setString('user_info', res.body);
+        print('FROM HINT :: ');
+        print(res.body);
+        CommonFunction.alertDialog(
+            context: context,
+            msg: question.reference,
+            type: 'success',
+            doneButtonText: 'Hooray!',
+            title: 'Here is your hint ...',
+            barrierDismissible: false);
+      }
+    } catch (err) {
+      print('CATCH IN HINT :: ');
+      print(err);
+      CommonFunction.displayErrorDialog(context: context, msg: err.toString());
+    }
   }
 
   Widget titleBar() {
