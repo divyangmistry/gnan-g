@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:SheelQuotient/model/question.dart';
 import 'package:SheelQuotient/colors.dart';
 import '../../colors.dart';
+import 'dart:math';
 
 List<String> _optionChars = [];
+List answerLengths = List();
 String questionText = 'This is a Pikachar style question where you tap on character tiles?';
 int rowTilesLimit = 6; // What is the max no. of tiles in a row
 AnswerRows ansRows;
@@ -14,9 +16,19 @@ Map _answerChars = {
   "indexToInsert": 0
 };
 
-void setAnswerCharsFromData(Answer ans) {
-  int lengthOfAnswer = ans.answer.length;
+int getLengthOfAnswerChars(List answer) {
+  return answer.fold(0, (t,e) => t + e.length);
+}
+
+List mapAnswerCharsToLength(List answer) {
+  return answer.map((a) => a.length).toList();
+}
+
+void setAnswerCharsFromData(PikacharAnswer ans) {
+  int lengthOfAnswer = getLengthOfAnswerChars(ans.answer);
+  answerLengths = mapAnswerCharsToLength(ans.answer);
   print(lengthOfAnswer);
+  print("answerLengths: " + answerLengths.toString());
   _answerChars['length'] = lengthOfAnswer;
   for (int i = 0; i < lengthOfAnswer; i++) {
     _answerChars[i] = " ";
@@ -26,14 +38,17 @@ void setAnswerCharsFromData(Answer ans) {
 class Pikachar extends StatefulWidget {
   String questText = questionText;
   List<String> optionChars;
-  Answer answer;
+  PikacharAnswer answer;
 
   Pikachar(this.questText, this.optionChars) {
     Map<String, dynamic> jsonData = new Map<String, dynamic>();
     jsonData['_id'] = "5c66f999810d7b757e179d96";
-    jsonData['answer'] = "મહાવીર ભગવાન";
+    jsonData['answer'] = [
+      ["મ", "હા" , "વી", "ર", "ના", "નિ", "ર્વા", "ણ", "પ", "છી", "", "", ""],
+      ["ભ", "ગ", "વા" , "ન"],
+    ];
 
-    this.answer = new Answer.fromJson(jsonData);
+    this.answer = new PikacharAnswer.fromJson(jsonData);
   }
 
   @override
@@ -298,9 +313,17 @@ class _AnswerRowsState extends State<AnswerRows> {
 
   List<Widget> createAnswerRows() {
     List<Widget> cols = new List<Widget>();
-    for (int i = 0; i < _answerChars["length"]; i = i + rowTilesLimit) {
-      var optRow = AnswerTiles(i);
-      cols.add(optRow);
+//    for (int i = 0; i < _answerChars["length"]; i = i + rowTilesLimit) {
+    int i = 0;
+    for(int j = 0; j < answerLengths.length; j++) {
+      int temp = answerLengths[j];
+      while(temp > 0) {
+        int numTilesInRow = min(rowTilesLimit, temp);
+        var optRow = AnswerTiles(i, numTilesInRow);
+        cols.add(optRow);
+        i += numTilesInRow;
+        temp -= numTilesInRow;
+      }
     }
     return cols;
   }
@@ -308,31 +331,33 @@ class _AnswerRowsState extends State<AnswerRows> {
 
 class AnswerTiles extends StatefulWidget {
   int startingIndex;
+  int numTiles;
 
-  AnswerTiles(this.startingIndex);
+  AnswerTiles(this.startingIndex, this.numTiles);
 
-  _AnswerTilesState createState() => _AnswerTilesState(this.startingIndex);
+  _AnswerTilesState createState() => _AnswerTilesState(this.startingIndex, this.numTiles);
 }
 
 class _AnswerTilesState extends State<AnswerTiles> {
   int startingIndex;
+  int numTiles;
 
-  _AnswerTilesState(this.startingIndex);
+  _AnswerTilesState(this.startingIndex, this.numTiles);
 
   Widget build(BuildContext context) {
     return new Container(
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
       child: Row(
-        children: createAnswerTiles(this.startingIndex),
+        children: createAnswerTiles(this.startingIndex, this.numTiles),
         mainAxisAlignment: MainAxisAlignment.spaceAround,
       )
     );
   }
 
-  createAnswerTiles(int startingIndex) {
+  createAnswerTiles(int startingIndex, int numTiles) {
     List<AnswerTile> tempAnswerTiles = new List<AnswerTile>();
     for (int i = startingIndex; i < _answerChars["length"] &&
-      i < startingIndex + rowTilesLimit; i++) {
+      i < startingIndex + numTiles; i++) {
       var aTile = new AnswerTile(i);
       tempAnswerTiles.add(aTile);
       aTiles.add(aTile);
