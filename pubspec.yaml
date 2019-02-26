@@ -78,6 +78,8 @@ flutter:
     - assets/animation/leaderboard.flr
     - assets/animation/person_floating.flr
     - assets/animation/bonus.flr
+    - assets/animation/leader.flr
+    - assets/animation/puzzl.flr
     
     
 

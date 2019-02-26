@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:GnanG/common.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -12,7 +13,7 @@ class GameOfFifteen extends StatelessWidget {
   Widget build(BuildContext context) {
     // TODO: implement build
     return PlayGamesContainer(
-      child: ConfigUiContainer(
+      child: BackgroundGredient(
         child: MyApp(),
       ),
     );
@@ -46,34 +47,36 @@ class _MyMaterialApp extends _MyPlatformApp {
 
   @override
   Widget build(BuildContext context) {
-    final ui = ConfigUiContainer.of(context);
+    // final ui = ConfigUiContainer.of(context);
 
-    // Get current theme from
-    // a global state.
-    final overlay = ui.useDarkTheme
-        ? SystemUiOverlayStyle.light
-        : SystemUiOverlayStyle.dark;
-    final theme = ui.useDarkTheme ? ThemeData.dark() : ThemeData.light();
+    // // Get current theme from
+    // // a global state.
+    // final overlay = ui.useDarkTheme
+    //     ? SystemUiOverlayStyle.light
+    //     : SystemUiOverlayStyle.dark;
+    // final theme = ui.useDarkTheme ? ThemeData.dark() : ThemeData.light();
 
-    SystemChrome.setSystemUIOverlayStyle(
-      overlay.copyWith(
-        statusBarColor: Colors.transparent,
+    // SystemChrome.setSystemUIOverlayStyle(
+    //   overlay.copyWith(
+    //     statusBarColor: Colors.transparent,
+    //   ),
+    // );
+
+    return BackgroundGredient(
+      child: MaterialApp(
+        title: title,
+        // theme: theme.copyWith(
+        //   primaryColor: Colors.blue,
+        //   accentColor: Colors.amberAccent,
+        //   accentIconTheme: theme.iconTheme.copyWith(color: Colors.black),
+        //   dialogTheme: const DialogTheme(
+        //     shape: RoundedRectangleBorder(
+        //       borderRadius: BorderRadius.all(Radius.circular(16.0)),
+        //     ),
+        //   ),
+        // ),
+        home: GamePage(),
       ),
-    );
-
-    return MaterialApp(
-      title: title,
-      theme: theme.copyWith(
-        primaryColor: Colors.blue,
-        accentColor: Colors.amberAccent,
-        accentIconTheme: theme.iconTheme.copyWith(color: Colors.black),
-        dialogTheme: const DialogTheme(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(16.0)),
-          ),
-        ),
-      ),
-      home: GamePage(),
     );
   }
 }

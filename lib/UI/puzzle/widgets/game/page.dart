@@ -71,6 +71,7 @@ class GamePage extends StatelessWidget {
       );
     } else {
       showDialog(
+        barrierDismissible: false,
         context: context,
         builder: (context) => GameVictoryDialog(result: result),
       );

@@ -56,7 +56,7 @@ class GameMainPageState extends State<GameMainPage> {
             Navigator.pushNamed(context, '/level_new');
           },
           child: Container(
-            height: MediaQuery.of(context).size.height / 4.5,
+            height: MediaQuery.of(context).size.height / 8.0,
             decoration: BoxDecoration(
               shape: BoxShape.rectangle,
               boxShadow: [
@@ -99,7 +99,7 @@ class GameMainPageState extends State<GameMainPage> {
             Navigator.pushNamed(context, '/leaderboard');
           },
           child: Container(
-            height: MediaQuery.of(context).size.height / 4.5,
+            height: MediaQuery.of(context).size.height / 8.0,
             decoration: BoxDecoration(
               shape: BoxShape.rectangle,
               boxShadow: [
@@ -139,43 +139,137 @@ class GameMainPageState extends State<GameMainPage> {
         ),
         GestureDetector(
           onTap: () {
+            Navigator.pushNamed(context, '/gameOf15');
+          },
+          child: Container(
+            height: MediaQuery.of(context).size.height / 8.0,
+            decoration: BoxDecoration(
+              shape: BoxShape.rectangle,
+              color: Colors.blue.shade400,
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.grey.shade900,
+                    blurRadius: 10.0,
+                    spreadRadius: 1.0)
+              ],
+              borderRadius: BorderRadius.all(
+                Radius.circular(20.0),
+              ),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                Container(
+                  height: 180,
+                  width: 150,
+                  child: FlareActor(
+                    'assets/animation/puzzl.flr',
+                    animation: 'rotating',
+                  ),
+                ),
+                Container(
+                  alignment: Alignment(0.5, 0.0),
+                  child: Text(
+                    'Puzzle',
+                    style: TextStyle(fontSize: 25.0, color: Colors.white),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        SizedBox(
+          height: 15.0,
+        ),
+        GestureDetector(
+          onTap: () {
+            Navigator.pushNamed(context, '/leaderboard');
+          },
+          child: Container(
+            height: MediaQuery.of(context).size.height / 8.0,
+            decoration: BoxDecoration(
+              shape: BoxShape.rectangle,
+              color: Colors.green.shade400,
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.grey.shade900,
+                    blurRadius: 10.0,
+                    spreadRadius: 1.0)
+              ],
+              borderRadius: BorderRadius.all(
+                Radius.circular(20.0),
+              ),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                Container(
+                  decoration: BoxDecoration(shape: BoxShape.circle),
+                  height: 100,
+                  width: 150,
+                  child: FlareActor(
+                    'assets/animation/leader.flr',
+                    animation: 'after_success',
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                Container(
+                  alignment: Alignment(0.5, 0.0),
+                  child: Text(
+                    'Leader Board',
+                    style: TextStyle(fontSize: 25.0, color: Colors.white),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        SizedBox(
+          height: 15.0,
+        ),
+        GestureDetector(
+          onTap: () {
             Navigator.pushNamed(context, '/gameStart');
           },
           child: Container(
-              height: MediaQuery.of(context).size.height / 4.5,
-              decoration: BoxDecoration(
-                shape: BoxShape.rectangle,
-                color: Colors.blue.shade400,
-                boxShadow: [
-                  BoxShadow(
-                      color: Colors.grey.shade900,
-                      blurRadius: 10.0,
-                      spreadRadius: 1.0)
-                ],
-                borderRadius: BorderRadius.all(
-                  Radius.circular(20.0),
-                ),
+            height: MediaQuery.of(context).size.height / 8.0,
+            decoration: BoxDecoration(
+              shape: BoxShape.rectangle,
+              color: Colors.lime.shade500,
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.grey.shade900,
+                    blurRadius: 10.0,
+                    spreadRadius: 1.0)
+              ],
+              borderRadius: BorderRadius.all(
+                Radius.circular(20.0),
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  Container(
-                    height: 180,
-                    width: 150,
-                    child: FlareActor(
-                      'assets/animation/person_floating.flr',
-                      animation: 'Relaxing',
-                    ),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                Container(
+                  height: 180,
+                  width: 150,
+                  child: FlareActor(
+                    'assets/animation/person_floating.flr',
+                    animation: 'Relaxing',
                   ),
-                  Container(
-                    alignment: Alignment(0.5, 0.0),
-                    child: Text(
-                      'PROFILE',
-                      style: TextStyle(fontSize: 25.0, color: Colors.white),
-                    ),
+                ),
+                Container(
+                  alignment: Alignment(0.5, 0.0),
+                  child: Text(
+                    'PROFILE',
+                    style: TextStyle(fontSize: 25.0, color: Colors.white),
                   ),
-                ],
-              )),
+                ),
+              ],
+            ),
+          ),
+        ),
+        SizedBox(
+          height: 15.0,
         ),
       ],
     );
