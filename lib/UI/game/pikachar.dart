@@ -11,43 +11,29 @@ List<AnswerTile> aTiles = List<AnswerTile>();
 List<OptionTile> opTiles = List<OptionTile>();
 Map _answerChars = {
   "length": 6,
-  "indexToInsert": 0,
-  "pikacharAnswer": null
+  "indexToInsert": 0
 };
 
-int numberOfSpaces(List<String> answerList) {
-  int numSpaces = 0;
-  for (int i = 0; i < answerList.length; i++) {
-    if (answerList[i] == " ") {
-      numSpaces++;
-    }
-  }
-  print("numSpaces" + numSpaces.toString());
-  return numSpaces;
-}
-
-void setAnswerCharsFromData(PikacharAnswer ans) {
+void setAnswerCharsFromData(Answer ans) {
   int lengthOfAnswer = ans.answer.length;
-  lengthOfAnswer -= numberOfSpaces(ans.answer);
   print(lengthOfAnswer);
   _answerChars['length'] = lengthOfAnswer;
   for (int i = 0; i < lengthOfAnswer; i++) {
     _answerChars[i] = " ";
   }
-  _answerChars["pikacharAnswer"] = ans.answer;
 }
 
 class Pikachar extends StatefulWidget {
   String questText = questionText;
   List<String> optionChars;
-  PikacharAnswer answer;
+  Answer answer;
 
   Pikachar(this.questText, this.optionChars) {
     Map<String, dynamic> jsonData = new Map<String, dynamic>();
     jsonData['_id'] = "5c66f999810d7b757e179d96";
-    jsonData['answer'] = ["મ", "હા", "વી", "ર", " ", "ભ", "ગ", "વા", "ન"];
+    jsonData['answer'] = "મહાવીર ભગવાન";
 
-    this.answer = new PikacharAnswer.fromJson(jsonData);
+    this.answer = new Answer.fromJson(jsonData);
   }
 
   @override
@@ -312,9 +298,8 @@ class _AnswerRowsState extends State<AnswerRows> {
 
   List<Widget> createAnswerRows() {
     List<Widget> cols = new List<Widget>();
-    var optRow;
-    for (int i = 0; i < _answerChars["length"]; i = i + optRow.numTiles) {
-      optRow = AnswerTiles(i);
+    for (int i = 0; i < _answerChars["length"]; i = i + rowTilesLimit) {
+      var optRow = AnswerTiles(i);
       cols.add(optRow);
     }
     return cols;
@@ -323,7 +308,6 @@ class _AnswerRowsState extends State<AnswerRows> {
 
 class AnswerTiles extends StatefulWidget {
   int startingIndex;
-  int numTiles = 0;
 
   AnswerTiles(this.startingIndex);
 
@@ -347,15 +331,12 @@ class _AnswerTilesState extends State<AnswerTiles> {
 
   createAnswerTiles(int startingIndex) {
     List<AnswerTile> tempAnswerTiles = new List<AnswerTile>();
-    for (int i = startingIndex;
-    i < _answerChars["length"] &&
-      i < startingIndex + rowTilesLimit &&
-      _answerChars["pikacharAnswer"][i] != " "; i++) {
+    for (int i = startingIndex; i < _answerChars["length"] &&
+      i < startingIndex + rowTilesLimit; i++) {
       var aTile = new AnswerTile(i);
       tempAnswerTiles.add(aTile);
       aTiles.add(aTile);
     }
-    widget.numTiles = tempAnswerTiles.length;
     return tempAnswerTiles;
   }
 }
