@@ -1,5 +1,8 @@
 import 'dart:math';
 
+import 'package:GnanG/UI/game/mcq.dart';
+import 'package:GnanG/UI/game/question_ui.dart';
+import 'package:GnanG/UI/game/title_bar.dart';
 import 'package:flame/flame.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -31,13 +34,10 @@ class MainGamePage extends StatefulWidget {
 }
 
 class MainGamePageState extends BaseState<MainGamePage> {
-  bool clickAns = false;
   bool isLoading = false;
   bool isOverlay = false;
-  List<bool> option = [false, false, false, false];
-  List<int> fiftyFifty = [];
+  List<int> hiddenOptionIndex = [];
   int userLives = CacheData.userState.lives;
-  bool trueAnswer = false;
   List<Question> questions;
   Question question;
   int currentQueIndex;
@@ -46,7 +46,6 @@ class MainGamePageState extends BaseState<MainGamePage> {
   int selectedAnsIndex = -1;
   ApiService _api = new ApiService();
   CurrentState currentState;
-
   @override
   void initState() {
     print(widget.level);
@@ -83,7 +82,6 @@ class MainGamePageState extends BaseState<MainGamePage> {
     Navigator.pop(context);
     setState(() {
       if (!isCompletedLevel) {
-        _reInit();
         _loadNextQuestion();
       } else {
         Navigator.pushReplacementNamed(context, '/level');
@@ -92,110 +90,69 @@ class MainGamePageState extends BaseState<MainGamePage> {
   }
 
   _loadNextQuestion() {
-    Navigator.pop(context);
     if (currentQueIndex < questions.length - 1) {
       setState(() {
-        fiftyFifty = [];
+        hiddenOptionIndex = [];
         currentQueIndex++;
         question =
             questions.getRange(currentQueIndex, currentQueIndex + 1).first;
       });
-    } else {}
+    }
   }
 
-  _reInit() {
-    isGivenCorrectAns = false;
-    correctAnsIndex = -1;
-    selectedAnsIndex = -1;
-  }
-
-  void _onOptionSelect({int index, String answer}) async {
+  void onAnswerGiven(bool isGivenCorrectAns) {
     try {
-      Response res = await _api.validateAnswer(
-        questionId: question.questionId,
-        mhtId: CacheData.userInfo.mhtId,
-        answer: answer,
-        level: CacheData.userState.currentState.level,
-      );
-      AppResponse appResponse =
-          ResponseParser.parseResponse(context: context, res: res);
-      if (appResponse.status == WSConstant.SUCCESS_CODE) {
-        option = [false, false, false, false];
-        ValidateQuestion validateQuestion =
-            ValidateQuestion.fromJson(appResponse.data);
-        if (validateQuestion.answerStatus) {
-          setState(() {
-            userLives = validateQuestion.lives;
-            validateQuestion.updateSessionScore();
-          });
-          isGivenCorrectAns = true;
-          Flame.audio.play('music/party_horn-Mike_Koenig-76599891.mp3');
-          if (currentQueIndex == questions.length - 1) {
-            CommonFunction.alertDialog(
-                context: context,
-                msg: 'Level ' + question.level.toString() + ' completed !! ',
-                barrierDismissible: false,
-                type: 'success',
-                doneButtonFn: () async {
-                  setState(() {
-                    isOverlay = true;
-                    isLoading = true;
-                  });
-                  bool result = await CommonFunction.loadUserState(
-                      context, CacheData.userInfo.mhtId);
-                  if (result) {
-                    Navigator.pop(context);
-                    Navigator.pop(context);
-                    setState(() {
-                      isLoading = false;
-                      isOverlay = false;
-                    });
-                  } else {
-                    setState(() {
-                      isLoading = false;
-                      isOverlay = false;
-                    });
-                  }
-                });
-          } else {
-            CommonFunction.alertDialog(
+      setState(() {
+
+      });
+      if (isGivenCorrectAns) {
+        if (currentQueIndex == questions.length - 1) {
+          CommonFunction.alertDialog(
               context: context,
-              msg: 'Your answer is correct !!',
-              type: 'success',
+              msg: 'Level ' + question.level.toString() + ' completed !! ',
               barrierDismissible: false,
-              doneButtonFn: _loadNextQuestion,
-            );
-          }
+              type: 'success',
+              doneButtonFn: () async {
+                setState(() {
+                  isOverlay = true;
+                  isLoading = true;
+                });
+                bool result = await CommonFunction.loadUserState(
+                    context, CacheData.userInfo.mhtId);
+                if (result) {
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                  setState(() {
+                    isLoading = false;
+                    isOverlay = false;
+                  });
+                } else {
+                  setState(() {
+                    isLoading = false;
+                    isOverlay = false;
+                  });
+                }
+              });
         } else {
+          _loadNextQuestion();
+        }
+      } else {
+        if (userLives == 1) {
           CommonFunction.alertDialog(
             context: context,
-            msg: 'Your answer is wrong !!',
+            msg: 'You have only 1 Life remaining. Now you can access hint.',
             barrierDismissible: false,
           );
-          Flame.audio.play('music/Pac man dies.mp3');
-          isGivenCorrectAns = false;
-          setState(() {
-            userLives = validateQuestion.lives;
-            validateQuestion.updateSessionScore();
-          });
-          if (userLives == 1) {
-            CommonFunction.alertDialog(
+        }
+        if (userLives == 0) {
+          CommonFunction.alertDialog(
               context: context,
-              msg: 'You have only 1 Life remaining. Now you can access hint.',
+              msg: 'Game-over',
               barrierDismissible: false,
-            );
-          }
-          if (userLives == 0) {
-            CommonFunction.alertDialog(
-                context: context,
-                msg: 'Game-over',
-                barrierDismissible: false,
-                doneButtonFn: () {
-                  Navigator.pop(context);
-                  Navigator.pop(context);
-                  Navigator.pop(context);
-                });
-          }
+              doneButtonFn: () {
+                Navigator.pop(context);
+                Navigator.pop(context);
+              });
         }
       }
     } catch (err) {
@@ -215,85 +172,21 @@ class MainGamePageState extends BaseState<MainGamePage> {
         isLoading: isLoading,
         child: new BackgroundGredient(
           child: SafeArea(
-            child: question.questionType == "MCQ"
-                ? new ListView(
-                    padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
+              child: new Container(
+                  padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
+                  child: new Column(
                     children: <Widget>[
-                      titleBar(),
+                      GameTitleBar(widget.level.name),
                       SizedBox(
                         height: MediaQuery.of(context).size.height / 16,
                       ),
-                      Container(
-                        alignment: Alignment(0, -0.30),
-                        child: Text(
-                          ((question != null) ? question.question : ''),
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: kQuizBackgroundWhite,
-                            height: 1.5,
-                          ),
-                          textScaleFactor: 1.6,
-                        ),
-                      ),
-                      new Container(
-                        padding: EdgeInsets.fromLTRB(50, 30, 50, 50),
-                        child: questionUi(),
-                      ),
+                      QuestionUI(
+                          question, CacheData.userState.currentState.level, onAnswerGiven, hiddenOptionIndex),
                     ],
-                  )
-                : new Pikachar(),
-          ),
+                  ))),
         ),
       ),
-      bottomNavigationBar: BottomAppBar(
-        color: kBackgroundGrediant1,
-        elevation: 10.0,
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Container(
-                child: IconButton(
-                  icon: Icon(
-                    Icons.menu,
-                    color: kQuizBackgroundWhite,
-                  ),
-                  onPressed: () {
-                    showModalBottomSheet(
-                        builder: (BuildContext context) => _bottomDrawer(),
-                        context: context);
-                  },
-                ),
-              ),
-              Container(
-                child: Row(
-                  children: <Widget>[
-                    Text(
-                      'Lives : ',
-                      style: TextStyle(color: kQuizBackgroundWhite),
-                    ),
-                    Container(
-                      height: 25,
-                      child: ListView.builder(
-                        shrinkWrap: true,
-                        scrollDirection: Axis.horizontal,
-                        itemCount: userLives,
-                        itemBuilder: (BuildContext context, int index) {
-                          return Icon(
-                            Icons.account_circle,
-                            color: kQuizBackgroundWhite,
-                          );
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
+      bottomNavigationBar: _buildbottomNavigationBar(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: userLives <= 1
           ? FloatingActionButton.extended(
@@ -302,6 +195,58 @@ class MainGamePageState extends BaseState<MainGamePage> {
               onPressed: _getHint,
             )
           : null,
+    );
+  }
+
+  Widget _buildbottomNavigationBar() {
+    return BottomAppBar(
+      color: kBackgroundGrediant1,
+      elevation: 10.0,
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 10),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Container(
+              child: IconButton(
+                icon: Icon(
+                  Icons.menu,
+                  color: kQuizBackgroundWhite,
+                ),
+                onPressed: () {
+                  showModalBottomSheet(
+                      builder: (BuildContext context) => _bottomDrawer(),
+                      context: context);
+                },
+              ),
+            ),
+            Container(
+              child: Row(
+                children: <Widget>[
+                  Text(
+                    'Lives : ',
+                    style: TextStyle(color: kQuizBackgroundWhite),
+                  ),
+                  Container(
+                    height: 25,
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      scrollDirection: Axis.horizontal,
+                      itemCount: userLives,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Icon(
+                          Icons.account_circle,
+                          color: kQuizBackgroundWhite,
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -335,40 +280,6 @@ class MainGamePageState extends BaseState<MainGamePage> {
       print(err);
       CommonFunction.displayErrorDialog(context: context, msg: err.toString());
     }
-  }
-
-  Widget titleBar() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: <Widget>[
-        Container(
-          child: IconButton(
-            icon: Icon(
-              Icons.close,
-              color: kQuizSurfaceWhite,
-            ),
-            onPressed: () {
-              // Flame.audio.clear('music/bensound-epic.mp3');
-              // Flame.audio.clearCache();
-              Navigator.pop(context);
-            },
-          ),
-        ),
-        Container(
-          child: Text(
-            widget.level.name.toUpperCase(),
-            textScaleFactor: 1.2,
-            style: TextStyle(color: kQuizSurfaceWhite),
-          ),
-        ),
-        Container(
-          child: CommonFunction.pointsUI(
-            context: context,
-            point: CacheData.userState.totalscore.toString(),
-          ),
-        ),
-      ],
-    );
   }
 
   Widget _bottomDrawer() {
@@ -495,11 +406,12 @@ class MainGamePageState extends BaseState<MainGamePage> {
 
   _fiftyFifty() {
     var rng = new Random();
-    while (fiftyFifty.length < 2) {
+    while (hiddenOptionIndex.length < 2) {
       int temp = rng.nextInt(3);
-      if (temp != question.answerIndex && fiftyFifty.indexOf(temp) == -1) {
+      if (temp != question.answerIndex &&
+          hiddenOptionIndex.indexOf(temp) == -1) {
         setState(() {
-          fiftyFifty.add(temp);
+          hiddenOptionIndex.add(temp);
         });
       }
     }
@@ -542,75 +454,5 @@ class MainGamePageState extends BaseState<MainGamePage> {
       return "rd";
     }
     return "th";
-  }
-
-  Widget questionUi() {
-    return Container(
-      child: new Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        verticalDirection: VerticalDirection.down,
-        mainAxisSize: MainAxisSize.min,
-        children: getOptionsWidget(),
-      ),
-    );
-  }
-
-  List<Widget> getOptionsWidget() {
-    List<Widget> list = [];
-    int i = 0;
-    question.options.forEach((option) {
-      if (option != null) {
-        list.add(new SizedBox(height: 20));
-        list.add(getOptionWidget(option.option, i++));
-      }
-    });
-    return list;
-  }
-
-  Widget getOptionWidget(String text, index) {
-    return new SizedBox(
-      width: double.infinity,
-      child: !fiftyFifty.contains(index)
-          ? new MaterialButton(
-              elevation: 5,
-              onPressed: () {
-                setState(() {
-                  _onOptionSelect(index: index, answer: text);
-                  option = [false, false, false, false];
-                  option[index] = !option[index];
-                });
-              },
-              height: 50,
-              child: Row(
-                children: <Widget>[
-                  option[index]
-                      ? new Container(
-                          width: 0,
-                          child: Icon(
-                            Icons.check_circle,
-                            size: 25,
-                            color: kQuizBackgroundWhite,
-                          ),
-                        )
-                      : new Container(),
-                  Expanded(
-                    child: Text(
-                      text,
-                      textScaleFactor: 1.1,
-                      style: TextStyle(
-                        color:
-                            option[index] ? kQuizBackgroundWhite : kQuizMain400,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ],
-              ),
-              color: option[index] ? kQuizMain400 : kQuizBackgroundWhite,
-            )
-          : new Container(
-              height: 50,
-            ),
-    );
   }
 }
