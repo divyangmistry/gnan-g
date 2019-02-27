@@ -1,14 +1,10 @@
-import 'package:GnanG/UI/game_level.dart';
-import 'package:GnanG/UI/level/levelList.dart';
+import 'package:GnanG/colors.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:GnanG/common.dart';
-import 'package:GnanG/UI/animation/success.dart';
-import 'package:flutter/material.dart';
 import 'package:GnanG/Service/apiservice.dart';
 import 'package:GnanG/model/cacheData.dart';
 import '../../common.dart';
-import 'package:nima/nima_actor.dart';
 
 class GameMainPage extends StatefulWidget {
   @override
@@ -20,6 +16,7 @@ class GameMainPage extends StatefulWidget {
 
 class GameMainPageState extends State<GameMainPage> {
   ApiService _api = new ApiService();
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -37,17 +34,7 @@ class GameMainPageState extends State<GameMainPage> {
         SizedBox(
           height: 25.0,
         ),
-        _gameBar(),
-        SizedBox(
-          height: 20.0,
-        ),
-        Center(
-            child: Center(
-          child: Image.asset(
-            'images/logo1.png',
-            height: 70.0,
-          ),
-        )),
+        titleBar(),
         SizedBox(
           height: 20.0,
         ),
@@ -275,54 +262,36 @@ class GameMainPageState extends State<GameMainPage> {
     );
   }
 
-  Widget _gameBar() {
-    return new Row(
+  Widget titleBar() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
-        _iconButton(
-          Icon(Icons.power_settings_new, color: Colors.white),
-          () {
-            _api.logout();
-            Navigator.pop(context);
-            Navigator.pushReplacementNamed(context, '/login_new');
-          },
-        ),
-        new Expanded(
-          child: Center(
-              // child: Text(
-              //   'Gnan-G',
-              //   style: TextStyle(
-              //       color: Colors.white,
-              //       fontSize: 50.0,
-              //       fontWeight: FontWeight.w600),
-              // ),
-              ),
-        ),
-        _iconButton(
-          Icon(
-            Icons.help_outline,
-            color: Colors.white,
+        Container(
+          child: IconButton(
+            icon: Icon(
+              Icons.close,
+              color: kQuizSurfaceWhite,
+            ),
+            onPressed: () {},
           ),
-          () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => new SucessAnimationPage(),
+        ),
+        new Container(
+          child: Center(
+            child: Center(
+              child: Image.asset(
+                'images/logo1.png',
+                height: 70.0,
               ),
-            );
-            // Navigator.pushNamed(context, '/rules');
-          },
+            ),
+          ),
+        ),
+        Container(
+          child: CommonFunction.pointsUI(
+            context: context,
+            point: CacheData.userState.totalscore.toString(),
+          ),
         ),
       ],
-    );
-  }
-
-  Widget _iconButton(Icon icon, Function clickEvent) {
-    return new RaisedButton(
-      onPressed: clickEvent,
-      child: icon,
-      shape: new CircleBorder(),
-      elevation: 5.0,
-      padding: const EdgeInsets.all(10.0),
     );
   }
 }
