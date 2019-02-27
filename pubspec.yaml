@@ -75,12 +75,12 @@ flutter:
     - assets/animation/noInternet.flr
     - assets/animation/Teddy.flr
     - assets/animation/Dancing.flr
-    - assets/animation/leaderboard.flr
     - assets/animation/person_floating.flr
     - assets/animation/bonus.flr
-    - assets/animation/leader.flr
     - assets/animation/puzzl.flr
-    
+    - assets/animation/world.flr
+    - assets/animation/leader.flr
+    - assets/animation/bigbang.flr
     
 
 

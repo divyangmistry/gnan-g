@@ -58,21 +58,25 @@ class GameMainPageState extends State<GameMainPage> {
               color: Colors.pinkAccent.shade100,
             ),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Container(
-                  height: 180,
+                  height: 150,
                   width: 150,
                   child: FlareActor(
-                    'assets/animation/Teddy.flr',
-                    animation: 'idle',
+                    'assets/animation/world.flr',
+                    animation: 'move',
+                    fit: BoxFit.cover,
                   ),
                 ),
                 Container(
                   child: Text(
-                    'GO TO GAME',
+                    'Play Game',
                     style: TextStyle(fontSize: 25.0, color: Colors.white),
                   ),
+                ),
+                SizedBox(
+                  width: 10,
                 ),
               ],
             ),
@@ -101,7 +105,7 @@ class GameMainPageState extends State<GameMainPage> {
               ),
             ),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Container(
                   height: 150,
@@ -116,6 +120,9 @@ class GameMainPageState extends State<GameMainPage> {
                     'Bonus',
                     style: TextStyle(fontSize: 25.0, color: Colors.white),
                   ),
+                ),
+                SizedBox(
+                  width: 10,
                 ),
               ],
             ),
@@ -144,14 +151,15 @@ class GameMainPageState extends State<GameMainPage> {
               ),
             ),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Container(
-                  height: 180,
+                  height: 120,
                   width: 150,
                   child: FlareActor(
                     'assets/animation/puzzl.flr',
                     animation: 'rotating',
+                    fit: BoxFit.contain,
                   ),
                 ),
                 Container(
@@ -160,6 +168,9 @@ class GameMainPageState extends State<GameMainPage> {
                     'Puzzle',
                     style: TextStyle(fontSize: 25.0, color: Colors.white),
                   ),
+                ),
+                SizedBox(
+                  width: 10,
                 ),
               ],
             ),
@@ -188,7 +199,7 @@ class GameMainPageState extends State<GameMainPage> {
               ),
             ),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Container(
                   decoration: BoxDecoration(shape: BoxShape.circle),
@@ -197,7 +208,7 @@ class GameMainPageState extends State<GameMainPage> {
                   child: FlareActor(
                     'assets/animation/leader.flr',
                     animation: 'after_success',
-                    fit: BoxFit.cover,
+                    fit: BoxFit.fill,
                   ),
                 ),
                 Container(
@@ -206,6 +217,9 @@ class GameMainPageState extends State<GameMainPage> {
                     'Leader Board',
                     style: TextStyle(fontSize: 25.0, color: Colors.white),
                   ),
+                ),
+                SizedBox(
+                  width: 10,
                 ),
               ],
             ),
@@ -234,7 +248,7 @@ class GameMainPageState extends State<GameMainPage> {
               ),
             ),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Container(
                   height: 180,
@@ -247,9 +261,12 @@ class GameMainPageState extends State<GameMainPage> {
                 Container(
                   alignment: Alignment(0.5, 0.0),
                   child: Text(
-                    'PROFILE',
+                    'Profile',
                     style: TextStyle(fontSize: 25.0, color: Colors.white),
                   ),
+                ),
+                SizedBox(
+                  width: 10,
                 ),
               ],
             ),
