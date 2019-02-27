@@ -7,13 +7,10 @@ import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:GnanG/Service/apiservice.dart';
-import 'package:GnanG/UI/puzzle/main.dart';
-import 'package:GnanG/constans/appconstant.dart';
 import 'package:GnanG/constans/message_constant.dart';
 import 'package:GnanG/constans/wsconstants.dart';
 import 'package:GnanG/model/appresponse.dart';
 import 'package:GnanG/model/cacheData.dart';
-import 'package:GnanG/model/userinfo.dart';
 import 'package:GnanG/utils/response_parser.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'colors.dart';
@@ -23,6 +20,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 class AccentColorOverride extends StatelessWidget {
   final Color color;
   final Widget child;
+
   AccentColorOverride({Key key, @required this.color, @required this.child})
       : assert(color != null),
         assert(child != null);
@@ -40,6 +38,7 @@ class AccentColorOverride extends StatelessWidget {
 // VeritialDivider
 class CustomVerticalDivider extends StatelessWidget {
   final double height;
+
   CustomVerticalDivider({this.height: 40});
 
   @override
@@ -56,6 +55,7 @@ class CustomVerticalDivider extends StatelessWidget {
 // Gredient APP background
 class BackgroundGredient extends StatelessWidget {
   final Widget child;
+
   BackgroundGredient({@required this.child}) : assert(child != null);
 
   @override
@@ -84,8 +84,10 @@ class CustomLoading extends StatelessWidget {
   final bool isLoading;
   final Widget child;
   final bool isOverlay;
+
   CustomLoading(
       {@required this.isLoading, @required this.child, this.isOverlay = false});
+
   @override
   Widget build(BuildContext context) {
     return new Stack(
@@ -97,7 +99,9 @@ class CustomLoading extends StatelessWidget {
                   new Opacity(
                     opacity: 0.5,
                     child: const ModalBarrier(
-                        dismissible: false, color: kQuizBrown900),
+                      dismissible: false,
+                      color: kQuizBrown900,
+                    ),
                   ),
                   new Center(
                     child: SpinKitThreeBounce(
@@ -243,9 +247,9 @@ class CommonFunction {
   }
 
   static loadUserState(BuildContext context, int mhtId) async {
-      Response res = await _api.getUserState(mhtId: mhtId);
-      AppResponse appResponse =
-          ResponseParser.parseResponse(context: context, res: res);
+    Response res = await _api.getUserState(mhtId: mhtId);
+    AppResponse appResponse =
+    ResponseParser.parseResponse(context: context, res: res);
     try {
       if (appResponse.status == WSConstant.SUCCESS_CODE) {
         print('IN LOGIN ::: userstateStr :::');

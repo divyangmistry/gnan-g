@@ -1,11 +1,10 @@
 import 'package:GnanG/UI/game/game_main_page.dart';
-import 'package:connectivity/connectivity.dart';
+import 'package:GnanG/UI/intro/intro.dart';
 import 'package:flutter/material.dart';
 import 'package:GnanG/UI/game_level.dart';
 import 'package:GnanG/UI/leaderboard.dart';
 import 'package:GnanG/UI/profile.dart';
 import 'package:GnanG/UI/puzzle/main.dart';
-import 'package:GnanG/common.dart';
 import 'package:GnanG/no-internet-page.dart';
 
 import 'UI/auth/forgot_password.dart';
@@ -23,7 +22,8 @@ import 'UI/profile.dart';
 import 'colors.dart';
 
 class QuizApp extends StatefulWidget {
-  Widget defaultHome;
+  final Widget defaultHome;
+
   QuizApp({@required this.defaultHome});
 
   @override
@@ -36,27 +36,15 @@ class _QuizAppState extends State<QuizApp> {
     super.initState();
   }
 
-  checInternetConnection(BuildContext context) {
-    Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
-      print(result);
-      if (result == ConnectivityResult.none) {
-        print(' ------> inside NO internet !, inside APP.dart Page <------');
-        widget.defaultHome = NoInternetPage();
-      } else {
-        print(' ------> inside internet !, inside APP.dart Page <------');
-        widget.defaultHome = LoginPage();
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    checInternetConnection(context);
     return MaterialApp(
       title: 'Gnan-G',
       home: widget.defaultHome,
       theme: _kQuizTheme,
       routes: <String, WidgetBuilder>{
+        '/noInternet': (BuildContext context) => new NoInternetPage(),
+        '/introPage': (BuildContext context) => new IntroPage(),
         '/simpleGame': (BuildContext context) => new SimpleGame(),
         '/gameMainPage': (BuildContext context) => new GameMainPage(),
         '/game_new': (BuildContext context) => new MainGamePage(),
