@@ -1,5 +1,6 @@
 import 'package:GnanG/UI/game/game_main_page.dart';
 import 'package:GnanG/UI/intro/intro.dart';
+import 'package:GnanG/UI/others/feedback.dart';
 import 'package:flutter/material.dart';
 import 'package:GnanG/UI/game_level.dart';
 import 'package:GnanG/UI/leaderboard.dart';
@@ -45,6 +46,7 @@ class _QuizAppState extends State<QuizApp> {
       routes: <String, WidgetBuilder>{
         '/noInternet': (BuildContext context) => new NoInternetPage(),
         '/introPage': (BuildContext context) => new IntroPage(),
+        '/feedback': (BuildContext context) => new FeedbackPage(),
         '/simpleGame': (BuildContext context) => new SimpleGame(),
         '/gameMainPage': (BuildContext context) => new GameMainPage(),
         '/game_new': (BuildContext context) => new MainGamePage(),

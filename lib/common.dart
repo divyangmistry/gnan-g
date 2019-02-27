@@ -135,17 +135,18 @@ class CommonFunction {
   }
 
   // password Validation
-  static String passwordValidation(value) {
-    Pattern pattern =
-        r'(?=^.{6,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$';
-    RegExp regex = new RegExp(pattern);
+  static String passwordValidation(String value) {
+//    Pattern pattern =
+//        r'(?=^.{6,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$';
+//    RegExp regex = new RegExp(pattern);
     if (value.isEmpty) {
       return 'Password is required';
-    } else if (value.length < 6) {
-      return 'Passwords must contain at least six characters';
-    } else if (!regex.hasMatch(value)) {
-      return 'Passwords must contain uppercase, lowercase letters and numbers';
+    } else if (value.length < 4) {
+      return 'Passwords must contain at least 4 characters';
     }
+//    else if (!regex.hasMatch(value)) {
+//      return 'Passwords must contain uppercase, lowercase letters and numbers';
+//    }
     return null;
   }
 
@@ -160,9 +161,25 @@ class CommonFunction {
   }
 
   // mobile Validation
-  static String mobileValidation(value) {
+  static String mobileValidation(String value) {
     if (value.isEmpty) {
       return 'Mobile no. is required';
+    }
+    return null;
+  }
+
+  // Feedback contact validation
+  static String contactValidation(String value) {
+    if (value.isEmpty) {
+      return 'Contact is required';
+    }
+    return null;
+  }
+
+  // Feedback message validation
+  static String messageValidation(String value) {
+    if (value.isEmpty) {
+      return 'Message is required';
     }
     return null;
   }
@@ -249,7 +266,7 @@ class CommonFunction {
   static loadUserState(BuildContext context, int mhtId) async {
     Response res = await _api.getUserState(mhtId: mhtId);
     AppResponse appResponse =
-    ResponseParser.parseResponse(context: context, res: res);
+        ResponseParser.parseResponse(context: context, res: res);
     try {
       if (appResponse.status == WSConstant.SUCCESS_CODE) {
         print('IN LOGIN ::: userstateStr :::');

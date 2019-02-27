@@ -83,7 +83,7 @@ class GameMainPageState extends State<GameMainPage> {
         ),
         GestureDetector(
           onTap: () {
-            Navigator.pushNamed(context, '/leaderboard');
+            Navigator.pushNamed(context, '/feedback');
           },
           child: Container(
             height: MediaQuery.of(context).size.height / 8.0,

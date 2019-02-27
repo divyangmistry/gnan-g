@@ -108,6 +108,13 @@ class ApiService {
     return res;
   }
 
+  Future<http.Response> feedback(
+      {@required String contact, @required String message}) async {
+    Map<String, dynamic> data = {'contact': contact, 'message': message};
+    http.Response res = await postApi(url: '/feedback', data: data);
+    return res;
+  }
+
   // Get Question Detail
   Future<http.Response> getQuestions(
       {@required int level, int from, int to}) async {
