@@ -1,10 +1,26 @@
+import 'dart:convert';
+
+import 'package:GnanG/main.dart';
+import 'package:GnanG/model/user_score_state.dart';
+import 'package:GnanG/model/user_state.dart';
+import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
+import 'package:GnanG/Service/apiservice.dart';
+import 'package:GnanG/constans/message_constant.dart';
+import 'package:GnanG/constans/wsconstants.dart';
+import 'package:GnanG/model/appresponse.dart';
+import 'package:GnanG/model/cacheData.dart';
+import 'package:GnanG/utils/response_parser.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'colors.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 // For override color for Form input
 class AccentColorOverride extends StatelessWidget {
   final Color color;
   final Widget child;
+
   AccentColorOverride({Key key, @required this.color, @required this.child})
       : assert(color != null),
         assert(child != null);
@@ -22,6 +38,7 @@ class AccentColorOverride extends StatelessWidget {
 // VeritialDivider
 class CustomVerticalDivider extends StatelessWidget {
   final double height;
+
   CustomVerticalDivider({this.height: 40});
 
   @override
@@ -38,6 +55,7 @@ class CustomVerticalDivider extends StatelessWidget {
 // Gredient APP background
 class BackgroundGredient extends StatelessWidget {
   final Widget child;
+
   BackgroundGredient({@required this.child}) : assert(child != null);
 
   @override
@@ -63,17 +81,38 @@ class BackgroundGredient extends StatelessWidget {
 
 // App Loading Indicator
 class CustomLoading extends StatelessWidget {
+  final bool isLoading;
+  final Widget child;
+  final bool isOverlay;
+
+  CustomLoading(
+      {@required this.isLoading, @required this.child, this.isOverlay = false});
+
   @override
   Widget build(BuildContext context) {
-    return new Container(
-      child: Opacity(
-        opacity: 0.5,
-        child: Scaffold(
-          body: new Center(
-            child: new CircularProgressIndicator(),
-          ),
-        ),
-      ),
+    return new Stack(
+      children: <Widget>[
+        isOverlay ? child : !isLoading ? child : new Container(),
+        isLoading
+            ? new Stack(
+                children: [
+                  new Opacity(
+                    opacity: 0.5,
+                    child: const ModalBarrier(
+                      dismissible: false,
+                      color: kQuizBrown900,
+                    ),
+                  ),
+                  new Center(
+                    child: SpinKitThreeBounce(
+                      color: kQuizBackgroundWhite,
+                      size: 50.0,
+                    ),
+                  ),
+                ],
+              )
+            : new Container(),
+      ],
     );
   }
 }
@@ -85,33 +124,34 @@ class CustomLoading extends StatelessWidget {
 
 // All common functions
 class CommonFunction {
+  static ApiService _api = new ApiService();
+
   // mhtId Validation
-  String mhtIdValidation(value) {
+  static String mhtIdValidation(value) {
     if (value.isEmpty) {
       return 'Mht ID is required';
-    } else if (value.length != 6) {
-      return 'Mht ID must have 6 digit';
     }
     return null;
   }
 
   // password Validation
-  String passwordValidation(value) {
-    Pattern pattern =
-        r'(?=^.{6,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$';
-    RegExp regex = new RegExp(pattern);
+  static String passwordValidation(String value) {
+//    Pattern pattern =
+//        r'(?=^.{6,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$';
+//    RegExp regex = new RegExp(pattern);
     if (value.isEmpty) {
       return 'Password is required';
-    } else if (value.length < 6) {
-      return 'Passwords must contain at least six characters';
-    } else if (!regex.hasMatch(value)) {
-      return 'Passwords must contain uppercase, lowercase letters and numbers';
+    } else if (value.length < 4) {
+      return 'Passwords must contain at least 4 characters';
     }
+//    else if (!regex.hasMatch(value)) {
+//      return 'Passwords must contain uppercase, lowercase letters and numbers';
+//    }
     return null;
   }
 
   // otp Validation
-  String otpValidation(String value) {
+  static String otpValidation(String value) {
     if (value.isEmpty) {
       return 'OTP is required';
     } else if (value.length != 6) {
@@ -121,29 +161,144 @@ class CommonFunction {
   }
 
   // mobile Validation
-  String mobileValidation(value) {
+  static String mobileValidation(String value) {
     if (value.isEmpty) {
       return 'Mobile no. is required';
-    } else if (value.length != 10) {
-      return 'Enter Valid Mobile no.';
     }
     return null;
   }
 
+  // Feedback contact validation
+  static String contactValidation(String value) {
+    if (value.isEmpty) {
+      return 'Contact is required';
+    }
+    return null;
+  }
+
+  // Feedback message validation
+  static String messageValidation(String value) {
+    if (value.isEmpty) {
+      return 'Message is required';
+    }
+    return null;
+  }
+
+  static saveUserInfo() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.setString('user_info', json.encode(CacheData.userInfo.toJson()));
+  }
+
+  // points ui
+  static Widget pointsUI(
+      {@required BuildContext context, String point = '100'}) {
+    return GestureDetector(
+      child: new Container(
+        height: 40,
+        padding: EdgeInsets.only(right: 10, left: 10),
+        decoration: BoxDecoration(
+            color: kQuizSurfaceWhite,
+            borderRadius: BorderRadius.circular(10),
+            boxShadow: [
+              BoxShadow(
+                  color: Colors.black, blurRadius: 5.0, offset: Offset(-2, 2))
+            ]),
+        child: new Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            SizedBox(width: 1),
+            Text(
+              point,
+              style: TextStyle(
+                color: kQuizMain400,
+              ),
+              textScaleFactor: 1.5,
+            ),
+            SizedBox(width: 5),
+            Image.asset('images/coin.png', height: 20),
+          ],
+        ),
+      ),
+      onTap: () {
+        CommonFunction.alertDialog(
+          context: context,
+          msg: 'You can buy life from 100 points.',
+          doneButtonText: 'Yes take it',
+          type: 'success',
+          title: 'Oh Yeah ..',
+          barrierDismissible: false,
+          showCancelButton: true,
+          doneButtonFn: () {
+            _getLife(context);
+          },
+        );
+      },
+    );
+  }
+
+  static _getLife(BuildContext context) async {
+    try {
+      Response res = await _api.requestLife(mhtId: CacheData.userInfo.mhtId);
+      AppResponse appResponse =
+          ResponseParser.parseResponse(context: context, res: res);
+      if (appResponse.status == WSConstant.SUCCESS_CODE) {
+        UserScoreState userState = UserScoreState.fromJson(appResponse.data);
+        userState.updateSessionScore();
+        Navigator.pop(context);
+        main();
+      }
+    } catch (e) {
+      CommonFunction.displayErrorDialog(context: context, msg: e.toString());
+    }
+  }
+
+  static displayErrorDialog({@required BuildContext context, String msg}) {
+    if (msg == null) msg = MessageConstant.COMMON_ERROR_MSG;
+    alertDialog(
+      context: context,
+      msg: msg,
+      barrierDismissible: false,
+    );
+  }
+
+  static loadUserState(BuildContext context, int mhtId) async {
+    Response res = await _api.getUserState(mhtId: mhtId);
+    AppResponse appResponse =
+        ResponseParser.parseResponse(context: context, res: res);
+    try {
+      if (appResponse.status == WSConstant.SUCCESS_CODE) {
+        print('IN LOGIN ::: userstateStr :::');
+        SharedPreferences pref = await SharedPreferences.getInstance();
+        print('res.body :: ');
+        print(res.body);
+        pref.setString('userState', res.body);
+        UserState userState = UserState.fromJson(appResponse.data['results']);
+        CacheData.userState = userState;
+        return true;
+      }
+    } catch (err) {
+      print('CATCH 2 :: ');
+      print(err);
+      var data = res.body;
+      print(data);
+      CommonFunction.displayErrorDialog(context: context, msg: err.toString());
+      return false;
+    }
+  }
+
   // common Alert dialog
-  alertDialog({
+  static alertDialog({
     @required BuildContext context,
+    String type = 'error', // 'success' || 'error'
     String title,
     @required String msg,
     bool showDoneButton = true,
-    IconData doneButtonIcon = Icons.done,
-    String doneButtonText = 'Try Again',
-    @required Function doneButtonFn,
-    bool showCancel = false,
-    IconData cancelButtonIcon = Icons.close,
-    String cancelButtonText = 'Cancel',
-    @required Function cancelButtonFn,
+    String doneButtonText = 'Okeh...',
+    Function doneButtonFn,
     bool barrierDismissible = true,
+    bool showCancelButton = false,
     AlertDialog Function() builder,
   }) {
     showDialog(
@@ -152,85 +307,83 @@ class CommonFunction {
       builder: (_) {
         return AlertDialog(
           shape: new RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30.0),
+            borderRadius: BorderRadius.circular(25.0),
           ),
-          title:
-              title != null ? Text(title, textAlign: TextAlign.center) : null,
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              Text(
-                msg,
-                style: TextStyle(color: Colors.blueGrey),
+              Container(
+                height: 150,
+                width: 150,
+                child: FlareActor(
+                  'assets/animation/Teddy.flr',
+                  animation: type == 'success' ? "success" : 'fail',
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 25),
+                child: Text(
+                  msg != null
+                      ? msg
+                      : type == 'error'
+                          ? "Looks like your lack of \n Imagination ! "
+                          : "Looks like today is your luckyday ... !!",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: Colors.blueGrey, height: 1.5),
+                  textScaleFactor: 1.1,
+                ),
               ),
               SizedBox(height: 20.0),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  showCancel
-                      ? FlatButton(
-                          shape: new RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30.0),
-                            side: BorderSide(color: kQuizMain50),
+                  FlatButton(
+                    padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+                    color: type == 'error' ? kQuizErrorRed : Colors.green[600],
+                    child: Row(
+                      children: <Widget>[
+                        Text(
+                          doneButtonText != null
+                              ? doneButtonText
+                              : type == 'error' ? "Okeh..." : "Hooray!",
+                          textScaleFactor: 1.2,
+                          style: TextStyle(
+                            color: kQuizBackgroundWhite,
                           ),
+                        )
+                      ],
+                    ),
+                    onPressed: doneButtonFn != null
+                        ? doneButtonFn
+                        : () {
+                            Navigator.pop(context);
+                          },
+                  ),
+                  showCancelButton ? SizedBox(width: 10) : new Container(),
+                  showCancelButton
+                      ? FlatButton(
+                          padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+                          color: kQuizErrorRed,
                           child: Row(
                             children: <Widget>[
-                              Icon(
-                                cancelButtonIcon,
-                                size: 22.0,
-                                color: kQuizBrown900,
-                              ),
-                              SizedBox(
-                                width: 5.0,
-                              ),
                               Text(
-                                cancelButtonText,
-                                style: TextStyle(color: kQuizBrown900),
-                              )
-                            ],
-                          ),
-                          onPressed: cancelButtonFn != null
-                              ? cancelButtonFn
-                              : () {
-                                  Navigator.pop(context);
-                                  return false;
-                                },
-                        )
-                      : new Container(width: 0, height: 0),
-                  showCancel
-                      ? SizedBox(
-                          width: 10.0,
-                        )
-                      : new Container(width: 0, height: 0),
-                  showDoneButton
-                      ? FlatButton(
-                          color: kQuizBrown900,
-                          child: Row(
-                            children: <Widget>[
-                              Icon(
-                                doneButtonIcon,
-                                size: 22.0,
-                                color: kQuizBackgroundWhite,
-                              ),
-                              SizedBox(
-                                width: 5.0,
-                              ),
-                              Text(
-                                doneButtonText,
+                                "Cancel",
+                                textScaleFactor: 1.2,
                                 style: TextStyle(
                                   color: kQuizBackgroundWhite,
                                 ),
                               )
                             ],
                           ),
-                          onPressed: doneButtonFn != null
-                              ? doneButtonFn
-                              : () {
-                                  Navigator.pop(context);
-                                },
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
                         )
-                      : new Container(width: 0, height: 0),
+                      : new Container(),
                 ],
               ),
             ],

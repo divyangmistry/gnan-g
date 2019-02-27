@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:SheelQuotient/UI/game/mainGame.dart';
+import 'package:GnanG/UI/game/mainGame.dart';
+import 'package:GnanG/UI/puzzle/main.dart';
+import 'package:GnanG/common.dart';
+import 'package:GnanG/model/cacheData.dart';
 import '../../colors.dart';
 import '../../model/quizlevel.dart';
 
 class LevelCardRow extends StatelessWidget {
   final QuizLevel levelDetails;
+  final bool lock;
 
-  LevelCardRow(this.levelDetails);
+  LevelCardRow(this.levelDetails, this.lock);
 
   Widget levelThumbnail() {
     return new Container(
@@ -29,30 +33,38 @@ class LevelCardRow extends StatelessWidget {
 
   Widget levelCard() {
     return new Card(
-      color: kQuizSurfaceWhite,
+      color: lock ? Colors.grey[200] : kQuizSurfaceWhite,
       margin: const EdgeInsets.only(left: 72.0, right: 20.0),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20.0),
       ),
-      elevation: 5,
+      elevation: lock ? 0 : 5,
       child: new Container(
         margin: const EdgeInsets.only(top: 18.0, left: 72.0),
         constraints: new BoxConstraints.expand(),
         child: new Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            new Text(
-              levelDetails.name,
-              style: TextStyle(
-                color: kQuizBrown900,
-              ),
-              textScaleFactor: 1.8,
+            new Row(
+              children: <Widget>[
+                new Expanded(
+                  child: new Text(
+                    levelDetails.name,
+                    style: TextStyle(
+                      color: kQuizBrown900,
+                    ),
+                    textScaleFactor: 1.8,
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.fromLTRB(0, 0, 20, 0),
+                  child: lock ? Icon(Icons.lock) : new Container(),
+                )
+              ],
             ),
             new SizedBox(height: 10),
             new Text(
-              levelDetails.levelType == null
-                  ? "Some Description"
-                  : levelDetails.levelType,
+              levelDetails.description != null ? levelDetails.description : "",
               style: TextStyle(
                 color: kQuizMain50,
               ),
@@ -86,7 +98,9 @@ class LevelCardRow extends StatelessWidget {
                   style: TextStyle(color: kQuizMain50),
                 ),
                 new Text(
-                  '100',
+                  levelDetails.totalscores != null
+                      ? levelDetails.totalscores.toString()
+                      : "",
                   style: TextStyle(color: kQuizMain400),
                 ),
               ],
@@ -105,12 +119,51 @@ class LevelCardRow extends StatelessWidget {
         onTap: () {
           print('LEVEL DETAILS :: ');
           print(levelDetails);
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => new MainGamePage(level: levelDetails,),
-            ),
-          );
+          if (CacheData.userState.lives > 0) {
+            if (!lock) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => new MainGamePage(
+                        level: levelDetails,
+                      ),
+                ),
+              );
+            } else {
+              CommonFunction.alertDialog(
+                  context: context, msg: 'This level is lock for you');
+            }
+          } else {
+            if (CacheData.userState.totalscore > 100) {
+              CommonFunction.alertDialog(
+                context: context,
+                msg:
+                    'You don\'t have enough points.\nYou can earn life from 100 Points',
+                barrierDismissible: false,
+                doneButtonText: 'Get Life',
+                doneButtonFn: () {
+                  Navigator.pop(context);
+                },
+              );
+            } else {
+              CommonFunction.alertDialog(
+                context: context,
+                msg:
+                    'You don\'t have enough lifes.\nYou can earn points and get life from puzzeles',
+                barrierDismissible: false,
+                doneButtonText: 'Play puzzle',
+                doneButtonFn: () {
+                  Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => new GameOfFifteen(),
+                    ),
+                  );
+                },
+              );
+            }
+          }
         },
         child: new Stack(
           children: <Widget>[

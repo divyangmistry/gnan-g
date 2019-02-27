@@ -1,19 +1,23 @@
+import 'package:GnanG/constans/sharedpref_constant.dart';
+import 'package:GnanG/model/cacheData.dart';
+import 'package:GnanG/model/userinfo.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
-import 'package:SheelQuotient/constans/wsconstants.dart';
-import 'package:SheelQuotient/model/appresponse.dart';
-import 'package:SheelQuotient/utils/response_parser.dart';
+import 'package:GnanG/constans/wsconstants.dart';
+import 'package:GnanG/model/appresponse.dart';
+import 'package:GnanG/utils/response_parser.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../model/signupsession.dart';
-import 'package:SheelQuotient/notification/notifcation_setup.dart';
+import 'package:GnanG/notification/notifcation_setup.dart';
 import '../../colors.dart';
 import '../../common.dart';
 import '../../Service/apiservice.dart';
 
 class RegisterPage2 extends StatefulWidget {
   final bool fromForgotPassword;
+  final UserData userData;
 
-  RegisterPage2({this.fromForgotPassword = false});
+  RegisterPage2({this.userData, this.fromForgotPassword = false});
   @override
   State<StatefulWidget> createState() => new RegisterPage2State();
 }
@@ -27,7 +31,6 @@ class RegisterPage2State extends State<RegisterPage2> {
   final _passwordController = new TextEditingController();
   final _verifyPasswordController = new TextEditingController();
   CommonFunction cf = new CommonFunction();
-  SignUpSession signUpSession = new SignUpSession();
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +71,7 @@ class RegisterPage2State extends State<RegisterPage2> {
                 color: kQuizBrown900,
                 child: new TextFormField(
                   controller: _passwordController,
-                  validator: cf.passwordValidation,
+                  validator: CommonFunction.passwordValidation,
                   decoration: InputDecoration(
                     labelText: 'Password',
                     hintText: 'Enter Password',
@@ -164,78 +167,40 @@ class RegisterPage2State extends State<RegisterPage2> {
 
   _registerUser() async {
     try {
-      SignUpSession signUpSession = new SignUpSession();
-      Map<String, dynamic> data = {
-        'mht_id': signUpSession.data['mht_id'],
-        'mobile': signUpSession.data['mobile'],
-        'password': signUpSession.data['password'],
-        'name': signUpSession.data['name'],
-        'email': signUpSession.data['email'],
-        'center': signUpSession.data['center'],
-      };
-      Response res = await _api.postApi(url: '/register', data: data);
+      widget.userData.password = _passwordController.text.toString();
+      Response res = await _api.register(userData: widget.userData);
       AppResponse appResponse =
           ResponseParser.parseResponse(context: context, res: res);
       if (appResponse.status == WSConstant.SUCCESS_CODE) {
+        UserInfo userInfo = UserInfo.fromJson(appResponse.data);
+        CacheData.userInfo = userInfo;
         SharedPreferences pref = await SharedPreferences.getInstance();
         pref.setString('user_info', res.body);
+        pref.setString('token', userInfo.token);
+        pref.setBool(SharedPrefConstant.b_isUserLoggedIn, true);
         NotificationSetup.setupNotification();
         Navigator.pop(context);
-        Navigator.pushReplacementNamed(context, '/gameStart');
-      } else {
-        cf.alertDialog(
-          context: context,
-          msg: appResponse.message,
-          barrierDismissible: false,
-          cancelButtonFn: null,
-          doneButtonFn: null,
-        );
+        Navigator.pushReplacementNamed(context, '/level_new');
       }
     } catch (err) {
-      cf.alertDialog(
-        context: context,
-        msg: err.toString(),
-        barrierDismissible: false,
-        cancelButtonFn: null,
-        doneButtonFn: null,
-        doneButtonIcon: Icons.replay,
-      );
+      CommonFunction.displayErrorDialog(context: context, msg: err.toString());
     }
   }
 
   _resetPassword() async {
     try {
-      SignUpSession signUpSession = new SignUpSession();
-      Map<String, dynamic> data = {
-        'mht_id': signUpSession.data['mht_id'],
-        'password': signUpSession.data['password'],
-      };
-      Response res = await _api.postApi(url: '/update_password', data: data);
+      Response res = await _api.updatePassword(
+          mhtId: widget.userData.mhtId, password: _passwordController.text);
       AppResponse appResponse =
           ResponseParser.parseResponse(context: context, res: res);
       if (appResponse.status == WSConstant.SUCCESS_CODE) {
         SharedPreferences pref = await SharedPreferences.getInstance();
         pref.setString('user_info', res.body);
         Navigator.pop(context);
-        Navigator.pushReplacementNamed(context, '/gameStart');
-      } else {
-        cf.alertDialog(
-          context: context,
-          msg: appResponse.message,
-          barrierDismissible: false,
-          cancelButtonFn: null,
-          doneButtonFn: null,
-        );
+        Navigator.pushReplacementNamed(context, '/level_new');
       }
     } catch (err) {
-      cf.alertDialog(
-        context: context,
-        msg: err.toString(),
-        barrierDismissible: false,
-        cancelButtonFn: null,
-        doneButtonFn: null,
-        doneButtonIcon: Icons.replay,
-      );
+      CommonFunction.displayErrorDialog(context: context, msg: err.toString());
     }
   }
 
@@ -254,13 +219,13 @@ class RegisterPage2State extends State<RegisterPage2> {
               textScaleFactor: 1.5,
             ),
             SizedBox(height: 30),
-            titleAndData('Name : ', signUpSession.data['name']),
+            titleAndData('Name : ', widget.userData.name),
             SizedBox(height: 15),
-            titleAndData('Mobile no. : ', signUpSession.data['mobile']),
+            titleAndData('Mobile no. : ', widget.userData.mobile),
             SizedBox(height: 15),
-            titleAndData('Email id : ', signUpSession.data['email']),
+            titleAndData('Email id : ', widget.userData.email),
             SizedBox(height: 15),
-            titleAndData('Center : ', signUpSession.data['center']),
+            titleAndData('Center : ', widget.userData.center),
           ],
         ),
       ),

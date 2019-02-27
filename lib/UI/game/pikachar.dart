@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:SheelQuotient/model/question.dart';
-import 'package:SheelQuotient/colors.dart';
+import 'package:GnanG/model/question.dart';
+import '../../common.dart';
 import '../../colors.dart';
 import 'dart:math';
 

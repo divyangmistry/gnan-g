@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:SheelQuotient/UI/auth/register_new.dart';
-import 'package:SheelQuotient/model/signupsession.dart';
+import 'package:GnanG/UI/auth/register_new.dart';
+import 'package:GnanG/model/signupsession.dart';
 import '../../colors.dart';
 import '../../common.dart';
 import '../../Service/apiservice.dart';
 
 class OtpVerifyPage extends StatefulWidget {
-  final SignUpSession signUpSession;
+  final int otp;
   final bool fromForgotPassword;
+  final UserData userData;
 
-  OtpVerifyPage({this.signUpSession, this.fromForgotPassword = false});
+  OtpVerifyPage({this.otp, this.userData, this.fromForgotPassword = false});
   @override
   State<StatefulWidget> createState() => new OtpVerifyPageState();
 }
@@ -55,7 +56,7 @@ class OtpVerifyPageState extends State<OtpVerifyPage> {
               new AccentColorOverride(
                 color: kQuizBrown900,
                 child: new TextFormField(
-                  validator: cf.otpValidation,
+                  validator: CommonFunction.otpValidation,
                   decoration: InputDecoration(
                     labelText: 'OTP',
                     hintText: 'Enter OTP',
@@ -91,22 +92,20 @@ class OtpVerifyPageState extends State<OtpVerifyPage> {
   void _submit() {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
-      if (_otp == widget.signUpSession.otp.toString()) {
+      if (_otp == widget.otp.toString()) {
         Navigator.pop(context);
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
             builder: (context) => new RegisterPage2(
+                userData: widget.userData,
                 fromForgotPassword: widget.fromForgotPassword),
           ),
         );
       } else {
-        cf.alertDialog(
+        CommonFunction.alertDialog(
           context: context,
-          title: 'Eroor',
           msg: "OTP is not valid, Please try again.",
-          doneButtonFn: null,
-          cancelButtonFn: null,
         );
       }
     } else {

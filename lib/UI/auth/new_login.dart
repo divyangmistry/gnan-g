@@ -1,14 +1,15 @@
 // Package import
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
-import 'package:SheelQuotient/constans/wsconstants.dart';
-import 'package:SheelQuotient/notification/notifcation_setup.dart';
+import 'package:GnanG/constans/wsconstants.dart';
+import 'package:GnanG/model/appresponse.dart';
+import 'package:GnanG/model/userinfo.dart';
+import 'package:GnanG/utils/response_parser.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // File import
-import '../../model/appresponse.dart';
-import '../../utils/response_parser.dart';
+import '../../notification/notifcation_setup.dart';
 import '../../common.dart';
 import '../../Service/apiservice.dart';
 import '../../colors.dart';
@@ -22,9 +23,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class LoginPageState extends State<LoginPage> {
-  CommonFunction cf = new CommonFunction();
-
   final _formKey = GlobalKey<FormState>();
+  bool _isLoading = false;
   bool _autoValidate = false;
   bool _obscureText = true;
   ApiService _api = new ApiService();
@@ -38,99 +38,105 @@ class LoginPageState extends State<LoginPage> {
       autovalidate: _autoValidate,
       child: new Scaffold(
         backgroundColor: kQuizSurfaceWhite,
-        body: SafeArea(
-          child: new ListView(
-            padding: EdgeInsets.symmetric(horizontal: 30.0),
-            children: <Widget>[
-              new SizedBox(height: 40.0),
-              new Column(
-                children: <Widget>[
-                  new Image.asset(
-                    'images/logo1.png',
-                    height: 150,
-                  ),
-                  new SizedBox(height: 30.0),
-                  new Text(
-                    'SIGN IN',
-                    textScaleFactor: 1.5,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w800,
+        body: CustomLoading(
+          isLoading: _isLoading,
+          isOverlay: true,
+          child: SafeArea(
+            child: new ListView(
+              padding: EdgeInsets.symmetric(horizontal: 30.0),
+              children: <Widget>[
+                new SizedBox(height: 40.0),
+                new Column(
+                  children: <Widget>[
+                    new Image.asset(
+                      'images/logo1.png',
+                      height: 150,
                     ),
-                  ),
-                ],
-              ),
-              new SizedBox(
-                height: 50.0,
-              ),
-              new AccentColorOverride(
-                color: kQuizBrown900,
-                child: new TextFormField(
-                  validator: cf.mhtIdValidation,
-                  decoration: InputDecoration(
-                    labelText: 'Mht Id',
-                    hintText: 'Enter Mht Id no.',
-                    prefixIcon: Icon(
-                      Icons.person_outline,
-                      color: kQuizBrown900,
-                    ),
-                    filled: true,
-                  ),
-                  onSaved: (String value) {
-                    _mhtId = value;
-                  },
-                  keyboardType: TextInputType.numberWithOptions(),
-                ),
-              ),
-              new SizedBox(height: 20.0),
-              new AccentColorOverride(
-                color: kQuizBrown900,
-                child: new TextFormField(
-                  // validator: cf.passwordValidation,
-                  decoration: InputDecoration(
-                    labelText: 'Password',
-                    hintText: 'Enter Password',
-                    prefixIcon: Icon(
-                      Icons.vpn_key,
-                      color: kQuizBrown900,
-                    ),
-                    filled: true,
-                    suffixIcon: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          _obscureText = !_obscureText;
-                        });
-                      },
-                      child: Icon(
-                        _obscureText ? Icons.visibility_off : Icons.visibility,
-                        semanticLabel:
-                            _obscureText ? 'show password' : 'hide password',
-                        color: kQuizBrown900,
+                    new SizedBox(height: 30.0),
+                    new Text(
+                      'SIGN IN',
+                      textScaleFactor: 1.5,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w800,
                       ),
                     ),
+                  ],
+                ),
+                new SizedBox(
+                  height: 50.0,
+                ),
+                new AccentColorOverride(
+                  color: kQuizBrown900,
+                  child: new TextFormField(
+                    validator: CommonFunction.mhtIdValidation,
+                    decoration: InputDecoration(
+                      labelText: 'Mht Id',
+                      hintText: 'Enter Mht Id no.',
+                      prefixIcon: Icon(
+                        Icons.person_outline,
+                        color: kQuizBrown900,
+                      ),
+                      filled: true,
+                    ),
+                    onSaved: (String value) {
+                      _mhtId = value;
+                    },
+                    keyboardType: TextInputType.numberWithOptions(),
                   ),
-                  onSaved: (String value) {
-                    _password = value;
-                  },
-                  obscureText: _obscureText,
                 ),
-              ),
-              new SizedBox(height: 20.0),
-              new RaisedButton(
-                child: Text(
-                  'SIGN IN',
-                  style: TextStyle(color: Colors.white),
+                new SizedBox(height: 20.0),
+                new AccentColorOverride(
+                  color: kQuizBrown900,
+                  child: new TextFormField(
+                    validator: CommonFunction.passwordValidation,
+                    decoration: InputDecoration(
+                      labelText: 'Password',
+                      hintText: 'Enter Password',
+                      prefixIcon: Icon(
+                        Icons.vpn_key,
+                        color: kQuizBrown900,
+                      ),
+                      filled: true,
+                      suffixIcon: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _obscureText = !_obscureText;
+                          });
+                        },
+                        child: Icon(
+                          _obscureText
+                              ? Icons.visibility_off
+                              : Icons.visibility,
+                          semanticLabel:
+                              _obscureText ? 'show password' : 'hide password',
+                          color: kQuizBrown900,
+                        ),
+                      ),
+                    ),
+                    onSaved: (String value) {
+                      _password = value;
+                    },
+                    obscureText: _obscureText,
+                  ),
                 ),
-                elevation: 4.0,
-                padding: EdgeInsets.all(20.0),
-                onPressed: _submit,
-              ),
-              new SizedBox(height: 15.0),
-              _forgotPasswordBox(),
-              new SizedBox(height: 20.0),
-              _signupBox(),
-              new SizedBox(height: 5.0),
-              _termsAndCondition(),
-            ],
+                new SizedBox(height: 20.0),
+                new RaisedButton(
+                  child: Text(
+                    'SIGN IN',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  elevation: 4.0,
+                  padding: EdgeInsets.all(20.0),
+                  onPressed: _submit,
+                ),
+                new SizedBox(height: 15.0),
+                _forgotPasswordBox(),
+                new SizedBox(height: 20.0),
+                _signupBox(),
+                new SizedBox(height: 5.0),
+                _termsAndCondition(),
+              ],
+            ),
           ),
         ),
       ),
@@ -212,43 +218,50 @@ class LoginPageState extends State<LoginPage> {
 
   void _submit() async {
     if (_formKey.currentState.validate()) {
+      setState(() {
+        _isLoading = true;
+      });
       _formKey.currentState.save();
       print('LOGIN DATA');
       print('MOBILE : ${this._mhtId}');
       print('PASSWORD : ${this._password}');
       try {
-        Map<String, dynamic> data = {'mht_id': _mhtId, 'password': _password};
-        Response res = await _api.postApi(url: '/login', data: data);
+        Response res = await _api.login(mhtId: _mhtId, password: _password);
         AppResponse appResponse =
             ResponseParser.parseResponse(context: context, res: res);
         if (appResponse.status == WSConstant.SUCCESS_CODE) {
+          UserInfo userInfo = UserInfo.fromJson(appResponse.data);
+          CacheData.userInfo = userInfo;
           SharedPreferences pref = await SharedPreferences.getInstance();
           pref.setString('user_info', res.body);
+          pref.setString('token', userInfo.token);
           pref.setBool(SharedPrefConstant.b_isUserLoggedIn, true);
-          print(appResponse.data['user_info']);
-          _api.appendTokenToHeader(appResponse.data['token']);
-          NotificationSetup.setupNotification();
-          _loadUserState(appResponse.data['mhtId']);
+          print(userInfo);
+          _api.appendTokenToHeader(userInfo.token);
+          NotificationSetup.setupNotification(userInfo: userInfo);
+          bool result = await CommonFunction.loadUserState(context, int.parse(_mhtId));
+          if (result) {
+            print('CacheData.userState in login :: ');
+            print(CacheData.userState.currentState.level);
+            Navigator.pushReplacementNamed(context, '/gameMainPage');
+          } else {
+            setState(() {
+              _isLoading = false;
+            });
+          }
         } else {
-          cf.alertDialog(
-            context: context,
-            msg: appResponse.message,
-            barrierDismissible: false,
-            cancelButtonFn: null,
-            doneButtonFn: null,
-          );
+          setState(() {
+            _isLoading = false;
+          });
         }
       } catch (err) {
         print('CATCH 1 :: ');
         print(err);
-        cf.alertDialog(
-          context: context,
-          msg: err.toString(),
-          barrierDismissible: false,
-          cancelButtonFn: null,
-          doneButtonFn: onClickDone,
-          doneButtonIcon: Icons.replay,
-        );
+        setState(() {
+          _isLoading = false;
+        });
+        CommonFunction.displayErrorDialog(
+            context: context, msg: err.toString());
       }
     } else {
       _autoValidate = true;
@@ -260,37 +273,26 @@ class LoginPageState extends State<LoginPage> {
     Navigator.pop(context);
   }
 
-  _loadUserState(mhtId) async {
-    try {
-      var data = {'mhtid': mhtId};
-      Response res = await _api.postApi(url: '/user_state', data: data);
-      AppResponse appResponse =
-          ResponseParser.parseResponse(context: context, res: res);
-      if (appResponse.status == WSConstant.SUCCESS_CODE) {
-        print('IN LOGIN ::: userstateStr :::');
-        print(appResponse.data);
-        UserState userState = UserState.fromJson(appResponse.data['results']);
-        CacheData.userState = userState;
-        Navigator.pushReplacementNamed(context, '/level_new');
-      } else {
-        cf.alertDialog(
-          context: context,
-          msg: appResponse.message,
-          barrierDismissible: false,
-          cancelButtonFn: null,
-          doneButtonFn: null,
-        );
-      }
-    } catch (err) {
-      print('CATCH 2 :: ');
-      print(err);
-      cf.alertDialog(
-        context: context,
-        msg: err.toString(),
-        barrierDismissible: false,
-        cancelButtonFn: null,
-        doneButtonFn: null,
-      );
-    }
-  }
+  // _loadUserState(int mhtId) async {
+  //   try {
+  //     Response res = await _api.getUserState(mhtId: mhtId);
+  //     AppResponse appResponse =
+  //         ResponseParser.parseResponse(context: context, res: res);
+  //     if (appResponse.status == WSConstant.SUCCESS_CODE) {
+  //       print('IN LOGIN ::: userstateStr :::');
+  //       SharedPreferences pref = await SharedPreferences.getInstance();
+  //       await pref.setString('userState', res.body);
+  //       UserState userState = UserState.fromJson(appResponse.data['results']);
+  //       CacheData.userState = userState;
+  //       Navigator.pushReplacementNamed(context, '/level_new');
+  //     }
+  //   } catch (err) {
+  //     setState(() {
+  //       _isLoading = false;
+  //     });
+  //     print('CATCH 2 :: ');
+  //     print(err);
+  //     CommonFunction.displayErrorDialog(context: context, msg: err.toString());
+  //   }
+  // }
 }

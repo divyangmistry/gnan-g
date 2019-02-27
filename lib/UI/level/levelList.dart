@@ -1,11 +1,7 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:SheelQuotient/model/cacheData.dart';
-import 'package:SheelQuotient/model/user_state.dart';
+import 'package:GnanG/model/cacheData.dart';
 import '../../colors.dart';
 import 'levelRow.dart';
-import '../../model/quizlevel.dart';
 import '../../common.dart';
 // import 'package:flame/flame.dart';
 
@@ -15,12 +11,9 @@ class NewLevelPage extends StatefulWidget {
 }
 
 class NewLevelPageState extends State<NewLevelPage> {
-  bool display = true;
-
   @override
   void initState() {
     super.initState();
-    loadData();
     // Flame.audio.play('music/CV-01Trimantra.mp3');
   }
 
@@ -30,46 +23,56 @@ class NewLevelPageState extends State<NewLevelPage> {
     // Flame.audio.clear('music/CV-01Trimantra.mp3');
   }
 
-  Future<Null> loadData() async {
-    const timeOut = const Duration(seconds: 2);
-    new Timer(timeOut, () {
-      setState(() {
-        // TODO : Load levels
-        display = false;
-      });
-    });
-  }
-
-  Widget _pageToDisplay() {
-    if (display) {
-      return CustomLoading();
-    } else {
-      return new SafeArea(
-        child: Column(
-          children: <Widget>[
-            new SizedBox(height: 20),
-            new Text(
-              'LEVELS',
-              textScaleFactor: 1.5,
-              style: TextStyle(
-                  fontWeight: FontWeight.w800,
-                  color: kQuizSurfaceWhite,
-                  letterSpacing: 4),
+  Widget pageToDisplay() {
+    return new SafeArea(
+      child: Column(
+        children: <Widget>[
+          new SizedBox(height: 20),
+          new Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                new RaisedButton(
+                  padding: EdgeInsets.all(10),
+                  shape: CircleBorder(),
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/gameStart');
+                  },
+                  child: Icon(
+                    Icons.person_outline,
+                    size: 25,
+                    color: kQuizSurfaceWhite,
+                  ),
+                ),
+                new Text(
+                  'LEVELS',
+                  textScaleFactor: 1.5,
+                  style: TextStyle(
+                      fontWeight: FontWeight.w800,
+                      color: kQuizSurfaceWhite,
+                      letterSpacing: 4),
+                ),
+                CommonFunction.pointsUI(
+                  context: context,
+                  point: CacheData.userState.totalscore.toString(),
+                ),
+              ],
             ),
-            new SizedBox(height: 20),
-            new LevelList(),
-          ],
-        ),
-      );
-    }
+          ),
+          new SizedBox(height: 20),
+          new LevelList(),
+        ],
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      backgroundColor: kQuizSurfaceWhite,
-      body: new BackgroundGredient(
-        child: _pageToDisplay(),
+    return Scaffold(
+      body: BackgroundGredient(
+        child: pageToDisplay(),
       ),
     );
   }
@@ -83,8 +86,12 @@ class LevelList extends StatelessWidget {
         child: new ListView.builder(
           itemExtent: 160.0,
           itemCount: CacheData.userState.quizLevels.length,
-          itemBuilder: (_, index) =>
-              new LevelCardRow(CacheData.userState.quizLevels[index]),
+          itemBuilder: (_, index) {
+            print('CacheData.userState :: ');
+            print(CacheData.userState.currentState.level);
+            print(index + 1);
+            return new LevelCardRow(CacheData.userState.quizLevels[index], CacheData.userState.currentState.level == index + 1 ? false : true);
+          },
         ),
       ),
     );

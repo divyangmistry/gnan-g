@@ -1,4 +1,7 @@
+import 'package:GnanG/UI/animation/success.dart';
 import 'package:flutter/material.dart';
+import 'package:GnanG/Service/apiservice.dart';
+import 'package:GnanG/model/cacheData.dart';
 import '../common.dart';
 import '../colors.dart';
 
@@ -8,28 +11,45 @@ class GameLevelPage extends StatefulWidget {
 }
 
 class GameLevelPageState extends State<GameLevelPage> {
+  ApiService _api = new ApiService();
+  bool _isloading = true;
+
+  GameLevelPageState() {
+    new Future.delayed(new Duration(seconds: 1), () {
+      setState(() {
+        _isloading = false;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
       backgroundColor: kQuizSurfaceWhite,
-      body: new SafeArea(
-        child: new ListView(
-          padding: EdgeInsets.symmetric(horizontal: 30.0,vertical: 20.0),
-          children: <Widget>[
-            _gameBar(),
-            SizedBox(
-              height: 20.0,
+      body: BackgroundGredient(
+        child: new SafeArea(
+          child: CustomLoading(
+            isLoading: _isloading,
+            child: new ListView(
+              padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 20.0),
+              children: <Widget>[
+                _gameBar(),
+                SizedBox(
+                  height: 20.0,
+                ),
+                _userCard(),
+                SizedBox(
+                  height: 20.0,
+                ),
+                _profileData(),
+                // _bonusRoundInfo(),
+                SizedBox(
+                  height: 20.0,
+                ),
+                _bottomButtons(),
+              ],
             ),
-            _userCard(),
-            SizedBox(
-              height: 20.0,
-            ),
-            _bonusRoundInfo(),
-            SizedBox(
-              height: 20.0,
-            ),
-            _bottomButtons(),
-          ],
+          ),
         ),
       ),
     );
@@ -39,9 +59,11 @@ class GameLevelPageState extends State<GameLevelPage> {
     return new Row(
       children: <Widget>[
         _iconButton(
-          Icon(Icons.person_outline, color: Colors.white),
+          Icon(Icons.power_settings_new, color: Colors.white),
           () {
-            Navigator.pushNamed(context, '/profile');
+            _api.logout();
+            Navigator.pop(context);
+            Navigator.pushReplacementNamed(context, '/login_new');
           },
         ),
         new Expanded(
@@ -58,7 +80,13 @@ class GameLevelPageState extends State<GameLevelPage> {
             color: Colors.white,
           ),
           () {
-            Navigator.pushNamed(context, '/rules');
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => new SucessAnimationPage(),
+              ),
+            );
+            // Navigator.pushNamed(context, '/rules');
           },
         ),
       ],
@@ -78,6 +106,69 @@ class GameLevelPageState extends State<GameLevelPage> {
           ),
         ],
       ),
+    );
+  }
+
+  _profileData() {
+    return new Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+      margin: EdgeInsets.symmetric(vertical: 10),
+      color: Colors.grey[50],
+      elevation: 4,
+      child: new Padding(
+        padding: EdgeInsets.all(30),
+        child: new Column(
+          children: <Widget>[
+            Text(
+              'Profile data',
+              textScaleFactor: 1.5,
+              style: TextStyle(
+                color: kQuizMain400,
+              ),
+            ),
+            SizedBox(height: 15),
+            new Divider(),
+            SizedBox(height: 15),
+            titleAndData('Mobile no. : ', CacheData.userInfo.mobile),
+            SizedBox(height: 15),
+            titleAndData(
+                'Email id : ',
+                CacheData.userInfo.email != null
+                    ? CacheData.userInfo.email
+                    : ""),
+            SizedBox(height: 15),
+            titleAndData('Center : ', CacheData.userInfo.center),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget titleAndData(String title, String data) {
+    return new Column(
+      children: <Widget>[
+        new Row(
+          children: <Widget>[
+            new Container(
+              width: MediaQuery.of(context).size.width / 3,
+              child: new Text(
+                title,
+                textScaleFactor: 1.1,
+                style: TextStyle(
+                  color: kQuizMain50,
+                ),
+              ),
+            ),
+            new Text(
+              data,
+              textScaleFactor: 1.2,
+              style: TextStyle(
+                color: kQuizMain400,
+              ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 
@@ -126,10 +217,10 @@ class GameLevelPageState extends State<GameLevelPage> {
         ),
         SizedBox(width: 10.0),
         _button(
-          'Play GAME',
+          'Play Puzzle',
           Icons.play_circle_filled,
           () {
-            Navigator.pushNamed(context, '/gamePage');
+            Navigator.pushNamed(context, '/gameOf15');
           },
         ),
       ],
@@ -167,9 +258,14 @@ class GameLevelPageState extends State<GameLevelPage> {
     return Expanded(
       child: Column(
         children: <Widget>[
-          Icon(
-            icon,
-            size: 40.0,
+          IconButton(
+            icon: Icon(Icons.access_time),
+            onPressed: () {
+              print(' ----> SHOW USER DATA ! <----');
+              CommonFunction.alertDialog(
+                  context: context, msg: CacheData.userState.toString());
+            },
+            // size: 40.0,
             color: kQuizBrown900,
           ),
           SizedBox(
@@ -208,7 +304,7 @@ class GameLevelPageState extends State<GameLevelPage> {
               height: 50,
             ),
             new Text(
-              'Milan Vadher',
+              CacheData.userInfo.name,
               textScaleFactor: 1.5,
               style: TextStyle(
                 fontWeight: FontWeight.w200,
@@ -220,11 +316,10 @@ class GameLevelPageState extends State<GameLevelPage> {
             ),
             new Row(
               children: <Widget>[
-                _scoreData('Points', '\$10'),
+                _scoreData(
+                    'Points', '\$' + CacheData.userState.totalscore.toString()),
                 CustomVerticalDivider(height: 60),
-                _scoreData('Rank', '15th'),
-                CustomVerticalDivider(height: 60),
-                _scoreData('Lives', '05'),
+                _scoreData('Lives', CacheData.userState.lives.toString()),
               ],
             ),
           ],
@@ -267,20 +362,13 @@ class GameLevelPageState extends State<GameLevelPage> {
   }
 
   Widget _userAvatar() {
-    return new Container(
-      width: 100.0,
-      height: 100.0,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: Colors.white54,
-        image: DecorationImage(
-          fit: BoxFit.fill,
-          image: NetworkImage(
-              'https://avatars2.githubusercontent.com/u/16611246?s=400&v=4'),
-        ),
+    return CircleAvatar(
+      maxRadius: 50,
+      child: CircleAvatar(
+        maxRadius: 45,
+        backgroundImage: AssetImage('images/face.jpg'),
       ),
+      backgroundColor: kQuizBrown900,
     );
   }
 }
-
-

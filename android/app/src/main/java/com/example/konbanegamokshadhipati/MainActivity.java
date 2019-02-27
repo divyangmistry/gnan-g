@@ -1,4 +1,4 @@
-package com.example.konbanegamokshadhipati;
+package com.mba.sheelquotient;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;

@@ -1,4 +1,4 @@
-name: SheelQuotient
+name: GnanG
 description: A new Flutter project.
 
 # The following defines the version and build number for your application.
@@ -18,7 +18,22 @@ dependencies:
   shared_preferences: "0.4.3"
   http: "0.11.3+17"
   flame: "0.10.0"
-  onesignal: "^1.0.0"
+  onesignal: "1.0.5"
+  firebase_core:
+  firebase_messaging: "0.2.1"
+  flutter_spinkit: "3.1.0"
+  flare_flutter: "1.0.7"
+
+  # For Puzzle -
+  # cupertino_icons: ^0.1.2
+  fluttertoast: "2.2.2"
+  url_launcher: "4.0.3"
+  share: "0.5.3"
+  color: any
+  rxdart: "0.20.0"
+  encrypt: "1.0.0+1"
+  connectivity: "0.3.2"
+  nima: ^1.0.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -43,19 +58,30 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - images/TZLogo.jpg
+    - images/coin.png
     - images/face.png
     - images/planet.png
     - images/logo.png
     - images/bkg.jpg
     - images/login.jpg
+    - images/logo1.png
     - images/face.jpg
     - images/rank2.jpg
     - images/rank3.jpg
-    - images/logo1.png
     - assets/audio/music/CV-01Trimantra.mp3
     - assets/audio/music/Pac man dies.mp3
     - assets/audio/music/party_horn-Mike_Koenig-76599891.mp3
     - assets/audio/music/bensound-epic.mp3
+    - assets/animation/noInternet.flr
+    - assets/animation/Teddy.flr
+    - assets/animation/Dancing.flr
+    - assets/animation/leaderboard.flr
+    - assets/animation/person_floating.flr
+    - assets/animation/bonus.flr
+    - assets/animation/leader.flr
+    - assets/animation/puzzl.flr
+    
+    
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

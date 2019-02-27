@@ -1,10 +1,9 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
-import 'package:SheelQuotient/constans/wsconstants.dart';
-import 'package:SheelQuotient/model/appresponse.dart';
-import 'package:SheelQuotient/model/signupsession.dart';
-import 'package:SheelQuotient/utils/response_parser.dart';
+import 'package:GnanG/model/appresponse.dart';
+import 'package:GnanG/model/signupsession.dart';
+import 'package:GnanG/utils/response_parser.dart';
 import '../../UI/auth/new_otp.dart';
 import '../../Service/apiservice.dart';
 import '../../common.dart';
@@ -58,7 +57,7 @@ class ForgotPasswordState extends State<ForgotPassword> {
               new AccentColorOverride(
                 color: kQuizBrown900,
                 child: new TextFormField(
-                  validator: cf.mhtIdValidation,
+                  validator: CommonFunction.mhtIdValidation,
                   decoration: InputDecoration(
                     labelText: 'Mht Id',
                     hintText: 'Enter Mht Id no.',
@@ -95,39 +94,23 @@ class ForgotPasswordState extends State<ForgotPassword> {
     if (_formKey.currentState.validate()) {
       try {
         _formKey.currentState.save();
-        Map<String, dynamic> data = {'mht_id': _mhtId};
-        Response res = await _api.postApi(url: '/forgot_password', data: data);
+        Response res = await _api.forgotPassword(mhtId: _mhtId);
         AppResponse appResponse = ResponseParser.parseResponse(context: context, res: res);
-        if (appResponse.status == WSConstant.SUCCESS_CODE) {
+        if (appResponse.status == 200) {
           SignUpSession signUpSession = SignUpSession.fromJson(appResponse.data);
           Navigator.pop(context);
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
               builder: (context) =>
-                  new OtpVerifyPage(signUpSession: signUpSession),
+                  new OtpVerifyPage(otp: signUpSession.otp, userData: signUpSession.userData, fromForgotPassword: true,),
             ),
-          );
-        } else {
-          cf.alertDialog(
-            context: context,
-            msg: appResponse.message,
-            barrierDismissible: false,
-            cancelButtonFn: null,
-            doneButtonFn: null,
           );
         }
       } catch (err) {
         print('CATCH :: ');
         print(err);
-        cf.alertDialog(
-          context: context,
-          msg: err.toString(),
-          barrierDismissible: false,
-          cancelButtonFn: null,
-          doneButtonFn: null,
-          doneButtonIcon: Icons.replay,
-        );
+        CommonFunction.displayErrorDialog(context: context, msg: err.toString());
       }
     } else {
       _autoValidate = true;

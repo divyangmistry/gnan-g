@@ -1,11 +1,13 @@
 // Package import
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
-import 'package:SheelQuotient/UI/auth/new_otp.dart';
-import 'package:SheelQuotient/constans/wsconstants.dart';
-import 'package:SheelQuotient/model/appresponse.dart';
-import 'package:SheelQuotient/model/signupsession.dart';
-import 'package:SheelQuotient/utils/response_parser.dart';
+import 'package:GnanG/UI/auth/new_otp.dart';
+import 'package:GnanG/constans/wsconstants.dart';
+import 'package:GnanG/model/appresponse.dart';
+import 'package:GnanG/model/signupsession.dart';
+import 'package:GnanG/utils/response_parser.dart';
 
 // File import
 import '../../common.dart';
@@ -19,7 +21,6 @@ class SignUpPage extends StatefulWidget {
 
 class SignUpPageState extends State<SignUpPage> {
   final _formKey = GlobalKey<FormState>();
-  CommonFunction cf = new CommonFunction();
   bool _autoValidate = false;
   ApiService _api = new ApiService();
   String _mhtId;
@@ -59,7 +60,7 @@ class SignUpPageState extends State<SignUpPage> {
               new AccentColorOverride(
                 color: kQuizBrown900,
                 child: new TextFormField(
-                  validator: cf.mhtIdValidation,
+                  validator: CommonFunction.mhtIdValidation,
                   decoration: InputDecoration(
                     labelText: 'Mht Id',
                     hintText: 'Enter Mht Id no.',
@@ -79,7 +80,7 @@ class SignUpPageState extends State<SignUpPage> {
               new AccentColorOverride(
                 color: kQuizBrown900,
                 child: new TextFormField(
-                  validator: cf.mobileValidation,
+                  validator: CommonFunction.mobileValidation,
                   decoration: InputDecoration(
                     labelText: 'Mobile no.',
                     hintText: 'Enter Mobile no.',
@@ -169,39 +170,30 @@ class SignUpPageState extends State<SignUpPage> {
     if (_formKey.currentState.validate()) {
       try {
         _formKey.currentState.save();
-        Map<String, dynamic> data = {'mht_id': _mhtId, 'password': _mobile};
-        Response res = await _api.postApi(url: '/validate_user', data: data);
+        Response res =
+            await _api.validateUser(mhtId: _mhtId, mobileNo: _mobile);
         AppResponse appResponse =
             ResponseParser.parseResponse(context: context, res: res);
-        if (appResponse.status == WSConstant.SUCCESS_CODE) {
+        if (appResponse.status == 200) {
           SignUpSession signUpSession =
               SignUpSession.fromJson(appResponse.data);
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) =>
-                  new OtpVerifyPage(signUpSession: signUpSession),
+              builder: (context) => new OtpVerifyPage(
+                    otp: signUpSession.otp,
+                    userData: signUpSession.userData,
+                    fromForgotPassword: false,
+                  ),
             ),
-          );
-        } else {
-          cf.alertDialog(
-            context: context,
-            msg: appResponse.message,
-            barrierDismissible: false,
-            cancelButtonFn: null,
-            doneButtonFn: null,
           );
         }
       } catch (err) {
         print('CATCH :: ');
         print(err);
-        cf.alertDialog(
+        CommonFunction.displayErrorDialog(
           context: context,
           msg: err.toString(),
-          barrierDismissible: false,
-          cancelButtonFn: null,
-          doneButtonFn: null,
-          doneButtonIcon: Icons.replay,
         );
       }
     } else {

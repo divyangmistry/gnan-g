@@ -1,152 +1,55 @@
-import 'dart:convert';
+import 'package:GnanG/UI/game/game_main_page.dart';
+import 'package:GnanG/UI/intro/intro.dart';
+import 'package:GnanG/UI/others/feedback.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
+import 'package:GnanG/UI/game_level.dart';
+import 'package:GnanG/UI/leaderboard.dart';
+import 'package:GnanG/UI/profile.dart';
+import 'package:GnanG/UI/puzzle/main.dart';
+import 'package:GnanG/no-internet-page.dart';
 
-import 'model/question.dart';
-import 'common.dart';
-
-import 'package:SheelQuotient/Service/apiservice.dart';
-import 'package:SheelQuotient/UI/auth/forgot_password.dart';
-import 'package:SheelQuotient/UI/game_level.dart';
-
-//import 'package:SheelQuotient/UI/game_page.dart';
-import 'package:SheelQuotient/UI/game/leaderboar.dart';
-
-//import 'package:SheelQuotient/UI/level_ui.dart';
-//import 'package:SheelQuotient/UI/login_ui.dart';
-//import 'package:SheelQuotient/UI/new_login.dart';
-import 'package:SheelQuotient/UI/profile.dart';
-
-//import 'package:SheelQuotient/UI/register_page.dart';
-//import 'package:SheelQuotient/UI/rules.dart';
-//import 'package:SheelQuotient/UI/send_otp_page.dart';
-//import 'package:SheelQuotient/UI/simple_game.dart';
-import 'package:SheelQuotient/UI/leaderboard.dart';
-import 'package:SheelQuotient/model/cacheData.dart';
-import 'package:SheelQuotient/model/user_state.dart';
-import 'package:SheelQuotient/UI/intro/intro.dart';
-import 'package:SheelQuotient/constans/wsconstants.dart';
-import 'package:SheelQuotient/model/appresponse.dart';
-import 'package:SheelQuotient/utils/response_parser.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
-import 'Service/apiservice.dart';
-import 'UI/game/mainGame.dart';
-import 'UI/level/levelList.dart';
-import 'UI/auth/register_new.dart';
+import 'UI/auth/forgot_password.dart';
+import 'UI/auth/new_login.dart';
 import 'UI/auth/new_otp.dart';
 import 'UI/auth/new_signup.dart';
-import 'UI/auth/forgot_password.dart';
-import 'UI/game_level.dart';
-import 'UI/game/leaderboar.dart';
-import 'UI/auth/new_login.dart';
-import 'UI/profile.dart';
-import 'UI/others/rules.dart';
+import 'UI/auth/register_new.dart';
+import 'UI/game/mainGame.dart';
 import 'UI/game/simple_game.dart';
+import 'UI/game_level.dart';
+import 'UI/level/levelList.dart';
+import 'UI/others/rules.dart';
 import 'UI/others/terms&condition.dart';
-import 'model/cacheData.dart';
-import 'model/user_state.dart';
-import 'UI/game/pikachar.dart';
-
+import 'UI/profile.dart';
 import 'colors.dart';
 
 class QuizApp extends StatefulWidget {
+  final Widget defaultHome;
+
+  QuizApp({@required this.defaultHome});
+
   @override
   _QuizAppState createState() => _QuizAppState();
 }
 
 class _QuizAppState extends State<QuizApp> {
-  // Widget _defaultHome = new LoginPage();
-  Widget _defaultHome = new Container(
-    child: Scaffold(
-      body: new BackgroundGredient(
-        child: SafeArea(
-          child: Pikachar(
-            'પાંચમું મહાવ્રત ક્યાં તીર્થંકર ભગવાને આપ્યું હતું?', ["ભ",
-          "ન",
-          "મ",
-          "મ",
-          "વા",
-          "વી",
-          "ના",
-          "લ્લિ",
-          "હા",
-          "ન",
-          "ભ",
-          "ગ",
-          "ર",
-          "થ",
-          "ગ",
-          "વા",
-          "ભ",
-          "ન",
-          "મ",
-          "મ",
-          "વા",
-          "વી",
-          "ના",
-          "લ્લિ",
-          "હા",
-          "ન",
-          "ભ",
-          "ગ",
-          "ર",
-          "થ",
-          "ગ",
-          "વા"
-          ]))
-      )
-    )
-  );
-
-
-  ApiService _api = new ApiService();
 
   @override
   void initState() {
-    // _checkLoginStatus();
     super.initState();
-  }
-
-  _checkLoginStatus() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool _isLogin = prefs.getBool('b_isUserLoggedIn') == null
-        ? false
-        : prefs.getBool('b_isUserLoggedIn');
-
-    if (_isLogin) {
-      _getInitData(_isLogin,
-          json.decode(prefs.getString('user_info'))['user_info']['mobile']);
-    }
-  }
-
-  _getInitData(_result, mobile) async {
-    if (_result) {
-      _defaultHome = new GameLevelPage();
-      var data = {'user_mob': mobile};
-      Response res = await _api.getUserState(json.encode(data));
-      AppResponse appResponse = ResponseParser.parseResponse(context: context, res: res);
-      if (appResponse.status == WSConstant.SUCCESS_CODE) {
-        Map<String, dynamic> userstateStr = appResponse.data['results'];
-        print('IN MAIN ::: userstateStr :::');
-        print(userstateStr);
-        UserState userState = UserState.fromJson(userstateStr);
-        CacheData.userState = userState;
-        _defaultHome = new NewLevelPage();
-      } else {
-        _defaultHome = new LoginPage();
-      }
-    }
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Quiz',
-      home: _defaultHome,
+      title: 'Gnan-G',
+      home: widget.defaultHome,
       theme: _kQuizTheme,
       routes: <String, WidgetBuilder>{
+        '/noInternet': (BuildContext context) => new NoInternetPage(),
+        '/introPage': (BuildContext context) => new IntroPage(),
+        '/feedback': (BuildContext context) => new FeedbackPage(),
         '/simpleGame': (BuildContext context) => new SimpleGame(),
+        '/gameMainPage': (BuildContext context) => new GameMainPage(),
         '/game_new': (BuildContext context) => new MainGamePage(),
         '/level_new': (BuildContext context) => new NewLevelPage(),
         '/login_new': (BuildContext context) => new LoginPage(),
@@ -157,8 +60,9 @@ class _QuizAppState extends State<QuizApp> {
         '/gameStart': (BuildContext context) => new GameLevelPage(),
         '/rules': (BuildContext context) => new RulesPagePage(),
         '/profile': (BuildContext context) => new ProfilePagePage(),
-        '/leaderboard': (BuildContext context) => new LeaderboarPagePage(),
+        '/leaderboard': (BuildContext context) => new LeaderBoard(),
         '/t&c': (BuildContext context) => new TermsAndConditionPage(),
+        '/gameOf15': (BuildContext context) => new GameOfFifteen(),
       },
     );
   }

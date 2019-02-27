@@ -1,55 +1,49 @@
 class CurrentState {
-  String userMobile;
-  int queSt;
+  int questionSt;
   int level;
   int score;
-  int lives;
-  int currentScore;
   bool completed;
+  int mhtId;
+  int totalQuestions;
   String updatedAt;
-  int totalQues;
+  String createdAt;
 
   CurrentState(
-      {this.userMobile,
-        this.queSt,
-        this.level,
-        this.score,
-        this.lives,
-        this.currentScore,
-        this.completed,
-        this.updatedAt,
-        this.totalQues});
+      {this.questionSt,
+      this.level,
+      this.score,
+      this.completed,
+      this.mhtId,
+      this.totalQuestions,
+      this.updatedAt,
+      this.createdAt});
 
   CurrentState.fromJson(Map<String, dynamic> json) {
-    userMobile = json['user_mobile'];
-    queSt = json['question_st'];
+    questionSt = json['question_st'];
     level = json['level'];
     score = json['score'];
-    lives = json['lives'];
-    currentScore = json['current_score'];
     completed = json['completed'];
+    mhtId = json['mht_id'];
+    totalQuestions = json['total_questions'];
     updatedAt = json['updatedAt'];
-    totalQues = json['total_questions'];
+    createdAt = json['createdAt'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['user_mobile'] = this.userMobile;
-    data['question_st'] = this.queSt;
+    data['question_st'] = this.questionSt;
     data['level'] = this.level;
     data['score'] = this.score;
-    data['lives'] = this.lives;
-    data['current_score'] = this.currentScore;
     data['completed'] = this.completed;
+    data['mht_id'] = this.mhtId;
+    data['total_questions'] = this.totalQuestions;
     data['updatedAt'] = this.updatedAt;
-    data['total_questions'] = this.totalQues;
+    data['createdAt'] = this.createdAt;
     return data;
   }
 
   @override
   String toString() {
-    return 'Current{userMobile: $userMobile, queSt: $queSt, level: $level, score: $score, lives: $lives, currentScore: $currentScore, completed: $completed, updatedAt: $updatedAt, totalQues: $totalQues}';
+    return 'Current{questionSt: $questionSt, level: $level, score: $score, completed: $completed, mhtId: $mhtId, totalQuestions: $totalQuestions, updatedAt: $updatedAt, createdAt: $createdAt}';
   }
-
-
 }
