@@ -36,7 +36,7 @@ class QuestionUIState extends State<QuestionUI> {
     return Expanded(
       child: question.questionType == "MCQ"
           ? new MCQ(question, validateAnswer, widget.hiddenOptionIndex)
-          : new Pikachar(),
+          : new Pikachar(question, validateAnswer),
     );
   }
 
