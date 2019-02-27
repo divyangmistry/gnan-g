@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import 'package:GnanG/UI/game/mcq.dart';
+import 'package:GnanG/UI/game/question_ui.dart';
 import 'package:GnanG/UI/game/title_bar.dart';
 import 'package:flame/flame.dart';
 import 'package:flutter/cupertino.dart';
@@ -32,13 +34,10 @@ class MainGamePage extends StatefulWidget {
 }
 
 class MainGamePageState extends BaseState<MainGamePage> {
-  bool clickAns = false;
   bool isLoading = false;
   bool isOverlay = false;
-  List<bool> option = [false, false, false, false];
-  List<int> fiftyFifty = [];
+  List<int> hiddenOptionIndex = [];
   int userLives = CacheData.userState.lives;
-  bool trueAnswer = false;
   List<Question> questions;
   Question question;
   int currentQueIndex;
@@ -83,7 +82,6 @@ class MainGamePageState extends BaseState<MainGamePage> {
     Navigator.pop(context);
     setState(() {
       if (!isCompletedLevel) {
-        _reInit();
         _loadNextQuestion();
       } else {
         Navigator.pushReplacementNamed(context, '/level');
@@ -92,110 +90,69 @@ class MainGamePageState extends BaseState<MainGamePage> {
   }
 
   _loadNextQuestion() {
-    Navigator.pop(context);
     if (currentQueIndex < questions.length - 1) {
       setState(() {
-        fiftyFifty = [];
+        hiddenOptionIndex = [];
         currentQueIndex++;
         question =
             questions.getRange(currentQueIndex, currentQueIndex + 1).first;
       });
-    } else {}
+    }
   }
 
-  _reInit() {
-    isGivenCorrectAns = false;
-    correctAnsIndex = -1;
-    selectedAnsIndex = -1;
-  }
-
-  void _onOptionSelect({int index, String answer}) async {
+  void onAnswerGiven(bool isGivenCorrectAns) {
     try {
-      Response res = await _api.validateAnswer(
-        questionId: question.questionId,
-        mhtId: CacheData.userInfo.mhtId,
-        answer: answer,
-        level: CacheData.userState.currentState.level,
-      );
-      AppResponse appResponse =
-          ResponseParser.parseResponse(context: context, res: res);
-      if (appResponse.status == WSConstant.SUCCESS_CODE) {
-        option = [false, false, false, false];
-        ValidateQuestion validateQuestion =
-            ValidateQuestion.fromJson(appResponse.data);
-        if (validateQuestion.answerStatus) {
-          setState(() {
-            userLives = validateQuestion.lives;
-            validateQuestion.updateSessionScore();
-          });
-          isGivenCorrectAns = true;
-          Flame.audio.play('music/party_horn-Mike_Koenig-76599891.mp3');
-          if (currentQueIndex == questions.length - 1) {
-            CommonFunction.alertDialog(
-                context: context,
-                msg: 'Level ' + question.level.toString() + ' completed !! ',
-                barrierDismissible: false,
-                type: 'success',
-                doneButtonFn: () async {
-                  setState(() {
-                    isOverlay = true;
-                    isLoading = true;
-                  });
-                  bool result = await CommonFunction.loadUserState(
-                      context, CacheData.userInfo.mhtId);
-                  if (result) {
-                    Navigator.pop(context);
-                    Navigator.pop(context);
-                    setState(() {
-                      isLoading = false;
-                      isOverlay = false;
-                    });
-                  } else {
-                    setState(() {
-                      isLoading = false;
-                      isOverlay = false;
-                    });
-                  }
-                });
-          } else {
-            CommonFunction.alertDialog(
+      setState(() {
+
+      });
+      if (isGivenCorrectAns) {
+        if (currentQueIndex == questions.length - 1) {
+          CommonFunction.alertDialog(
               context: context,
-              msg: 'Your answer is correct !!',
-              type: 'success',
+              msg: 'Level ' + question.level.toString() + ' completed !! ',
               barrierDismissible: false,
-              doneButtonFn: _loadNextQuestion,
-            );
-          }
+              type: 'success',
+              doneButtonFn: () async {
+                setState(() {
+                  isOverlay = true;
+                  isLoading = true;
+                });
+                bool result = await CommonFunction.loadUserState(
+                    context, CacheData.userInfo.mhtId);
+                if (result) {
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                  setState(() {
+                    isLoading = false;
+                    isOverlay = false;
+                  });
+                } else {
+                  setState(() {
+                    isLoading = false;
+                    isOverlay = false;
+                  });
+                }
+              });
         } else {
+          _loadNextQuestion();
+        }
+      } else {
+        if (userLives == 1) {
           CommonFunction.alertDialog(
             context: context,
-            msg: 'Your answer is wrong !!',
+            msg: 'You have only 1 Life remaining. Now you can access hint.',
             barrierDismissible: false,
           );
-          Flame.audio.play('music/Pac man dies.mp3');
-          isGivenCorrectAns = false;
-          setState(() {
-            userLives = validateQuestion.lives;
-            validateQuestion.updateSessionScore();
-          });
-          if (userLives == 1) {
-            CommonFunction.alertDialog(
+        }
+        if (userLives == 0) {
+          CommonFunction.alertDialog(
               context: context,
-              msg: 'You have only 1 Life remaining. Now you can access hint.',
+              msg: 'Game-over',
               barrierDismissible: false,
-            );
-          }
-          if (userLives == 0) {
-            CommonFunction.alertDialog(
-                context: context,
-                msg: 'Game-over',
-                barrierDismissible: false,
-                doneButtonFn: () {
-                  Navigator.pop(context);
-                  Navigator.pop(context);
-                  Navigator.pop(context);
-                });
-          }
+              doneButtonFn: () {
+                Navigator.pop(context);
+                Navigator.pop(context);
+              });
         }
       }
     } catch (err) {
@@ -223,11 +180,8 @@ class MainGamePageState extends BaseState<MainGamePage> {
                       SizedBox(
                         height: MediaQuery.of(context).size.height / 16,
                       ),
-                      Expanded(
-                        child: question.questionType == "MCQ"
-                            ? _buildMCQ()
-                            : new Pikachar(),
-                      ),
+                      QuestionUI(
+                          question, CacheData.userState.currentState.level, onAnswerGiven, hiddenOptionIndex),
                     ],
                   ))),
         ),
@@ -241,29 +195,6 @@ class MainGamePageState extends BaseState<MainGamePage> {
               onPressed: _getHint,
             )
           : null,
-    );
-  }
-
-  Widget _buildMCQ() {
-    return ListView(
-      children: <Widget>[
-        Container(
-          alignment: Alignment(0, -0.30),
-          child: Text(
-            ((question != null) ? question.question : ''),
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: kQuizBackgroundWhite,
-              height: 1.5,
-            ),
-            textScaleFactor: 1.6,
-          ),
-        ),
-        new Container(
-          padding: EdgeInsets.fromLTRB(50, 30, 50, 50),
-          child: optionsUi(),
-        )
-      ],
     );
   }
 
@@ -350,8 +281,6 @@ class MainGamePageState extends BaseState<MainGamePage> {
       CommonFunction.displayErrorDialog(context: context, msg: err.toString());
     }
   }
-
-  Widget titleBar() {}
 
   Widget _bottomDrawer() {
     return Drawer(
@@ -477,11 +406,12 @@ class MainGamePageState extends BaseState<MainGamePage> {
 
   _fiftyFifty() {
     var rng = new Random();
-    while (fiftyFifty.length < 2) {
+    while (hiddenOptionIndex.length < 2) {
       int temp = rng.nextInt(3);
-      if (temp != question.answerIndex && fiftyFifty.indexOf(temp) == -1) {
+      if (temp != question.answerIndex &&
+          hiddenOptionIndex.indexOf(temp) == -1) {
         setState(() {
-          fiftyFifty.add(temp);
+          hiddenOptionIndex.add(temp);
         });
       }
     }
@@ -524,75 +454,5 @@ class MainGamePageState extends BaseState<MainGamePage> {
       return "rd";
     }
     return "th";
-  }
-
-  Widget optionsUi() {
-    return Container(
-      child: new Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        verticalDirection: VerticalDirection.down,
-        mainAxisSize: MainAxisSize.min,
-        children: getOptionsWidget(),
-      ),
-    );
-  }
-
-  List<Widget> getOptionsWidget() {
-    List<Widget> list = [];
-    int i = 0;
-    question.options.forEach((option) {
-      if (option != null) {
-        list.add(new SizedBox(height: 20));
-        list.add(getOptionWidget(option.option, i++));
-      }
-    });
-    return list;
-  }
-
-  Widget getOptionWidget(String text, index) {
-    return new SizedBox(
-      width: double.infinity,
-      child: !fiftyFifty.contains(index)
-          ? new MaterialButton(
-              elevation: 5,
-              onPressed: () {
-                setState(() {
-                  _onOptionSelect(index: index, answer: text);
-                  option = [false, false, false, false];
-                  option[index] = !option[index];
-                });
-              },
-              height: 50,
-              child: Row(
-                children: <Widget>[
-                  option[index]
-                      ? new Container(
-                          width: 0,
-                          child: Icon(
-                            Icons.check_circle,
-                            size: 25,
-                            color: kQuizBackgroundWhite,
-                          ),
-                        )
-                      : new Container(),
-                  Expanded(
-                    child: Text(
-                      text,
-                      textScaleFactor: 1.1,
-                      style: TextStyle(
-                        color:
-                            option[index] ? kQuizBackgroundWhite : kQuizMain400,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ],
-              ),
-              color: option[index] ? kQuizMain400 : kQuizBackgroundWhite,
-            )
-          : new Container(
-              height: 50,
-            ),
-    );
   }
 }
