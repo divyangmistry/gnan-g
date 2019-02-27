@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:GnanG/UI/game/title_bar.dart';
 import 'package:flame/flame.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -46,7 +47,6 @@ class MainGamePageState extends BaseState<MainGamePage> {
   int selectedAnsIndex = -1;
   ApiService _api = new ApiService();
   CurrentState currentState;
-
   @override
   void initState() {
     print(widget.level);
@@ -215,85 +215,24 @@ class MainGamePageState extends BaseState<MainGamePage> {
         isLoading: isLoading,
         child: new BackgroundGredient(
           child: SafeArea(
-            child: question.questionType == "MCQ"
-                ? new ListView(
-                    padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
+              child: new Container(
+                  padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
+                  child: new Column(
                     children: <Widget>[
-                      titleBar(),
+                      GameTitleBar(widget.level.name),
                       SizedBox(
                         height: MediaQuery.of(context).size.height / 16,
                       ),
-                      Container(
-                        alignment: Alignment(0, -0.30),
-                        child: Text(
-                          ((question != null) ? question.question : ''),
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: kQuizBackgroundWhite,
-                            height: 1.5,
-                          ),
-                          textScaleFactor: 1.6,
-                        ),
-                      ),
-                      new Container(
-                        padding: EdgeInsets.fromLTRB(50, 30, 50, 50),
-                        child: questionUi(),
+                      Expanded(
+                        child: question.questionType == "MCQ"
+                            ? _buildMCQ()
+                            : new Pikachar(),
                       ),
                     ],
-                  )
-                : new Pikachar(),
-          ),
+                  ))),
         ),
       ),
-      bottomNavigationBar: BottomAppBar(
-        color: kBackgroundGrediant1,
-        elevation: 10.0,
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Container(
-                child: IconButton(
-                  icon: Icon(
-                    Icons.menu,
-                    color: kQuizBackgroundWhite,
-                  ),
-                  onPressed: () {
-                    showModalBottomSheet(
-                        builder: (BuildContext context) => _bottomDrawer(),
-                        context: context);
-                  },
-                ),
-              ),
-              Container(
-                child: Row(
-                  children: <Widget>[
-                    Text(
-                      'Lives : ',
-                      style: TextStyle(color: kQuizBackgroundWhite),
-                    ),
-                    Container(
-                      height: 25,
-                      child: ListView.builder(
-                        shrinkWrap: true,
-                        scrollDirection: Axis.horizontal,
-                        itemCount: userLives,
-                        itemBuilder: (BuildContext context, int index) {
-                          return Icon(
-                            Icons.account_circle,
-                            color: kQuizBackgroundWhite,
-                          );
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
+      bottomNavigationBar: _buildbottomNavigationBar(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: userLives <= 1
           ? FloatingActionButton.extended(
@@ -302,6 +241,81 @@ class MainGamePageState extends BaseState<MainGamePage> {
               onPressed: _getHint,
             )
           : null,
+    );
+  }
+
+  Widget _buildMCQ() {
+    return ListView(
+      children: <Widget>[
+        Container(
+          alignment: Alignment(0, -0.30),
+          child: Text(
+            ((question != null) ? question.question : ''),
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: kQuizBackgroundWhite,
+              height: 1.5,
+            ),
+            textScaleFactor: 1.6,
+          ),
+        ),
+        new Container(
+          padding: EdgeInsets.fromLTRB(50, 30, 50, 50),
+          child: optionsUi(),
+        )
+      ],
+    );
+  }
+
+  Widget _buildbottomNavigationBar() {
+    return BottomAppBar(
+      color: kBackgroundGrediant1,
+      elevation: 10.0,
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 10),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Container(
+              child: IconButton(
+                icon: Icon(
+                  Icons.menu,
+                  color: kQuizBackgroundWhite,
+                ),
+                onPressed: () {
+                  showModalBottomSheet(
+                      builder: (BuildContext context) => _bottomDrawer(),
+                      context: context);
+                },
+              ),
+            ),
+            Container(
+              child: Row(
+                children: <Widget>[
+                  Text(
+                    'Lives : ',
+                    style: TextStyle(color: kQuizBackgroundWhite),
+                  ),
+                  Container(
+                    height: 25,
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      scrollDirection: Axis.horizontal,
+                      itemCount: userLives,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Icon(
+                          Icons.account_circle,
+                          color: kQuizBackgroundWhite,
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -337,39 +351,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
     }
   }
 
-  Widget titleBar() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: <Widget>[
-        Container(
-          child: IconButton(
-            icon: Icon(
-              Icons.close,
-              color: kQuizSurfaceWhite,
-            ),
-            onPressed: () {
-              // Flame.audio.clear('music/bensound-epic.mp3');
-              // Flame.audio.clearCache();
-              Navigator.pop(context);
-            },
-          ),
-        ),
-        Container(
-          child: Text(
-            widget.level.name.toUpperCase(),
-            textScaleFactor: 1.2,
-            style: TextStyle(color: kQuizSurfaceWhite),
-          ),
-        ),
-        Container(
-          child: CommonFunction.pointsUI(
-            context: context,
-            point: CacheData.userState.totalscore.toString(),
-          ),
-        ),
-      ],
-    );
-  }
+  Widget titleBar() {}
 
   Widget _bottomDrawer() {
     return Drawer(
@@ -544,7 +526,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
     return "th";
   }
 
-  Widget questionUi() {
+  Widget optionsUi() {
     return Container(
       child: new Column(
         crossAxisAlignment: CrossAxisAlignment.center,
