@@ -37,7 +37,6 @@ class MainGamePageState extends BaseState<MainGamePage> {
   bool isLoading = false;
   bool isOverlay = false;
   List<int> hiddenOptionIndex = [];
-  int userLives = CacheData.userState.lives;
   List<Question> questions;
   Question question;
   int currentQueIndex;
@@ -102,9 +101,6 @@ class MainGamePageState extends BaseState<MainGamePage> {
 
   void onAnswerGiven(bool isGivenCorrectAns) {
     try {
-      setState(() {
-
-      });
       if (isGivenCorrectAns) {
         if (currentQueIndex == questions.length - 1) {
           CommonFunction.alertDialog(
@@ -137,14 +133,14 @@ class MainGamePageState extends BaseState<MainGamePage> {
           _loadNextQuestion();
         }
       } else {
-        if (userLives == 1) {
+        if (CacheData.userState.lives == 1) {
           CommonFunction.alertDialog(
             context: context,
             msg: 'You have only 1 Life remaining. Now you can access hint.',
             barrierDismissible: false,
           );
         }
-        if (userLives == 0) {
+        if (CacheData.userState.lives == 0) {
           CommonFunction.alertDialog(
               context: context,
               msg: 'Game-over',
@@ -188,7 +184,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
       ),
       bottomNavigationBar: _buildbottomNavigationBar(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: userLives <= 1
+      floatingActionButton: CacheData.userState.lives <= 1
           ? FloatingActionButton.extended(
               icon: Icon(Icons.help_outline),
               label: Text('Get Hint'),
@@ -232,7 +228,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
                     child: ListView.builder(
                       shrinkWrap: true,
                       scrollDirection: Axis.horizontal,
-                      itemCount: userLives,
+                      itemCount: CacheData.userState.lives,
                       itemBuilder: (BuildContext context, int index) {
                         return Icon(
                           Icons.account_circle,

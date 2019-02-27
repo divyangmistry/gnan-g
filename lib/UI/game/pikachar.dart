@@ -1,3 +1,4 @@
+import 'package:GnanG/model/question.dart';
 import 'package:flutter/material.dart';
 import '../../colors.dart';
 import '../../common.dart';
@@ -19,6 +20,9 @@ Map _answerChars = {
 };
 
 class Pikachar extends StatefulWidget {
+  Question question;
+  Function validateAnswer;
+  Pikachar(this.question, this.validateAnswer);
   @override
   _PikacharState createState() => new _PikacharState();
 }
