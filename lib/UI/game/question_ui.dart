@@ -36,7 +36,7 @@ class QuestionUIState extends State<QuestionUI> {
     return Expanded(
       child: question.questionType == "MCQ"
           ? new MCQ(question, validateAnswer, widget.hiddenOptionIndex)
-          : new Pikachar(question, validateAnswer),
+          : new Pikachar(null,null),
     );
   }
 
@@ -55,9 +55,9 @@ class QuestionUIState extends State<QuestionUI> {
     AppResponse appResponse =
     ResponseParser.parseResponse(context: context, res: res);
     if (appResponse.status == WSConstant.SUCCESS_CODE) {
-      ValidateQuestion validateQuestion =
-      ValidateQuestion.fromJson(appResponse.data);
+      ValidateQuestion validateQuestion = ValidateQuestion.fromJson(appResponse.data);
       setState(() {
+        isGivenCorrectAns = true;
         validateQuestion.updateSessionScore();
       });
       if (validateQuestion.answerStatus) {
@@ -69,8 +69,8 @@ class QuestionUIState extends State<QuestionUI> {
           doneButtonFn: onAnswerStatusDialogOK,
         );
         Flame.audio.play('music/party_horn-Mike_Koenig-76599891.mp3');
-        isGivenCorrectAns = true;
       } else {
+        isGivenCorrectAns = false;
         CommonFunction.alertDialog(
           context: context,
           msg: 'Your answer is wrong !!',
