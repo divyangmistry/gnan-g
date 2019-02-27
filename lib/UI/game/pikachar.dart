@@ -1,28 +1,57 @@
 import 'package:GnanG/model/question.dart';
 import 'package:flutter/material.dart';
-import '../../colors.dart';
+import 'package:GnanG/model/question.dart';
 import '../../common.dart';
 import '../../colors.dart';
+import 'dart:math';
 
 List<String> _optionChars = [];
+List answerLengths = List();
+String questionText = 'This is a Pikachar style question where you tap on character tiles?';
 int rowTilesLimit = 6; // What is the max no. of tiles in a row
-AnswerTiles ansTiles;
+AnswerRows ansRows;
+List<AnswerTile> aTiles = List<AnswerTile>();
 List<OptionTile> opTiles = List<OptionTile>();
 Map _answerChars = {
   "length": 6,
-  "indexToInsert": 0,
-  0: " ",
-  1: " ",
-  2: " ",
-  3: " ",
-  4: " ",
-  5: " ",
+  "indexToInsert": 0
 };
 
+int getLengthOfAnswerChars(List answer) {
+  return answer.fold(0, (t,e) => t + e.length);
+}
+
+List mapAnswerCharsToLength(List answer) {
+  return answer.map((a) => a.length).toList();
+}
+
+void setAnswerCharsFromData(PikacharAnswer ans) {
+  int lengthOfAnswer = getLengthOfAnswerChars(ans.answer);
+  answerLengths = mapAnswerCharsToLength(ans.answer);
+  print(lengthOfAnswer);
+  print("answerLengths: " + answerLengths.toString());
+  _answerChars['length'] = lengthOfAnswer;
+  for (int i = 0; i < lengthOfAnswer; i++) {
+    _answerChars[i] = " ";
+  }
+}
+
 class Pikachar extends StatefulWidget {
-  Question question;
-  Function validateAnswer;
-  Pikachar(this.question, this.validateAnswer);
+  String questText = questionText;
+  List<String> optionChars;
+  PikacharAnswer answer;
+
+  Pikachar(this.questText, this.optionChars) {
+    Map<String, dynamic> jsonData = new Map<String, dynamic>();
+    jsonData['_id'] = "5c66f999810d7b757e179d96";
+    jsonData['answer'] = [
+      ["મ", "હા" , "વી", "ર", "ના", "નિ", "ર્વા", "ણ", "પ", "છી", "", "", ""],
+      ["ભ", "ગ", "વા" , "ન"],
+    ];
+
+    this.answer = new PikacharAnswer.fromJson(jsonData);
+  }
+
   @override
   _PikacharState createState() => new _PikacharState();
 }
@@ -32,19 +61,25 @@ class _PikacharState extends State<Pikachar> {
   void initState() {
     super.initState();
     // todo: Set the optionChars to come from API
-    _optionChars = [
-      'સી', 'મં', 'ધ', 'ર', 'સ્વા', 'મી', 'દા', 'દા', 'ભ', 'ગ', 'વા',
-      'ન', 'ની', 'રૂ', 'મા'
-    ];
+    if (widget.optionChars != null) {
+      _optionChars = widget.optionChars;
+    } else {
+      _optionChars = [
+        'સી', 'મં', 'ધ', 'ર', 'સ્વા', 'મી', 'દા', 'દા', 'ભ', 'ગ', 'વા',
+        'ન', 'ની', 'રૂ', 'મા'
+      ];
+    }
+    print(widget.answer);
+    setAnswerCharsFromData(widget.answer);
   }
 
   @override
   Widget build(BuildContext context) {
-    ansTiles = new AnswerTiles();
+    ansRows = new AnswerRows();
     return new ListView(
               children: <Widget>[
                 question(),
-                ansTiles,
+                ansRows,
                 optionTiles(),
               ],
     );
@@ -54,7 +89,7 @@ class _PikacharState extends State<Pikachar> {
     return new Container(
       padding: EdgeInsets.fromLTRB(20, 150, 20, 0),
       child: Text(
-        'This is a Pikachar style question where you tap on character tiles?',
+        widget.questText,
         textAlign: TextAlign.center,
         style: TextStyle(
           color: kQuizBackgroundWhite,
@@ -177,7 +212,7 @@ class _OptionTileState extends State<OptionTile> {
 
   void tileTapped() {
     if (!isActive) {
-      if (ansTiles.addCharToAnswer(char, index)) {
+      if (ansRows.addCharToAnswer(char, index)) {
         setState(() {
           isActive = true;
         });
@@ -224,27 +259,29 @@ class _OptionTileState extends State<OptionTile> {
   }
 }
 
-class AnswerTiles extends StatefulWidget {
+class AnswerRows extends StatefulWidget {
   //todo: @Milan: Please check, is calling methods of state from statefulwidget
   // the correct way, because setState can only be called from State.
   // Or is there another way? I had to hack it this way as I didn't know any
   // other way. This is not working with hot reload, the state becomes null.
-  _AnswerTilesState st;
+  _AnswerRowsState st;
 
-  _AnswerTilesState createState() {
-    st = new _AnswerTilesState();
+  _AnswerRowsState createState() {
+    st = new _AnswerRowsState();
     return st;
   }
 
   /// Set the index to insert to the first blank answer tile
   /// Needs to be called after removing or adding an answer tile
   void findIndexToInsert() {
-    for (int i = 0; i < _answerChars["length"]; i++) {
+    int i = 0;
+    for (; i < _answerChars["length"]; i++) {
       if (_answerChars[i] == "" || _answerChars[i] == " ") {
-        _answerChars["indexToInsert"] = i;
         break;
       }
     }
+    // If all tiles full, then indexToInsert set to length + 1
+    _answerChars["indexToInsert"] = i;
   }
 
   /// Adds the char to the answer tiles
@@ -253,37 +290,80 @@ class AnswerTiles extends StatefulWidget {
   }
 }
 
-class _AnswerTilesState extends State<AnswerTiles> {
-  List<AnswerTile> aTiles;
+class _AnswerRowsState extends State<AnswerRows> {
 
-  bool addChar(char, opTileIndex) {
+  bool addChar(String char, int opTileIndex) {
     int i = _answerChars["indexToInsert"];
     if (i >= _answerChars["length"]) {
       return false;
     } else {
       aTiles[i].setOpIndex(i, char, opTileIndex);
     }
-    ansTiles.findIndexToInsert();
+    ansRows.findIndexToInsert();
     return true;
   }
 
   Widget build(BuildContext context) {
     return new Container(
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 50),
+      padding: EdgeInsets.symmetric(vertical: 20),
+      child: new Column(
+        children: createAnswerRows(),
+      )
+    );
+  }
+
+  List<Widget> createAnswerRows() {
+    List<Widget> cols = new List<Widget>();
+//    for (int i = 0; i < _answerChars["length"]; i = i + rowTilesLimit) {
+    int i = 0;
+    for(int j = 0; j < answerLengths.length; j++) {
+      int temp = answerLengths[j];
+      while(temp > 0) {
+        int numTilesInRow = min(rowTilesLimit, temp);
+        var optRow = AnswerTiles(i, numTilesInRow);
+        cols.add(optRow);
+        i += numTilesInRow;
+        temp -= numTilesInRow;
+      }
+    }
+    return cols;
+  }
+}
+
+class AnswerTiles extends StatefulWidget {
+  int startingIndex;
+  int numTiles;
+
+  AnswerTiles(this.startingIndex, this.numTiles);
+
+  _AnswerTilesState createState() => _AnswerTilesState(this.startingIndex, this.numTiles);
+}
+
+class _AnswerTilesState extends State<AnswerTiles> {
+  int startingIndex;
+  int numTiles;
+
+  _AnswerTilesState(this.startingIndex, this.numTiles);
+
+  Widget build(BuildContext context) {
+    return new Container(
+      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
       child: Row(
-        children: createAnswerTiles(),
+        children: createAnswerTiles(this.startingIndex, this.numTiles),
         mainAxisAlignment: MainAxisAlignment.spaceAround,
       )
     );
   }
 
-  createAnswerTiles() {
-    aTiles = List<AnswerTile>();
-    for (int i = 0; i < _answerChars["length"]; i++) {
-      var opTile = new AnswerTile(i);
-      aTiles.add(opTile);
+  createAnswerTiles(int startingIndex, int numTiles) {
+    List<AnswerTile> tempAnswerTiles = new List<AnswerTile>();
+    for (int i = startingIndex; i < _answerChars["length"] &&
+      i < startingIndex + numTiles; i++) {
+      var aTile = new AnswerTile(i);
+      tempAnswerTiles.add(aTile);
+      aTiles.add(aTile);
     }
-    return aTiles;
+    return tempAnswerTiles;
   }
 }
 
@@ -311,21 +391,25 @@ class _AnswerTileState extends State<AnswerTile> {
   _AnswerTileState(this.index);
 
   void setOpIndex(int i, String char, int opTileIndex) {
+    print(i.toString() + char + opTileIndex.toString());
     this.indexOfOption = opTileIndex;
     setState(() {
+      print("Hi");
       _answerChars["indexToInsert"]++;
       _answerChars[i] = char;
     });
   }
 
   void answerTileTapped() {
-    if (indexOfOption != null) {
+    print("Reached here outside if" + indexOfOption.toString());
+    if (this.indexOfOption != null) {
+      print("Reached here");
       opTiles[indexOfOption].rtrnCharFromAnswer();
       indexOfOption = null;
       setState(() {
         _answerChars[index] = " ";
       });
-      ansTiles.findIndexToInsert();
+      ansRows.findIndexToInsert();
     }
   }
 

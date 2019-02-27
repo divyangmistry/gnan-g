@@ -40,6 +40,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
   List<Question> questions;
   Question question;
   int currentQueIndex;
+  bool isHintTaken = false;
   bool isGivenCorrectAns = false;
   int correctAnsIndex = -1;
   int selectedAnsIndex = -1;
@@ -91,7 +92,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
   _loadNextQuestion() {
     if (currentQueIndex < questions.length - 1) {
       setState(() {
-        hiddenOptionIndex = [];
+        _reInitForQuestion();
         currentQueIndex++;
         question =
             questions.getRange(currentQueIndex, currentQueIndex + 1).first;
@@ -99,8 +100,15 @@ class MainGamePageState extends BaseState<MainGamePage> {
     }
   }
 
+  _reInitForQuestion() {
+    hiddenOptionIndex = [];
+    isHintTaken = false;
+  }
+
   void onAnswerGiven(bool isGivenCorrectAns) {
     try {
+      print('Inside onAnswerGiven' + isGivenCorrectAns.toString());
+      setState(() {});
       if (isGivenCorrectAns) {
         if (currentQueIndex == questions.length - 1) {
           CommonFunction.alertDialog(
@@ -249,20 +257,28 @@ class MainGamePageState extends BaseState<MainGamePage> {
   void _getHint() async {
     // CommonFunction.loadUserState(context, CacheData.userInfo.mhtId);
     try {
-      Response res = await _api.hintTaken(
-          questionId: question.questionId, mhtId: CacheData.userInfo.mhtId);
-      AppResponse appResponse =
-          ResponseParser.parseResponse(context: context, res: res);
-      if (appResponse.status == WSConstant.SUCCESS_CODE) {
-        UserScoreState userScoreState =
-            UserScoreState.fromJson(appResponse.data);
-        setState(() {
-          userScoreState.updateSessionScore();
-        });
-        SharedPreferences pref = await SharedPreferences.getInstance();
-        pref.setString('user_info', res.body);
-        print('FROM HINT :: ');
-        print(res.body);
+      bool isApiFailed = false;
+      if(!isHintTaken) {
+        Response res = await _api.hintTaken(
+            questionId: question.questionId, mhtId: CacheData.userInfo.mhtId);
+        AppResponse appResponse =
+        ResponseParser.parseResponse(context: context, res: res);
+        if (appResponse.status == WSConstant.SUCCESS_CODE) {
+          UserScoreState userScoreState =
+          UserScoreState.fromJson(appResponse.data);
+          setState(() {
+            userScoreState.updateSessionScore();
+          });
+          SharedPreferences pref = await SharedPreferences.getInstance();
+          pref.setString('user_info', res.body);
+          print('FROM HINT :: ');
+          print(res.body);
+          isHintTaken = true;
+        }
+      } else {
+        isApiFailed = true;
+      }
+      if(!isApiFailed) {
         CommonFunction.alertDialog(
             context: context,
             msg: question.reference,

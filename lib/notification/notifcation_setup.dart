@@ -4,7 +4,6 @@ import 'package:GnanG/notification/firebase_notification.dart';
 import 'package:GnanG/notification/onesignal_notification.dart';
 import 'package:flutter/material.dart';
 
-
 class NotificationSetup {
   static ApiService _apiService = ApiService();
   static void setupNotification({BuildContext context, UserInfo userInfo}) async {
