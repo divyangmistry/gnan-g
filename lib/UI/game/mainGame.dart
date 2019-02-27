@@ -46,6 +46,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
   int selectedAnsIndex = -1;
   ApiService _api = new ApiService();
   CurrentState currentState;
+
   @override
   void initState() {
     print(widget.level);
@@ -493,11 +494,10 @@ class MainGamePageState extends BaseState<MainGamePage> {
   }
 
   _fiftyFifty() {
-    print('50-50');
     var rng = new Random();
-    while (fiftyFifty.length < 3) {
+    while (fiftyFifty.length < 2) {
       int temp = rng.nextInt(3);
-      if (temp != question.answerIndex) {
+      if (temp != question.answerIndex && fiftyFifty.indexOf(temp) == -1) {
         setState(() {
           fiftyFifty.add(temp);
         });
