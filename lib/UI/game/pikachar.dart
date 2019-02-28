@@ -1,6 +1,5 @@
 import 'package:GnanG/model/question.dart';
 import 'package:flutter/material.dart';
-import 'package:GnanG/model/question.dart';
 import '../../common.dart';
 import '../../colors.dart';
 import 'dart:math';
@@ -41,15 +40,14 @@ class Pikachar extends StatefulWidget {
   List<String> optionChars;
   PikacharAnswer answer;
 
-  Pikachar(this.questText, this.optionChars) {
-    Map<String, dynamic> jsonData = new Map<String, dynamic>();
-    jsonData['_id'] = "5c66f999810d7b757e179d96";
-    jsonData['answer'] = [
-      ["મ", "હા" , "વી", "ર", "ના", "નિ", "ર્વા", "ણ", "પ", "છી", "", "", ""],
-      ["ભ", "ગ", "વા" , "ન"],
-    ];
-
-    this.answer = new PikacharAnswer.fromJson(jsonData);
+  Pikachar(this.questText, this.optionChars, this.answer) {
+//    List<List> jsonData = new List<List>();
+//    jsonData = [
+//      ["મ", "હા" , "વી", "ર"],
+//      ["ભ", "ગ", "વા" , "ન"],
+//    ];
+//
+//    this.answer = new PikacharAnswer.fromJson(jsonData);
   }
 
   @override

@@ -8,6 +8,7 @@ class Question {
   String question;
   List<Options> options;
   List<Answer> answer;
+  PikacharAnswer pikacharAnswer;
   int answerIndex;
   String artifactPath;
   int level;
@@ -66,6 +67,22 @@ class Question {
         answer.add(new Answer.fromJson(v));
       });
     }
+    PikacharAnswer pikacharAnswer = PikacharAnswer();
+
+    if (json['pikacharanswer'] != null) {
+      List pikacharanswer = new List<List<String>>();
+      json['pikacharanswer'].forEach((v) {
+        List abc = new List<String>();
+        v.forEach((w) {
+          abc.add(w);
+        });
+        pikacharanswer.add(abc);
+        this.pikacharAnswer = PikacharAnswer.fromJson(pikacharanswer);
+      });
+    }
+//    if (json['pikacharanswer'] != null) {
+//      pikacharAnswer = new PikacharAnswer.fromJson(json['pikacharanswer']);
+//    }
     setAnswerIndex();
     artifactPath = json['artifact_path'];
     level = json['level'];
@@ -140,14 +157,12 @@ class Answer {
 }
 
 class PikacharAnswer {
-  String sId;
-  List<List> answer;
+  List<List<String>> answer;
 
-  PikacharAnswer({this.sId, this.answer});
+  PikacharAnswer({this.answer});
 
-  PikacharAnswer.fromJson(Map<String, dynamic> json) {
-    sId = json['_id'];
-    answer = json['answer'];
+  PikacharAnswer.fromJson(List json) {
+    answer = json;
   }
 
 //  Map<String, dynamic> toJson() {
