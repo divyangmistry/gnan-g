@@ -166,6 +166,15 @@ class ApiService {
     return res;
   }
 
+  Future<http.Response> fiftyFifty({
+    @required int mht_id,
+    @required int level,
+  }) async {
+    Map<String, dynamic> data = {"mht_id": mht_id, "level": level};
+    http.Response res = await postApi(url: '/hint_question', data: data);
+    return res;
+  }
+
   Future<http.Response> validateAnswer({
     @required int questionId,
     @required int mhtId,

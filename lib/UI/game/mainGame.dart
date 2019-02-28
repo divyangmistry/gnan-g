@@ -47,6 +47,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
   int selectedAnsIndex = -1;
   ApiService _api = new ApiService();
   CurrentState currentState;
+
   @override
   void initState() {
     print(widget.level);
@@ -181,7 +182,10 @@ class MainGamePageState extends BaseState<MainGamePage> {
                   padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
                   child: new Column(
                     children: <Widget>[
-                      GameTitleBar(title:widget.level.name, questionNumber: question.questionSt,),
+                      GameTitleBar(
+                        title: widget.level.name,
+                        questionNumber: question.questionSt,
+                      ),
                       SizedBox(
                         height: MediaQuery.of(context).size.height / 16,
                       ),
@@ -436,16 +440,47 @@ class MainGamePageState extends BaseState<MainGamePage> {
     }
   }
 
-  _fiftyFifty() {
-    var rng = new Random();
-    while (hiddenOptionIndex.length < 2) {
-      int temp = rng.nextInt(3);
-      if (temp != question.answerIndex &&
-          hiddenOptionIndex.indexOf(temp) == -1) {
-        setState(() {
-          hiddenOptionIndex.add(temp);
-        });
+  _fiftyFifty() async {
+    try {
+      bool isApiFailed = false;
+      if (!isHintTaken) {
+        Response res = await _api.fiftyFifty(
+          mht_id: CacheData.userInfo.mhtId,
+          level: CacheData.userState.currentState.level,
+        );
+        AppResponse appResponse =
+            ResponseParser.parseResponse(context: context, res: res);
+        if (appResponse.status == WSConstant.SUCCESS_CODE) {
+          UserScoreState userScoreState =
+              UserScoreState.fromJson(appResponse.data);
+          setState(() {
+            userScoreState.updateSessionScore();
+          });
+          SharedPreferences pref = await SharedPreferences.getInstance();
+          pref.setString('user_info', res.body);
+          print('FROM HINT :: ');
+          print(res.body);
+          isHintTaken = true;
+        } else {
+          isApiFailed = true;
+        }
       }
+      if (!isApiFailed) {
+        var rng = new Random();
+        while (hiddenOptionIndex.length < 2) {
+          int temp = rng.nextInt(3);
+          if (temp != question.answerIndex &&
+              hiddenOptionIndex.indexOf(temp) == -1) {
+            setState(() {
+              hiddenOptionIndex.add(temp);
+            });
+          }
+        }
+      }
+    } catch (err) {
+      print('CATCH IN HINT :: ');
+      print(err);
+      CommonFunction.displayErrorDialog(context: context, msg: err.toString());
     }
   }
 
