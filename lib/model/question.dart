@@ -13,8 +13,9 @@ class Question {
   int level;
   String date;
   String reference;
-  List<Null> jumbledata;
+  List<String> jumbledata;
   int iV;
+  PikacharAnswer pikacharAnswer;
 
   Question(
       {this.questionType,
@@ -60,6 +61,17 @@ class Question {
         options.add(new Options.fromJson(v));
       });
     }
+    List<List> words = new List<List>();
+    if (json['pikacharanswer'] != null) {
+      json['pikacharanswer'].forEach((v) {
+         List<String> chars = List.from(v);
+         print(chars);
+         words.add(chars);
+      });
+      print(words);
+      pikacharAnswer = PikacharAnswer(answer: words);
+    }
+
     if (json['answer'] != null) {
       answer = new List<Answer>();
       json['answer'].forEach((v) {
@@ -72,9 +84,9 @@ class Question {
     date = json['date'];
     reference = json['reference'];
     if (json['jumbledata'] != null) {
-      jumbledata = new List<Null>();
+      jumbledata = new List<String>();
       json['jumbledata'].forEach((v) {
-        //jumbledata.add(new Null.fromJson(v));
+          jumbledata.add(v);
       });
     }
     iV = json['__v'];
@@ -140,13 +152,11 @@ class Answer {
 }
 
 class PikacharAnswer {
-  String sId;
   List<List> answer;
 
-  PikacharAnswer({this.sId, this.answer});
+  PikacharAnswer({this.answer});
 
   PikacharAnswer.fromJson(Map<String, dynamic> json) {
-    sId = json['_id'];
     answer = json['answer'];
   }
 
