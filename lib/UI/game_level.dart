@@ -1,4 +1,5 @@
 import 'package:GnanG/UI/animation/success.dart';
+import 'package:GnanG/UI/imagepicker/image_input.dart';
 import 'package:flutter/material.dart';
 import 'package:GnanG/Service/apiservice.dart';
 import 'package:GnanG/model/cacheData.dart';
@@ -362,6 +363,7 @@ class GameLevelPageState extends State<GameLevelPage> {
   }
 
   Widget _userAvatar() {
+    return ImageInput();
     return CircleAvatar(
       maxRadius: 50,
       child: CircleAvatar(

@@ -18,6 +18,7 @@ import 'package:GnanG/model/user_score_state.dart';
 import 'package:GnanG/model/validateQuestion.dart';
 import 'package:GnanG/utils/response_parser.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'pikachar.dart';
 
 import '../../colors.dart';
@@ -180,12 +181,15 @@ class MainGamePageState extends BaseState<MainGamePage> {
                   padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
                   child: new Column(
                     children: <Widget>[
-                      GameTitleBar(widget.level.name),
+                      GameTitleBar(title:widget.level.name, questionNumber: question.questionSt,),
                       SizedBox(
                         height: MediaQuery.of(context).size.height / 16,
                       ),
                       QuestionUI(
-                          question, CacheData.userState.currentState.level, onAnswerGiven, hiddenOptionIndex),
+                          question,
+                          CacheData.userState.currentState.level,
+                          onAnswerGiven,
+                          hiddenOptionIndex),
                     ],
                   ))),
         ),
@@ -258,14 +262,14 @@ class MainGamePageState extends BaseState<MainGamePage> {
     // CommonFunction.loadUserState(context, CacheData.userInfo.mhtId);
     try {
       bool isApiFailed = false;
-      if(!isHintTaken) {
+      if (!isHintTaken) {
         Response res = await _api.hintTaken(
             questionId: question.questionId, mhtId: CacheData.userInfo.mhtId);
         AppResponse appResponse =
-        ResponseParser.parseResponse(context: context, res: res);
+            ResponseParser.parseResponse(context: context, res: res);
         if (appResponse.status == WSConstant.SUCCESS_CODE) {
           UserScoreState userScoreState =
-          UserScoreState.fromJson(appResponse.data);
+              UserScoreState.fromJson(appResponse.data);
           setState(() {
             userScoreState.updateSessionScore();
           });
@@ -274,11 +278,11 @@ class MainGamePageState extends BaseState<MainGamePage> {
           print('FROM HINT :: ');
           print(res.body);
           isHintTaken = true;
+        } else {
+          isApiFailed = true;
         }
-      } else {
-        isApiFailed = true;
       }
-      if(!isApiFailed) {
+      if (!isApiFailed) {
         CommonFunction.alertDialog(
             context: context,
             msg: question.reference,
@@ -413,7 +417,23 @@ class MainGamePageState extends BaseState<MainGamePage> {
   }
 
   _phoneAFriend() {
-    print('Phone a Friend');
+    /*if (platform.isAndroid) {
+      AndroidIntent intent = AndroidIntent(
+        action: 'action_view',
+        data: 'https://play.google.com/store/apps/details?'
+            'id=com.google.android.apps.myapp',
+        arguments: {'authAccount': currentUserEmail},
+      );
+      await intent.launch();
+    }*/
+    try {
+      launch("tel://");
+      print('Phone a Friend');
+    } catch (err) {
+      print('CATCH IN HINT :: ');
+      print(err);
+      CommonFunction.displayErrorDialog(context: context, msg: err.toString());
+    }
   }
 
   _fiftyFifty() {
