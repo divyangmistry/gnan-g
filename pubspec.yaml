@@ -34,6 +34,8 @@ dependencies:
   encrypt: "1.0.0+1"
   connectivity: "0.3.2"
   nima: ^1.0.0
+  image_picker: "0.4.5"
+  image_cropper: 1.0.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -75,12 +77,13 @@ flutter:
     - assets/animation/noInternet.flr
     - assets/animation/Teddy.flr
     - assets/animation/Dancing.flr
-    - assets/animation/leaderboard.flr
     - assets/animation/person_floating.flr
     - assets/animation/bonus.flr
-    - assets/animation/leader.flr
     - assets/animation/puzzl.flr
-    
+    - assets/animation/world.flr
+    - assets/animation/leader.flr
+    - assets/animation/bigbang.flr
+    - images/photo_camera.png
     
 
 

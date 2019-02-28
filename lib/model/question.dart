@@ -14,7 +14,7 @@ class Question {
   int level;
   String date;
   String reference;
-  List<Null> jumbledata;
+  List<String> jumbledata;
   int iV;
 
   Question(
@@ -89,9 +89,9 @@ class Question {
     date = json['date'];
     reference = json['reference'];
     if (json['jumbledata'] != null) {
-      jumbledata = new List<Null>();
+      jumbledata = new List<String>();
       json['jumbledata'].forEach((v) {
-        //jumbledata.add(new Null.fromJson(v));
+          jumbledata.add(v);
       });
     }
     iV = json['__v'];

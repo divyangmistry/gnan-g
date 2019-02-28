@@ -179,6 +179,7 @@ class RegisterPage2State extends State<RegisterPage2> {
         pref.setString('token', userInfo.token);
         pref.setBool(SharedPrefConstant.b_isUserLoggedIn, true);
         NotificationSetup.setupNotification();
+        CommonFunction.loadUserState(context, userInfo.mhtId);
         Navigator.pop(context);
         Navigator.pushReplacementNamed(context, '/level_new');
       }

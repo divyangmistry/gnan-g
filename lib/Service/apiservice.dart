@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:GnanG/constans/sharedpref_constant.dart';
 import 'package:GnanG/model/cacheData.dart';
 import 'package:GnanG/model/signupsession.dart';
+import 'package:http/http.dart';
 import 'package:meta/meta.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -161,6 +162,15 @@ class ApiService {
     @required int mhtId,
   }) async {
     Map<String, dynamic> data = {"question_id": questionId, "mht_id": mhtId};
+    http.Response res = await postApi(url: '/hint_question', data: data);
+    return res;
+  }
+
+  Future<http.Response> fiftyFifty({
+    @required int mht_id,
+    @required int level,
+  }) async {
+    Map<String, dynamic> data = {"mht_id": mht_id, "level": level};
     http.Response res = await postApi(url: '/hint_question', data: data);
     return res;
   }

@@ -54,9 +54,9 @@ class GameMaterialPage extends StatelessWidget {
                     ? 56.0
                     : 72.0,
               ),
-              GameStepsWidget(
-                steps: presenter.steps,
-              ),
+              // GameStepsWidget(
+              //   steps: presenter.steps,
+              // ),
             ],
           );
 
