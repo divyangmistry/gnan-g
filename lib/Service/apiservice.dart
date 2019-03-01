@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:GnanG/constans/sharedpref_constant.dart';
 import 'package:GnanG/model/cacheData.dart';
 import 'package:GnanG/model/signupsession.dart';
+import 'package:GnanG/utils/appsharedpref.dart';
 import 'package:http/http.dart';
 import 'package:meta/meta.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -18,9 +19,8 @@ class ApiService {
 
   checkLogin() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-    if (pref.getBool('b_isUserLoggedIn') != null &&
-        pref.getBool('b_isUserLoggedIn')) {
-      appendTokenToHeader(pref.getString('token'));
+    if (await AppSharedPrefUtil.isUserLoggedIn()) {
+      appendTokenToHeader(await AppSharedPrefUtil.getToken());
     }
   }
 
