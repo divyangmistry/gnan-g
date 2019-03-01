@@ -23,6 +23,7 @@ dependencies:
   firebase_messaging: "0.2.1"
   flutter_spinkit: "3.1.0"
   flare_flutter: "1.0.7"
+  vector_math: ^2.0.8
 
   # For Puzzle -
   # cupertino_icons: ^0.1.2
