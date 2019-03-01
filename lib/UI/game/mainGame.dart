@@ -26,9 +26,10 @@ import '../../common.dart';
 import '../../model/quizlevel.dart';
 
 class MainGamePage extends StatefulWidget {
-  final QuizLevel level;
+  QuizLevel level;
+  bool isBonusLevel;
 
-  MainGamePage({this.level});
+  MainGamePage({this.level = null, this.isBonusLevel = false});
 
   @override
   State<StatefulWidget> createState() => new MainGamePageState();
@@ -61,12 +62,17 @@ class MainGamePageState extends BaseState<MainGamePage> {
     currentState = CacheData.userState.currentState;
     print('currentState ::::::::: ');
     print(currentState);
-    _loadAllQuestions(widget.level.levelIndex);
+    _loadAllQuestions();
   }
 
-  _loadAllQuestions(int level) async {
-    Response res =
-        await _api.getQuestions(level: level, from: currentState.questionSt);
+  _loadAllQuestions() async {
+    Response res;
+    if (widget.isBonusLevel) {
+      res = await _api.getBonusQuestion(mhtId: CacheData.userInfo.mhtId);
+    } else {
+      res =
+          await _api.getQuestions(level: widget.level.levelIndex, from: currentState.questionSt);
+    }
     AppResponse appResponse =
         ResponseParser.parseResponse(context: context, res: res);
     if (appResponse.status == 200) {
@@ -111,54 +117,60 @@ class MainGamePageState extends BaseState<MainGamePage> {
     try {
       print('Inside onAnswerGiven' + isGivenCorrectAns.toString());
       setState(() {});
-      if (isGivenCorrectAns) {
-        if (currentQueIndex == questions.length - 1) {
-          CommonFunction.alertDialog(
-              context: context,
-              msg: 'Level ' + question.level.toString() + ' completed !! ',
-              barrierDismissible: false,
-              type: 'success',
-              doneButtonFn: () async {
-                setState(() {
-                  isOverlay = true;
-                  isLoading = true;
-                });
-                bool result = await CommonFunction.loadUserState(
-                    context, CacheData.userInfo.mhtId);
-                if (result) {
-                  Navigator.pop(context);
-                  Navigator.pop(context);
-                  setState(() {
-                    isLoading = false;
-                    isOverlay = false;
-                  });
-                } else {
-                  setState(() {
-                    isLoading = false;
-                    isOverlay = false;
-                  });
-                }
-              });
-        } else {
-          _loadNextQuestion();
-        }
+      if (widget.isBonusLevel) {
+        _loadNextQuestion();
       } else {
-        if (CacheData.userState.lives == 1) {
-          CommonFunction.alertDialog(
-            context: context,
-            msg: 'You have only 1 Life remaining. Now you can access hint.',
-            barrierDismissible: false,
-          );
-        }
-        if (CacheData.userState.lives == 0) {
-          CommonFunction.alertDialog(
+        if (isGivenCorrectAns) {
+          if (currentQueIndex == questions.length - 1) {
+            CommonFunction.alertDialog(
+                context: context,
+                msg: (widget.isBonusLevel)
+                    ? "All Question of Today's Challange is completed !!"
+                    : 'Level ' + question.level.toString() + ' completed !! ',
+                barrierDismissible: false,
+                type: 'success',
+                doneButtonFn: () async {
+                  setState(() {
+                    isOverlay = true;
+                    isLoading = true;
+                  });
+                  bool result = await CommonFunction.loadUserState(
+                      context, CacheData.userInfo.mhtId);
+                  if (result) {
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                    setState(() {
+                      isLoading = false;
+                      isOverlay = false;
+                    });
+                  } else {
+                    setState(() {
+                      isLoading = false;
+                      isOverlay = false;
+                    });
+                  }
+                });
+          } else {
+            _loadNextQuestion();
+          }
+        } else {
+          if (CacheData.userState.lives == 1) {
+            CommonFunction.alertDialog(
               context: context,
-              msg: 'Game-over',
+              msg: 'You have only 1 Life remaining. Now you can access hint.',
               barrierDismissible: false,
-              doneButtonFn: () {
-                Navigator.pop(context);
-                Navigator.pop(context);
-              });
+            );
+          }
+          if (CacheData.userState.lives == 0) {
+            CommonFunction.alertDialog(
+                context: context,
+                msg: 'Game-over',
+                barrierDismissible: false,
+                doneButtonFn: () {
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                });
+          }
         }
       }
     } catch (err) {
@@ -183,8 +195,10 @@ class MainGamePageState extends BaseState<MainGamePage> {
                   child: new Column(
                     children: <Widget>[
                       GameTitleBar(
-                        title: widget.level.name,
-                        questionNumber: question.questionSt,
+                        title: (widget.isBonusLevel)
+                            ? "Today's Challange"
+                            : widget.level.name,
+                        questionNumber: question.questionSt, totalQuestion: getTotalQuestion(),
                       ),
                       SizedBox(
                         height: MediaQuery.of(context).size.height / 16,
@@ -198,16 +212,33 @@ class MainGamePageState extends BaseState<MainGamePage> {
                   ))),
         ),
       ),
-      bottomNavigationBar: _buildbottomNavigationBar(),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: CacheData.userState.lives <= 1
-          ? FloatingActionButton.extended(
-              icon: Icon(Icons.help_outline),
-              label: Text('Get Hint'),
-              onPressed: _getHint,
-            )
+      bottomNavigationBar:
+          !widget.isBonusLevel ? _buildbottomNavigationBar() : null,
+      floatingActionButtonLocation: !widget.isBonusLevel
+          ? FloatingActionButtonLocation.centerDocked
+          : null,
+      floatingActionButton: !widget.isBonusLevel
+          ? CacheData.userState.lives <= 1
+              ? FloatingActionButton.extended(
+                  icon: Icon(Icons.help_outline),
+                  label: Text('Get Hint'),
+                  onPressed: _getHint,
+                )
+              : null
           : null,
     );
+  }
+
+  int getTotalQuestion() {
+    int totalQuestion = -1;
+    List<QuizLevel> levelInfos = CacheData.userState.quizLevels;
+    for (final quizLevel in levelInfos) {
+      if (quizLevel.levelIndex == CacheData.userState.currentState.level) {
+        totalQuestion = quizLevel.totalQuestions;
+        break;
+      }
+    };
+    return totalQuestion;
   }
 
   Widget _buildbottomNavigationBar() {

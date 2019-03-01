@@ -130,6 +130,16 @@ class ApiService {
     return res;
   }
 
+  // Bonus Question
+  Future<http.Response> getBonusQuestion(
+      {@required int mhtId}) async {
+    Map<String, dynamic> data = {
+      'mht_id': mhtId
+    };
+    http.Response res = await postApi(url: '/bonus_question', data: data);
+    return res;
+  }
+
   // Puzzle Completed
   Future<http.Response> puzzleCompleted(
       {@required int mhtId,

@@ -1,3 +1,4 @@
+import 'package:GnanG/UI/game/mainGame.dart';
 import 'package:GnanG/colors.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
@@ -87,7 +88,15 @@ class GameMainPageState extends State<GameMainPage> {
         ),
         GestureDetector(
           onTap: () {
-            Navigator.pushNamed(context, '/feedback');
+            //Navigator.pushNamed(context, '/feedback');
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => new MainGamePage(
+                  isBonusLevel: true,
+                ),
+              ),
+            );
           },
           child: Container(
             height: MediaQuery.of(context).size.height / 8.0,
