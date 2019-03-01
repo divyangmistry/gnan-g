@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:GnanG/UI/game/mcq.dart';
 import 'package:GnanG/UI/game/question_ui.dart';
 import 'package:GnanG/UI/game/title_bar.dart';
+import 'package:GnanG/utils/app_utils.dart';
 import 'package:flame/flame.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -36,8 +37,6 @@ class MainGamePage extends StatefulWidget {
 }
 
 class MainGamePageState extends BaseState<MainGamePage> {
-  bool isLoading = false;
-  bool isOverlay = false;
   List<int> hiddenOptionIndex = [];
   List<Question> questions;
   Question question;
@@ -70,8 +69,8 @@ class MainGamePageState extends BaseState<MainGamePage> {
     if (widget.isBonusLevel) {
       res = await _api.getBonusQuestion(mhtId: CacheData.userInfo.mhtId);
     } else {
-      res =
-          await _api.getQuestions(level: widget.level.levelIndex, from: currentState.questionSt);
+      res = await _api.getQuestions(
+          level: widget.level.levelIndex, from: currentState.questionSt);
     }
     AppResponse appResponse =
         ResponseParser.parseResponse(context: context, res: res);
@@ -130,24 +129,17 @@ class MainGamePageState extends BaseState<MainGamePage> {
                 barrierDismissible: false,
                 type: 'success',
                 doneButtonFn: () async {
+                  Navigator.pop(context);
                   setState(() {
                     isOverlay = true;
-                    isLoading = true;
                   });
                   bool result = await CommonFunction.loadUserState(
                       context, CacheData.userInfo.mhtId);
+                  setState(() {
+                    isOverlay = false;
+                  });
                   if (result) {
                     Navigator.pop(context);
-                    Navigator.pop(context);
-                    setState(() {
-                      isLoading = false;
-                      isOverlay = false;
-                    });
-                  } else {
-                    setState(() {
-                      isLoading = false;
-                      isOverlay = false;
-                    });
                   }
                 });
           } else {
@@ -186,37 +178,33 @@ class MainGamePageState extends BaseState<MainGamePage> {
   @override
   Widget pageToDisplay() {
     return new Scaffold(
-      body: CustomLoading(
-        isLoading: isLoading,
-        child: new BackgroundGredient(
-          child: SafeArea(
-              child: new Container(
-                  padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
-                  child: new Column(
-                    children: <Widget>[
-                      GameTitleBar(
-                        title: (widget.isBonusLevel)
-                            ? "Today's Challange"
-                            : widget.level.name,
-                        questionNumber: question.questionSt, totalQuestion: getTotalQuestion(),
-                      ),
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height / 16,
-                      ),
-                      QuestionUI(
-                          question,
-                          CacheData.userState.currentState.level,
-                          onAnswerGiven,
-                          hiddenOptionIndex),
-                    ],
-                  ))),
-        ),
+      body: new BackgroundGredient(
+        child: SafeArea(
+            child: new Container(
+                padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
+                child: new Column(
+                  children: <Widget>[
+                    GameTitleBar(
+                      title: (widget.isBonusLevel)
+                          ? "Today's Challange"
+                          : widget.level.name,
+                      questionNumber: question.questionSt,
+                      totalQuestion: getTotalQuestion(),
+                    ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height / 16,
+                    ),
+                    Expanded(
+                        child: question.questionType == "MCQ"
+                            ? new MCQ(
+                                question, validateAnswer, hiddenOptionIndex)
+                            : new Pikachar(null, null))
+                  ],
+                ))),
       ),
       bottomNavigationBar:
           !widget.isBonusLevel ? _buildbottomNavigationBar() : null,
-      floatingActionButtonLocation: !widget.isBonusLevel
-          ? FloatingActionButtonLocation.centerDocked
-          : null,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: !widget.isBonusLevel
           ? CacheData.userState.lives <= 1
               ? FloatingActionButton.extended(
@@ -237,8 +225,62 @@ class MainGamePageState extends BaseState<MainGamePage> {
         totalQuestion = quizLevel.totalQuestions;
         break;
       }
-    };
+    }
+    ;
     return totalQuestion;
+  }
+
+  void validateAnswer({String answer}) async {
+    setState(() {
+      isOverlay = true;
+    });
+    Response res = await _api.validateAnswer(
+      questionId: question.questionId,
+      mhtId: CacheData.userInfo.mhtId,
+      answer: answer,
+      level: CacheData.userState.currentState.level,
+    );
+    setState(() {
+      isOverlay = false;
+    });
+    AppResponse appResponse =
+        ResponseParser.parseResponse(context: context, res: res);
+    if (appResponse.status == WSConstant.SUCCESS_CODE) {
+      ValidateQuestion validateQuestion =
+          ValidateQuestion.fromJson(appResponse.data);
+      setState(() {
+        isGivenCorrectAns = true;
+        validateQuestion.updateSessionScore();
+      });
+      if (validateQuestion.answerStatus) {
+        CommonFunction.alertDialog(
+          context: context,
+          msg: 'Your answer is correct !!',
+          type: 'success',
+          barrierDismissible: false,
+          doneButtonFn: onAnswerStatusDialogOK,
+        );
+        AppUtils.appSound(() {
+          Flame.audio.play('music/party_horn-Mike_Koenig-76599891.mp3');
+        });
+      } else {
+        isGivenCorrectAns = false;
+        CommonFunction.alertDialog(
+          context: context,
+          msg: 'Your answer is wrong !!',
+          barrierDismissible: false,
+          doneButtonFn: onAnswerStatusDialogOK,
+        );
+        AppUtils.appSound(() {
+          Flame.audio.play('music/Pac man dies.mp3');
+        });
+      }
+    }
+  }
+
+  void onAnswerStatusDialogOK() {
+    Navigator.pop(context);
+    onAnswerGiven(isGivenCorrectAns);
   }
 
   Widget _buildbottomNavigationBar() {
