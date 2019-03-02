@@ -6,18 +6,17 @@ import 'dart:math';
 
 List<String> _optionChars = [];
 List answerLengths = List();
-String questionText = 'This is a Pikachar style question where you tap on character tiles?';
+String questionText =
+    'This is a Pikachar style question where you tap on character tiles?';
 int rowTilesLimit = 6; // What is the max no. of tiles in a row
 AnswerRows ansRows;
 List<AnswerTile> aTiles = List<AnswerTile>();
 List<OptionTile> opTiles = List<OptionTile>();
-Map _answerChars = {
-  "length": 6,
-  "indexToInsert": 0
-};
+Map _answerChars = {"length": 6, "indexToInsert": 0};
+Function validateAnswer;
 
 int getLengthOfAnswerChars(List answer) {
-  return answer.fold(0, (t,e) => t + e.length);
+  return answer.fold(0, (t, e) => t + e.length);
 }
 
 List mapAnswerCharsToLength(List answer) {
@@ -35,19 +34,21 @@ void setAnswerCharsFromData(PikacharAnswer ans) {
   }
 }
 
+void initializeQuestion(var ans) {
+  _answerChars = {"length": 6, "indexToInsert": 0};
+  aTiles = List<AnswerTile>();
+  opTiles = List<OptionTile>();
+  setAnswerCharsFromData(ans);
+}
+
 class Pikachar extends StatefulWidget {
   String questText = questionText;
   List<String> optionChars;
   PikacharAnswer answer;
 
-  Pikachar(this.questText, this.optionChars, this.answer) {
-//    List<List> jsonData = new List<List>();
-//    jsonData = [
-//      ["મ", "હા" , "વી", "ર"],
-//      ["ભ", "ગ", "વા" , "ન"],
-//    ];
-//
-//    this.answer = new PikacharAnswer.fromJson(jsonData);
+  Pikachar(this.questText, this.optionChars, this.answer, va) {
+    initializeQuestion(this.answer);
+    validateAnswer = va;
   }
 
   @override
@@ -63,23 +64,35 @@ class _PikacharState extends State<Pikachar> {
       _optionChars = widget.optionChars;
     } else {
       _optionChars = [
-        'સી', 'મં', 'ધ', 'ર', 'સ્વા', 'મી', 'દા', 'દા', 'ભ', 'ગ', 'વા',
-        'ન', 'ની', 'રૂ', 'મા'
+        'સી',
+        'મં',
+        'ધ',
+        'ર',
+        'સ્વા',
+        'મી',
+        'દા',
+        'દા',
+        'ભ',
+        'ગ',
+        'વા',
+        'ન',
+        'ની',
+        'રૂ',
+        'મા'
       ];
     }
     print(widget.answer);
-    setAnswerCharsFromData(widget.answer);
   }
 
   @override
   Widget build(BuildContext context) {
     ansRows = new AnswerRows();
     return new ListView(
-              children: <Widget>[
-                question(),
-                ansRows,
-                optionTiles(),
-              ],
+      children: <Widget>[
+        question(),
+        ansRows,
+        optionTiles(),
+      ],
     );
   }
 
@@ -99,17 +112,17 @@ class _PikacharState extends State<Pikachar> {
 
   Widget answerTiles() {
     return new Container(
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 50),
-      child: Row(
-        children: <Widget>[
-          answerTile(),
-          answerTile(),
-          answerTile(),
-          answerTile(),
-          answerTile(),
-        ],
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-      ));
+        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 50),
+        child: Row(
+          children: <Widget>[
+            answerTile(),
+            answerTile(),
+            answerTile(),
+            answerTile(),
+            answerTile(),
+          ],
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+        ));
   }
 
   Widget answerTile() {
@@ -151,8 +164,9 @@ class _PikacharState extends State<Pikachar> {
 
   List<StatefulWidget> createOptionTiles(int startingIndex) {
     List<OptionTile> tempOpTiles = List<OptionTile>();
-    for (int i = startingIndex; i < _optionChars.length &&
-      i < startingIndex + rowTilesLimit; i++) {
+    for (int i = startingIndex;
+        i < _optionChars.length && i < startingIndex + rowTilesLimit;
+        i++) {
       var opTile = new OptionTile(i, _optionChars[i]);
       opTiles.add(opTile);
       tempOpTiles.add(opTile);
@@ -162,19 +176,18 @@ class _PikacharState extends State<Pikachar> {
 
   Widget optionTile(String text, int index) {
     return new GestureDetector(
-      child: Card(
-        elevation: 5,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-        child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-          child: Text(
-            text,
-            textScaleFactor: 3,
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-        )
-      )
-    );
+        child: Card(
+            elevation: 5,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+              child: Text(
+                text,
+                textScaleFactor: 2,
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+            )));
   }
 }
 
@@ -220,40 +233,38 @@ class _OptionTileState extends State<OptionTile> {
 
   Widget getWidget() {
     return new GestureDetector(
-      onTap: tileTapped,
-      child: Card(
-        elevation: 5,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-        child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-          child: Text(
-            this.char,
-            textScaleFactor: 3,
-            style: TextStyle(fontWeight: FontWeight.bold),
+        onTap: tileTapped,
+        child: Card(
+          elevation: 5,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+            child: Text(
+              this.char,
+              textScaleFactor: 2,
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
           ),
-        ),
-        color: isActive ? kQuizMain50 : kQuizBackgroundWhite,
-      )
-    );
+          color: isActive ? kQuizMain50 : kQuizBackgroundWhite,
+        ));
   }
 
   Widget build(BuildContext context) {
     return new GestureDetector(
-      onTap: tileTapped,
-      child: Card(
-        elevation: 5,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-        child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-          child: Text(
-            this.char,
-            textScaleFactor: 3,
-            style: TextStyle(fontWeight: FontWeight.bold),
+        onTap: tileTapped,
+        child: Card(
+          elevation: 5,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+            child: Text(
+              this.char,
+              textScaleFactor: 2,
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
           ),
-        ),
-        color: isActive ? kQuizMain50 : kQuizBackgroundWhite,
-      )
-    );
+          color: isActive ? kQuizMain50 : kQuizBackgroundWhite,
+        ));
   }
 }
 
@@ -289,7 +300,6 @@ class AnswerRows extends StatefulWidget {
 }
 
 class _AnswerRowsState extends State<AnswerRows> {
-
   bool addChar(String char, int opTileIndex) {
     int i = _answerChars["indexToInsert"];
     if (i >= _answerChars["length"]) {
@@ -303,20 +313,19 @@ class _AnswerRowsState extends State<AnswerRows> {
 
   Widget build(BuildContext context) {
     return new Container(
-      padding: EdgeInsets.symmetric(vertical: 20),
-      child: new Column(
-        children: createAnswerRows(),
-      )
-    );
+        padding: EdgeInsets.symmetric(vertical: 20),
+        child: new Column(
+          children: createAnswerRows(),
+        ));
   }
 
   List<Widget> createAnswerRows() {
     List<Widget> cols = new List<Widget>();
 //    for (int i = 0; i < _answerChars["length"]; i = i + rowTilesLimit) {
     int i = 0;
-    for(int j = 0; j < answerLengths.length; j++) {
+    for (int j = 0; j < answerLengths.length; j++) {
       int temp = answerLengths[j];
-      while(temp > 0) {
+      while (temp > 0) {
         int numTilesInRow = min(rowTilesLimit, temp);
         var optRow = AnswerTiles(i, numTilesInRow);
         cols.add(optRow);
@@ -334,7 +343,8 @@ class AnswerTiles extends StatefulWidget {
 
   AnswerTiles(this.startingIndex, this.numTiles);
 
-  _AnswerTilesState createState() => _AnswerTilesState(this.startingIndex, this.numTiles);
+  _AnswerTilesState createState() =>
+      _AnswerTilesState(this.startingIndex, this.numTiles);
 }
 
 class _AnswerTilesState extends State<AnswerTiles> {
@@ -345,18 +355,18 @@ class _AnswerTilesState extends State<AnswerTiles> {
 
   Widget build(BuildContext context) {
     return new Container(
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-      child: Row(
-        children: createAnswerTiles(this.startingIndex, this.numTiles),
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-      )
-    );
+        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+        child: Row(
+          children: createAnswerTiles(this.startingIndex, this.numTiles),
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+        ));
   }
 
   createAnswerTiles(int startingIndex, int numTiles) {
     List<AnswerTile> tempAnswerTiles = new List<AnswerTile>();
-    for (int i = startingIndex; i < _answerChars["length"] &&
-      i < startingIndex + numTiles; i++) {
+    for (int i = startingIndex;
+        i < _answerChars["length"] && i < startingIndex + numTiles;
+        i++) {
       var aTile = new AnswerTile(i);
       tempAnswerTiles.add(aTile);
       aTiles.add(aTile);
@@ -395,6 +405,10 @@ class _AnswerTileState extends State<AnswerTile> {
       print("Hi");
       _answerChars["indexToInsert"]++;
       _answerChars[i] = char;
+      if (i == _answerChars["length"] - 1) {
+        // Answer complete, so check answer
+        checkAnswer();
+      }
     });
   }
 
@@ -421,13 +435,23 @@ class _AnswerTileState extends State<AnswerTile> {
           padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
           child: Text(
             _answerChars[index],
-            textScaleFactor: 3,
+            textScaleFactor: 2,
             style: TextStyle(
-              fontWeight: FontWeight.bold, color: kQuizSurfaceWhite),
+                fontWeight: FontWeight.bold, color: kQuizSurfaceWhite),
           ),
         ),
         color: kQuizMain400,
       ),
     );
   }
+}
+
+// Construct answer from the answer tiles and validate
+void checkAnswer() {
+  String userAnswer = "";
+  for (int i = 0; i < _answerChars["length"]; i++) {
+    userAnswer += _answerChars[i];
+  }
+  print(userAnswer);
+  validateAnswer(answer: userAnswer);
 }
