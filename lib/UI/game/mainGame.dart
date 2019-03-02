@@ -233,7 +233,6 @@ class MainGamePageState extends BaseState<MainGamePage> {
         break;
       }
     }
-    ;
     return totalQuestion;
   }
 
