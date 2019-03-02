@@ -1,7 +1,6 @@
-import 'package:GnanG/model/boolean_wrapper.dart';
-import 'package:flutter/material.dart';
 import 'package:GnanG/colors.dart';
 import 'package:GnanG/common.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 abstract class BaseState<T extends StatefulWidget> extends State<T> {
@@ -9,9 +8,8 @@ abstract class BaseState<T extends StatefulWidget> extends State<T> {
   bool isOverlay = false;
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      backgroundColor: kQuizSurfaceWhite,
-      body: new BackgroundGredient(
+    return new SafeArea(
+        child: new BackgroundGredient(
         child: new Stack(
           children: <Widget>[
             !isLoading

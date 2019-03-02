@@ -1,30 +1,25 @@
 // Package import
-import 'package:flutter/material.dart';
-import 'package:http/http.dart';
+import 'package:GnanG/UI/widgets/base_state.dart';
 import 'package:GnanG/constans/wsconstants.dart';
 import 'package:GnanG/model/appresponse.dart';
 import 'package:GnanG/model/userinfo.dart';
 import 'package:GnanG/utils/response_parser.dart';
-import 'dart:convert';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 
-// File import
-import '../../notification/notifcation_setup.dart';
-import '../../common.dart';
 import '../../Service/apiservice.dart';
 import '../../colors.dart';
-import '../../constans/sharedpref_constant.dart';
-import '../../model/cacheData.dart';
-import '../../model/user_state.dart';
+import '../../common.dart';
+// File import
+
 
 class LoginPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => new LoginPageState();
 }
 
-class LoginPageState extends State<LoginPage> {
+class LoginPageState extends BaseState<LoginPage> {
   final _formKey = GlobalKey<FormState>();
-  bool _isLoading = false;
   bool _autoValidate = false;
   bool _obscureText = true;
   ApiService _api = new ApiService();
@@ -32,16 +27,13 @@ class LoginPageState extends State<LoginPage> {
   String _password;
 
   @override
-  Widget build(BuildContext context) {
+  Widget pageToDisplay() {
     return new Form(
       key: _formKey,
       autovalidate: _autoValidate,
       child: new Scaffold(
         backgroundColor: kQuizSurfaceWhite,
-        body: CustomLoading(
-          isLoading: _isLoading,
-          isOverlay: true,
-          child: SafeArea(
+        body: SafeArea(
             child: new ListView(
               padding: EdgeInsets.symmetric(horizontal: 30.0),
               children: <Widget>[
@@ -138,7 +130,6 @@ class LoginPageState extends State<LoginPage> {
               ],
             ),
           ),
-        ),
       ),
     );
   }
@@ -219,7 +210,7 @@ class LoginPageState extends State<LoginPage> {
   void _submit() async {
     if (_formKey.currentState.validate()) {
       setState(() {
-        _isLoading = true;
+        isOverlay = true;
       });
       _formKey.currentState.save();
       print('LOGIN DATA');
@@ -227,42 +218,20 @@ class LoginPageState extends State<LoginPage> {
       print('PASSWORD : ${this._password}');
       try {
         Response res = await _api.login(mhtId: _mhtId, password: _password);
-        AppResponse appResponse =
-            ResponseParser.parseResponse(context: context, res: res);
+        AppResponse appResponse = ResponseParser.parseResponse(context: context, res: res);
         if (appResponse.status == WSConstant.SUCCESS_CODE) {
           UserInfo userInfo = UserInfo.fromJson(appResponse.data);
-          CacheData.userInfo = userInfo;
-          SharedPreferences pref = await SharedPreferences.getInstance();
-          pref.setString('user_info', res.body);
-          pref.setString('token', userInfo.token);
-          pref.setBool(SharedPrefConstant.b_isUserLoggedIn, true);
-          print(userInfo);
-          _api.appendTokenToHeader(userInfo.token);
-          NotificationSetup.setupNotification(userInfo: userInfo);
-          bool result = await CommonFunction.loadUserState(context, int.parse(_mhtId));
-          if (result) {
-            print('CacheData.userState in login :: ');
-            print(CacheData.userState.currentState.level);
+          if(await CommonFunction.startUserSession(userInfo: userInfo, context: context))
             Navigator.pushReplacementNamed(context, '/gameMainPage');
-          } else {
-            setState(() {
-              _isLoading = false;
-            });
-          }
-        } else {
-          setState(() {
-            _isLoading = false;
-          });
         }
       } catch (err) {
         print('CATCH 1 :: ');
         print(err);
-        setState(() {
-          _isLoading = false;
-        });
-        CommonFunction.displayErrorDialog(
-            context: context, msg: err.toString());
+        CommonFunction.displayErrorDialog(context: context, msg: err.toString());
       }
+      setState(() {
+        isOverlay = false;
+      });
     } else {
       _autoValidate = true;
     }

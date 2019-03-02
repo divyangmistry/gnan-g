@@ -1,15 +1,9 @@
 import 'dart:math';
 
+import 'package:GnanG/Service/apiservice.dart';
 import 'package:GnanG/UI/game/fab_animated_button.dart';
 import 'package:GnanG/UI/game/mcq.dart';
-import 'package:GnanG/UI/game/question_ui.dart';
 import 'package:GnanG/UI/game/title_bar.dart';
-import 'package:GnanG/utils/app_utils.dart';
-import 'package:flame/flame.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:http/http.dart';
-import 'package:GnanG/Service/apiservice.dart';
 import 'package:GnanG/UI/widgets/base_state.dart';
 import 'package:GnanG/constans/wsconstants.dart';
 import 'package:GnanG/model/appresponse.dart';
@@ -18,14 +12,19 @@ import 'package:GnanG/model/current_stat.dart';
 import 'package:GnanG/model/question.dart';
 import 'package:GnanG/model/user_score_state.dart';
 import 'package:GnanG/model/validateQuestion.dart';
+import 'package:GnanG/utils/app_utils.dart';
 import 'package:GnanG/utils/response_parser.dart';
+import 'package:flame/flame.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'pikachar.dart';
 
 import '../../colors.dart';
 import '../../common.dart';
 import '../../model/quizlevel.dart';
+import 'pikachar.dart';
 
 class MainGamePage extends StatefulWidget {
   final QuizLevel level;
@@ -218,12 +217,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
 //              : null
 //          : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: kQuizBrown900,
-        child: FabAnimatedButton(),
-        onPressed: () {},
-        heroTag: 0,
-      ),
+      floatingActionButton: FabAnimatedButton(),
     );
   }
 
@@ -514,7 +508,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
       await intent.launch();
     }*/
     try {
-      launch("tel://");
+      launch("tel:");
       print('Phone a Friend');
     } catch (err) {
       print('CATCH IN HINT :: ');

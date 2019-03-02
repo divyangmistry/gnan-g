@@ -1,25 +1,24 @@
 // Package import
-import 'dart:convert';
-
-import 'package:flutter/material.dart';
-import 'package:http/http.dart';
 import 'package:GnanG/UI/auth/new_otp.dart';
-import 'package:GnanG/constans/wsconstants.dart';
+import 'package:GnanG/UI/widgets/base_state.dart';
 import 'package:GnanG/model/appresponse.dart';
 import 'package:GnanG/model/signupsession.dart';
 import 'package:GnanG/utils/response_parser.dart';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 
-// File import
-import '../../common.dart';
 import '../../Service/apiservice.dart';
 import '../../colors.dart';
+import '../../common.dart';
+// File import
+
 
 class SignUpPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => new SignUpPageState();
 }
 
-class SignUpPageState extends State<SignUpPage> {
+class SignUpPageState extends BaseState<SignUpPage> {
   final _formIndiaKey = GlobalKey<FormState>();
   final _formOtherKey = GlobalKey<FormState>();
   final _tabs = <Tab>[Tab(text: 'India'), Tab(text: 'Rest of India')];
@@ -30,7 +29,7 @@ class SignUpPageState extends State<SignUpPage> {
   String _emailId;
 
   @override
-  Widget build(BuildContext context) {
+  Widget pageToDisplay() {
     return DefaultTabController(
       length: _tabs.length,
       child: new Scaffold(

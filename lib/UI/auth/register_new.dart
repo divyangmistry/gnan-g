@@ -1,17 +1,15 @@
-import 'package:GnanG/constans/sharedpref_constant.dart';
-import 'package:GnanG/model/cacheData.dart';
-import 'package:GnanG/model/userinfo.dart';
-import 'package:flutter/material.dart';
-import 'package:http/http.dart';
+import 'package:GnanG/UI/widgets/base_state.dart';
 import 'package:GnanG/constans/wsconstants.dart';
 import 'package:GnanG/model/appresponse.dart';
+import 'package:GnanG/model/userinfo.dart';
 import 'package:GnanG/utils/response_parser.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../../model/signupsession.dart';
-import 'package:GnanG/notification/notifcation_setup.dart';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart';
+
+import '../../Service/apiservice.dart';
 import '../../colors.dart';
 import '../../common.dart';
-import '../../Service/apiservice.dart';
+import '../../model/signupsession.dart';
 
 class RegisterPage2 extends StatefulWidget {
   final bool fromForgotPassword;
@@ -22,7 +20,7 @@ class RegisterPage2 extends StatefulWidget {
   State<StatefulWidget> createState() => new RegisterPage2State();
 }
 
-class RegisterPage2State extends State<RegisterPage2> {
+class RegisterPage2State extends BaseState<RegisterPage2> {
   final _formKey = GlobalKey<FormState>();
   bool _autoValidate = false;
   bool _obscureText = true;
@@ -33,7 +31,7 @@ class RegisterPage2State extends State<RegisterPage2> {
   CommonFunction cf = new CommonFunction();
 
   @override
-  Widget build(BuildContext context) {
+  Widget pageToDisplay() {
     return new Form(
       key: _formKey,
       autovalidate: _autoValidate,
@@ -104,14 +102,13 @@ class RegisterPage2State extends State<RegisterPage2> {
                   controller: _verifyPasswordController,
                   validator: (value) {
                     if (value.isEmpty) {
-                      return 'Confirm Password is required';
+                      return 'Verify Password is required';
                     } else if (value != _passwordController.text) {
-                      return 'Password and Confirm Password must be same';
+                      return 'Password and Verifypassword must be same';
                     }
                     return null;
                   },
                   decoration: InputDecoration(
-                    errorMaxLines: 3,
                     labelText: 'Confirm Password',
                     hintText: 'Enter Password',
                     prefixIcon: Icon(
@@ -156,62 +153,39 @@ class RegisterPage2State extends State<RegisterPage2> {
 
   void _submit() async {
     if (_formKey.currentState.validate()) {
-      if (widget.fromForgotPassword) {
-        _resetPassword();
-      } else {
-        _registerUser();
-      }
+      _login();
     } else {
       _autoValidate = true;
     }
   }
 
-  _registerUser() async {
+
+  _login() async {
+    setState(() {
+      isOverlay = true;
+    });
     try {
       widget.userData.password = _passwordController.text.toString();
-      Response res = await _api.register(userData: widget.userData);
-      AppResponse appResponse =
-          ResponseParser.parseResponse(context: context, res: res);
+      Response res;
+      if(widget.fromForgotPassword) {
+        res = await _api.updatePassword(mhtId: widget.userData.mhtId, password: widget.userData.password);
+      } else {
+        res = await _api.register(userData: widget.userData);
+      }
+      AppResponse appResponse = ResponseParser.parseResponse(context: context, res: res);
       if (appResponse.status == WSConstant.SUCCESS_CODE) {
         UserInfo userInfo = UserInfo.fromJson(appResponse.data);
-        CacheData.userInfo = userInfo;
-        SharedPreferences pref = await SharedPreferences.getInstance();
-        pref.setString('user_info', res.body);
-        pref.setString('token', userInfo.token);
-        _api.appendTokenToHeader(userInfo.token);
-        pref.setBool(SharedPrefConstant.b_isUserLoggedIn, true);
-        NotificationSetup.setupNotification(userInfo: userInfo,context: context);
-        await CommonFunction.loadUserState(context, userInfo.mhtId);
-        Navigator.pop(context);
-        Navigator.pushReplacementNamed(context, '/gameMainPage');
+        if(await CommonFunction.startUserSession(userInfo: userInfo, context: context)) {
+          Navigator.pop(context);
+          Navigator.pushReplacementNamed(context, '/gameMainPage');
+        }
       }
     } catch (err) {
       CommonFunction.displayErrorDialog(context: context, msg: err.toString());
     }
-  }
-
-  _resetPassword() async {
-    try {
-      Response res = await _api.updatePassword(
-          mhtId: widget.userData.mhtId, password: _passwordController.text);
-      AppResponse appResponse =
-          ResponseParser.parseResponse(context: context, res: res);
-      if (appResponse.status == WSConstant.SUCCESS_CODE) {
-        UserInfo userInfo = UserInfo.fromJson(appResponse.data);
-        CacheData.userInfo = userInfo;
-        SharedPreferences pref = await SharedPreferences.getInstance();
-        pref.setString('user_info', res.body);
-        pref.setString('token', userInfo.token);
-        _api.appendTokenToHeader(userInfo.token);
-        pref.setBool(SharedPrefConstant.b_isUserLoggedIn, true);
-        NotificationSetup.setupNotification(userInfo: userInfo,context: context);
-        await CommonFunction.loadUserState(context, userInfo.mhtId);
-        Navigator.pop(context);
-        Navigator.pushReplacementNamed(context, '/gameMainPage');
-      }
-    } catch (err) {
-      CommonFunction.displayErrorDialog(context: context, msg: err.toString());
-    }
+    setState(() {
+      isOverlay = false;
+    });
   }
 
   profileData() {

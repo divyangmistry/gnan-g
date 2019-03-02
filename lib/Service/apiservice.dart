@@ -1,13 +1,15 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
+
 import 'package:GnanG/constans/sharedpref_constant.dart';
 import 'package:GnanG/model/cacheData.dart';
 import 'package:GnanG/model/signupsession.dart';
 import 'package:GnanG/utils/appsharedpref.dart';
 import 'package:http/http.dart';
+import 'package:http/http.dart' as http;
 import 'package:meta/meta.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
 
 class ApiService {
   // final _apiUrl = 'http://192.168.43.23:3000';
@@ -158,6 +160,19 @@ class ApiService {
       'puzzle_name': puzzle_name
     };
     http.Response res = await postApi(url: '/puzzle_completed', data: data);
+    return res;
+  }
+
+  Future<http.Response> uploadProfilePicture(
+      {@required int mhtId,
+        @required File file,
+      }) async {
+    String base64Image = base64Encode(file.readAsBytesSync());
+    Map<String, dynamic> data = {
+      'mht_id': mhtId,
+      'image' : base64Image
+    };
+    http.Response res = await postApi(url: '/uploadprofileimage', data: data);
     return res;
   }
 

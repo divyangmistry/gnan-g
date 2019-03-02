@@ -5,9 +5,9 @@ import 'package:GnanG/colors.dart';
 import 'package:flutter/material.dart';
 
 class ImageInput extends StatefulWidget {
-  ImageInput({Key key, this.title}) : super(key: key);
-  final String title;
 
+  Function onImagePicked;
+  ImageInput({this.onImagePicked});
   @override
   _ImageInputState createState() => new _ImageInputState();
 }
@@ -91,8 +91,13 @@ class _ImageInputState extends State<ImageInput>
 
   @override
   userImage(File _image) {
+    if(widget.onImagePicked != null) {
+      widget.onImagePicked(_image);
+    }
+    _image.length().then((data) {print("Profile image size:" + (data/1000).toString());});
     setState(() {
       this._image = _image;
     });
+
   }
 }

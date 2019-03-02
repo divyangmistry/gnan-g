@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:GnanG/colors.dart';
-import 'package:GnanG/utils/appsharedpref.dart';
 import 'package:flutter/material.dart';
 import 'package:vector_math/vector_math.dart' as radians;
 
@@ -62,44 +61,50 @@ class RadialAnimation extends StatelessWidget {
           angle: radians.radians(rotaton.value),
           child: Stack(
             children: <Widget>[
-              _buildButton(
-                1,
-                0,
-                color: Colors.blue.shade100,
-                icon: Icon(Icons.star_half, color: kQuizBrown900),
+              Stack(
+                children: <Widget>[
+                  _buildButton(
+                    1,
+                    0,
+                    color: Colors.blue.shade100,
+                    icon: Icon(Icons.star_half, color: kQuizBrown900),
+                  ),
+                  _buildButton(
+                    3,
+                    -90,
+                    color: Colors.blue.shade100,
+                    icon: Icon(Icons.help, color: kQuizBrown900),
+                  ),
+                  _buildButton(
+                    2,
+                    180,
+                    color: Colors.blue.shade100,
+                    icon: Icon(Icons.call, color: kQuizBrown900),
+                  ),
+                ],
               ),
-              _buildButton(
-                3,
-                -90,
-                color: Colors.blue.shade100,
-                icon: Icon(Icons.help, color: kQuizBrown900),
+              Stack(
+                children: <Widget>[
+                  Transform.scale(
+                    scale: scale.value - 1.0,
+                    child: FloatingActionButton(
+                      child: Icon(Icons.close),
+                      onPressed: _close,
+                      backgroundColor: Colors.red,
+                      heroTag: 4,
+                    ),
+                  ),
+                  Transform.scale(
+                    scale: scale.value,
+                    child: FloatingActionButton(
+                      child: Icon(Icons.build),
+                      onPressed: _open,
+                      backgroundColor: kQuizBrown900,
+                      heroTag: 5,
+                    ),
+                  ),
+                ],
               ),
-              _buildButton(
-                2,
-                180,
-                color: Colors.blue.shade100,
-                icon: Icon(Icons.call, color: kQuizBrown900),
-              ),
-              Transform.scale(
-                scale: scale.value - 1.0,
-                child: FloatingActionButton(
-                  child: Icon(Icons.close),
-                  onPressed: _close,
-                  backgroundColor: Colors.red,
-                  heroTag: 4,
-                ),
-              ),
-              Transform.scale(
-                scale: scale.value,
-                child: FloatingActionButton(
-                  child: Icon(Icons.build),
-                  onPressed: _open,
-                  backgroundColor: kQuizBrown900,
-                  heroTag: 3,
-                ),
-              ),
-
-
             ],
           ),
         );
@@ -118,7 +123,9 @@ class RadialAnimation extends StatelessWidget {
         tooltip: 'Click Here',
         backgroundColor: color,
         elevation: 2,
-        onPressed: () {print(index);},
+        onPressed: () {
+          print(index);
+        },
         heroTag: index,
       ),
     );

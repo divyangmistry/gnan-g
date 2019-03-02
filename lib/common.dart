@@ -1,20 +1,24 @@
 import 'dart:convert';
 
-import 'package:GnanG/main.dart';
-import 'package:GnanG/model/user_score_state.dart';
-import 'package:GnanG/model/user_state.dart';
-import 'package:flare_flutter/flare_actor.dart';
-import 'package:flutter/material.dart';
-import 'package:http/http.dart';
 import 'package:GnanG/Service/apiservice.dart';
 import 'package:GnanG/constans/message_constant.dart';
+import 'package:GnanG/constans/sharedpref_constant.dart';
 import 'package:GnanG/constans/wsconstants.dart';
+import 'package:GnanG/main.dart';
 import 'package:GnanG/model/appresponse.dart';
 import 'package:GnanG/model/cacheData.dart';
+import 'package:GnanG/model/user_score_state.dart';
+import 'package:GnanG/model/user_state.dart';
+import 'package:GnanG/model/userinfo.dart';
+import 'package:GnanG/notification/notifcation_setup.dart';
 import 'package:GnanG/utils/response_parser.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'colors.dart';
+import 'package:flare_flutter/flare_actor.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:http/http.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'colors.dart';
 
 // For override color for Form input
 class AccentColorOverride extends StatelessWidget {
@@ -278,7 +282,7 @@ class CommonFunction {
     );
   }
 
-  static loadUserState(BuildContext context, int mhtId) async {
+  static Future<bool> loadUserState(BuildContext context, int mhtId) async {
     Response res = await _api.getUserState(mhtId: mhtId);
     AppResponse appResponse =
         ResponseParser.parseResponse(context: context, res: res);
@@ -301,6 +305,19 @@ class CommonFunction {
       CommonFunction.displayErrorDialog(context: context, msg: err.toString());
       return false;
     }
+  }
+
+  static Future<bool> startUserSession({@required UserInfo userInfo, BuildContext context}) async {
+    CacheData.userInfo = userInfo;
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.setString('user_info', json.encode(userInfo.toJson()));
+    pref.setString('token', userInfo.token);
+    pref.setBool(SharedPrefConstant.b_isUserLoggedIn, true);
+    print(userInfo);
+    _api.appendTokenToHeader(userInfo.token);
+    await NotificationSetup.setupNotification(userInfo: userInfo, context: context);
+    await CommonFunction.loadUserState(context, userInfo.mhtId);
+    return true;
   }
 
   // common Alert dialog
