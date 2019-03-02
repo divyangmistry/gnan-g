@@ -1,10 +1,11 @@
 import 'dart:math';
+import 'dart:typed_data';
 
 import 'package:GnanG/Service/apiservice.dart';
-import 'package:GnanG/UI/game/fab_animated_button.dart';
 import 'package:GnanG/UI/game/mcq.dart';
 import 'package:GnanG/UI/game/title_bar.dart';
 import 'package:GnanG/UI/widgets/base_state.dart';
+import 'package:GnanG/constans/appconstant.dart';
 import 'package:GnanG/constans/wsconstants.dart';
 import 'package:GnanG/model/appresponse.dart';
 import 'package:GnanG/model/cacheData.dart';
@@ -47,6 +48,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
   int selectedAnsIndex = -1;
   ApiService _api = new ApiService();
   CurrentState currentState;
+  Uint8List image;
 
   @override
   void initState() {
@@ -65,6 +67,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
   }
 
   _loadAllQuestions() async {
+    image = await CommonFunction.getUserProfileImg(context: context);
     Response res;
     if (widget.isBonusLevel) {
       res = await _api.getBonusQuestion(mhtId: CacheData.userInfo.mhtId);
@@ -193,7 +196,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
                   totalQuestion: getTotalQuestion(),
                 ),
                 SizedBox(
-                  height: MediaQuery.of(context).size.height / 16,
+                  height: 15,
                 ),
                 Expanded(
                     child: question.questionType == "MCQ"
@@ -206,18 +209,18 @@ class MainGamePageState extends BaseState<MainGamePage> {
       ),
       bottomNavigationBar:
           !widget.isBonusLevel ? _buildbottomNavigationBar() : null,
-//      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-//      floatingActionButton: !widget.isBonusLevel
-//          ? CacheData.userState.lives <= 1
-//              ? FloatingActionButton.extended(
-//                  icon: Icon(Icons.help_outline),
-//                  label: Text('Get Hint'),
-//                  onPressed: _getHint,
-//                )
-//              : null
-//          : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: FabAnimatedButton(),
+      floatingActionButton: !widget.isBonusLevel
+          ? CacheData.userState.lives <= 1
+              ? FloatingActionButton.extended(
+                  icon: Icon(Icons.help_outline),
+                  label: Text('Get Hint'),
+                  onPressed: _getHint,
+                )
+              : null
+          : null,
+//      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+//      floatingActionButton: FabAnimatedButton(),
     );
   }
 
@@ -399,7 +402,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
                     color: kQuizMain50,
                     image: DecorationImage(
                       fit: BoxFit.fill,
-                      image: AssetImage('images/face.jpg'),
+                      image: image != null ? MemoryImage(image) : AssetImage(AppConstant.DEFAULT_USER_IMG_PATH),
                     ),
                   ),
                 ),
@@ -414,7 +417,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
               CacheData.userInfo.email + '\n' + CacheData.userInfo.mobile,
               style: TextStyle(color: kQuizMain50, height: 1.3),
             ),
-            dense: true,
+//            dense: true,
             // trailing: Row(
             //   mainAxisSize: MainAxisSize.min,
             //   children: <Widget>[
