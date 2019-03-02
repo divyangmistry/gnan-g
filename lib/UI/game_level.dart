@@ -1,10 +1,11 @@
+import 'package:GnanG/Service/apiservice.dart';
 import 'package:GnanG/UI/animation/success.dart';
 import 'package:GnanG/UI/imagepicker/image_input.dart';
-import 'package:flutter/material.dart';
-import 'package:GnanG/Service/apiservice.dart';
 import 'package:GnanG/model/cacheData.dart';
-import '../common.dart';
+import 'package:flutter/material.dart';
+
 import '../colors.dart';
+import '../common.dart';
 
 class GameLevelPage extends StatefulWidget {
   @override
@@ -47,7 +48,7 @@ class GameLevelPageState extends State<GameLevelPage> {
                 SizedBox(
                   height: 20.0,
                 ),
-                _bottomButtons(),
+//                _bottomButtons(),
               ],
             ),
           ),
@@ -151,7 +152,7 @@ class GameLevelPageState extends State<GameLevelPage> {
         new Row(
           children: <Widget>[
             new Container(
-              width: MediaQuery.of(context).size.width / 3,
+              width: MediaQuery.of(context).size.width / 4,
               child: new Text(
                 title,
                 textScaleFactor: 1.1,
@@ -160,14 +161,17 @@ class GameLevelPageState extends State<GameLevelPage> {
                 ),
               ),
             ),
-            new Text(
-              data,
-              overflow: TextOverflow.fade,
-              textScaleFactor: 1.2,
-              style: TextStyle(
-                color: kQuizMain400,
+            new Container(
+              width: MediaQuery.of(context).size.width / 2.5,
+              child: new Text(
+                data,
+                overflow: TextOverflow.fade,
+                textScaleFactor: 1.2,
+                style: TextStyle(
+                  color: kQuizMain400,
+                ),
               ),
-            ),
+            )
           ],
         ),
       ],
@@ -318,8 +322,9 @@ class GameLevelPageState extends State<GameLevelPage> {
             ),
             new Row(
               children: <Widget>[
+
                 _scoreData(
-                    'Points', '\$' + CacheData.userState.totalscore.toString()),
+                    'Points', CacheData.userState.totalscore.toString()),
                 CustomVerticalDivider(height: 60),
                 _scoreData('Lives', CacheData.userState.lives.toString()),
               ],
