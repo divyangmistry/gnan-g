@@ -61,8 +61,8 @@ class RadialAnimation extends StatelessWidget {
           angle: radians.radians(rotaton.value),
           child: Stack(
             children: <Widget>[
-              _buildButton(0, color: Colors.blue, icon: Icon(Icons.person)),
-              _buildButton(180,
+              _buildButton(1,0, color: Colors.blue, icon: Icon(Icons.person)),
+              _buildButton(2,180,
                   color: Colors.blue, icon: Icon(Icons.person_add)),
               Transform.scale(
                 scale: scale.value - 1.5,
@@ -70,6 +70,7 @@ class RadialAnimation extends StatelessWidget {
                   child: Icon(Icons.more_horiz),
                   onPressed: _close,
                   backgroundColor: Colors.red,
+                  heroTag: 4,
                 ),
               ),
               Transform.scale(
@@ -78,6 +79,7 @@ class RadialAnimation extends StatelessWidget {
                   child: Icon(Icons.more_vert),
                   onPressed: _open,
                   backgroundColor: Colors.blue,
+                  heroTag: 3,
                 ),
               )
             ],
@@ -87,7 +89,7 @@ class RadialAnimation extends StatelessWidget {
     );
   }
 
-  _buildButton(double angle, {Color color, Icon icon}) {
+  _buildButton(int index, double angle, {Color color, Icon icon}) {
     final double rad = radians.radians(angle);
 
     return Transform(
@@ -98,6 +100,7 @@ class RadialAnimation extends StatelessWidget {
         child: Icon(Icons.person_add),
         backgroundColor: color,
         onPressed: _close,
+        heroTag: index,
       ),
     );
   }
