@@ -62,11 +62,6 @@ class ProfilePagePageState extends BaseState<ProfilePagePage> {
                   height: 20.0,
                 ),
                 _profileData(),
-                // _bonusRoundInfo(),
-                SizedBox(
-                  height: 20.0,
-                ),
-                _bottomButtons(),
               ],
             ),
         ),
@@ -172,10 +167,7 @@ class ProfilePagePageState extends BaseState<ProfilePagePage> {
         new Row(
           children: <Widget>[
             new Container(
-              width: MediaQuery
-                  .of(context)
-                  .size
-                  .width / 3,
+              width: MediaQuery.of(context).size.width / 4,
               child: new Text(
                 title,
                 textScaleFactor: 1.1,
@@ -184,133 +176,20 @@ class ProfilePagePageState extends BaseState<ProfilePagePage> {
                 ),
               ),
             ),
-            new Text(
-              data,
-              overflow: TextOverflow.fade,
-              textScaleFactor: 1.2,
-              style: TextStyle(
-                color: kQuizMain400,
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-
-  Widget _bonusRoundInfo() {
-    return Card(
-      elevation: 5.0,
-      color: Colors.grey[50],
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(30.0),
-      ),
-      child: Padding(
-        padding: EdgeInsets.all(20.0),
-        child: Column(
-          children: <Widget>[
-            Text(
-              'Next Game',
-              textScaleFactor: 1.5,
-              style: TextStyle(color: kQuizMain400),
-            ),
-            SizedBox(
-              height: 30.0,
-            ),
-            Row(
-              children: <Widget>[
-                _bonusData(Icons.access_time, 'Tommorrow', '07:00 pm'),
-                CustomVerticalDivider(height: 80.0),
-                _bonusData(Icons.monetization_on, 'Points', '\$200'),
-              ],
-            )
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _bottomButtons() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        _button(
-          'Leaderboard',
-          Icons.poll,
-              () {
-            Navigator.pushNamed(context, '/leaderboard');
-          },
-        ),
-        SizedBox(width: 10.0),
-        _button(
-          'Play Puzzle',
-          Icons.play_circle_filled,
-              () {
-            Navigator.pushNamed(context, '/gameOf15');
-          },
-        ),
-      ],
-    );
-  }
-
-  Widget _button(String btnLable, icon, Function clickEvent) {
-    return Expanded(
-      child: RaisedButton(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(50.0),
-        ),
-        elevation: 10.0,
-        padding: EdgeInsets.all(12.0),
-        onPressed: clickEvent,
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Icon(icon, color: kQuizSurfaceWhite),
-            SizedBox(width: 10),
-            Text(
-              btnLable,
-              style: TextStyle(
-                color: kQuizSurfaceWhite,
+            new Container(
+              width: MediaQuery.of(context).size.width / 2.5,
+              child: new Text(
+                data,
+                overflow: TextOverflow.fade,
+                textScaleFactor: 1.2,
+                style: TextStyle(
+                  color: kQuizMain400,
+                ),
               ),
             )
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _bonusData(icon, String title, String value) {
-    return Expanded(
-      child: Column(
-        children: <Widget>[
-          IconButton(
-            icon: Icon(Icons.access_time),
-            onPressed: () {
-              print(' ----> SHOW USER DATA ! <----');
-              CommonFunction.alertDialog(
-                  context: context, msg: CacheData.userState.toString());
-            },
-            // size: 40.0,
-            color: kQuizBrown900,
-          ),
-          SizedBox(
-            height: 10.0,
-          ),
-          Text(
-            title,
-            style: TextStyle(
-              color: kQuizMain50,
-            ),
-          ),
-          SizedBox(height: 5.0),
-          Text(
-            value,
-            textScaleFactor: 1.5,
-            style: TextStyle(color: kQuizMain400),
-          ),
-        ],
-      ),
+      ],
     );
   }
 
