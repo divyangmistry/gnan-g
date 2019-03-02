@@ -1,24 +1,26 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
-import 'package:GnanG/Service/apiservice.dart';
-import 'package:GnanG/constans/message_constant.dart';
 import 'package:GnanG/constans/sharedpref_constant.dart';
-import 'package:GnanG/constans/wsconstants.dart';
 import 'package:GnanG/main.dart';
-import 'package:GnanG/model/appresponse.dart';
-import 'package:GnanG/model/cacheData.dart';
 import 'package:GnanG/model/user_score_state.dart';
 import 'package:GnanG/model/user_state.dart';
 import 'package:GnanG/model/userinfo.dart';
 import 'package:GnanG/notification/notifcation_setup.dart';
-import 'package:GnanG/utils/response_parser.dart';
+import 'package:GnanG/utils/appsharedpref.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http/http.dart';
+import 'package:GnanG/Service/apiservice.dart';
+import 'package:GnanG/constans/message_constant.dart';
+import 'package:GnanG/constans/wsconstants.dart';
+import 'package:GnanG/model/appresponse.dart';
+import 'package:GnanG/model/cacheData.dart';
+import 'package:GnanG/utils/response_parser.dart';
+import 'package:path/path.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'colors.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 // For override color for Form input
 class AccentColorOverride extends StatelessWidget {
@@ -307,10 +309,10 @@ class CommonFunction {
     }
   }
 
-  static Future<bool> startUserSession({@required UserInfo userInfo, BuildContext context}) async {
+  static Future<bool> startUserSession({@required UserInfo userInfo, @required String strUserInfo, BuildContext context}) async {
     CacheData.userInfo = userInfo;
     SharedPreferences pref = await SharedPreferences.getInstance();
-    pref.setString('user_info', json.encode(userInfo.toJson()));
+    pref.setString('user_info', strUserInfo);
     pref.setString('token', userInfo.token);
     pref.setBool(SharedPrefConstant.b_isUserLoggedIn, true);
     print(userInfo);
@@ -318,6 +320,32 @@ class CommonFunction {
     await NotificationSetup.setupNotification(userInfo: userInfo, context: context);
     await CommonFunction.loadUserState(context, userInfo.mhtId);
     return true;
+  }
+
+  static Future<Uint8List> getUserProfileImg({BuildContext context}) async {
+    Uint8List userProfile;
+    userProfile = await AppSharedPrefUtil.getProfileImage();
+      if (userProfile == null) {
+        userProfile = getImageFromBase64Img(await _getProfilePictureFromDB(context));
+      }
+    return userProfile;
+  }
+
+  static Future<String> _getProfilePictureFromDB(BuildContext context) async {
+    String profileBase64Image;
+    Response res = await _api.getProfilePicture(mhtId: CacheData.userInfo.mhtId);
+    AppResponse appResponse = ResponseParser.parseResponse(context: context, res: res);
+    if (appResponse.status == WSConstant.SUCCESS_CODE) {
+      profileBase64Image = appResponse.data['image'];
+    }
+    return profileBase64Image;
+  }
+
+  static Uint8List getImageFromBase64Img(String base64Img) {
+    Uint8List image;
+    if (base64Img != null)
+      image = base64Decode(base64Img);
+    return image;
   }
 
   // common Alert dialog

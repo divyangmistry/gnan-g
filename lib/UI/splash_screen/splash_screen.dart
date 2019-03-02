@@ -36,7 +36,7 @@ class SplashScreenState extends State<StatefulWidget> {
         UserInfo userInfo = await AppSharedPrefUtil.getUserInfo();
         CacheData.userInfo = userInfo;
         await CommonFunction.loadUserState(context, CacheData.userInfo.mhtId);
-        Navigator.pushReplacementNamed(context, '/gameMainPage');
+        Navigator.pushReplacementNamed(context, '/dashboardPage');
       } else {
         Navigator.pushReplacementNamed(context, '/introPage');
       }

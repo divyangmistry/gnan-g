@@ -37,7 +37,7 @@ class Leaders {
   int totalscore;
   String updatedAt;
   String createdAt;
-
+  String img;
   Leaders(
       {this.lives,
       this.isactive,
@@ -50,7 +50,8 @@ class Leaders {
       this.questionId,
       this.totalscore,
       this.updatedAt,
-      this.createdAt});
+      this.createdAt,
+      this.img});
 
   Leaders.fromJson(Map<String, dynamic> json) {
     lives = json['lives'];
@@ -65,6 +66,7 @@ class Leaders {
     totalscore = json['totalscore'];
     updatedAt = json['updatedAt'];
     createdAt = json['createdAt'];
+    img = json['img'];
   }
 
   Map<String, dynamic> toJson() {
@@ -81,6 +83,7 @@ class Leaders {
     data['totalscore'] = this.totalscore;
     data['updatedAt'] = this.updatedAt;
     data['createdAt'] = this.createdAt;
+    data['img'] = this.img;
     return data;
   }
 }

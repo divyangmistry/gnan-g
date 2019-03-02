@@ -172,9 +172,21 @@ class ApiService {
       'mht_id': mhtId,
       'image' : base64Image
     };
-    http.Response res = await postApi(url: '/uploadprofileimage', data: data);
+    http.Response res = await postApi(url: '/upload_photo', data: data);
     return res;
   }
+
+  Future<http.Response> getProfilePicture(
+      {@required int mhtId
+      }) async {
+    Map<String, dynamic> data = {
+      'mht_id': mhtId,
+    };
+    http.Response res = await postApi(url: '/get_photo', data: data);
+    return res;
+  }
+
+
 
   Future<http.Response> updateNotificationToken(
       {@required int mhtId,
@@ -227,7 +239,6 @@ class ApiService {
   Future<void> logout() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.clear();
-    // go to login
   }
 
   // Check Login Status

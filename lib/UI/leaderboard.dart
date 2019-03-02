@@ -1,3 +1,7 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
+import 'package:GnanG/constans/appconstant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:http/http.dart';
@@ -21,6 +25,7 @@ class LeaderBoardState extends State<LeaderBoard> {
 
   List<Leaders> leaderList;
   int _userRank = 0;
+  Uint8List _userImage;
 
   @override
   void initState() {
@@ -35,6 +40,7 @@ class LeaderBoardState extends State<LeaderBoard> {
           ResponseParser.parseResponse(context: context, res: res);
       if (appResponse.status == WSConstant.SUCCESS_CODE) {
         LeaderList leaders = LeaderList.fromJson(appResponse.data);
+        _userImage = await CommonFunction.getUserProfileImg(context: context);
         setState(() {
           leaderList = leaders.leaders;
           print(leaderList);
@@ -47,7 +53,7 @@ class LeaderBoardState extends State<LeaderBoard> {
   }
 
   Widget _buildLeaderRow(int rank, String name, int points, IconData icon,
-      String imagePath, int mhtId) {
+      Uint8List image, int mhtId) {
     return Column(
       children: <Widget>[
         Container(
@@ -66,7 +72,7 @@ class LeaderBoardState extends State<LeaderBoard> {
                         minRadius: 25,
                         child: CircleAvatar(
                           minRadius: 22,
-                          backgroundImage: AssetImage(imagePath),
+                          backgroundImage: image == null ? AssetImage(AppConstant.DEFAULT_USER_IMG_PATH) : MemoryImage(image),
                         ),
                       ),
                     )
@@ -80,7 +86,7 @@ class LeaderBoardState extends State<LeaderBoard> {
                           color: kQuizMain50,
                           image: DecorationImage(
                             fit: BoxFit.fill,
-                            image: AssetImage(imagePath),
+                            image: image == null ? AssetImage(AppConstant.DEFAULT_USER_IMG_PATH) : MemoryImage(image),
                           ),
                         ),
                       ),
@@ -106,7 +112,7 @@ class LeaderBoardState extends State<LeaderBoard> {
     );
   }
 
-  Widget _buildUserRow(int rank, int points, String picPath) {
+  Widget _buildUserRow(int rank, int points) {
     return Container(
       padding: EdgeInsets.all(16),
       child: Row(
@@ -139,7 +145,7 @@ class LeaderBoardState extends State<LeaderBoard> {
               color: kQuizMain50,
               image: DecorationImage(
                 fit: BoxFit.fill,
-                image: AssetImage('images/face.jpg'),
+                image: _userImage == null ? AssetImage(AppConstant.DEFAULT_USER_IMG_PATH) : MemoryImage(_userImage),
               ),
             ),
           ),
@@ -204,10 +210,12 @@ class LeaderBoardState extends State<LeaderBoard> {
               ),
             ),
           ),
-          _buildUserRow(1, CacheData.userState.totalscore, 'image/face.jpg')
+          _buildUserRow(1, CacheData.userState.totalscore)
         ],
       ),
     );
+
+
     return leaderList != null
         ? new Scaffold(
             appBar: AppBar(
@@ -218,12 +226,13 @@ class LeaderBoardState extends State<LeaderBoard> {
             body: ListView.builder(
               itemCount: leaderList.length,
               itemBuilder: (BuildContext context, int index) {
+                Uint8List leaderImage = CommonFunction.getImageFromBase64Img(leaderList[index].img);
                 return _buildLeaderRow(
                   index + 1,
                   leaderList[index].name,
                   leaderList[index].totalscore,
                   Icons.face,
-                  'images/rank2.jpg',
+                  leaderImage,
                   leaderList[index].mhtId,
                 );
               },
