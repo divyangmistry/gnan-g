@@ -27,10 +27,10 @@ import '../../common.dart';
 import '../../model/quizlevel.dart';
 
 class MainGamePage extends StatefulWidget {
-  QuizLevel level;
-  bool isBonusLevel;
+  final QuizLevel level;
+  final bool isBonusLevel;
 
-  MainGamePage({this.level = null, this.isBonusLevel = false});
+  MainGamePage({this.level, this.isBonusLevel = false});
 
   @override
   State<StatefulWidget> createState() => new MainGamePageState();
@@ -180,27 +180,29 @@ class MainGamePageState extends BaseState<MainGamePage> {
     return new Scaffold(
       body: new BackgroundGredient(
         child: SafeArea(
-            child: new Container(
-                padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
-                child: new Column(
-                  children: <Widget>[
-                    GameTitleBar(
-                      title: (widget.isBonusLevel)
-                          ? "Today's Challange"
-                          : widget.level.name,
-                      questionNumber: question.questionSt,
-                      totalQuestion: getTotalQuestion(),
-                    ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height / 16,
-                    ),
-                    Expanded(
-                        child: question.questionType == "MCQ"
-                            ? new MCQ(
-                                question, validateAnswer, hiddenOptionIndex)
-                            : new Pikachar(null, null))
-                  ],
-                ))),
+          child: new Container(
+//            padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
+            padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
+            child: new Column(
+              children: <Widget>[
+                GameTitleBar(
+                  title: (widget.isBonusLevel)
+                      ? "Today's Challange"
+                      : widget.level.name,
+                  questionNumber: question.questionSt,
+                  totalQuestion: getTotalQuestion(),
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height / 16,
+                ),
+                Expanded(
+                    child: question.questionType == "MCQ"
+                        ? new MCQ(question, validateAnswer, hiddenOptionIndex)
+                        : new Pikachar(null, null))
+              ],
+            ),
+          ),
+        ),
       ),
       bottomNavigationBar:
           !widget.isBonusLevel ? _buildbottomNavigationBar() : null,

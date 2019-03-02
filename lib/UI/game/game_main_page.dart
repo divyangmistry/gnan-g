@@ -19,6 +19,7 @@ class GameMainPage extends StatefulWidget {
 class GameMainPageState extends State<GameMainPage> {
   ApiService _api = new ApiService();
   bool isMuteEnabled = false;
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -214,12 +215,26 @@ class GameMainPageState extends State<GameMainPage> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         Container(
-          child: IconButton(
-            icon: Icon(
+          child: new RaisedButton(
+            padding: EdgeInsets.all(10),
+            shape: CircleBorder(),
+            onPressed: () {
+              CommonFunction.alertDialog(
+                context: context,
+                msg: 'Do you want to exit Gnan-G ?',
+                showCancelButton: true,
+                doneButtonText: 'Yes',
+                doneButtonFn: () {
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                },
+              );
+            },
+            child: Icon(
               Icons.close,
+              size: 25,
               color: kQuizSurfaceWhite,
             ),
-            onPressed: () {},
           ),
         ),
         new Container(
@@ -249,12 +264,12 @@ class GameMainPageState extends State<GameMainPage> {
       });
     });
     return IconButton(
-        icon: Icon(
-          isMuteEnabled ? Icons.volume_off : Icons.volume_up,
-          color: kQuizSurfaceWhite,
-        ),
-        onPressed: toggleMuteSound,
-      );
+      icon: Icon(
+        isMuteEnabled ? Icons.volume_off : Icons.volume_up,
+        color: kQuizSurfaceWhite,
+      ),
+      onPressed: toggleMuteSound,
+    );
   }
 
   void toggleMuteSound() async {

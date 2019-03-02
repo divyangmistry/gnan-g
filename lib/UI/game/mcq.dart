@@ -3,9 +3,9 @@ import 'package:GnanG/model/question.dart';
 import 'package:flutter/material.dart';
 
 class MCQ extends StatefulWidget {
-  Question question;
-  Function validateAnswer;
-  List<int> hiddenOptionIndex = [];
+  final Question question;
+  final Function validateAnswer;
+  final List<int> hiddenOptionIndex;
   MCQ(this.question, this.validateAnswer, this.hiddenOptionIndex);
 
   @override

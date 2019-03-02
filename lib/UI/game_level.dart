@@ -162,6 +162,7 @@ class GameLevelPageState extends State<GameLevelPage> {
             ),
             new Text(
               data,
+              overflow: TextOverflow.fade,
               textScaleFactor: 1.2,
               style: TextStyle(
                 color: kQuizMain400,
