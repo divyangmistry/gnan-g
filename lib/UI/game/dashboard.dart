@@ -9,15 +9,15 @@ import 'package:GnanG/Service/apiservice.dart';
 import 'package:GnanG/model/cacheData.dart';
 import '../../common.dart';
 
-class GameMainPage extends StatefulWidget {
+class DashboardPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return GameMainPageState();
+    return DashboardPageState();
   }
 }
 
-class GameMainPageState extends State<GameMainPage> {
+class DashboardPageState extends State<DashboardPage> {
   ApiService _api = new ApiService();
   bool isMuteEnabled = false;
 
@@ -27,6 +27,13 @@ class GameMainPageState extends State<GameMainPage> {
     return new Scaffold(
       body: BackgroundGredient(
         child: _bodyView(),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: kQuizMain300,
+        child: FabAnimatedButton(),
+        onPressed: () {},
+        heroTag: 0,
       ),
     );
   }
@@ -69,7 +76,7 @@ class GameMainPageState extends State<GameMainPage> {
   Widget _profile() {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, '/gameStart');
+        Navigator.pushNamed(context, '/profile');
       },
       child: _gameMenu(
           Colors.lime.shade500,

@@ -175,9 +175,9 @@ class RegisterPage2State extends BaseState<RegisterPage2> {
       AppResponse appResponse = ResponseParser.parseResponse(context: context, res: res);
       if (appResponse.status == WSConstant.SUCCESS_CODE) {
         UserInfo userInfo = UserInfo.fromJson(appResponse.data);
-        if(await CommonFunction.startUserSession(userInfo: userInfo, context: context)) {
+        if(await CommonFunction.startUserSession(userInfo: userInfo,strUserInfo: res.body, context: context)) {
           Navigator.pop(context);
-          Navigator.pushReplacementNamed(context, '/gameMainPage');
+          Navigator.pushReplacementNamed(context, '/profile');
         }
       }
     } catch (err) {

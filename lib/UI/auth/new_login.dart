@@ -221,8 +221,8 @@ class LoginPageState extends BaseState<LoginPage> {
         AppResponse appResponse = ResponseParser.parseResponse(context: context, res: res);
         if (appResponse.status == WSConstant.SUCCESS_CODE) {
           UserInfo userInfo = UserInfo.fromJson(appResponse.data);
-          if(await CommonFunction.startUserSession(userInfo: userInfo, context: context))
-            Navigator.pushReplacementNamed(context, '/gameMainPage');
+          if(await CommonFunction.startUserSession(userInfo: userInfo,strUserInfo: res.body, context: context))
+            Navigator.pushReplacementNamed(context, '/dashboardPage');
         }
       } catch (err) {
         print('CATCH 1 :: ');
