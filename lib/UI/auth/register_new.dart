@@ -104,14 +104,15 @@ class RegisterPage2State extends State<RegisterPage2> {
                   controller: _verifyPasswordController,
                   validator: (value) {
                     if (value.isEmpty) {
-                      return 'Verify Password is required';
+                      return 'Confirm Password is required';
                     } else if (value != _passwordController.text) {
-                      return 'Password and Verifypassword must be same';
+                      return 'Password and Confirm Password must be same';
                     }
                     return null;
                   },
                   decoration: InputDecoration(
-                    labelText: 'Verify Password',
+                    errorMaxLines: 3,
+                    labelText: 'Confirm Password',
                     hintText: 'Enter Password',
                     prefixIcon: Icon(
                       Icons.vpn_key,
@@ -180,9 +181,9 @@ class RegisterPage2State extends State<RegisterPage2> {
         _api.appendTokenToHeader(userInfo.token);
         pref.setBool(SharedPrefConstant.b_isUserLoggedIn, true);
         NotificationSetup.setupNotification(userInfo: userInfo,context: context);
-        CommonFunction.loadUserState(context, userInfo.mhtId);
+        await CommonFunction.loadUserState(context, userInfo.mhtId);
         Navigator.pop(context);
-        Navigator.pushReplacementNamed(context, '/level_new');
+        Navigator.pushReplacementNamed(context, '/gameMainPage');
       }
     } catch (err) {
       CommonFunction.displayErrorDialog(context: context, msg: err.toString());
@@ -196,10 +197,17 @@ class RegisterPage2State extends State<RegisterPage2> {
       AppResponse appResponse =
           ResponseParser.parseResponse(context: context, res: res);
       if (appResponse.status == WSConstant.SUCCESS_CODE) {
+        UserInfo userInfo = UserInfo.fromJson(appResponse.data);
+        CacheData.userInfo = userInfo;
         SharedPreferences pref = await SharedPreferences.getInstance();
         pref.setString('user_info', res.body);
+        pref.setString('token', userInfo.token);
+        _api.appendTokenToHeader(userInfo.token);
+        pref.setBool(SharedPrefConstant.b_isUserLoggedIn, true);
+        NotificationSetup.setupNotification(userInfo: userInfo,context: context);
+        await CommonFunction.loadUserState(context, userInfo.mhtId);
         Navigator.pop(context);
-        Navigator.pushReplacementNamed(context, '/level_new');
+        Navigator.pushReplacementNamed(context, '/gameMainPage');
       }
     } catch (err) {
       CommonFunction.displayErrorDialog(context: context, msg: err.toString());

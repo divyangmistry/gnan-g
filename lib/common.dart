@@ -164,6 +164,21 @@ class CommonFunction {
   static String mobileValidation(String value) {
     if (value.isEmpty) {
       return 'Mobile no. is required';
+    } else if (value.length != 10) {
+      return 'Enter valid Mobile no.';
+    }
+    return null;
+  }
+
+  // email Validation
+  static String emailValidation(String value) {
+    Pattern pattern =
+        r'^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$';
+    RegExp regex = new RegExp(pattern);
+    if (value.isEmpty) {
+      return 'Email-Id is required';
+    } else if (!regex.hasMatch(value)) {
+      return 'Enter valid Email-Id';
     }
     return null;
   }

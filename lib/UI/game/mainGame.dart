@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:GnanG/UI/game/fab_animated_button.dart';
 import 'package:GnanG/UI/game/mcq.dart';
 import 'package:GnanG/UI/game/question_ui.dart';
 import 'package:GnanG/UI/game/title_bar.dart';
@@ -206,16 +207,23 @@ class MainGamePageState extends BaseState<MainGamePage> {
       ),
       bottomNavigationBar:
           !widget.isBonusLevel ? _buildbottomNavigationBar() : null,
+//      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+//      floatingActionButton: !widget.isBonusLevel
+//          ? CacheData.userState.lives <= 1
+//              ? FloatingActionButton.extended(
+//                  icon: Icon(Icons.help_outline),
+//                  label: Text('Get Hint'),
+//                  onPressed: _getHint,
+//                )
+//              : null
+//          : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: !widget.isBonusLevel
-          ? CacheData.userState.lives <= 1
-              ? FloatingActionButton.extended(
-                  icon: Icon(Icons.help_outline),
-                  label: Text('Get Hint'),
-                  onPressed: _getHint,
-                )
-              : null
-          : null,
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: kQuizBrown900,
+        child: FabAnimatedButton(),
+        onPressed: () {},
+        heroTag: 0,
+      ),
     );
   }
 

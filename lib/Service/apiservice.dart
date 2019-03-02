@@ -61,9 +61,16 @@ class ApiService {
     print(headers);
   }
 
-  Future<http.Response> validateUser(
+  Future<http.Response> validateUserIndia(
       {@required String mhtId, @required String mobileNo}) async {
     Map<String, dynamic> data = {'mht_id': mhtId, 'mobile': mobileNo};
+    Response res = await postApi(url: '/validate_user', data: data);
+    return res;
+  }
+
+  Future<http.Response> validateUserOther(
+      {@required String mhtId, @required String emailId}) async {
+    Map<String, dynamic> data = {'mht_id': mhtId, 'emailId': emailId};
     Response res = await postApi(url: '/validate_user', data: data);
     return res;
   }

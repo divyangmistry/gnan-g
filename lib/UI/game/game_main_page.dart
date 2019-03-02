@@ -28,13 +28,6 @@ class GameMainPageState extends State<GameMainPage> {
       body: BackgroundGredient(
         child: _bodyView(),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: kQuizMain300,
-        child: FabAnimatedButton(),
-        onPressed: () {},
-        heroTag: 0,
-      ),
     );
   }
 
