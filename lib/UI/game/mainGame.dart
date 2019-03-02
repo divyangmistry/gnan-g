@@ -198,7 +198,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
                 Expanded(
                     child: question.questionType == "MCQ"
                         ? new MCQ(question, validateAnswer, hiddenOptionIndex)
-                        : new Pikachar(null, null))
+                        : new Pikachar(question.question, question.jumbledata, question.pikacharAnswer, validateAnswer))
               ],
             ),
           ),
