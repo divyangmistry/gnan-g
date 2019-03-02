@@ -144,7 +144,7 @@ class SignUpPageState extends BaseState<SignUpPage> {
             validator: CommonFunction.mobileValidation,
             decoration: InputDecoration(
               labelText: 'Mobile no.',
-              hintText: 'Enter Mobile no.',
+              hintText: 'Enter 10 digit Mobile no.',
               prefixIcon: Icon(
                 Icons.call,
                 color: kQuizBrown900,
