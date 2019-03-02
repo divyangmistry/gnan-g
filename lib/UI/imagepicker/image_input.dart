@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 
 class ImageInput extends StatefulWidget {
 
-  Function onImagePicked;
+  final Function onImagePicked;
   ImageInput({this.onImagePicked});
   @override
   _ImageInputState createState() => new _ImageInputState();

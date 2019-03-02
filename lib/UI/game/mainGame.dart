@@ -368,7 +368,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
             context: context,
             msg: question.reference,
             type: 'success',
-            doneButtonText: 'Hooray!',
+            doneButtonText: 'Okay',
             title: 'Here is your hint ...',
             barrierDismissible: false);
       }

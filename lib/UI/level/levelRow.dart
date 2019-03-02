@@ -1,8 +1,9 @@
-import 'package:flutter/material.dart';
 import 'package:GnanG/UI/game/mainGame.dart';
 import 'package:GnanG/UI/puzzle/main.dart';
 import 'package:GnanG/common.dart';
 import 'package:GnanG/model/cacheData.dart';
+import 'package:flutter/material.dart';
+
 import '../../colors.dart';
 import '../../model/quizlevel.dart';
 
@@ -94,7 +95,7 @@ class LevelCardRow extends StatelessWidget {
                 ),
                 new SizedBox(width: 25),
                 new Text(
-                  'Point : ',
+                  'Max. Point : ',
                   style: TextStyle(color: kQuizMain50),
                 ),
                 new Text(

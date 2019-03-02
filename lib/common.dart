@@ -243,7 +243,7 @@ class CommonFunction {
       onTap: () {
         CommonFunction.alertDialog(
           context: context,
-          msg: 'You can buy life from 100 points.',
+          msg: 'You can buy life for 100 points.',
           doneButtonText: 'Yes take it',
           type: 'success',
           title: 'Oh Yeah ..',
@@ -327,7 +327,7 @@ class CommonFunction {
     String title,
     @required String msg,
     bool showDoneButton = true,
-    String doneButtonText = 'Okeh...',
+    String doneButtonText = 'Okay',
     Function doneButtonFn,
     bool barrierDismissible = true,
     bool showCancelButton = false,

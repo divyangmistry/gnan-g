@@ -210,28 +210,28 @@ class GameLevelPageState extends State<GameLevelPage> {
     );
   }
 
-  Widget _bottomButtons() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        _button(
-          'Leaderboard',
-          Icons.poll,
-          () {
-            Navigator.pushNamed(context, '/leaderboard');
-          },
-        ),
-        SizedBox(width: 10.0),
-        _button(
-          'Play Puzzle',
-          Icons.play_circle_filled,
-          () {
-            Navigator.pushNamed(context, '/gameOf15');
-          },
-        ),
-      ],
-    );
-  }
+//  Widget _bottomButtons() {
+//    return Row(
+//      mainAxisAlignment: MainAxisAlignment.center,
+//      children: <Widget>[
+//        _button(
+//          'Leaderboard',
+//          Icons.poll,
+//          () {
+//            Navigator.pushNamed(context, '/leaderboard');
+//          },
+//        ),
+//        SizedBox(width: 10.0),
+//        _button(
+//          'Play Puzzle',
+//          Icons.play_circle_filled,
+//          () {
+//            Navigator.pushNamed(context, '/gameOf15');
+//          },
+//        ),
+//      ],
+//    );
+//  }
 
   Widget _button(String btnLable, icon, Function clickEvent) {
     return Expanded(
@@ -370,13 +370,13 @@ class GameLevelPageState extends State<GameLevelPage> {
 
   Widget _userAvatar() {
     return ImageInput();
-    return CircleAvatar(
-      maxRadius: 50,
-      child: CircleAvatar(
-        maxRadius: 45,
-        backgroundImage: AssetImage('images/face.jpg'),
-      ),
-      backgroundColor: kQuizBrown900,
-    );
+//    return CircleAvatar(
+//      maxRadius: 50,
+//      child: CircleAvatar(
+//        maxRadius: 45,
+//        backgroundImage: AssetImage('images/face.jpg'),
+//      ),
+//      backgroundColor: kQuizBrown900,
+//    );
   }
 }
