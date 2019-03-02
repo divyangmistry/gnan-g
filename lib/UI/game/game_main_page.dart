@@ -1,3 +1,4 @@
+import 'package:GnanG/UI/game/fab_animated_button.dart';
 import 'package:GnanG/UI/game/mainGame.dart';
 import 'package:GnanG/colors.dart';
 import 'package:GnanG/utils/appsharedpref.dart';
@@ -27,10 +28,10 @@ class GameMainPageState extends State<GameMainPage> {
       body: BackgroundGredient(
         child: _bodyView(),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
         backgroundColor: kQuizMain300,
-        child: _buildMuteIcon(),
+        child: FabAnimatedButton(),
       ),
     );
   }
