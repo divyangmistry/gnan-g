@@ -1,3 +1,4 @@
+import 'package:GnanG/UI/widgets/base_state.dart';
 import 'package:flutter/material.dart';
 import 'package:GnanG/UI/auth/register_new.dart';
 import 'package:GnanG/model/signupsession.dart';
@@ -15,7 +16,7 @@ class OtpVerifyPage extends StatefulWidget {
   State<StatefulWidget> createState() => new OtpVerifyPageState();
 }
 
-class OtpVerifyPageState extends State<OtpVerifyPage> {
+class OtpVerifyPageState extends BaseState<OtpVerifyPage> {
   final _formKey = GlobalKey<FormState>();
   CommonFunction cf = new CommonFunction();
   bool _autoValidate = false;
@@ -23,7 +24,7 @@ class OtpVerifyPageState extends State<OtpVerifyPage> {
   String _otp;
 
   @override
-  Widget build(BuildContext context) {
+  Widget pageToDisplay() {
     return new Form(
       key: _formKey,
       autovalidate: _autoValidate,

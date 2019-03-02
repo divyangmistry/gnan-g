@@ -9,9 +9,8 @@ abstract class BaseState<T extends StatefulWidget> extends State<T> {
   bool isOverlay = false;
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      backgroundColor: kQuizSurfaceWhite,
-      body: new BackgroundGredient(
+    return new SafeArea(
+        child: new BackgroundGredient(
         child: new Stack(
           children: <Widget>[
             !isLoading

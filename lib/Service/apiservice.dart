@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'package:GnanG/constans/sharedpref_constant.dart';
 import 'package:GnanG/model/cacheData.dart';
 import 'package:GnanG/model/signupsession.dart';
@@ -151,6 +152,19 @@ class ApiService {
       'puzzle_name': puzzle_name
     };
     http.Response res = await postApi(url: '/puzzle_completed', data: data);
+    return res;
+  }
+
+  Future<http.Response> uploadProfilePicture(
+      {@required int mhtId,
+        @required File file,
+      }) async {
+    String base64Image = base64Encode(file.readAsBytesSync());
+    Map<String, dynamic> data = {
+      'mht_id': mhtId,
+      'image' : base64Image
+    };
+    http.Response res = await postApi(url: '/uploadprofileimage', data: data);
     return res;
   }
 

@@ -1,6 +1,7 @@
 // Package import
 import 'dart:convert';
 
+import 'package:GnanG/UI/widgets/base_state.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:GnanG/UI/auth/new_otp.dart';
@@ -19,7 +20,7 @@ class SignUpPage extends StatefulWidget {
   State<StatefulWidget> createState() => new SignUpPageState();
 }
 
-class SignUpPageState extends State<SignUpPage> {
+class SignUpPageState extends BaseState<SignUpPage> {
   final _formKey = GlobalKey<FormState>();
   bool _autoValidate = false;
   ApiService _api = new ApiService();
@@ -27,7 +28,7 @@ class SignUpPageState extends State<SignUpPage> {
   String _mobile;
 
   @override
-  Widget build(BuildContext context) {
+  Widget pageToDisplay() {
     return new Form(
       key: _formKey,
       autovalidate: _autoValidate,
@@ -170,21 +171,24 @@ class SignUpPageState extends State<SignUpPage> {
     if (_formKey.currentState.validate()) {
       try {
         _formKey.currentState.save();
-        Response res =
-            await _api.validateUser(mhtId: _mhtId, mobileNo: _mobile);
-        AppResponse appResponse =
-            ResponseParser.parseResponse(context: context, res: res);
+        setState(() {
+          isOverlay = true;
+        });
+        Response res = await _api.validateUser(mhtId: _mhtId, mobileNo: _mobile);
+        setState(() {
+          isOverlay = false;
+        });
+        AppResponse appResponse = ResponseParser.parseResponse(context: context, res: res);
         if (appResponse.status == 200) {
-          SignUpSession signUpSession =
-              SignUpSession.fromJson(appResponse.data);
-          Navigator.pushReplacement(
-            context,
+          SignUpSession signUpSession = SignUpSession.fromJson(appResponse.data);
+          Navigator.pushReplacement(context,
             MaterialPageRoute(
-              builder: (context) => new OtpVerifyPage(
-                    otp: signUpSession.otp,
-                    userData: signUpSession.userData,
-                    fromForgotPassword: false,
-                  ),
+              builder: (context) =>
+              new OtpVerifyPage(
+                otp: signUpSession.otp,
+                userData: signUpSession.userData,
+                fromForgotPassword: false,
+              ),
             ),
           );
         }

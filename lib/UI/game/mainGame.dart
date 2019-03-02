@@ -506,7 +506,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
       await intent.launch();
     }*/
     try {
-      launch("tel://");
+      launch("tel:");
       print('Phone a Friend');
     } catch (err) {
       print('CATCH IN HINT :: ');
