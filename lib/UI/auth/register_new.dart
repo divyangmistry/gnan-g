@@ -177,8 +177,9 @@ class RegisterPage2State extends State<RegisterPage2> {
         SharedPreferences pref = await SharedPreferences.getInstance();
         pref.setString('user_info', res.body);
         pref.setString('token', userInfo.token);
+        _api.appendTokenToHeader(userInfo.token);
         pref.setBool(SharedPrefConstant.b_isUserLoggedIn, true);
-        NotificationSetup.setupNotification();
+        NotificationSetup.setupNotification(userInfo: userInfo,context: context);
         CommonFunction.loadUserState(context, userInfo.mhtId);
         Navigator.pop(context);
         Navigator.pushReplacementNamed(context, '/level_new');

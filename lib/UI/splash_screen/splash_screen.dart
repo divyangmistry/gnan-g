@@ -1,9 +1,11 @@
 import 'dart:convert';
 import 'package:GnanG/Service/apiservice.dart';
+import 'package:GnanG/common.dart';
 import 'package:GnanG/constans/wsconstants.dart';
 import 'package:GnanG/model/cacheData.dart';
 import 'package:GnanG/model/user_state.dart';
 import 'package:GnanG/model/userinfo.dart';
+import 'package:GnanG/utils/appsharedpref.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -30,37 +32,14 @@ class SplashScreenState extends State<StatefulWidget> {
     } else if (connectivityResult == ConnectivityResult.wifi ||
         connectivityResult == ConnectivityResult.mobile) {
       print(' ------> inside internet <------');
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      bool _isLogin = prefs.getBool('b_isUserLoggedIn') == null
-          ? false
-          : prefs.getBool('b_isUserLoggedIn');
-      if (_isLogin) {
-        print(json.decode(prefs.getString('user_info'))['data']);
-        UserInfo userInfo = UserInfo.fromJson(
-            json.decode(prefs.getString('user_info'))['data']);
+      if (await AppSharedPrefUtil.isUserLoggedIn()) {
+        UserInfo userInfo = await AppSharedPrefUtil.getUserInfo();
         CacheData.userInfo = userInfo;
-        await _loadUserState(CacheData.userInfo.mhtId);
+        await CommonFunction.loadUserState(context, CacheData.userInfo.mhtId);
+        Navigator.pushReplacementNamed(context, '/gameMainPage');
       } else {
         Navigator.pushReplacementNamed(context, '/introPage');
       }
-    }
-  }
-
-  _loadUserState(int mhtId) async {
-    try {
-      Response res = await _api.getUserState(mhtId: mhtId);
-      if (res.statusCode == WSConstant.SUCCESS_CODE) {
-        print('IN LOGIN ::: userstateStr ::: IN MAIN :: ');
-        SharedPreferences pref = await SharedPreferences.getInstance();
-        pref.setString('userState', res.body);
-        UserState userState =
-        UserState.fromJson(json.decode(res.body)['data']['results']);
-        CacheData.userState = userState;
-        Navigator.pushReplacementNamed(context, '/gameMainPage');
-      }
-    } catch (err) {
-      print('CATCH 2 :: ERROR IN MAIN :: ');
-      print(err);
     }
   }
 

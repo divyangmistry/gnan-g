@@ -38,10 +38,10 @@ class NewLevelPageState extends State<NewLevelPage> {
                   padding: EdgeInsets.all(10),
                   shape: CircleBorder(),
                   onPressed: () {
-                    Navigator.pushNamed(context, '/gameStart');
+                    Navigator.pop(context);
                   },
                   child: Icon(
-                    Icons.person_outline,
+                    Icons.close,
                     size: 25,
                     color: kQuizSurfaceWhite,
                   ),

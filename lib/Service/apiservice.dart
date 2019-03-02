@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:GnanG/constans/sharedpref_constant.dart';
 import 'package:GnanG/model/cacheData.dart';
 import 'package:GnanG/model/signupsession.dart';
+import 'package:GnanG/utils/appsharedpref.dart';
 import 'package:http/http.dart';
 import 'package:meta/meta.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -18,9 +19,8 @@ class ApiService {
 
   checkLogin() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-    if (pref.getBool('b_isUserLoggedIn') != null &&
-        pref.getBool('b_isUserLoggedIn')) {
-      appendTokenToHeader(pref.getString('token'));
+    if (await AppSharedPrefUtil.isUserLoggedIn()) {
+      appendTokenToHeader(await AppSharedPrefUtil.getToken());
     }
   }
 
@@ -127,6 +127,16 @@ class ApiService {
   Future<http.Response> requestLife({@required int mhtId}) async {
     Map<String, dynamic> data = {'mht_id': mhtId};
     http.Response res = await postApi(url: '/req_life', data: data);
+    return res;
+  }
+
+  // Bonus Question
+  Future<http.Response> getBonusQuestion(
+      {@required int mhtId}) async {
+    Map<String, dynamic> data = {
+      'mht_id': mhtId
+    };
+    http.Response res = await postApi(url: '/bonus_question', data: data);
     return res;
   }
 

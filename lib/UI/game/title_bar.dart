@@ -6,8 +6,9 @@ import 'package:flutter/material.dart';
 class GameTitleBar extends StatelessWidget {
   final String title;
   final int questionNumber;
+  final int totalQuestion;
 
-  GameTitleBar({this.title, this.questionNumber});
+  GameTitleBar({this.title, this.questionNumber, this.totalQuestion});
 
   @override
   Widget build(BuildContext context) {
@@ -44,8 +45,9 @@ class GameTitleBar extends StatelessWidget {
                             textScaleFactor: 0.9,
                             style: TextStyle(color: kQuizSurfaceWhite),
                           ),
+                          SizedBox(height: 1,),
                           Text(
-                            questionNumber.toString(),
+                            questionNumber.toString() + " of " + totalQuestion.toString(),
                             textScaleFactor: 1.2,
                             style: TextStyle(color: kQuizSurfaceWhite),
                           )
