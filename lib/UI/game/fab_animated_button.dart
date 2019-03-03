@@ -1,6 +1,9 @@
 import 'dart:math';
 
+import 'package:GnanG/UI/others/feedback.dart';
 import 'package:GnanG/colors.dart';
+import 'package:GnanG/utils/app_setting_util.dart';
+import 'package:GnanG/utils/appsharedpref.dart';
 import 'package:flutter/material.dart';
 import 'package:vector_math/vector_math.dart' as radians;
 import 'package:GnanG/common.dart';
@@ -17,6 +20,7 @@ class FabAnimatedButton extends StatefulWidget {
 class FabAnimatedButtonState extends State<FabAnimatedButton>
     with SingleTickerProviderStateMixin {
   AnimationController controller;
+  bool isMuteEnabled = false;
 
   @override
   void initState() {
@@ -35,21 +39,14 @@ class FabAnimatedButtonState extends State<FabAnimatedButton>
     // return RadialAnimation(
     //   controller: controller,
     // );
-    return Scaffold(
-      floatingActionButton: speedDialButton(),
-    );
+    return speedDialButton();
   }
 
   speedDialButton() {
     return SpeedDial(
-      // both default to 16
-      marginRight: 18,
-      marginBottom: 20,
       animatedIcon: AnimatedIcons.menu_close,
       animatedIconTheme: IconThemeData(size: 22.0),
-      // this is ignored if animatedIcon is non null
-      // child: Icon(Icons.add),
-      // visible: _dialVisible,
+      visible: true,
       curve: Curves.bounceIn,
       overlayColor: Colors.black,
       overlayOpacity: 0.5,
@@ -63,27 +60,57 @@ class FabAnimatedButtonState extends State<FabAnimatedButton>
       shape: CircleBorder(),
       children: [
         SpeedDialChild(
-            child: Icon(Icons.accessibility),
+            child: Icon(Icons.feedback),
+            label: 'Feedback',
             backgroundColor: Colors.red,
-            label: 'First',
             labelStyle: TextStyle(fontSize: 18.0),
-            onTap: () => print('FIRST CHILD')),
+            onTap: () {
+              Navigator.pushNamed(context, '/feedback');
+            }),
         SpeedDialChild(
-          child: Icon(Icons.brush),
+          child: Icon(Icons.info_outline),
           backgroundColor: Colors.blue,
-          label: 'Second',
+          label: 'About',
           labelStyle: TextStyle(fontSize: 18.0),
-          onTap: () => print('SECOND CHILD'),
+          onTap: () => FeedbackPage(),
         ),
         SpeedDialChild(
-          child: Icon(Icons.keyboard_voice),
+          child: _buildMuteIcon(),
           backgroundColor: Colors.green,
-          label: 'Third',
           labelStyle: TextStyle(fontSize: 18.0),
-          onTap: () => print('THIRD CHILD'),
+          onTap: () => toggleMuteSound,
         ),
       ],
     );
+  }
+
+  Widget _buildMuteIcon() {
+    AppSharedPrefUtil.isMuteEnabled().then((isMute) {
+      setState(() {
+        isMuteEnabled = isMute;
+      });
+    });
+    return IconButton(
+      icon: Icon(
+        isMuteEnabled ? Icons.volume_off : Icons.volume_up,
+        color: kQuizSurfaceWhite,
+      ),
+      onPressed: toggleMuteSound,
+    );
+  }
+
+  void toggleMuteSound() async {
+    await AppSharedPrefUtil.saveMuteEnabled(
+        !await AppSharedPrefUtil.isMuteEnabled());
+    AppSharedPrefUtil.isMuteEnabled().then((isMute) {
+      setState(() {
+        isMuteEnabled = isMute;
+        if (!isMuteEnabled)
+          AppSetting.startBackgroundMusic();
+        else
+          AppSetting.stopBackgroundMusic();
+      });
+    });
   }
 }
 

@@ -36,11 +36,12 @@ class DashboardPageState extends State<DashboardPage> {
         onPressed: () {},
         heroTag: 0,
       ),*/
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: kQuizMain300,
-        child: _buildMuteIcon(),
-        onPressed: toggleMuteSound,
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   backgroundColor: kQuizMain300,
+      //   child: _buildMuteIcon(),
+      //   onPressed: toggleMuteSound,
+      // ),
+      floatingActionButton: FabAnimatedButton(),
     );
   }
 
@@ -282,11 +283,12 @@ class DashboardPageState extends State<DashboardPage> {
   }
 
   void toggleMuteSound() async {
-    await AppSharedPrefUtil.saveMuteEnabled(!await AppSharedPrefUtil.isMuteEnabled());
+    await AppSharedPrefUtil.saveMuteEnabled(
+        !await AppSharedPrefUtil.isMuteEnabled());
     AppSharedPrefUtil.isMuteEnabled().then((isMute) {
       setState(() {
         isMuteEnabled = isMute;
-        if(!isMuteEnabled)
+        if (!isMuteEnabled)
           AppSetting.startBackgroundMusic();
         else
           AppSetting.stopBackgroundMusic();
