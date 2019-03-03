@@ -22,6 +22,7 @@ class Pikachar extends StatefulWidget {
 
 class _PikacharState extends State<Pikachar> {
 
+  final String emptyAnswerCell= "\t\t";
   List<bool> isActiveArr = new List<bool>();
   List<int> ansOptionMapping = new List<int>();
   List<String> _optionChars = [];
@@ -39,7 +40,6 @@ class _PikacharState extends State<Pikachar> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
 
@@ -76,7 +76,7 @@ class _PikacharState extends State<Pikachar> {
     _answerChars['indexToInsert'] = 0;
 
     for (int i = 0; i < lengthOfAnswer; i++) {
-      _answerChars[i] = " ";
+      _answerChars[i] = emptyAnswerCell;
     }
   }
 
@@ -100,7 +100,6 @@ class _PikacharState extends State<Pikachar> {
 
     print(isActiveArr);
 
-    // todo: Set the optionChars to come from API
     if (optionChars != null) {
       print("initialize:" + optionChars.toString());
       _optionChars = optionChars;
@@ -233,7 +232,7 @@ class _PikacharState extends State<Pikachar> {
   void findIndexToInsert() {
     int i = 0;
     for (; i < _answerChars["length"]; i++) {
-      if (_answerChars[i] == "" || _answerChars[i] == " ") {
+      if (_answerChars[i] == "" || _answerChars[i] == emptyAnswerCell) {
         break;
       }
     }
@@ -297,14 +296,16 @@ class _PikacharState extends State<Pikachar> {
           rtrnCharFromAnswer(ansOptionMapping[index]);
           ansOptionMapping[index] = null;
           setState(() {
-            _answerChars[index] = " ";
+            _answerChars[index] = emptyAnswerCell;
           });
           findIndexToInsert();
         }
       },
       child: Card(
         elevation: 5,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5),
+//          side: BorderSide(color: Colors.white, width: 2)
+        ),
         child: Container(
           padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
           child: Text(

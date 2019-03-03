@@ -36,11 +36,12 @@ class DashboardPageState extends State<DashboardPage> {
         onPressed: () {},
         heroTag: 0,
       ),*/
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: kQuizMain300,
-        child: _buildMuteIcon(),
-        onPressed: toggleMuteSound,
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   backgroundColor: kQuizMain300,
+      //   child: _buildMuteIcon(),
+      //   onPressed: toggleMuteSound,
+      // ),
+      floatingActionButton: FabAnimatedButton(),
     );
   }
 
