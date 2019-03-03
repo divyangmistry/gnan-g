@@ -1,6 +1,7 @@
 import 'package:GnanG/UI/game/fab_animated_button.dart';
 import 'package:GnanG/UI/game/mainGame.dart';
 import 'package:GnanG/colors.dart';
+import 'package:GnanG/utils/app_setting_util.dart';
 import 'package:GnanG/utils/appsharedpref.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
@@ -9,15 +10,15 @@ import 'package:GnanG/Service/apiservice.dart';
 import 'package:GnanG/model/cacheData.dart';
 import '../../common.dart';
 
-class GameMainPage extends StatefulWidget {
+class DashboardPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return GameMainPageState();
+    return DashboardPageState();
   }
 }
 
-class GameMainPageState extends State<GameMainPage> {
+class DashboardPageState extends State<DashboardPage> {
   ApiService _api = new ApiService();
   bool isMuteEnabled = false;
 
@@ -28,10 +29,17 @@ class GameMainPageState extends State<GameMainPage> {
       body: BackgroundGredient(
         child: _bodyView(),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: FloatingActionButton(
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      /*floatingActionButton: FloatingActionButton(
         backgroundColor: kQuizMain300,
         child: FabAnimatedButton(),
+        onPressed: () {},
+        heroTag: 0,
+      ),*/
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: kQuizMain300,
+        child: _buildMuteIcon(),
+        onPressed: toggleMuteSound,
       ),
     );
   }
@@ -74,7 +82,7 @@ class GameMainPageState extends State<GameMainPage> {
   Widget _profile() {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, '/gameStart');
+        Navigator.pushNamed(context, '/profile');
       },
       child: _gameMenu(
           Colors.lime.shade500,
@@ -154,7 +162,7 @@ class GameMainPageState extends State<GameMainPage> {
               animation: 'Notification Loop',
             ),
           ),
-          "Bonus"),
+          "Daily Bonus"),
     );
   }
 
@@ -274,11 +282,14 @@ class GameMainPageState extends State<GameMainPage> {
   }
 
   void toggleMuteSound() async {
-    await AppSharedPrefUtil.saveMuteEnabled(
-        !await AppSharedPrefUtil.isMuteEnabled());
+    await AppSharedPrefUtil.saveMuteEnabled(!await AppSharedPrefUtil.isMuteEnabled());
     AppSharedPrefUtil.isMuteEnabled().then((isMute) {
       setState(() {
         isMuteEnabled = isMute;
+        if(!isMuteEnabled)
+          AppSetting.startBackgroundMusic();
+        else
+          AppSetting.stopBackgroundMusic();
       });
     });
   }

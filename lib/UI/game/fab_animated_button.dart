@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:GnanG/colors.dart';
-import 'package:GnanG/utils/appsharedpref.dart';
 import 'package:flutter/material.dart';
 import 'package:vector_math/vector_math.dart' as radians;
 
@@ -21,10 +20,11 @@ class FabAnimatedButtonState extends State<FabAnimatedButton>
   void initState() {
     super.initState();
     controller = AnimationController(
-        duration: Duration(
-          milliseconds: 500,
-        ),
-        vsync: this);
+      duration: Duration(
+        milliseconds: 500,
+      ),
+      vsync: this,
+    );
   }
 
   @override
@@ -38,7 +38,7 @@ class FabAnimatedButtonState extends State<FabAnimatedButton>
 
 class RadialAnimation extends StatelessWidget {
   RadialAnimation({Key key, this.controller})
-      : scale = Tween<double>(begin: 1.5, end: 0.0).animate(
+      : scale = Tween<double>(begin: 1.0, end: 0.0).animate(
             CurvedAnimation(parent: controller, curve: Curves.fastOutSlowIn)),
         translation = Tween<double>(begin: 0.0, end: 100.0).animate(
             CurvedAnimation(parent: controller, curve: Curves.easeInOut)),
@@ -61,25 +61,50 @@ class RadialAnimation extends StatelessWidget {
           angle: radians.radians(rotaton.value),
           child: Stack(
             children: <Widget>[
-              _buildButton(0, color: Colors.blue, icon: Icon(Icons.person)),
-              _buildButton(180,
-                  color: Colors.blue, icon: Icon(Icons.person_add)),
-              Transform.scale(
-                scale: scale.value - 1.5,
-                child: FloatingActionButton(
-                  child: Icon(Icons.more_horiz),
-                  onPressed: _close,
-                  backgroundColor: Colors.red,
-                ),
+              Stack(
+                children: <Widget>[
+                  _buildButton(
+                    1,
+                    0,
+                    color: Colors.blue.shade100,
+                    icon: Icon(Icons.star_half, color: kQuizBrown900),
+                  ),
+                  _buildButton(
+                    3,
+                    -90,
+                    color: Colors.blue.shade100,
+                    icon: Icon(Icons.help, color: kQuizBrown900),
+                  ),
+                  _buildButton(
+                    2,
+                    180,
+                    color: Colors.blue.shade100,
+                    icon: Icon(Icons.call, color: kQuizBrown900),
+                  ),
+                ],
               ),
-              Transform.scale(
-                scale: scale.value,
-                child: FloatingActionButton(
-                  child: Icon(Icons.more_vert),
-                  onPressed: _open,
-                  backgroundColor: Colors.blue,
-                ),
-              )
+              Stack(
+                children: <Widget>[
+                  Transform.scale(
+                    scale: scale.value - 1.0,
+                    child: FloatingActionButton(
+                      child: Icon(Icons.close),
+                      onPressed: _close,
+                      backgroundColor: Colors.red,
+                      heroTag: 4,
+                    ),
+                  ),
+                  Transform.scale(
+                    scale: scale.value,
+                    child: FloatingActionButton(
+                      child: Icon(Icons.build),
+                      onPressed: _open,
+                      backgroundColor: kQuizBrown900,
+                      heroTag: 5,
+                    ),
+                  ),
+                ],
+              ),
             ],
           ),
         );
@@ -87,17 +112,21 @@ class RadialAnimation extends StatelessWidget {
     );
   }
 
-  _buildButton(double angle, {Color color, Icon icon}) {
+  _buildButton(int index, double angle, {Color color, Icon icon}) {
     final double rad = radians.radians(angle);
-
     return Transform(
       transform: Matrix4.identity()
         ..translate(
             (translation.value) * cos(rad), (translation.value) * sin(rad)),
       child: FloatingActionButton(
-        child: Icon(Icons.person_add),
+        child: icon,
+        tooltip: 'Click Here',
         backgroundColor: color,
-        onPressed: _close,
+        elevation: 2,
+        onPressed: () {
+          print(index);
+        },
+        heroTag: index,
       ),
     );
   }

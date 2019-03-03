@@ -1,5 +1,10 @@
+import 'dart:io';
+import 'dart:typed_data';
+
+import 'package:GnanG/common.dart';
 import 'package:GnanG/constans/sharedpref_constant.dart';
 import 'package:GnanG/model/userinfo.dart';
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
@@ -43,5 +48,14 @@ class AppSharedPrefUtil {
     return pref.getString('token');
   }
 
+  static Future<bool> saveProfileImage(String base64Image) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.setString(SharedPrefConstant.s_profileImage, base64Image);
+    return true;
+  }
 
+  static Future<Image> getProfileImage() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    return CommonFunction.getImageFromBase64Img(base64Img: pref.getString(SharedPrefConstant.s_profileImage));
+  }
 }

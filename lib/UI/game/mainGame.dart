@@ -1,15 +1,11 @@
 import 'dart:math';
+import 'dart:typed_data';
 
-import 'package:GnanG/UI/game/mcq.dart';
-import 'package:GnanG/UI/game/question_ui.dart';
-import 'package:GnanG/UI/game/title_bar.dart';
-import 'package:GnanG/utils/app_utils.dart';
-import 'package:flame/flame.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:http/http.dart';
 import 'package:GnanG/Service/apiservice.dart';
+import 'package:GnanG/UI/game/mcq.dart';
+import 'package:GnanG/UI/game/title_bar.dart';
 import 'package:GnanG/UI/widgets/base_state.dart';
+import 'package:GnanG/constans/appconstant.dart';
 import 'package:GnanG/constans/wsconstants.dart';
 import 'package:GnanG/model/appresponse.dart';
 import 'package:GnanG/model/cacheData.dart';
@@ -17,14 +13,19 @@ import 'package:GnanG/model/current_stat.dart';
 import 'package:GnanG/model/question.dart';
 import 'package:GnanG/model/user_score_state.dart';
 import 'package:GnanG/model/validateQuestion.dart';
+import 'package:GnanG/utils/app_utils.dart';
 import 'package:GnanG/utils/response_parser.dart';
+import 'package:flame/flame.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'pikachar.dart';
 
 import '../../colors.dart';
 import '../../common.dart';
 import '../../model/quizlevel.dart';
+import 'pikachar.dart';
 
 class MainGamePage extends StatefulWidget {
   final QuizLevel level;
@@ -47,6 +48,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
   int selectedAnsIndex = -1;
   ApiService _api = new ApiService();
   CurrentState currentState;
+  Image image;
 
   @override
   void initState() {
@@ -65,6 +67,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
   }
 
   _loadAllQuestions() async {
+    image = await CommonFunction.getUserProfileImg(context: context);
     Response res;
     if (widget.isBonusLevel) {
       res = await _api.getBonusQuestion(mhtId: CacheData.userInfo.mhtId);
@@ -72,19 +75,52 @@ class MainGamePageState extends BaseState<MainGamePage> {
       res = await _api.getQuestions(
           level: widget.level.levelIndex, from: currentState.questionSt);
     }
-    AppResponse appResponse =
-        ResponseParser.parseResponse(context: context, res: res);
+    AppResponse appResponse = ResponseParser.parseResponse(context: context, res: res);
     if (appResponse.status == 200) {
-      questions = Question.fromJsonArray(appResponse.data);
-      print(questions);
-      setState(() {
-        question = questions.getRange(0, 1).first;
-        currentQueIndex = 0;
-        isLoading = false;
-      });
+      bool isLoadQuestion = true;
+      if(widget.isBonusLevel) {
+          if(isBonusCompleted(appResponse)) {
+            isLoadQuestion = false;
+            isLoading = false;
+          }
+      }
+      if(isLoadQuestion) {
+        questions = Question.fromJsonArray(appResponse.data);
+        print(questions);
+        setState(() {
+          if(questions.length > 0) {
+            question = questions.getRange(0, 1).first;
+            currentQueIndex = 0;
+          } else {
+            CommonFunction.alertDialog(
+                context: context,
+                msg: 'There is no any question',
+                barrierDismissible: false,
+                doneButtonFn: () {
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                });
+          }
+          isLoading = false;
+        });
+      }
     }
   }
 
+  bool isBonusCompleted(AppResponse appResponse) {
+    if(appResponse.data is Map && appResponse.data['msg'] != null) {
+      CommonFunction.alertDialog(
+          context: context,
+          msg: appResponse.data['msg'],
+          barrierDismissible: false,
+          doneButtonFn: () {
+            Navigator.pop(context);
+            Navigator.pop(context);
+          });
+      return true;
+    }
+    return false;
+  }
   void onOKButtonClick(bool isCompletedLevel) {
     Navigator.pop(context);
     setState(() {
@@ -104,6 +140,28 @@ class MainGamePageState extends BaseState<MainGamePage> {
         question =
             questions.getRange(currentQueIndex, currentQueIndex + 1).first;
       });
+    } else {
+      CommonFunction.alertDialog(
+          context: context,
+          msg: (widget.isBonusLevel)
+              ? "All Question of Daily Bonus is completed !!"
+              : 'Level ' + question.level.toString() + ' completed !! ',
+          barrierDismissible: false,
+          type: 'success',
+          doneButtonFn: () async {
+            Navigator.pop(context);
+            setState(() {
+              isOverlay = true;
+            });
+            bool result = await CommonFunction.loadUserState(
+                context, CacheData.userInfo.mhtId);
+            setState(() {
+              isOverlay = false;
+            });
+            if (result) {
+              Navigator.pop(context);
+            }
+          });
     }
   }
 
@@ -120,31 +178,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
         _loadNextQuestion();
       } else {
         if (isGivenCorrectAns) {
-          if (currentQueIndex == questions.length - 1) {
-            CommonFunction.alertDialog(
-                context: context,
-                msg: (widget.isBonusLevel)
-                    ? "All Question of Today's Challange is completed !!"
-                    : 'Level ' + question.level.toString() + ' completed !! ',
-                barrierDismissible: false,
-                type: 'success',
-                doneButtonFn: () async {
-                  Navigator.pop(context);
-                  setState(() {
-                    isOverlay = true;
-                  });
-                  bool result = await CommonFunction.loadUserState(
-                      context, CacheData.userInfo.mhtId);
-                  setState(() {
-                    isOverlay = false;
-                  });
-                  if (result) {
-                    Navigator.pop(context);
-                  }
-                });
-          } else {
             _loadNextQuestion();
-          }
         } else {
           if (CacheData.userState.lives == 1) {
             CommonFunction.alertDialog(
@@ -187,16 +221,16 @@ class MainGamePageState extends BaseState<MainGamePage> {
               children: <Widget>[
                 GameTitleBar(
                   title: (widget.isBonusLevel)
-                      ? "Today's Challange"
+                      ? "Daily Bonus"
                       : widget.level.name,
-                  questionNumber: question.questionSt,
+                  questionNumber: question != null ? question.questionSt : 1,
                   totalQuestion: getTotalQuestion(),
                 ),
                 SizedBox(
-                  height: MediaQuery.of(context).size.height / 16,
+                  height: 15,
                 ),
                 Expanded(
-                    child: question.questionType == "MCQ"
+                    child: question != null ? question.questionType == "MCQ"
                         ? new MCQ(question, validateAnswer, hiddenOptionIndex)
                         : new Pikachar(question.question, question.jumbledata, question.pikacharAnswer, validateAnswer))
               ],
@@ -216,10 +250,15 @@ class MainGamePageState extends BaseState<MainGamePage> {
                 )
               : null
           : null,
+//      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+//      floatingActionButton: FabAnimatedButton(),
     );
   }
 
   int getTotalQuestion() {
+    if(widget.isBonusLevel) {
+      return questions.getRange(questions.length - 1, questions.length).first.questionSt;
+    }
     int totalQuestion = -1;
     List<QuizLevel> levelInfos = CacheData.userState.quizLevels;
     for (final quizLevel in levelInfos) {
@@ -228,7 +267,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
         break;
       }
     }
-    ;
+
     return totalQuestion;
   }
 
@@ -366,7 +405,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
             context: context,
             msg: question.reference,
             type: 'success',
-            doneButtonText: 'Hooray!',
+            doneButtonText: 'Okay',
             title: 'Here is your hint ...',
             barrierDismissible: false);
       }
@@ -397,7 +436,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
                     color: kQuizMain50,
                     image: DecorationImage(
                       fit: BoxFit.fill,
-                      image: AssetImage('images/face.jpg'),
+                      image: image.image,
                     ),
                   ),
                 ),
@@ -412,7 +451,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
               CacheData.userInfo.email + '\n' + CacheData.userInfo.mobile,
               style: TextStyle(color: kQuizMain50, height: 1.3),
             ),
-            dense: true,
+//            dense: true,
             // trailing: Row(
             //   mainAxisSize: MainAxisSize.min,
             //   children: <Widget>[
@@ -506,7 +545,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
       await intent.launch();
     }*/
     try {
-      launch("tel://");
+      launch("tel:");
       print('Phone a Friend');
     } catch (err) {
       print('CATCH IN HINT :: ');

@@ -1,13 +1,15 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
+
 import 'package:GnanG/constans/sharedpref_constant.dart';
 import 'package:GnanG/model/cacheData.dart';
 import 'package:GnanG/model/signupsession.dart';
 import 'package:GnanG/utils/appsharedpref.dart';
 import 'package:http/http.dart';
+import 'package:http/http.dart' as http;
 import 'package:meta/meta.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
 
 class ApiService {
   // final _apiUrl = 'http://192.168.43.23:3000';
@@ -61,9 +63,16 @@ class ApiService {
     print(headers);
   }
 
-  Future<http.Response> validateUser(
+  Future<http.Response> validateUserIndia(
       {@required String mhtId, @required String mobileNo}) async {
     Map<String, dynamic> data = {'mht_id': mhtId, 'mobile': mobileNo};
+    Response res = await postApi(url: '/validate_user', data: data);
+    return res;
+  }
+
+  Future<http.Response> validateUserOther(
+      {@required String mhtId, @required String emailId}) async {
+    Map<String, dynamic> data = {'mht_id': mhtId, 'emailId': emailId};
     Response res = await postApi(url: '/validate_user', data: data);
     return res;
   }
@@ -154,6 +163,31 @@ class ApiService {
     return res;
   }
 
+  Future<http.Response> uploadProfilePicture(
+      {@required int mhtId,
+        @required File file,
+      }) async {
+    String base64Image = base64Encode(file.readAsBytesSync());
+    Map<String, dynamic> data = {
+      'mht_id': mhtId,
+      'image' : base64Image
+    };
+    http.Response res = await postApi(url: '/upload_photo', data: data);
+    return res;
+  }
+
+  Future<http.Response> getProfilePicture(
+      {@required int mhtId
+      }) async {
+    Map<String, dynamic> data = {
+      'mht_id': mhtId,
+    };
+    http.Response res = await postApi(url: '/get_photo', data: data);
+    return res;
+  }
+
+
+
   Future<http.Response> updateNotificationToken(
       {@required int mhtId,
         @required String fbToken,
@@ -205,7 +239,6 @@ class ApiService {
   Future<void> logout() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.clear();
-    // go to login
   }
 
   // Check Login Status

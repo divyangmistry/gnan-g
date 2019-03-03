@@ -1,17 +1,15 @@
-import 'package:GnanG/constans/sharedpref_constant.dart';
-import 'package:GnanG/model/cacheData.dart';
-import 'package:GnanG/model/userinfo.dart';
-import 'package:flutter/material.dart';
-import 'package:http/http.dart';
+import 'package:GnanG/UI/widgets/base_state.dart';
 import 'package:GnanG/constans/wsconstants.dart';
 import 'package:GnanG/model/appresponse.dart';
+import 'package:GnanG/model/userinfo.dart';
 import 'package:GnanG/utils/response_parser.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../../model/signupsession.dart';
-import 'package:GnanG/notification/notifcation_setup.dart';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart';
+
+import '../../Service/apiservice.dart';
 import '../../colors.dart';
 import '../../common.dart';
-import '../../Service/apiservice.dart';
+import '../../model/signupsession.dart';
 
 class RegisterPage2 extends StatefulWidget {
   final bool fromForgotPassword;
@@ -22,7 +20,7 @@ class RegisterPage2 extends StatefulWidget {
   State<StatefulWidget> createState() => new RegisterPage2State();
 }
 
-class RegisterPage2State extends State<RegisterPage2> {
+class RegisterPage2State extends BaseState<RegisterPage2> {
   final _formKey = GlobalKey<FormState>();
   bool _autoValidate = false;
   bool _obscureText = true;
@@ -33,7 +31,7 @@ class RegisterPage2State extends State<RegisterPage2> {
   CommonFunction cf = new CommonFunction();
 
   @override
-  Widget build(BuildContext context) {
+  Widget pageToDisplay() {
     return new Form(
       key: _formKey,
       autovalidate: _autoValidate,
@@ -111,7 +109,7 @@ class RegisterPage2State extends State<RegisterPage2> {
                     return null;
                   },
                   decoration: InputDecoration(
-                    labelText: 'Verify Password',
+                    labelText: 'Confirm Password',
                     hintText: 'Enter Password',
                     prefixIcon: Icon(
                       Icons.vpn_key,
@@ -155,55 +153,39 @@ class RegisterPage2State extends State<RegisterPage2> {
 
   void _submit() async {
     if (_formKey.currentState.validate()) {
-      if (widget.fromForgotPassword) {
-        _resetPassword();
-      } else {
-        _registerUser();
-      }
+      _login();
     } else {
       _autoValidate = true;
     }
   }
 
-  _registerUser() async {
+
+  _login() async {
+    setState(() {
+      isOverlay = true;
+    });
     try {
       widget.userData.password = _passwordController.text.toString();
-      Response res = await _api.register(userData: widget.userData);
-      AppResponse appResponse =
-          ResponseParser.parseResponse(context: context, res: res);
+      Response res;
+      if(widget.fromForgotPassword) {
+        res = await _api.updatePassword(mhtId: widget.userData.mhtId, password: widget.userData.password);
+      } else {
+        res = await _api.register(userData: widget.userData);
+      }
+      AppResponse appResponse = ResponseParser.parseResponse(context: context, res: res);
       if (appResponse.status == WSConstant.SUCCESS_CODE) {
         UserInfo userInfo = UserInfo.fromJson(appResponse.data);
-        CacheData.userInfo = userInfo;
-        SharedPreferences pref = await SharedPreferences.getInstance();
-        pref.setString('user_info', res.body);
-        pref.setString('token', userInfo.token);
-        _api.appendTokenToHeader(userInfo.token);
-        pref.setBool(SharedPrefConstant.b_isUserLoggedIn, true);
-        NotificationSetup.setupNotification(userInfo: userInfo,context: context);
-        CommonFunction.loadUserState(context, userInfo.mhtId);
-        Navigator.pop(context);
-        Navigator.pushReplacementNamed(context, '/level_new');
+        if(await CommonFunction.startUserSession(userInfo: userInfo,strUserInfo: res.body, context: context)) {
+          Navigator.pop(context);
+          Navigator.pushReplacementNamed(context, '/profile');
+        }
       }
     } catch (err) {
       CommonFunction.displayErrorDialog(context: context, msg: err.toString());
     }
-  }
-
-  _resetPassword() async {
-    try {
-      Response res = await _api.updatePassword(
-          mhtId: widget.userData.mhtId, password: _passwordController.text);
-      AppResponse appResponse =
-          ResponseParser.parseResponse(context: context, res: res);
-      if (appResponse.status == WSConstant.SUCCESS_CODE) {
-        SharedPreferences pref = await SharedPreferences.getInstance();
-        pref.setString('user_info', res.body);
-        Navigator.pop(context);
-        Navigator.pushReplacementNamed(context, '/level_new');
-      }
-    } catch (err) {
-      CommonFunction.displayErrorDialog(context: context, msg: err.toString());
-    }
+    setState(() {
+      isOverlay = false;
+    });
   }
 
   profileData() {
@@ -213,7 +195,7 @@ class RegisterPage2State extends State<RegisterPage2> {
       color: Colors.grey[50],
       elevation: 4,
       child: new Padding(
-        padding: EdgeInsets.all(30),
+        padding: EdgeInsets.all(20),
         child: new Column(
           children: <Widget>[
             Text(
@@ -221,41 +203,16 @@ class RegisterPage2State extends State<RegisterPage2> {
               textScaleFactor: 1.5,
             ),
             SizedBox(height: 30),
-            titleAndData('Name : ', widget.userData.name),
+            CommonFunction.titleAndData(context,'Name : ', widget.userData.name),
             SizedBox(height: 15),
-            titleAndData('Mobile no. : ', widget.userData.mobile),
+            CommonFunction.titleAndData(context,'Mobile no. : ', widget.userData.mobile),
             SizedBox(height: 15),
-            titleAndData('Email id : ', widget.userData.email),
+            CommonFunction.titleAndData(context,'Email id : ', widget.userData.email),
             SizedBox(height: 15),
-            titleAndData('Center : ', widget.userData.center),
+            CommonFunction.titleAndData(context,'Center : ', widget.userData.center),
           ],
         ),
       ),
-    );
-  }
-
-  Widget titleAndData(String title, String data) {
-    return new Column(
-      children: <Widget>[
-        new Row(
-          children: <Widget>[
-            new Container(
-              width: MediaQuery.of(context).size.width / 3,
-              child: new Text(
-                title,
-                textScaleFactor: 1.1,
-                style: TextStyle(
-                  color: kQuizMain50,
-                ),
-              ),
-            ),
-            new Text(
-              data,
-              textScaleFactor: 1.2,
-            ),
-          ],
-        ),
-      ],
     );
   }
 }

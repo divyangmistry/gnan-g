@@ -1,12 +1,12 @@
-import 'package:GnanG/UI/game/game_main_page.dart';
+import 'package:GnanG/UI/game/dashboard.dart';
 import 'package:GnanG/UI/intro/intro.dart';
-import 'package:GnanG/UI/others/feedback.dart';
-import 'package:flutter/material.dart';
-import 'package:GnanG/UI/game_level.dart';
 import 'package:GnanG/UI/leaderboard.dart';
+import 'package:GnanG/UI/others/feedback.dart';
 import 'package:GnanG/UI/profile.dart';
 import 'package:GnanG/UI/puzzle/main.dart';
 import 'package:GnanG/no-internet-page.dart';
+import 'package:GnanG/utils/app_setting_util.dart';
+import 'package:flutter/material.dart';
 
 import 'UI/auth/forgot_password.dart';
 import 'UI/auth/new_login.dart';
@@ -15,7 +15,6 @@ import 'UI/auth/new_signup.dart';
 import 'UI/auth/register_new.dart';
 import 'UI/game/mainGame.dart';
 import 'UI/game/simple_game.dart';
-import 'UI/game_level.dart';
 import 'UI/level/levelList.dart';
 import 'UI/others/rules.dart';
 import 'UI/others/terms&condition.dart';
@@ -36,6 +35,7 @@ class _QuizAppState extends State<QuizApp> {
   @override
   void initState() {
     super.initState();
+    AppSetting.startBackgroundMusic();
   }
 
   @override
@@ -49,7 +49,7 @@ class _QuizAppState extends State<QuizApp> {
         '/introPage': (BuildContext context) => new IntroPage(),
         '/feedback': (BuildContext context) => new FeedbackPage(),
         '/simpleGame': (BuildContext context) => new SimpleGame(),
-        '/gameMainPage': (BuildContext context) => new GameMainPage(),
+        '/dashboardPage': (BuildContext context) => new DashboardPage(),
         '/game_new': (BuildContext context) => new MainGamePage(),
         '/level_new': (BuildContext context) => new NewLevelPage(),
         '/login_new': (BuildContext context) => new LoginPage(),
@@ -57,7 +57,6 @@ class _QuizAppState extends State<QuizApp> {
         '/signup': (BuildContext context) => new SignUpPage(),
         '/forgotPassword': (BuildContext context) => new ForgotPassword(),
         '/otp_new': (BuildContext context) => new OtpVerifyPage(),
-        '/gameStart': (BuildContext context) => new GameLevelPage(),
         '/rules': (BuildContext context) => new RulesPagePage(),
         '/profile': (BuildContext context) => new ProfilePagePage(),
         '/leaderboard': (BuildContext context) => new LeaderBoard(),

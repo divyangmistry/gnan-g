@@ -1,8 +1,14 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
+import 'package:GnanG/constans/appconstant.dart';
+import 'package:GnanG/constans/sharedpref_constant.dart';
 import 'package:GnanG/main.dart';
 import 'package:GnanG/model/user_score_state.dart';
 import 'package:GnanG/model/user_state.dart';
+import 'package:GnanG/model/userinfo.dart';
+import 'package:GnanG/notification/notifcation_setup.dart';
+import 'package:GnanG/utils/appsharedpref.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
@@ -12,6 +18,7 @@ import 'package:GnanG/constans/wsconstants.dart';
 import 'package:GnanG/model/appresponse.dart';
 import 'package:GnanG/model/cacheData.dart';
 import 'package:GnanG/utils/response_parser.dart';
+import 'package:path/path.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'colors.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -164,6 +171,21 @@ class CommonFunction {
   static String mobileValidation(String value) {
     if (value.isEmpty) {
       return 'Mobile no. is required';
+    } else if (value.length != 10) {
+      return 'Enter valid Mobile no.';
+    }
+    return null;
+  }
+
+  // email Validation
+  static String emailValidation(String value) {
+    Pattern pattern =
+        r'^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$';
+    RegExp regex = new RegExp(pattern);
+    if (value.isEmpty) {
+      return 'Email-Id is required';
+    } else if (!regex.hasMatch(value)) {
+      return 'Enter valid Email-Id';
     }
     return null;
   }
@@ -224,7 +246,7 @@ class CommonFunction {
       onTap: () {
         CommonFunction.alertDialog(
           context: context,
-          msg: 'You can buy life from 100 points.',
+          msg: 'You can buy life for 100 points.',
           doneButtonText: 'Yes take it',
           type: 'success',
           title: 'Oh Yeah ..',
@@ -241,8 +263,7 @@ class CommonFunction {
   static _getLife(BuildContext context) async {
     try {
       Response res = await _api.requestLife(mhtId: CacheData.userInfo.mhtId);
-      AppResponse appResponse =
-          ResponseParser.parseResponse(context: context, res: res);
+      AppResponse appResponse = ResponseParser.parseResponse(context: context, res: res);
       if (appResponse.status == WSConstant.SUCCESS_CODE) {
         UserScoreState userState = UserScoreState.fromJson(appResponse.data);
         userState.updateSessionScore();
@@ -263,10 +284,9 @@ class CommonFunction {
     );
   }
 
-  static loadUserState(BuildContext context, int mhtId) async {
+  static Future<bool> loadUserState(BuildContext context, int mhtId) async {
     Response res = await _api.getUserState(mhtId: mhtId);
-    AppResponse appResponse =
-        ResponseParser.parseResponse(context: context, res: res);
+    AppResponse appResponse = ResponseParser.parseResponse(context: context, res: res);
     try {
       if (appResponse.status == WSConstant.SUCCESS_CODE) {
         print('IN LOGIN ::: userstateStr :::');
@@ -288,6 +308,48 @@ class CommonFunction {
     }
   }
 
+  static Future<bool> startUserSession({@required UserInfo userInfo, @required String strUserInfo, BuildContext context}) async {
+    CacheData.userInfo = userInfo;
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.setString('user_info', strUserInfo);
+    pref.setString('token', userInfo.token);
+    pref.setBool(SharedPrefConstant.b_isUserLoggedIn, true);
+    print(userInfo);
+    _api.appendTokenToHeader(userInfo.token);
+    await NotificationSetup.setupNotification(userInfo: userInfo, context: context);
+    await CommonFunction.loadUserState(context, userInfo.mhtId);
+    return true;
+  }
+
+  static Future<Image> getUserProfileImg({BuildContext context}) async {
+    Image userProfile;
+    userProfile = await AppSharedPrefUtil.getProfileImage();
+    if (userProfile == null)
+      userProfile = getImageFromBase64Img(base64Img: await _getProfilePictureFromServer(context));
+    if(userProfile == null)
+      userProfile = Image(image: AssetImage(AppConstant.DEFAULT_USER_IMG_PATH));
+    return userProfile;
+  }
+
+  static Future<String> _getProfilePictureFromServer(BuildContext context) async {
+    String profileBase64Image;
+    Response res = await _api.getProfilePicture(mhtId: CacheData.userInfo.mhtId);
+    AppResponse appResponse = ResponseParser.parseResponse(context: context, res: res);
+    if (appResponse.status == WSConstant.SUCCESS_CODE) {
+      profileBase64Image = appResponse.data['image'];
+    }
+    return profileBase64Image;
+  }
+
+  static Image getImageFromBase64Img({@required String base64Img, bool returnDefault = false}) {
+    Image image;
+    if (base64Img != null)
+      image = Image(image: MemoryImage(base64Decode(base64Img)));
+    if(returnDefault && image == null)
+      image = Image(image: AssetImage(AppConstant.DEFAULT_USER_IMG_PATH));
+    return image;
+  }
+
   // common Alert dialog
   static alertDialog({
     @required BuildContext context,
@@ -295,7 +357,7 @@ class CommonFunction {
     String title,
     @required String msg,
     bool showDoneButton = true,
-    String doneButtonText = 'Okeh...',
+    String doneButtonText = 'Okay',
     Function doneButtonFn,
     bool barrierDismissible = true,
     bool showCancelButton = false,
@@ -390,6 +452,38 @@ class CommonFunction {
           ),
         );
       },
+    );
+  }
+
+  static Widget titleAndData(BuildContext context, String title, String data) {
+    return new Column(
+      children: <Widget>[
+        new Row(
+          children: <Widget>[
+            new Container(
+              width: MediaQuery.of(context).size.width / 4,
+              child: new Text(
+                title,
+                textScaleFactor: 1.1,
+                style: TextStyle(
+                  color: kQuizMain50,
+                ),
+              ),
+            ),
+            new Container(
+              width: MediaQuery.of(context).size.width / 2.5,
+              child: new Text(
+                data,
+                overflow: TextOverflow.fade,
+                textScaleFactor: 1.2,
+                style: TextStyle(
+                  color: kQuizMain400,
+                ),
+              ),
+            )
+          ],
+        ),
+      ],
     );
   }
 }
