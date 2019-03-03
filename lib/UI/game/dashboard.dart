@@ -1,4 +1,5 @@
 import 'package:GnanG/Service/apiservice.dart';
+import 'package:GnanG/UI/game/fab_animated_button.dart';
 import 'package:GnanG/UI/game/mainGame.dart';
 import 'package:GnanG/colors.dart';
 import 'package:GnanG/common.dart';
@@ -30,18 +31,13 @@ class DashboardPageState extends State<DashboardPage> {
         child: _bodyView(),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-//      floatingActionButton: FloatingActionButton(
-//        backgroundColor: kQuizMain300,
-//        child: FabAnimatedButton(),
-//        onPressed: () {},
-//        heroTag: 0,
-//      ),
-       floatingActionButton: FloatingActionButton(
-         backgroundColor: kQuizMain300,
-         child: _buildMuteIcon(),
-         onPressed: toggleMuteSound,
-       ),
 //      floatingActionButton: FabAnimatedButton(),
+//       floatingActionButton: FloatingActionButton(
+//         backgroundColor: kQuizMain300,
+//         child: _buildMuteIcon(),
+//         onPressed: toggleMuteSound,
+//       ),
+      floatingActionButton: FabAnimatedButton(),
     );
   }
 

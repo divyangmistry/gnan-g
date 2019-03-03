@@ -501,10 +501,10 @@ class MainGamePageState extends BaseState<MainGamePage> {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               lifeline(Icons.call, 'Phone a Friend', _phoneAFriend),
-              CustomVerticalDivider(
+              question.questionType == 'MCQ' ? CustomVerticalDivider(
                 height: 100,
-              ),
-              lifeline(Icons.star_half, '50 - 50', _fiftyFifty),
+              ) : new Container(),
+              question.questionType == 'MCQ' ? lifeline(Icons.star_half, '50 - 50', _fiftyFifty) : new Container(),
             ],
           ),
           SizedBox(
@@ -557,6 +557,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
     try {
       launch("tel:");
       print('Phone a Friend');
+      Navigator.pop(context);
     } catch (err) {
       print('CATCH IN HINT :: ');
       print(err);
@@ -601,6 +602,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
           }
         }
       }
+      Navigator.pop(context);
     } catch (err) {
       print('CATCH IN HINT :: ');
       print(err);
