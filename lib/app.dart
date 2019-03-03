@@ -8,6 +8,7 @@ import 'package:GnanG/no-internet-page.dart';
 import 'package:GnanG/utils/app_setting_util.dart';
 import 'package:GnanG/utils/app_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'UI/auth/forgot_password.dart';
 import 'UI/auth/new_login.dart';
@@ -39,6 +40,13 @@ class _QuizAppState extends State<QuizApp> {
     AppSetting.startBackgroundMusic();
     //AppUtils.launchPlaystoreApp("");
     //_checkForNewAppUpdate();
+    SystemChannels.lifecycle.setMessageHandler((msg) {
+      if (msg == "AppLifecycleState.paused" || msg == "AppLifecycleState.inactive" || msg == "AppLifecycleState.suspending") {
+        AppSetting.stopBackgroundMusic();
+      } else if (msg == "AppLifecycleState.resumed") {
+        AppSetting.startBackgroundMusic();
+      }
+    });
   }
 
   String appVersion = "1.0.1";
@@ -125,22 +133,22 @@ ThemeData _buildQuizTheme() {
 TextTheme _buildQuizTextTheme(TextTheme base) {
   return base
       .copyWith(
-        headline: base.headline.copyWith(
-          fontWeight: FontWeight.w500,
-        ),
-        title: base.title.copyWith(fontSize: 18.0),
-        caption: base.caption.copyWith(
-          fontWeight: FontWeight.w400,
-          fontSize: 14.0,
-        ),
-        body2: base.body2.copyWith(
-          fontWeight: FontWeight.w500,
-          fontSize: 16.0,
-        ),
-      )
+    headline: base.headline.copyWith(
+      fontWeight: FontWeight.w500,
+    ),
+    title: base.title.copyWith(fontSize: 18.0),
+    caption: base.caption.copyWith(
+      fontWeight: FontWeight.w400,
+      fontSize: 14.0,
+    ),
+    body2: base.body2.copyWith(
+      fontWeight: FontWeight.w500,
+      fontSize: 16.0,
+    ),
+  )
       .apply(
-        fontFamily: 'CmSans',
-        displayColor: kQuizBrown900,
-        bodyColor: kQuizBrown900,
-      );
+    fontFamily: 'CmSans',
+    displayColor: kQuizBrown900,
+    bodyColor: kQuizBrown900,
+  );
 }
