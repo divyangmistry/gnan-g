@@ -46,19 +46,20 @@ class SplashScreenState extends State<StatefulWidget> {
       body: new SafeArea(
         child: new Center(
           child: new Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               new Image.asset(
                 'images/logo1.png',
                 height: MediaQuery
                     .of(context)
                     .size
-                    .height / 4,
+                    .height / 2,
                 width: MediaQuery
                     .of(context)
                     .size
-                    .width / 4,
+                    .width / 2,
               ),
+              SizedBox(height: 10),
               new CircularProgressIndicator(),
             ],
           ),

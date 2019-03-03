@@ -327,6 +327,9 @@ class SignUpPageState extends BaseState<SignUpPage> {
 
   void _submitOther() async {
     if (_formOtherKey.currentState.validate()) {
+      setState(() {
+        isOverlay = true;
+      });
       try {
         _formOtherKey.currentState.save();
         Response res =
@@ -355,6 +358,9 @@ class SignUpPageState extends BaseState<SignUpPage> {
           msg: err.toString(),
         );
       }
+      setState(() {
+        isOverlay = false;
+      });
     } else {
       _autoValidate = true;
     }

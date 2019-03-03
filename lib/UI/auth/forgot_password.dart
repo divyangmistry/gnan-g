@@ -29,7 +29,7 @@ class ForgotPasswordState extends State<ForgotPassword> {
       key: _formKey,
       autovalidate: _autoValidate,
       child: new Scaffold(
-        backgroundColor: kQuizSurfaceWhite,
+        backgroundColor: kBackgroundGrediant1,
         body: SafeArea(
           child: new ListView(
             padding: EdgeInsets.symmetric(horizontal: 30.0),

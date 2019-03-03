@@ -36,7 +36,7 @@ class RegisterPage2State extends BaseState<RegisterPage2> {
       key: _formKey,
       autovalidate: _autoValidate,
       child: new Scaffold(
-        backgroundColor: kQuizSurfaceWhite,
+        backgroundColor: kBackgroundGrediant1,
         body: SafeArea(
           child: new ListView(
             padding: EdgeInsets.symmetric(horizontal: 30.0),
@@ -50,7 +50,7 @@ class RegisterPage2State extends BaseState<RegisterPage2> {
                   ),
                   new SizedBox(height: 5.0),
                   new Text(
-                    'REGISTER - STEP: 2',
+                    'REGISTER - STEP : 2',
                     textScaleFactor: 1.5,
                     style: TextStyle(
                       fontWeight: FontWeight.w800,
@@ -177,7 +177,7 @@ class RegisterPage2State extends BaseState<RegisterPage2> {
         UserInfo userInfo = UserInfo.fromJson(appResponse.data);
         if(await CommonFunction.startUserSession(userInfo: userInfo,strUserInfo: res.body, context: context)) {
           Navigator.pop(context);
-          Navigator.pushReplacementNamed(context, '/profile');
+          Navigator.pushReplacementNamed(context, '/dashboardPage');
         }
       }
     } catch (err) {
