@@ -6,6 +6,7 @@ import 'package:GnanG/UI/profile.dart';
 import 'package:GnanG/UI/puzzle/main.dart';
 import 'package:GnanG/no-internet-page.dart';
 import 'package:GnanG/utils/app_setting_util.dart';
+import 'package:GnanG/utils/app_utils.dart';
 import 'package:flutter/material.dart';
 
 import 'UI/auth/forgot_password.dart';
@@ -36,7 +37,28 @@ class _QuizAppState extends State<QuizApp> {
   void initState() {
     super.initState();
     AppSetting.startBackgroundMusic();
+    //AppUtils.launchPlaystoreApp("");
+    //_checkForNewAppUpdate();
   }
+
+  String appVersion = "1.0.1";
+
+
+  /*void _checkForNewAppUpdate() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    String version = packageInfo.version;
+    Version currentVersion  = Version(version: packageInfo.version);
+    Version playStoreVersion = Version(version: appVersion);
+    if(playStoreVersion.compareTo(currentVersion) > 0) {
+      CommonFunction.alertDialog(context: context,
+          msg: "New App Version is avalilable, Please Update it",
+          doneButtonText: "Update Now",
+          doneButtonFn: () {
+
+          }
+      );
+    }
+  }*/
 
   @override
   Widget build(BuildContext context) {

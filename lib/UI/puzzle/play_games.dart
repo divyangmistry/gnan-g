@@ -48,7 +48,7 @@ class _PlayGamesContainerState extends State<PlayGamesContainer> {
   }
 
   void submitScore({@required String key, @required int time}) async {
-    try {
+    /*try {
       await playGames.invokeMethod(
         'submitScore',
         <String, dynamic>{
@@ -56,7 +56,7 @@ class _PlayGamesContainerState extends State<PlayGamesContainer> {
           'score': time,
         },
       );
-    } on PlatformException {}
+    } on PlatformException {}*/
   }
 
   void showLeaderboard({@required String key}) async {

@@ -22,7 +22,7 @@ class AppSharedPrefUtil {
   static Future<bool> isMuteEnabled() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     return pref.getBool(SharedPrefConstant.b_muteSound) == null
-        ? false
+        ? true
         : pref.getBool(SharedPrefConstant.b_muteSound);
   }
 
