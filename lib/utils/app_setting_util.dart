@@ -16,6 +16,8 @@ class AppSetting {
   }
 
   static void stopBackgroundMusic() {
+
       backgroundMusic.pause();
+
   }
 }
