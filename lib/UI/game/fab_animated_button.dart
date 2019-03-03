@@ -77,6 +77,7 @@ class FabAnimatedButtonState extends State<FabAnimatedButton>
         SpeedDialChild(
           child: _buildMuteIcon(),
           backgroundColor: Colors.green,
+          label: 'Sound',
           labelStyle: TextStyle(fontSize: 18.0),
           onTap: () => toggleMuteSound,
         ),
