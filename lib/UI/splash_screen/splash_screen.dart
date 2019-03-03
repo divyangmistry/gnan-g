@@ -1,16 +1,12 @@
-import 'dart:convert';
 import 'package:GnanG/Service/apiservice.dart';
 import 'package:GnanG/common.dart';
-import 'package:GnanG/constans/wsconstants.dart';
 import 'package:GnanG/model/cacheData.dart';
-import 'package:GnanG/model/user_state.dart';
 import 'package:GnanG/model/userinfo.dart';
 import 'package:GnanG/utils/appsharedpref.dart';
-import 'package:flutter/material.dart';
-import 'package:http/http.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../../colors.dart';
 import 'package:connectivity/connectivity.dart';
+import 'package:flutter/material.dart';
+
+import '../../colors.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -58,6 +54,10 @@ class SplashScreenState extends State<StatefulWidget> {
                     .of(context)
                     .size
                     .height / 4,
+                width: MediaQuery
+                    .of(context)
+                    .size
+                    .width / 4,
               ),
               new CircularProgressIndicator(),
             ],
