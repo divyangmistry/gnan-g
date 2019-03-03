@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:GnanG/constans/appconstant.dart';
 import 'package:GnanG/constans/sharedpref_constant.dart';
 import 'package:GnanG/main.dart';
 import 'package:GnanG/model/user_score_state.dart';
@@ -262,8 +263,7 @@ class CommonFunction {
   static _getLife(BuildContext context) async {
     try {
       Response res = await _api.requestLife(mhtId: CacheData.userInfo.mhtId);
-      AppResponse appResponse =
-          ResponseParser.parseResponse(context: context, res: res);
+      AppResponse appResponse = ResponseParser.parseResponse(context: context, res: res);
       if (appResponse.status == WSConstant.SUCCESS_CODE) {
         UserScoreState userState = UserScoreState.fromJson(appResponse.data);
         userState.updateSessionScore();
@@ -286,8 +286,7 @@ class CommonFunction {
 
   static Future<bool> loadUserState(BuildContext context, int mhtId) async {
     Response res = await _api.getUserState(mhtId: mhtId);
-    AppResponse appResponse =
-        ResponseParser.parseResponse(context: context, res: res);
+    AppResponse appResponse = ResponseParser.parseResponse(context: context, res: res);
     try {
       if (appResponse.status == WSConstant.SUCCESS_CODE) {
         print('IN LOGIN ::: userstateStr :::');
@@ -322,16 +321,17 @@ class CommonFunction {
     return true;
   }
 
-  static Future<Uint8List> getUserProfileImg({BuildContext context}) async {
-    Uint8List userProfile;
+  static Future<Image> getUserProfileImg({BuildContext context}) async {
+    Image userProfile;
     userProfile = await AppSharedPrefUtil.getProfileImage();
-      if (userProfile == null) {
-        userProfile = getImageFromBase64Img(await _getProfilePictureFromDB(context));
-      }
+    if (userProfile == null)
+      userProfile = getImageFromBase64Img(base64Img: await _getProfilePictureFromServer(context));
+    if(userProfile == null)
+      userProfile = Image(image: AssetImage(AppConstant.DEFAULT_USER_IMG_PATH));
     return userProfile;
   }
 
-  static Future<String> _getProfilePictureFromDB(BuildContext context) async {
+  static Future<String> _getProfilePictureFromServer(BuildContext context) async {
     String profileBase64Image;
     Response res = await _api.getProfilePicture(mhtId: CacheData.userInfo.mhtId);
     AppResponse appResponse = ResponseParser.parseResponse(context: context, res: res);
@@ -341,10 +341,12 @@ class CommonFunction {
     return profileBase64Image;
   }
 
-  static Uint8List getImageFromBase64Img(String base64Img) {
-    Uint8List image;
+  static Image getImageFromBase64Img({@required String base64Img, bool returnDefault = false}) {
+    Image image;
     if (base64Img != null)
-      image = base64Decode(base64Img);
+      image = Image(image: MemoryImage(base64Decode(base64Img)));
+    if(returnDefault && image == null)
+      image = Image(image: AssetImage(AppConstant.DEFAULT_USER_IMG_PATH));
     return image;
   }
 
@@ -450,6 +452,38 @@ class CommonFunction {
           ),
         );
       },
+    );
+  }
+
+  static Widget titleAndData(BuildContext context, String title, String data) {
+    return new Column(
+      children: <Widget>[
+        new Row(
+          children: <Widget>[
+            new Container(
+              width: MediaQuery.of(context).size.width / 4,
+              child: new Text(
+                title,
+                textScaleFactor: 1.1,
+                style: TextStyle(
+                  color: kQuizMain50,
+                ),
+              ),
+            ),
+            new Container(
+              width: MediaQuery.of(context).size.width / 2.5,
+              child: new Text(
+                data,
+                overflow: TextOverflow.fade,
+                textScaleFactor: 1.2,
+                style: TextStyle(
+                  color: kQuizMain400,
+                ),
+              ),
+            )
+          ],
+        ),
+      ],
     );
   }
 }

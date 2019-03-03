@@ -1,26 +1,23 @@
 import 'dart:io';
-import 'dart:typed_data';
 
-import 'package:GnanG/Service/apiservice.dart';
 import 'package:GnanG/UI/imagepicker/image_picker_handler.dart';
+import 'package:GnanG/UI/widgets/hero_image.dart';
 import 'package:GnanG/colors.dart';
 import 'package:flutter/material.dart';
 
 class ImageInput extends StatefulWidget {
 
   Function onImagePicked;
-  Uint8List base64Image;
-  ImageInput({this.base64Image, this.onImagePicked});
+  Image image;
+  ImageInput({@required this.image, this.onImagePicked});
   @override
   _ImageInputState createState() => new _ImageInputState();
 }
 
 class _ImageInputState extends State<ImageInput>
     with TickerProviderStateMixin, ImagePickerListener {
-  File _image;
   AnimationController _controller;
   ImagePickerHandler imagePicker;
-  ApiService _api = new ApiService();
   @override
   void initState() {
     super.initState();
@@ -28,7 +25,6 @@ class _ImageInputState extends State<ImageInput>
       vsync: this,
       duration: const Duration(milliseconds: 500),
     );
-
     imagePicker = new ImagePickerHandler(this, _controller);
     imagePicker.init();
   }
@@ -46,7 +42,7 @@ class _ImageInputState extends State<ImageInput>
         new Center(
             child: new Stack(
           children: <Widget>[
-            _buildProfilePicture(widget.base64Image),
+            _buildProfilePicture(),
             new Center(
               child: new GestureDetector(
                 onTap: () => imagePicker.showDialog(context),
@@ -79,26 +75,19 @@ class _ImageInputState extends State<ImageInput>
         ));
   }
 
-  _buildProfilePicture(Uint8List data) {
+  _buildProfilePicture() {
     return CircleAvatar(
       maxRadius: 48,
-      child: CircleAvatar(
-        maxRadius: 45,
-        backgroundImage: data == null ? AssetImage('images/face.jpg') : MemoryImage(data),
-      ),
+      child: HeroImage(image: widget.image),
       backgroundColor: kQuizBrown900,
     );
   }
 
+
   @override
   userImage(File _image) async {
-    _image.length().then((data) {print("Profile image size:" + (data/1000).toString());});
-    if(widget.onImagePicked != null) {
-      widget.onImagePicked(_image);
-    }
-    /*setState(() {
-      this._image = _image;
-    });*/
-
+    if(_image != null)
+      if(widget.onImagePicked != null)
+        widget.onImagePicked(_image);
   }
 }

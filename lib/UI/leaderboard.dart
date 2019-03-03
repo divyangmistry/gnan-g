@@ -1,17 +1,16 @@
-import 'dart:convert';
-import 'dart:typed_data';
-
-import 'package:GnanG/constans/appconstant.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:http/http.dart';
 import 'package:GnanG/Service/apiservice.dart';
+import 'package:GnanG/UI/widgets/base_state.dart';
+import 'package:GnanG/UI/widgets/hero_image.dart';
 import 'package:GnanG/common.dart';
 import 'package:GnanG/constans/wsconstants.dart';
 import 'package:GnanG/model/appresponse.dart';
 import 'package:GnanG/model/cacheData.dart';
 import 'package:GnanG/model/leaders.dart';
 import 'package:GnanG/utils/response_parser.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:http/http.dart';
+
 import '../colors.dart';
 
 class LeaderBoard extends StatefulWidget {
@@ -19,13 +18,13 @@ class LeaderBoard extends StatefulWidget {
   LeaderBoardState createState() => new LeaderBoardState();
 }
 
-class LeaderBoardState extends State<LeaderBoard> {
+class LeaderBoardState extends BaseState<LeaderBoard> {
   
   ApiService _api = new ApiService();
 
   List<Leaders> leaderList;
   int _userRank = 0;
-  Uint8List _userImage;
+  Image _userImage;
 
   @override
   void initState() {
@@ -34,6 +33,9 @@ class LeaderBoardState extends State<LeaderBoard> {
   }
 
   _loadLeadersAndRank() async {
+    setState(() {
+      isLoading = true;
+    });
     try {
       Response res = await _api.getApi(url: '/leaders');
       AppResponse appResponse =
@@ -50,47 +52,34 @@ class LeaderBoardState extends State<LeaderBoard> {
     } catch (err) {
       CommonFunction.displayErrorDialog(context: context, msg: err.toString());
     }
+    setState(() {
+      isLoading = false;
+    });
+
   }
 
   Widget _buildLeaderRow(int rank, String name, int points, IconData icon,
-      Uint8List image, int mhtId) {
+      Image image, int mhtId) {
     return Column(
       children: <Widget>[
         Container(
           padding: EdgeInsets.all(16),
           child: Row(
             children: <Widget>[
-              Text(
-                rank.toString(),
-                style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+              Container(
+                  width: 25,
+                  child:Text(
+                  rank.toString(),
+                  style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+                )
               ),
-              CacheData.userInfo.mhtId == mhtId
-                  ? Padding(
-                      padding: EdgeInsets.fromLTRB(18, 0, 12, 0),
-                      child: CircleAvatar(
-                        backgroundColor: kQuizBrown900,
-                        minRadius: 25,
-                        child: CircleAvatar(
-                          minRadius: 22,
-                          backgroundImage: image == null ? AssetImage(AppConstant.DEFAULT_USER_IMG_PATH) : MemoryImage(image),
-                        ),
-                      ),
-                    )
-                  : Container(
-                      padding: EdgeInsets.fromLTRB(18, 0, 12, 0),
-                      child: Container(
-                        width: 50,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: kQuizMain50,
-                          image: DecorationImage(
-                            fit: BoxFit.fill,
-                            image: image == null ? AssetImage(AppConstant.DEFAULT_USER_IMG_PATH) : MemoryImage(image),
-                          ),
-                        ),
-                      ),
-                    ),
+              SizedBox(width: 9,)
+              ,CircleAvatar(
+                  maxRadius: 25,
+                  child: HeroImage(image: image,maxRadius: 23,heroTag: name,),
+                  backgroundColor: CacheData.userInfo.mhtId == mhtId ? kQuizBrown900 : kQuizMain50,
+              ),
+              SizedBox(width: 9,),
               Expanded(
                 child: Text(
                   name,
@@ -138,15 +127,10 @@ class LeaderBoardState extends State<LeaderBoard> {
             ),
           ),
           Container(
-            width: 64,
-            height: 64,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: kQuizMain50,
-              image: DecorationImage(
-                fit: BoxFit.fill,
-                image: _userImage == null ? AssetImage(AppConstant.DEFAULT_USER_IMG_PATH) : MemoryImage(_userImage),
-              ),
+            child: CircleAvatar(
+              maxRadius: 34,
+              child: HeroImage(image: _userImage,maxRadius: 32,),
+              backgroundColor: kQuizBrown900,
             ),
           ),
           Expanded(
@@ -196,7 +180,7 @@ class LeaderBoardState extends State<LeaderBoard> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget pageToDisplay() {
     Widget topSection = Container(
       child: Column(
         children: <Widget>[
@@ -226,7 +210,7 @@ class LeaderBoardState extends State<LeaderBoard> {
             body: ListView.builder(
               itemCount: leaderList.length,
               itemBuilder: (BuildContext context, int index) {
-                Uint8List leaderImage = CommonFunction.getImageFromBase64Img(leaderList[index].img);
+                Image leaderImage = CommonFunction.getImageFromBase64Img(base64Img:leaderList[index].img, returnDefault: true);
                 return _buildLeaderRow(
                   index + 1,
                   leaderList[index].name,

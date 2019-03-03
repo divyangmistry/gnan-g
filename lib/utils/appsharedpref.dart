@@ -54,8 +54,8 @@ class AppSharedPrefUtil {
     return true;
   }
 
-  static Future<Uint8List> getProfileImage() async {
+  static Future<Image> getProfileImage() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-    return CommonFunction.getImageFromBase64Img(pref.getString(SharedPrefConstant.s_profileImage));
+    return CommonFunction.getImageFromBase64Img(base64Img: pref.getString(SharedPrefConstant.s_profileImage));
   }
 }

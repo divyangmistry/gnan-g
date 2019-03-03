@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:GnanG/Service/apiservice.dart';
 import 'package:GnanG/UI/animation/success.dart';
@@ -23,7 +22,7 @@ class ProfilePagePage extends StatefulWidget {
 
 class ProfilePagePageState extends BaseState<ProfilePagePage> {
   ApiService _api = new ApiService();
-  Uint8List uint8listImage;
+  Image profileImage;
 
   @override
   void initState() {
@@ -38,7 +37,7 @@ class ProfilePagePageState extends BaseState<ProfilePagePage> {
     });
     CommonFunction.getUserProfileImg(context: context).then((image) {
       setState(() {
-        uint8listImage = image;
+        profileImage = image;
         isOverlay = false;
       });
     });
@@ -146,50 +145,18 @@ class ProfilePagePageState extends BaseState<ProfilePagePage> {
             SizedBox(height: 15),
             new Divider(),
             SizedBox(height: 15),
-            titleAndData('Mobile no. : ', CacheData.userInfo.mobile),
+            CommonFunction.titleAndData(context,'Mobile no. : ', CacheData.userInfo.mobile),
             SizedBox(height: 15),
-            titleAndData(
+            CommonFunction.titleAndData(context,
                 'Email id : ',
                 CacheData.userInfo.email != null
                     ? CacheData.userInfo.email
                     : ""),
             SizedBox(height: 15),
-            titleAndData('Center : ', CacheData.userInfo.center),
+            CommonFunction.titleAndData(context,'Center : ', CacheData.userInfo.center),
           ],
         ),
       ),
-    );
-  }
-
-  Widget titleAndData(String title, String data) {
-    return new Column(
-      children: <Widget>[
-        new Row(
-          children: <Widget>[
-            new Container(
-              width: MediaQuery.of(context).size.width / 4,
-              child: new Text(
-                title,
-                textScaleFactor: 1.1,
-                style: TextStyle(
-                  color: kQuizMain50,
-                ),
-              ),
-            ),
-            new Container(
-              width: MediaQuery.of(context).size.width / 2.5,
-              child: new Text(
-                data,
-                overflow: TextOverflow.fade,
-                textScaleFactor: 1.2,
-                style: TextStyle(
-                  color: kQuizMain400,
-                ),
-              ),
-            )
-          ],
-        ),
-      ],
     );
   }
 
@@ -222,7 +189,7 @@ class ProfilePagePageState extends BaseState<ProfilePagePage> {
             new Row(
               children: <Widget>[
                 _scoreData(
-                    'Points', '\$' + CacheData.userState.totalscore.toString()),
+                    'Points', CacheData.userState.totalscore.toString()),
                 CustomVerticalDivider(height: 60),
                 _scoreData('Lives', CacheData.userState.lives.toString()),
               ],
@@ -267,7 +234,7 @@ class ProfilePagePageState extends BaseState<ProfilePagePage> {
   }
 
   Widget _userAvatar() {
-    return ImageInput(onImagePicked: onImagePicked, base64Image: uint8listImage);
+    return ImageInput(onImagePicked: onImagePicked, image: profileImage);
   }
 
   void onImagePicked(File image) async {
@@ -279,7 +246,7 @@ class ProfilePagePageState extends BaseState<ProfilePagePage> {
       AppResponse appResponse = ResponseParser.parseResponse(context: context, res: res);
       if (appResponse.status == WSConstant.SUCCESS_CODE) {
         setState(() {
-          uint8listImage = image.readAsBytesSync();
+          profileImage = Image(image: AssetImage(image.path));
         });
         await AppSharedPrefUtil.saveProfileImage(base64Encode(image.readAsBytesSync()));
       }

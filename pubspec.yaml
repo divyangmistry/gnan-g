@@ -71,6 +71,7 @@ flutter:
     - images/face.jpg
     - images/rank2.jpg
     - images/rank3.jpg
+    - assets/audio/music/background_music.mp3
     - assets/audio/music/CV-01Trimantra.mp3
     - assets/audio/music/Pac man dies.mp3
     - assets/audio/music/party_horn-Mike_Koenig-76599891.mp3

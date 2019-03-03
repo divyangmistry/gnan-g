@@ -5,6 +5,7 @@ import 'package:GnanG/UI/others/feedback.dart';
 import 'package:GnanG/UI/profile.dart';
 import 'package:GnanG/UI/puzzle/main.dart';
 import 'package:GnanG/no-internet-page.dart';
+import 'package:GnanG/utils/app_setting_util.dart';
 import 'package:flutter/material.dart';
 
 import 'UI/auth/forgot_password.dart';
@@ -34,6 +35,7 @@ class _QuizAppState extends State<QuizApp> {
   @override
   void initState() {
     super.initState();
+    AppSetting.startBackgroundMusic();
   }
 
   @override

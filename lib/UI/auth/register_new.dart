@@ -195,7 +195,7 @@ class RegisterPage2State extends BaseState<RegisterPage2> {
       color: Colors.grey[50],
       elevation: 4,
       child: new Padding(
-        padding: EdgeInsets.all(30),
+        padding: EdgeInsets.all(20),
         child: new Column(
           children: <Widget>[
             Text(
@@ -203,41 +203,16 @@ class RegisterPage2State extends BaseState<RegisterPage2> {
               textScaleFactor: 1.5,
             ),
             SizedBox(height: 30),
-            titleAndData('Name : ', widget.userData.name),
+            CommonFunction.titleAndData(context,'Name : ', widget.userData.name),
             SizedBox(height: 15),
-            titleAndData('Mobile no. : ', widget.userData.mobile),
+            CommonFunction.titleAndData(context,'Mobile no. : ', widget.userData.mobile),
             SizedBox(height: 15),
-            titleAndData('Email id : ', widget.userData.email),
+            CommonFunction.titleAndData(context,'Email id : ', widget.userData.email),
             SizedBox(height: 15),
-            titleAndData('Center : ', widget.userData.center),
+            CommonFunction.titleAndData(context,'Center : ', widget.userData.center),
           ],
         ),
       ),
-    );
-  }
-
-  Widget titleAndData(String title, String data) {
-    return new Column(
-      children: <Widget>[
-        new Row(
-          children: <Widget>[
-            new Container(
-              width: MediaQuery.of(context).size.width / 3,
-              child: new Text(
-                title,
-                textScaleFactor: 1.1,
-                style: TextStyle(
-                  color: kQuizMain50,
-                ),
-              ),
-            ),
-            new Text(
-              data,
-              textScaleFactor: 1.2,
-            ),
-          ],
-        ),
-      ],
     );
   }
 }

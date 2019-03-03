@@ -48,7 +48,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
   int selectedAnsIndex = -1;
   ApiService _api = new ApiService();
   CurrentState currentState;
-  Uint8List image;
+  Image image;
 
   @override
   void initState() {
@@ -75,19 +75,52 @@ class MainGamePageState extends BaseState<MainGamePage> {
       res = await _api.getQuestions(
           level: widget.level.levelIndex, from: currentState.questionSt);
     }
-    AppResponse appResponse =
-        ResponseParser.parseResponse(context: context, res: res);
+    AppResponse appResponse = ResponseParser.parseResponse(context: context, res: res);
     if (appResponse.status == 200) {
-      questions = Question.fromJsonArray(appResponse.data);
-      print(questions);
-      setState(() {
-        question = questions.getRange(0, 1).first;
-        currentQueIndex = 0;
-        isLoading = false;
-      });
+      bool isLoadQuestion = true;
+      if(widget.isBonusLevel) {
+          if(isBonusCompleted(appResponse)) {
+            isLoadQuestion = false;
+            isLoading = false;
+          }
+      }
+      if(isLoadQuestion) {
+        questions = Question.fromJsonArray(appResponse.data);
+        print(questions);
+        setState(() {
+          if(questions.length > 0) {
+            question = questions.getRange(0, 1).first;
+            currentQueIndex = 0;
+          } else {
+            CommonFunction.alertDialog(
+                context: context,
+                msg: 'There is no any question',
+                barrierDismissible: false,
+                doneButtonFn: () {
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                });
+          }
+          isLoading = false;
+        });
+      }
     }
   }
 
+  bool isBonusCompleted(AppResponse appResponse) {
+    if(appResponse.data is Map && appResponse.data['msg'] != null) {
+      CommonFunction.alertDialog(
+          context: context,
+          msg: appResponse.data['msg'],
+          barrierDismissible: false,
+          doneButtonFn: () {
+            Navigator.pop(context);
+            Navigator.pop(context);
+          });
+      return true;
+    }
+    return false;
+  }
   void onOKButtonClick(bool isCompletedLevel) {
     Navigator.pop(context);
     setState(() {
@@ -107,6 +140,28 @@ class MainGamePageState extends BaseState<MainGamePage> {
         question =
             questions.getRange(currentQueIndex, currentQueIndex + 1).first;
       });
+    } else {
+      CommonFunction.alertDialog(
+          context: context,
+          msg: (widget.isBonusLevel)
+              ? "All Question of Daily Bonus is completed !!"
+              : 'Level ' + question.level.toString() + ' completed !! ',
+          barrierDismissible: false,
+          type: 'success',
+          doneButtonFn: () async {
+            Navigator.pop(context);
+            setState(() {
+              isOverlay = true;
+            });
+            bool result = await CommonFunction.loadUserState(
+                context, CacheData.userInfo.mhtId);
+            setState(() {
+              isOverlay = false;
+            });
+            if (result) {
+              Navigator.pop(context);
+            }
+          });
     }
   }
 
@@ -123,31 +178,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
         _loadNextQuestion();
       } else {
         if (isGivenCorrectAns) {
-          if (currentQueIndex == questions.length - 1) {
-            CommonFunction.alertDialog(
-                context: context,
-                msg: (widget.isBonusLevel)
-                    ? "All Question of Today's Challange is completed !!"
-                    : 'Level ' + question.level.toString() + ' completed !! ',
-                barrierDismissible: false,
-                type: 'success',
-                doneButtonFn: () async {
-                  Navigator.pop(context);
-                  setState(() {
-                    isOverlay = true;
-                  });
-                  bool result = await CommonFunction.loadUserState(
-                      context, CacheData.userInfo.mhtId);
-                  setState(() {
-                    isOverlay = false;
-                  });
-                  if (result) {
-                    Navigator.pop(context);
-                  }
-                });
-          } else {
             _loadNextQuestion();
-          }
         } else {
           if (CacheData.userState.lives == 1) {
             CommonFunction.alertDialog(
@@ -190,18 +221,20 @@ class MainGamePageState extends BaseState<MainGamePage> {
               children: <Widget>[
                 GameTitleBar(
                   title: (widget.isBonusLevel)
-                      ? "Today's Challange"
+                      ? "Daily Bonus"
                       : widget.level.name,
-                  questionNumber: question.questionSt,
+                  questionNumber: question != null ? question.questionSt : 1,
                   totalQuestion: getTotalQuestion(),
                 ),
                 SizedBox(
                   height: 15,
                 ),
                 Expanded(
-                    child: question.questionType == "MCQ"
+                    child: question != null ? question.questionType == "MCQ"
                         ? new MCQ(question, validateAnswer, hiddenOptionIndex)
-                        : new Pikachar(null, null))
+                        : new Pikachar(null, null)
+                        : new Container()
+                )
               ],
             ),
           ),
@@ -225,6 +258,9 @@ class MainGamePageState extends BaseState<MainGamePage> {
   }
 
   int getTotalQuestion() {
+    if(widget.isBonusLevel) {
+      return questions.getRange(questions.length - 1, questions.length).first.questionSt;
+    }
     int totalQuestion = -1;
     List<QuizLevel> levelInfos = CacheData.userState.quizLevels;
     for (final quizLevel in levelInfos) {
@@ -233,6 +269,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
         break;
       }
     }
+
     return totalQuestion;
   }
 
@@ -401,7 +438,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
                     color: kQuizMain50,
                     image: DecorationImage(
                       fit: BoxFit.fill,
-                      image: image != null ? MemoryImage(image) : AssetImage(AppConstant.DEFAULT_USER_IMG_PATH),
+                      image: image.image,
                     ),
                   ),
                 ),
