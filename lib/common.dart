@@ -1,27 +1,26 @@
 import 'dart:convert';
-import 'dart:typed_data';
 
+import 'package:GnanG/Service/apiservice.dart';
 import 'package:GnanG/constans/appconstant.dart';
+import 'package:GnanG/constans/message_constant.dart';
 import 'package:GnanG/constans/sharedpref_constant.dart';
+import 'package:GnanG/constans/wsconstants.dart';
 import 'package:GnanG/main.dart';
+import 'package:GnanG/model/appresponse.dart';
+import 'package:GnanG/model/cacheData.dart';
 import 'package:GnanG/model/user_score_state.dart';
 import 'package:GnanG/model/user_state.dart';
 import 'package:GnanG/model/userinfo.dart';
 import 'package:GnanG/notification/notifcation_setup.dart';
 import 'package:GnanG/utils/appsharedpref.dart';
+import 'package:GnanG/utils/response_parser.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
-import 'package:GnanG/Service/apiservice.dart';
-import 'package:GnanG/constans/message_constant.dart';
-import 'package:GnanG/constans/wsconstants.dart';
-import 'package:GnanG/model/appresponse.dart';
-import 'package:GnanG/model/cacheData.dart';
-import 'package:GnanG/utils/response_parser.dart';
-import 'package:path/path.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'colors.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:http/http.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'colors.dart';
 
 // For override color for Form input
 class AccentColorOverride extends StatelessWidget {
@@ -78,6 +77,33 @@ class BackgroundGredient extends StatelessWidget {
           colors: [
             kBackgroundGrediant1,
             kBackgroundGrediant2,
+          ],
+        ),
+      ),
+      child: child,
+    );
+  }
+}
+
+// Gredient APP background
+class BackgroundGredientGame extends StatelessWidget {
+  final Widget child;
+
+  BackgroundGredientGame({@required this.child}) : assert(child != null);
+
+  @override
+  Widget build(BuildContext context) {
+    return new Container(
+      height: MediaQuery.of(context).size.height,
+      width: MediaQuery.of(context).size.width,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          stops: [0.1, 0.9],
+          colors: [
+            kBackgroundGrediant3,
+            kBackgroundGrediant4,
           ],
         ),
       ),

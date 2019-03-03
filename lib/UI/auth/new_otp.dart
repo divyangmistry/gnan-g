@@ -35,14 +35,14 @@ class OtpVerifyPageState extends BaseState<OtpVerifyPage> {
           child: new ListView(
             padding: EdgeInsets.symmetric(horizontal: 30.0),
             children: <Widget>[
-              new SizedBox(height: 40.0),
+              new SizedBox(height: 20.0),
               new Column(
                 children: <Widget>[
                   new Image.asset(
                     'images/logo1.png',
-                    height: 150,
+                    height: 200,
                   ),
-                  new SizedBox(height: 30.0),
+                  new SizedBox(height: 5.0),
                   new Text(
                     'VERIFY OTP',
                     textScaleFactor: 1.5,

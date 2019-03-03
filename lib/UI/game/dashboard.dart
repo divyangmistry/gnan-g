@@ -1,13 +1,13 @@
-import 'package:GnanG/UI/game/fab_animated_button.dart';
+import 'package:GnanG/Service/apiservice.dart';
 import 'package:GnanG/UI/game/mainGame.dart';
 import 'package:GnanG/colors.dart';
+import 'package:GnanG/common.dart';
+import 'package:GnanG/model/cacheData.dart';
 import 'package:GnanG/utils/app_setting_util.dart';
 import 'package:GnanG/utils/appsharedpref.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
-import 'package:GnanG/common.dart';
-import 'package:GnanG/Service/apiservice.dart';
-import 'package:GnanG/model/cacheData.dart';
+
 import '../../common.dart';
 
 class DashboardPage extends StatefulWidget {
@@ -85,7 +85,7 @@ class DashboardPageState extends State<DashboardPage> {
         Navigator.pushNamed(context, '/profile');
       },
       child: _gameMenu(
-          Colors.lime.shade500,
+          Colors.deepPurple.shade300,
           Container(
             height: 180,
             width: 150,
@@ -104,7 +104,7 @@ class DashboardPageState extends State<DashboardPage> {
         Navigator.pushNamed(context, '/leaderboard');
       },
       child: _gameMenu(
-          Colors.green.shade400,
+          Colors.pinkAccent.shade100,
           Container(
             decoration: BoxDecoration(shape: BoxShape.circle),
             height: 100,
@@ -125,7 +125,7 @@ class DashboardPageState extends State<DashboardPage> {
         Navigator.pushNamed(context, '/level_new');
       },
       child: _gameMenu(
-          Colors.pinkAccent.shade100,
+          Colors.green.shade400,
           Container(
             height: 150,
             width: 150,
@@ -194,7 +194,7 @@ class DashboardPageState extends State<DashboardPage> {
         color: color,
         boxShadow: [
           BoxShadow(
-              color: Colors.grey.shade900, blurRadius: 10.0, spreadRadius: 1.0)
+              color: Colors.grey.shade600, blurRadius: 5.0, spreadRadius: 1.0)
         ],
         borderRadius: BorderRadius.all(
           Radius.circular(20.0),
@@ -221,37 +221,20 @@ class DashboardPageState extends State<DashboardPage> {
 
   Widget titleBar() {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Container(
-          child: new RaisedButton(
-            padding: EdgeInsets.all(10),
-            shape: CircleBorder(),
-            onPressed: () {
-              CommonFunction.alertDialog(
-                context: context,
-                msg: 'Do you want to exit Gnan-G ?',
-                showCancelButton: true,
-                doneButtonText: 'Yes',
-                doneButtonFn: () {
-                  Navigator.pop(context);
-                  Navigator.pop(context);
-                },
-              );
-            },
-            child: Icon(
-              Icons.close,
-              size: 25,
-              color: kQuizSurfaceWhite,
-            ),
-          ),
+          width: 70,
         ),
-        new Container(
-          child: Center(
+        Expanded(
+          child: new Container(
+//          width: MediaQuery.of(context).size.width,
             child: Center(
-              child: Image.asset(
-                'images/logo1.png',
-                height: 70.0,
+              child: Center(
+                child: Image.asset(
+                  'images/logo1.png',
+                  height: 100.0,
+                ),
               ),
             ),
           ),
@@ -282,11 +265,12 @@ class DashboardPageState extends State<DashboardPage> {
   }
 
   void toggleMuteSound() async {
-    await AppSharedPrefUtil.saveMuteEnabled(!await AppSharedPrefUtil.isMuteEnabled());
+    await AppSharedPrefUtil.saveMuteEnabled(
+        !await AppSharedPrefUtil.isMuteEnabled());
     AppSharedPrefUtil.isMuteEnabled().then((isMute) {
       setState(() {
         isMuteEnabled = isMute;
-        if(!isMuteEnabled)
+        if (!isMuteEnabled)
           AppSetting.startBackgroundMusic();
         else
           AppSetting.stopBackgroundMusic();

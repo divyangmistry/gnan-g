@@ -26,7 +26,7 @@ class MCQState extends State<MCQ> {
             ((widget.question != null) ? widget.question.question : ''),
             textAlign: TextAlign.center,
             style: TextStyle(
-              color: kQuizBackgroundWhite,
+              color: kQuizMain400,
               height: 1.5,
             ),
             textScaleFactor: 1.6,
@@ -87,7 +87,7 @@ class MCQState extends State<MCQ> {
               child: Icon(
                 Icons.check_circle,
                 size: 25,
-                color: kQuizBackgroundWhite,
+                color: kQuizMain500,
               ),
             )
                 : new Container(),
@@ -97,14 +97,14 @@ class MCQState extends State<MCQ> {
                 textScaleFactor: 1.1,
                 style: TextStyle(
                   color:
-                  selectedIndex == index ? kQuizBackgroundWhite : kQuizMain400,
+                  selectedIndex == index ? kQuizBackgroundWhite : kQuizBackgroundWhite,
                 ),
                 textAlign: TextAlign.center,
               ),
             ),
           ],
         ),
-        color: selectedIndex == index ? kQuizMain400 : kQuizBackgroundWhite,
+        color: selectedIndex == index ? kQuizMain400 : kQuizMain500,
       )
           : new Container(
         height: 50,

@@ -1,8 +1,10 @@
-import 'package:GnanG/model/question.dart';
-import 'package:flutter/material.dart';
-import '../../colors.dart';
 import 'dart:math';
+
+import 'package:GnanG/model/question.dart';
 import 'package:collection/collection.dart';
+import 'package:flutter/material.dart';
+
+import '../../colors.dart';
 
 class Pikachar extends StatefulWidget {
   String questText;
@@ -125,12 +127,12 @@ class _PikacharState extends State<Pikachar> {
 
   Widget question() {
     return new Container(
-      padding: EdgeInsets.fromLTRB(20, 150, 20, 0),
+      padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
       child: Text(
         widget.questText,
         textAlign: TextAlign.center,
         style: TextStyle(
-          color: kQuizBackgroundWhite,
+          color: kQuizMain400,
         ),
         textScaleFactor: 2,
       ),

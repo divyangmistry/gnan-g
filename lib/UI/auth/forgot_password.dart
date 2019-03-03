@@ -1,13 +1,13 @@
-import 'dart:convert';
-import 'package:flutter/material.dart';
-import 'package:http/http.dart';
 import 'package:GnanG/model/appresponse.dart';
 import 'package:GnanG/model/signupsession.dart';
 import 'package:GnanG/utils/response_parser.dart';
-import '../../UI/auth/new_otp.dart';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart';
+
 import '../../Service/apiservice.dart';
-import '../../common.dart';
+import '../../UI/auth/new_otp.dart';
 import '../../colors.dart';
+import '../../common.dart';
 
 class ForgotPassword extends StatefulWidget {
   @override
@@ -34,14 +34,14 @@ class ForgotPasswordState extends State<ForgotPassword> {
           child: new ListView(
             padding: EdgeInsets.symmetric(horizontal: 30.0),
             children: <Widget>[
-              new SizedBox(height: 40.0),
+              new SizedBox(height: 20.0),
               new Column(
                 children: <Widget>[
                   new Image.asset(
                     'images/logo1.png',
-                    height: 150,
+                    height: 200,
                   ),
-                  new SizedBox(height: 30.0),
+                  new SizedBox(height: 5.0),
                   new Text(
                     'FORGOT PASSWORD',
                     textScaleFactor: 1.5,

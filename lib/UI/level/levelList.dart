@@ -1,8 +1,9 @@
-import 'package:flutter/material.dart';
 import 'package:GnanG/model/cacheData.dart';
+import 'package:flutter/material.dart';
+
 import '../../colors.dart';
-import 'levelRow.dart';
 import '../../common.dart';
+import 'levelRow.dart';
 // import 'package:flame/flame.dart';
 
 class NewLevelPage extends StatefulWidget {
@@ -34,16 +35,15 @@ class NewLevelPageState extends State<NewLevelPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                new RaisedButton(
-                  padding: EdgeInsets.all(10),
-                  shape: CircleBorder(),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: Icon(
-                    Icons.close,
-                    size: 25,
-                    color: kQuizSurfaceWhite,
+                Container(
+                  child: IconButton(
+                    icon: Icon(
+                      Icons.arrow_back,
+                      color: kQuizMain400,
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
                   ),
                 ),
                 new Text(
@@ -51,7 +51,7 @@ class NewLevelPageState extends State<NewLevelPage> {
                   textScaleFactor: 1.5,
                   style: TextStyle(
                       fontWeight: FontWeight.w800,
-                      color: kQuizSurfaceWhite,
+                      color: kQuizMain500,
                       letterSpacing: 4),
                 ),
                 CommonFunction.pointsUI(

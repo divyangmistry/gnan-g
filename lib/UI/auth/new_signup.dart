@@ -21,7 +21,7 @@ class SignUpPage extends StatefulWidget {
 class SignUpPageState extends BaseState<SignUpPage> {
   final _formIndiaKey = GlobalKey<FormState>();
   final _formOtherKey = GlobalKey<FormState>();
-  final _tabs = <Tab>[Tab(text: 'India'), Tab(text: 'Rest of India')];
+  final _tabs = <Tab>[Tab(text: 'India'), Tab(text: 'Rest of World')];
   bool _autoValidate = false;
   ApiService _api = new ApiService();
   String _mhtId;
@@ -34,8 +34,10 @@ class SignUpPageState extends BaseState<SignUpPage> {
       length: _tabs.length,
       child: new Scaffold(
         backgroundColor: kQuizSurfaceWhite,
-        body: TabBarView(
-          children: <Widget>[_indiaSignupPage(), _otherSignupPage()],
+        body: new BackgroundGredient(
+            child: TabBarView(
+              children: <Widget>[_indiaSignupPage(), _otherSignupPage()],
+            ),
         ),
       ),
     );
@@ -84,14 +86,14 @@ class SignUpPageState extends BaseState<SignUpPage> {
   Widget _titleAndLogo() {
     return Column(
       children: <Widget>[
-        new SizedBox(height: 40.0),
+        new SizedBox(height: 20.0),
         new Column(
           children: <Widget>[
             new Image.asset(
               'images/logo1.png',
-              height: 150,
+              height: 200,
             ),
-            new SizedBox(height: 30.0),
+            new SizedBox(height: 5.0),
             new Text(
               'SIGN UP',
               textScaleFactor: 1.5,
@@ -105,8 +107,14 @@ class SignUpPageState extends BaseState<SignUpPage> {
           height: 25.0,
         ),
         new Container(
-          child: TabBar(tabs: _tabs),
-          color: Colors.blue.shade50,
+//          child: TabBar(tabs: _tabs),
+          decoration: BoxDecoration(
+            //This is for background color
+              color: Colors.white.withOpacity(0.0),
+              //This is for bottom border that is needed
+              border: Border(bottom: BorderSide(color: Colors.red, width: 0.8),),),
+          child: TabBar(tabs: _tabs, indicatorColor: kQuizMain400),
+//          color: Colors.red.shade50,
         ),
         new SizedBox(
           height: 25.0,

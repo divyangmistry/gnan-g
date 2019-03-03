@@ -19,8 +19,8 @@ class GameTitleBar extends StatelessWidget {
           Container(
             child: IconButton(
               icon: Icon(
-                Icons.close,
-                color: kQuizSurfaceWhite,
+                Icons.arrow_back,
+                color: kQuizMain400,
               ),
               onPressed: () {
                 // Flame.audio.clear('music/bensound-epic.mp3');
@@ -35,21 +35,15 @@ class GameTitleBar extends StatelessWidget {
                 Text(
                   title.toUpperCase(),
                   textScaleFactor: 1.2,
-                  style: TextStyle(color: kQuizSurfaceWhite),
+                  style: TextStyle(color: kQuizMain500),
                 ),
                 questionNumber != null
                     ? Row(
                         children: <Widget>[
                           Text(
-                            "Question: ",
-                            textScaleFactor: 0.9,
-                            style: TextStyle(color: kQuizSurfaceWhite),
-                          ),
-                          SizedBox(height: 1,),
-                          Text(
-                            questionNumber.toString() + " of " + totalQuestion.toString(),
+                            questionNumber.toString() + " / " + totalQuestion.toString(),
                             textScaleFactor: 1.2,
-                            style: TextStyle(color: kQuizSurfaceWhite),
+                            style: TextStyle(color: kQuizMain500),
                           )
                         ],
                       )

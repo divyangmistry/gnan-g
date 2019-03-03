@@ -33,18 +33,19 @@ class LoginPageState extends BaseState<LoginPage> {
       autovalidate: _autoValidate,
       child: new Scaffold(
         backgroundColor: kQuizSurfaceWhite,
-        body: SafeArea(
+        body: BackgroundGredient(
+          child: SafeArea(
             child: new ListView(
               padding: EdgeInsets.symmetric(horizontal: 30.0),
               children: <Widget>[
-                new SizedBox(height: 40.0),
+                new SizedBox(height: 20.0),
                 new Column(
                   children: <Widget>[
                     new Image.asset(
                       'images/logo1.png',
-                      height: 150,
+                      height: 200,
                     ),
-                    new SizedBox(height: 30.0),
+                    new SizedBox(height: 5.0),
                     new Text(
                       'SIGN IN',
                       textScaleFactor: 1.5,
@@ -100,7 +101,7 @@ class LoginPageState extends BaseState<LoginPage> {
                               ? Icons.visibility_off
                               : Icons.visibility,
                           semanticLabel:
-                              _obscureText ? 'show password' : 'hide password',
+                          _obscureText ? 'show password' : 'hide password',
                           color: kQuizBrown900,
                         ),
                       ),
@@ -130,6 +131,7 @@ class LoginPageState extends BaseState<LoginPage> {
               ],
             ),
           ),
+        )
       ),
     );
   }

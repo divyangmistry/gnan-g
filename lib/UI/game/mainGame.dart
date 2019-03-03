@@ -1,11 +1,9 @@
 import 'dart:math';
-import 'dart:typed_data';
 
 import 'package:GnanG/Service/apiservice.dart';
 import 'package:GnanG/UI/game/mcq.dart';
 import 'package:GnanG/UI/game/title_bar.dart';
 import 'package:GnanG/UI/widgets/base_state.dart';
-import 'package:GnanG/constans/appconstant.dart';
 import 'package:GnanG/constans/wsconstants.dart';
 import 'package:GnanG/model/appresponse.dart';
 import 'package:GnanG/model/cacheData.dart';
@@ -75,20 +73,21 @@ class MainGamePageState extends BaseState<MainGamePage> {
       res = await _api.getQuestions(
           level: widget.level.levelIndex, from: currentState.questionSt);
     }
-    AppResponse appResponse = ResponseParser.parseResponse(context: context, res: res);
+    AppResponse appResponse =
+        ResponseParser.parseResponse(context: context, res: res);
     if (appResponse.status == 200) {
       bool isLoadQuestion = true;
-      if(widget.isBonusLevel) {
-          if(isBonusCompleted(appResponse)) {
-            isLoadQuestion = false;
-            isLoading = false;
-          }
+      if (widget.isBonusLevel) {
+        if (isBonusCompleted(appResponse)) {
+          isLoadQuestion = false;
+          isLoading = false;
+        }
       }
-      if(isLoadQuestion) {
+      if (isLoadQuestion) {
         questions = Question.fromJsonArray(appResponse.data);
         print(questions);
         setState(() {
-          if(questions.length > 0) {
+          if (questions.length > 0) {
             question = questions.getRange(0, 1).first;
             currentQueIndex = 0;
           } else {
@@ -108,7 +107,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
   }
 
   bool isBonusCompleted(AppResponse appResponse) {
-    if(appResponse.data is Map && appResponse.data['msg'] != null) {
+    if (appResponse.data is Map && appResponse.data['msg'] != null) {
       CommonFunction.alertDialog(
           context: context,
           msg: appResponse.data['msg'],
@@ -121,6 +120,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
     }
     return false;
   }
+
   void onOKButtonClick(bool isCompletedLevel) {
     Navigator.pop(context);
     setState(() {
@@ -178,7 +178,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
         _loadNextQuestion();
       } else {
         if (isGivenCorrectAns) {
-            _loadNextQuestion();
+          _loadNextQuestion();
         } else {
           if (CacheData.userState.lives == 1) {
             CommonFunction.alertDialog(
@@ -220,9 +220,8 @@ class MainGamePageState extends BaseState<MainGamePage> {
             child: new Column(
               children: <Widget>[
                 GameTitleBar(
-                  title: (widget.isBonusLevel)
-                      ? "Daily Bonus"
-                      : widget.level.name,
+                  title:
+                      (widget.isBonusLevel) ? "Daily Bonus" : widget.level.name,
                   questionNumber: question != null ? question.questionSt : 1,
                   totalQuestion: getTotalQuestion(),
                 ),
@@ -230,9 +229,15 @@ class MainGamePageState extends BaseState<MainGamePage> {
                   height: 15,
                 ),
                 Expanded(
-                    child: question != null ? question.questionType == "MCQ"
-                        ? new MCQ(question, validateAnswer, hiddenOptionIndex)
-                        : new Pikachar(question.question, question.jumbledata, question.pikacharAnswer, validateAnswer)
+                    child: question != null
+                        ? question.questionType == "MCQ"
+                            ? new MCQ(
+                                question, validateAnswer, hiddenOptionIndex)
+                            : new Pikachar(
+                                question.question,
+                                question.jumbledata,
+                                question.pikacharAnswer,
+                                validateAnswer)
                         : new Container())
               ],
             ),
@@ -245,6 +250,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
       floatingActionButton: !widget.isBonusLevel
           ? CacheData.userState.lives <= 1
               ? FloatingActionButton.extended(
+                  backgroundColor: kQuizBrown900,
                   icon: Icon(Icons.help_outline),
                   label: Text('Get Hint'),
                   onPressed: _getHint,
@@ -257,8 +263,11 @@ class MainGamePageState extends BaseState<MainGamePage> {
   }
 
   int getTotalQuestion() {
-    if(widget.isBonusLevel) {
-      return questions.getRange(questions.length - 1, questions.length).first.questionSt;
+    if (widget.isBonusLevel) {
+      return questions
+          .getRange(questions.length - 1, questions.length)
+          .first
+          .questionSt;
     }
     int totalQuestion = -1;
     List<QuizLevel> levelInfos = CacheData.userState.quizLevels;
@@ -327,7 +336,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
 
   Widget _buildbottomNavigationBar() {
     return BottomAppBar(
-      color: kBackgroundGrediant1,
+      color: kQuizMain400,
       elevation: 10.0,
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 10),
@@ -604,7 +613,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
       child: Column(
         children: <Widget>[
           FlatButton(
-            color: Colors.blue[100],
+            color: Colors.red.shade100,
             padding: EdgeInsets.all(15),
             shape: CircleBorder(),
             child: Icon(
