@@ -1,12 +1,10 @@
 import 'dart:io';
 
+import 'package:GnanG/UI/puzzle/play_games.dart';
+import 'package:GnanG/UI/puzzle/widgets/game/page.dart';
 import 'package:GnanG/common.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:GnanG/UI/puzzle/config/ui.dart';
-import 'package:GnanG/UI/puzzle/play_games.dart';
-import 'package:GnanG/UI/puzzle/widgets/game/page.dart';
 
 class GameOfFifteen extends StatelessWidget {
   @override
@@ -23,7 +21,7 @@ class GameOfFifteen extends StatelessWidget {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final title = 'Game of Fifteen';
+    final title = 'Gnan-G';
     if (Platform.isIOS) {
       return _MyCupertinoApp(title: title);
     } else {

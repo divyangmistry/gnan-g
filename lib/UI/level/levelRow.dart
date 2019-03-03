@@ -2,6 +2,7 @@ import 'package:GnanG/UI/game/mainGame.dart';
 import 'package:GnanG/UI/puzzle/main.dart';
 import 'package:GnanG/common.dart';
 import 'package:GnanG/model/cacheData.dart';
+import 'package:GnanG/model/user_state.dart';
 import 'package:flutter/material.dart';
 
 import '../../colors.dart';
@@ -30,6 +31,15 @@ class LevelCardRow extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  bool isCompleted(int levelIndex) {
+    List<CompletedLevel> completedLevels = CacheData.userState.completed;
+    for(CompletedLevel completedLevel in completedLevels) {
+      if(completedLevel.level == levelIndex)
+        return true;
+    }
+    return false;
   }
 
   Widget levelCard() {
@@ -132,7 +142,7 @@ class LevelCardRow extends StatelessWidget {
               );
             } else {
               CommonFunction.alertDialog(
-                  context: context, msg: 'This level is lock for you');
+                  context: context, msg: isCompleted(levelDetails.levelIndex) ? 'Hooray !!  You have already cleared this level' : 'This level is lock for you');
             }
           } else {
             if (CacheData.userState.totalscore > 100) {
