@@ -1,7 +1,7 @@
 import 'package:GnanG/utils/appsharedpref.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flame/flame.dart';
-import 'package:launch_review/launch_review.dart';
+//import 'package:launch_review/launch_review.dart';
 
 class AppUtils {
   static Future<bool> isInternetConnected() async {
@@ -34,7 +34,7 @@ class AppUtils {
   }
 
   static void launchPlaystoreApp(String appId) {
-    LaunchReview.launch(androidAppId: "org.dadabhagwan.AKonnect",
-        iOSAppId: "585027354");
+//    LaunchReview.launch(androidAppId: "org.dadabhagwan.AKonnect",
+//        iOSAppId: "585027354");
   }
 }
