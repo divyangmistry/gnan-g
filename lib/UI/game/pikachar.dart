@@ -139,9 +139,7 @@ class _PikacharState extends State<Pikachar> {
   }
 
   Widget optionTiles() {
-    return new Column(
-      children: createOptionRows(),
-    );
+    return optionRow(0);
   }
 
   List<Widget> createOptionRows() {
@@ -156,17 +154,21 @@ class _PikacharState extends State<Pikachar> {
   Widget optionRow(int i) {
     return Container(
       padding: EdgeInsets.all(20),
-      child: Row(
-        children: createOptionTiles(i),
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-      ),
-    );
+      child:
+            Wrap(
+              alignment: WrapAlignment.center,
+              children: createOptionTiles(i),
+//              mainAxisAlignment: MainAxisAlignment.spaceAround,
+            )
+      );
   }
 
   List<Widget> createOptionTiles(int startingIndex) {
     List<Widget> tempOpTiles = List();
     for (int i = startingIndex;
-    i < _optionChars.length && i < startingIndex + rowTilesLimit;
+    i < _optionChars.length
+//      && i < startingIndex + rowTilesLimit
+    ;
     i++) {
       var opTile = optionTile(i, _optionChars[i]);
       opTiles.add(opTile);
