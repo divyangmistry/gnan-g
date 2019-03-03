@@ -72,7 +72,7 @@ class FabAnimatedButtonState extends State<FabAnimatedButton>
           backgroundColor: Colors.blue,
           label: 'About',
           labelStyle: TextStyle(fontSize: 18.0),
-          onTap: () => FeedbackPage(),
+          onTap: () => showPikacharAboutDialog(context),
         ),
         SpeedDialChild(
           child: _buildMuteIcon(),
@@ -230,3 +230,42 @@ class FabAnimatedButtonState extends State<FabAnimatedButton>
 //     controller.reverse();
 //   }
 // }
+
+void showPikacharAboutDialog(BuildContext context) {
+  final ThemeData themeData = Theme.of(context);
+  final TextStyle aboutTextStyle = themeData.textTheme.body2;
+
+  showAboutDialog(
+    context: context,
+    applicationVersion: 'v1.0.0',
+    applicationIcon: Image.asset(
+      "images/logo1.png",
+      height: 70,
+    ),
+    applicationLegalese: '© 2019 DBF',
+//    children: <Widget>[
+//      Padding(
+//        padding: const EdgeInsets.only(top: 24.0),
+//        child: RichText(
+//          text: TextSpan(
+//            children: <TextSpan>[
+//              TextSpan(
+//                style: aboutTextStyle,
+//                text: 'Flutter is an early-stage, open-source project to help developers '
+//                  'build high-performance, high-fidelity, mobile apps for '
+//                  'iOS and Android '
+//                  'from a single codebase. This gallery is a preview of '
+//                  "Flutter's many widgets, behaviors, animations, layouts, "
+//                  'and more. Learn more about Flutter'
+//              ),
+//              TextSpan(
+//                style: aboutTextStyle,
+//                text: '.',
+//              ),
+//            ],
+//          ),
+//        ),
+//      ),
+//    ],
+  );
+}
