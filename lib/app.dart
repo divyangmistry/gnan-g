@@ -19,6 +19,7 @@ import 'UI/game/simple_game.dart';
 import 'UI/level/levelList.dart';
 import 'UI/others/rules.dart';
 import 'UI/others/terms&condition.dart';
+import 'UI/others/about.dart';
 import 'UI/profile.dart';
 import 'colors.dart';
 
@@ -74,6 +75,7 @@ class _QuizAppState extends State<QuizApp> {
         '/leaderboard': (BuildContext context) => new LeaderBoard(),
         '/t&c': (BuildContext context) => new TermsAndConditionPage(),
         '/gameOf15': (BuildContext context) => new GameOfFifteen(),
+        '/about': (BuildContext context) => new About(),
       },
     );
   }
