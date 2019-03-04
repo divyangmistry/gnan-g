@@ -48,6 +48,7 @@ class LeaderBoardState extends BaseState<LeaderBoard> {
           print(leaderList);
           _userRank = leaders.userRank;
         });
+        loadPersonsImg();
       }
     } catch (err) {
       CommonFunction.displayErrorDialog(context: context, msg: err.toString());
@@ -56,6 +57,16 @@ class LeaderBoardState extends BaseState<LeaderBoard> {
       isLoading = false;
     });
 
+  }
+
+  void loadPersonsImg() async {
+    leaderList.forEach((leader) {
+        CommonFunction.getProfilePictureFromServer(context, leader.mhtId).then((base64Img) {
+          setState(() {
+            leader.img = base64Img;
+          });
+        });
+    });
   }
 
   Widget _buildLeaderRow(int rank, String name, int points, IconData icon,

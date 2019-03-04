@@ -354,15 +354,16 @@ class CommonFunction {
     Image userProfile;
     userProfile = await AppSharedPrefUtil.getProfileImage();
     if (userProfile == null)
-      userProfile = getImageFromBase64Img(base64Img: await _getProfilePictureFromServer(context));
-    if(userProfile == null)
+      userProfile = getImageFromBase64Img(base64Img: await getProfilePictureFromServer(context, CacheData.userInfo.mhtId));
+    if (userProfile == null)
       userProfile = Image(image: AssetImage(AppConstant.DEFAULT_USER_IMG_PATH));
     return userProfile;
   }
 
-  static Future<String> _getProfilePictureFromServer(BuildContext context) async {
+  static Future<String> getProfilePictureFromServer(
+      BuildContext context, int mhtId) async {
     String profileBase64Image;
-    Response res = await _api.getProfilePicture(mhtId: CacheData.userInfo.mhtId);
+    Response res = await _api.getProfilePicture(mhtId: mhtId);
     AppResponse appResponse = ResponseParser.parseResponse(context: context, res: res);
     if (appResponse.status == WSConstant.SUCCESS_CODE) {
       profileBase64Image = appResponse.data['image'];
@@ -374,7 +375,7 @@ class CommonFunction {
     Image image;
     if (base64Img != null)
       image = Image(image: MemoryImage(base64Decode(base64Img)));
-    if(returnDefault && image == null)
+    if (returnDefault && image == null)
       image = Image(image: AssetImage(AppConstant.DEFAULT_USER_IMG_PATH));
     return image;
   }
@@ -390,7 +391,9 @@ class CommonFunction {
     Function doneButtonFn,
     bool barrierDismissible = true,
     bool showCancelButton = false,
+    Function doneCancelFn,
     AlertDialog Function() builder,
+    bool displayImage = true,
   }) {
     showDialog(
       context: context,
@@ -403,14 +406,16 @@ class CommonFunction {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              Container(
-                height: 150,
-                width: 150,
-                child: FlareActor(
-                  'assets/animation/Teddy.flr',
-                  animation: type == 'success' ? "success" : 'fail',
-                ),
-              ),
+              displayImage
+                  ? Container(
+                      height: 150,
+                      width: 150,
+                      child: FlareActor(
+                        'assets/animation/Teddy.flr',
+                        animation: type == 'success' ? "success" : 'fail',
+                      ),
+                    )
+                  : Container(),
               SizedBox(
                 height: 20,
               ),
@@ -470,9 +475,11 @@ class CommonFunction {
                               )
                             ],
                           ),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
+                          onPressed: doneCancelFn != null
+                              ? doneCancelFn
+                              : () {
+                                  Navigator.pop(context);
+                                },
                         )
                       : new Container(),
                 ],

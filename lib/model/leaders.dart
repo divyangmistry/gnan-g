@@ -66,7 +66,7 @@ class Leaders {
     totalscore = json['totalscore'];
     updatedAt = json['updatedAt'];
     createdAt = json['createdAt'];
-    img = json['img'];
+    //img = json['img'];
   }
 
   Map<String, dynamic> toJson() {

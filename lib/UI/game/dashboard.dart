@@ -24,6 +24,12 @@ class DashboardPageState extends State<DashboardPage> {
   bool isMuteEnabled = false;
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    //Future.delayed(const Duration(seconds: 2), () => AppSetting.checkForNewAppUpdate(context));
+  }
+  @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return new Scaffold(
