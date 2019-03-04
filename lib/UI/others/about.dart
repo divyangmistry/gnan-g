@@ -33,7 +33,7 @@ class About extends StatelessWidget {
       ),
       body: ListView(
         children: <Widget>[
-          Image.asset('images/logo1.png',),
+          Image.asset('images/logo1.png', height: MediaQuery.of(context).size.height/2,),
           SizedBox(
             height: 20,
           ),
@@ -48,23 +48,23 @@ class About extends StatelessWidget {
                     Text(AppConstant.APP_VERSION),
                   ],
                 ),
-                SizedBox(height: 10),
+                SizedBox(height: 20),
                 Text("Links", style: TextStyle(fontSize: 18),),
-                SizedBox(height: 10),
+                SizedBox(height: 30),
                 Text("For any query email us @", style: TextStyle(fontSize: 14),),
                 SizedBox(height: 10),
                 _LinkText(
                   style: linkStyle,
                   text: "mbaapps@googlegroups.com",
-                  url: "mailto:mbaapps@googlegroups.com",
+                  url: "mailto:mbaapps@googlegroups.com?subject=Feedback of GnanG",
                 ),
-                SizedBox(height: 10),
+                SizedBox(height: 40),
                 Text("Send Bug Report to us with screenshots @", style: TextStyle(fontSize: 14),),
                 SizedBox(height: 10),
                 _LinkText(
                   style: linkStyle,
                   text: "mbaapps@googlegroups.com",
-                  url: "mailto:mbaapps@googlegroups.com",
+                  url: "mailto:mbaapps@googlegroups.com?subject=Bug Report of GnanG",
                 ),
               ],
             ),
