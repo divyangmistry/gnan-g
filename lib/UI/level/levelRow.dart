@@ -105,7 +105,7 @@ class LevelCardRow extends StatelessWidget {
                 ),
                 new SizedBox(width: 25),
                 new Text(
-                  'Max. Point : ',
+                  'Max. Points : ',
                   style: TextStyle(color: kQuizMain50),
                 ),
                 new Text(
@@ -141,8 +141,11 @@ class LevelCardRow extends StatelessWidget {
                 ),
               );
             } else {
+              bool isLevelCompleted = isCompleted(levelDetails.levelIndex);
               CommonFunction.alertDialog(
-                  context: context, msg: isCompleted(levelDetails.levelIndex) ? 'Hooray !!  You have already cleared this level' : 'This level is lock for you');
+                  context: context, msg: isLevelCompleted ? 'Hooray !!  You have already cleared this level' : 'This level is lock for you',
+                  type: isLevelCompleted ? "success" : 'error'
+                );
             }
           } else {
             if (CacheData.userState.totalscore > 100) {

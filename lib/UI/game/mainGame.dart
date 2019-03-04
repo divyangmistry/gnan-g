@@ -250,7 +250,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
       floatingActionButton: !widget.isBonusLevel
           ? CacheData.userState.lives <= 1
               ? FloatingActionButton.extended(
-                  backgroundColor: kQuizBrown900,
+                  backgroundColor: kQuizMain500,
                   icon: Icon(Icons.help_outline),
                   label: Text('Get Hint'),
                   onPressed: _getHint,
