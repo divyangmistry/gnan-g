@@ -105,7 +105,7 @@ class LevelCardRow extends StatelessWidget {
                 ),
                 new SizedBox(width: 25),
                 new Text(
-                  'Max. Point : ',
+                  'Max. Points : ',
                   style: TextStyle(color: kQuizMain50),
                 ),
                 new Text(
