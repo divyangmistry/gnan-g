@@ -345,7 +345,7 @@ class CommonFunction {
     _api.appendTokenToHeader(userInfo.token);
     await NotificationSetup.setupNotification(userInfo: userInfo, context: context);
     await CommonFunction.loadUserState(context, userInfo.mhtId);
-    await AppSharedPrefUtil.saveMuteEnabled(true);
+    await AppSharedPrefUtil.saveMuteEnabled(false);
     AppSetting.startBackgroundMusic();
     return true;
   }

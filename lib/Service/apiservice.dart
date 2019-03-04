@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:GnanG/constans/sharedpref_constant.dart';
 import 'package:GnanG/model/cacheData.dart';
 import 'package:GnanG/model/signupsession.dart';
+import 'package:GnanG/utils/app_setting_util.dart';
 import 'package:GnanG/utils/appsharedpref.dart';
 import 'package:http/http.dart';
 import 'package:http/http.dart' as http;
@@ -239,6 +240,7 @@ class ApiService {
   Future<void> logout() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.clear();
+    AppSetting.stopBackgroundMusic();
   }
 
   // Check Login Status

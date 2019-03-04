@@ -20,7 +20,7 @@ import 'package:GnanG/utils/response_parser.dart';
 class GamePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    //_puzzleCompletedApiCall(context);
+    _puzzleCompletedApiCall(context);
     final rootWidget = _buildRoot(context);
     return GamePresenterWidget(
       child: rootWidget,

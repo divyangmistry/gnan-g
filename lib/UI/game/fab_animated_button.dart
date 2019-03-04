@@ -71,13 +71,13 @@ class FabAnimatedButtonState extends State<FabAnimatedButton>
           labelStyle: TextStyle(fontSize: 18.0),
           onTap: () => showPikacharAboutDialog(context),
         ),
-        SpeedDialChild(
+        /*SpeedDialChild(
           child: _buildMuteIcon(),
           backgroundColor: Colors.green,
           label: 'Sound',
           labelStyle: TextStyle(fontSize: 18.0),
           onTap: () => toggleMuteSound,
-        ),
+        ),*/
       ],
     );
   }

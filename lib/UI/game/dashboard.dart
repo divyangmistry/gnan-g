@@ -221,7 +221,13 @@ class DashboardPageState extends State<DashboardPage> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Container(
-          width: 70,
+          child: new RaisedButton(
+            padding: EdgeInsets.all(1),
+            shape: CircleBorder(),
+            onPressed: (){},
+            color: kQuizSurfaceWhite,
+            child: _buildMuteIcon(),
+          ),
         ),
         Expanded(
           child: new Container(
@@ -255,15 +261,14 @@ class DashboardPageState extends State<DashboardPage> {
     return IconButton(
       icon: Icon(
         isMuteEnabled ? Icons.volume_off : Icons.volume_up,
-        color: kQuizSurfaceWhite,
+        color: kQuizMain400,
       ),
       onPressed: toggleMuteSound,
     );
   }
 
   void toggleMuteSound() async {
-    await AppSharedPrefUtil.saveMuteEnabled(
-        !await AppSharedPrefUtil.isMuteEnabled());
+    await AppSharedPrefUtil.saveMuteEnabled(!await AppSharedPrefUtil.isMuteEnabled());
     AppSharedPrefUtil.isMuteEnabled().then((isMute) {
       setState(() {
         isMuteEnabled = isMute;
