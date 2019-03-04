@@ -12,11 +12,11 @@ class Version implements Comparable<Version> {
   @override
   int compareTo(Version that) {
     if (that == null) return 1;
-    List<String> thisParts = this.get().split("\\.");
-    List<String> thatParts = that.get().split("\\.");
+    List<String> thisParts = this.get().split(".");
+    List<String> thatParts = that.get().split(".");
     int length = max(thisParts.length, thatParts.length);
     for (int i = 0; i < length; i++) {
-      int thisPart = i < thisParts.length ? thisParts[i] : 0;
+      int thisPart = i < thisParts.length ? int.parse(thisParts[i]) : 0;
       int thatPart = i < thatParts.length ? int.parse(thatParts[i]) : 0;
       if (thisPart < thatPart) return -1;
       if (thisPart > thatPart) return 1;
