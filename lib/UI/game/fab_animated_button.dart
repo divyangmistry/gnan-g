@@ -69,7 +69,7 @@ class FabAnimatedButtonState extends State<FabAnimatedButton>
           backgroundColor: Colors.blue,
           label: 'About',
           labelStyle: TextStyle(fontSize: 18.0),
-          onTap: () => showPikacharAboutDialog(context),
+          onTap: () => Navigator.pushNamed(context, '/about'),
         ),
         /*SpeedDialChild(
           child: _buildMuteIcon(),
