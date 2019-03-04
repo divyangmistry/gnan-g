@@ -13,7 +13,8 @@ class UserState {
       this.completed,
       this.currentState,
       this.totalscore,
-      this.lives});
+      this.lives,
+      });
 
   UserState.fromJson(Map<String, dynamic> json) {
     if (json['quiz_levels'] != null) {

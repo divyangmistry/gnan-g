@@ -7,6 +7,7 @@ class CurrentState {
   int totalQuestions;
   String updatedAt;
   String createdAt;
+  bool fifty_fifty;
 
   CurrentState(
       {this.questionSt,
@@ -16,7 +17,8 @@ class CurrentState {
       this.mhtId,
       this.totalQuestions,
       this.updatedAt,
-      this.createdAt});
+      this.createdAt,
+        this.fifty_fifty});
 
   CurrentState.fromJson(Map<String, dynamic> json) {
     questionSt = json['question_st'];
@@ -27,6 +29,7 @@ class CurrentState {
     totalQuestions = json['total_questions'];
     updatedAt = json['updatedAt'];
     createdAt = json['createdAt'];
+    fifty_fifty = json['fifty_fifty'];
   }
 
   Map<String, dynamic> toJson() {
@@ -39,11 +42,12 @@ class CurrentState {
     data['total_questions'] = this.totalQuestions;
     data['updatedAt'] = this.updatedAt;
     data['createdAt'] = this.createdAt;
+    data['fifty_fifty'] = this.fifty_fifty;
     return data;
   }
 
   @override
   String toString() {
-    return 'Current{questionSt: $questionSt, level: $level, score: $score, completed: $completed, mhtId: $mhtId, totalQuestions: $totalQuestions, updatedAt: $updatedAt, createdAt: $createdAt}';
+    return 'Current{questionSt: $questionSt, level: $level, score: $score, completed: $completed, mhtId: $mhtId, totalQuestions: $totalQuestions, fiftyFifty:$fifty_fifty, updatedAt: $updatedAt, createdAt: $createdAt}';
   }
 }

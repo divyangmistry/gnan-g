@@ -504,7 +504,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
               question.questionType == 'MCQ' ? CustomVerticalDivider(
                 height: 100,
               ) : new Container(),
-              question.questionType == 'MCQ' ? lifeline(Icons.star_half, '50 - 50', _fiftyFifty) : new Container(),
+              (question.questionType == 'MCQ' && CacheData.userState.currentState.fifty_fifty != null && CacheData.userState.currentState.fifty_fifty && CacheData.userState.lives <= 1) ? lifeline(Icons.star_half, '50 - 50', _fiftyFifty) : new Container(),
             ],
           ),
           SizedBox(
@@ -580,6 +580,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
               UserScoreState.fromJson(appResponse.data);
           setState(() {
             userScoreState.updateSessionScore();
+            CacheData.userState.currentState.fifty_fifty = false;
           });
           SharedPreferences pref = await SharedPreferences.getInstance();
           pref.setString('user_info', res.body);
