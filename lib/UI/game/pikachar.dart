@@ -21,7 +21,6 @@ class Pikachar extends StatefulWidget {
 }
 
 class _PikacharState extends State<Pikachar> {
-
   List<bool> isActiveArr = new List<bool>();
   List<int> ansOptionMapping = new List<int>();
   List<String> _optionChars = [];
@@ -45,7 +44,8 @@ class _PikacharState extends State<Pikachar> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget != null && !ListEquality().equals(widget.optionChars, this._optionChars)) {
+    if (widget != null &&
+        !ListEquality().equals(widget.optionChars, this._optionChars)) {
       initializeQuestion(widget.answer, widget.optionChars);
     }
 
@@ -154,64 +154,91 @@ class _PikacharState extends State<Pikachar> {
 
   Widget optionRow(int i) {
     return Container(
-      padding: EdgeInsets.all(20),
-      child:
-            Wrap(
-              alignment: WrapAlignment.center,
-              children: createOptionTiles(i),
+//        padding: EdgeInsets.all(20),
+      padding: EdgeInsets.symmetric(vertical: 10),
+      child: Wrap(
+        spacing: 15,
+        alignment: WrapAlignment.center,
+        runSpacing: 10,
+        children: createOptionTiles(i),
 //              mainAxisAlignment: MainAxisAlignment.spaceAround,
-            )
-      );
+      ),
+    );
   }
 
   List<Widget> createOptionTiles(int startingIndex) {
     List<Widget> tempOpTiles = List();
     for (int i = startingIndex;
-    i < _optionChars.length
+        i < _optionChars.length
 //      && i < startingIndex + rowTilesLimit
-    ;
-    i++) {
-      var opTile = optionTile(i, _optionChars[i]);
+        ;
+        i++) {
+      var opTile = optionTileButton(i, _optionChars[i]);
       opTiles.add(opTile);
       tempOpTiles.add(opTile);
     }
     return tempOpTiles;
   }
 
+  Widget optionTileButton(int index, String char) {
+    return new MaterialButton(
+      onPressed: !isActiveArr[index]
+          ? () {
+              if (addCharToAnswer(char, index)) {
+                setState(() {
+                  isActiveArr[index] = true;
+                });
+              }
+            }
+          : null,
+      textColor: Colors.white,
+      padding: EdgeInsets.all(0.0),
+      minWidth: 50.0,
+      height: 50.0,
+      color: kQuizMain400,
+      child: Text(
+        char,
+        textScaleFactor: 1.3,
+      ),
+    );
+  }
+
   Widget optionTile(int index, String char) {
     return new GestureDetector(
-        onTap: () {
-          print(isActiveArr);
-          if (!isActiveArr[index]) {
-            if (addCharToAnswer(char, index)) {
-              setState(() {
-                isActiveArr[index] = true;
-              });
-            }
+      onTap: () {
+        print(isActiveArr);
+        if (!isActiveArr[index]) {
+          if (addCharToAnswer(char, index)) {
+            setState(() {
+              isActiveArr[index] = true;
+            });
           }
-        },
-        child: Card(
-          elevation: 5,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-          child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-            child: Text(
-              char,
-              textScaleFactor: 2,
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
+        }
+      },
+      child: Card(
+        elevation: 5,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+          child: Text(
+            char,
+            textScaleFactor: 2,
+            style: TextStyle(fontWeight: FontWeight.bold),
           ),
-          color: isActiveArr[index] ? kQuizMain50 : kQuizBackgroundWhite,
-        ));
+        ),
+        color: isActiveArr[index] ? kQuizMain50 : kQuizBackgroundWhite,
+      ),
+    );
   }
 
   Widget answerRows() {
     print("answerRows");
     return new Container(
-        padding: EdgeInsets.symmetric(vertical: 20),
-        child: new Column(
-          children: createAnswerRows(),
-        ));
+      padding: EdgeInsets.symmetric(vertical: 20),
+      child: new Column(
+        children: createAnswerRows(),
+      ),
+    );
   }
 
   List<Widget> createAnswerRows() {
@@ -270,24 +297,50 @@ class _PikacharState extends State<Pikachar> {
 
   Widget answerTiles(int startingIndex, int numTiles) {
     return new Container(
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-        child: Row(
-          children: createAnswerTiles(startingIndex, numTiles),
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-        ));
+      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+      child: Row(
+        children: createAnswerTiles(startingIndex, numTiles),
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+      ),
+    );
   }
 
   List<Widget> createAnswerTiles(int startingIndex, int numTiles) {
     print("new answertiles created");
     List<Widget> tempAnswerTiles = new List<Widget>();
     for (int i = startingIndex;
-    i < _answerChars["length"] && i < startingIndex + numTiles;
-    i++) {
-      var aTile = answerTile(i);
+        i < _answerChars["length"] && i < startingIndex + numTiles;
+        i++) {
+      var aTile = answerTileButton(i);
       tempAnswerTiles.add(aTile);
       aTiles.add(aTile);
     }
     return tempAnswerTiles;
+  }
+
+  Widget answerTileButton(int index) {
+    return new MaterialButton(
+      onPressed: ansOptionMapping[index] != null
+          ? () {
+              rtrnCharFromAnswer(ansOptionMapping[index]);
+              ansOptionMapping[index] = null;
+              setState(() {
+                _answerChars[index] = " ";
+              });
+              findIndexToInsert();
+            }
+          : null,
+//      disabledElevation: 0,
+      textColor: Colors.white,
+      padding: EdgeInsets.all(0.0),
+      minWidth: 60.0,
+      height: 60.0,
+      color: kQuizMain500,
+      child: Text(
+        _answerChars[index],
+        textScaleFactor: 1.5,
+      ),
+    );
   }
 
   Widget answerTile(int index) {
