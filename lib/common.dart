@@ -11,6 +11,7 @@ import 'package:GnanG/model/cacheData.dart';
 import 'package:GnanG/model/user_score_state.dart';
 import 'package:GnanG/model/user_state.dart';
 import 'package:GnanG/model/userinfo.dart';
+import 'package:GnanG/notification/notifcation_setup.dart';
 import 'package:GnanG/utils/app_setting_util.dart';
 import 'package:GnanG/utils/appsharedpref.dart';
 import 'package:GnanG/utils/response_parser.dart';
@@ -342,7 +343,7 @@ class CommonFunction {
     pref.setBool(SharedPrefConstant.b_isUserLoggedIn, true);
     print(userInfo);
     _api.appendTokenToHeader(userInfo.token);
-//    await NotificationSetup.setupNotification(userInfo: userInfo, context: context);
+    await NotificationSetup.setupNotification(userInfo: userInfo, context: context);
     await CommonFunction.loadUserState(context, userInfo.mhtId);
     await AppSharedPrefUtil.saveMuteEnabled(false);
     AppSetting.startBackgroundMusic();

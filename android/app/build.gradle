@@ -61,10 +61,10 @@ android {
 
             signingConfig signingConfigs.release
 
-            minifyEnabled true
-//            useProguard true
+            minifyEnabled false
+            useProguard true
 
-//            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 
         }
     }
@@ -87,8 +87,8 @@ buildscript {
     dependencies {
         // ...
         // OneSignal-Gradle-Plugin
-//        classpath 'gradle.plugin.com.onesignal:onesignal-gradle-plugin:[0.10.2, 0.99.99]'
+        classpath 'gradle.plugin.com.onesignal:onesignal-gradle-plugin:[0.10.2, 0.99.99]'
     }
 }
 //apply plugin: 'com.google.gms.google-services'
-//apply plugin: 'com.onesignal.androidsdk.onesignal-gradle-plugin'
+apply plugin: 'com.onesignal.androidsdk.onesignal-gradle-plugin'
