@@ -298,9 +298,10 @@ class _PikacharState extends State<Pikachar> {
   Widget answerTiles(int startingIndex, int numTiles) {
     return new Container(
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-      child: Row(
+      child: Wrap(
         children: createAnswerTiles(startingIndex, numTiles),
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        runAlignment: WrapAlignment.spaceAround,
+        spacing: 10,
       ),
     );
   }
