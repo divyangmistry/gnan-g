@@ -152,7 +152,7 @@ class SimpleGameState extends State<SimpleGame> {
         _reInit();
         _loadNextQuestion();
       } else {
-        Navigator.pushReplacementNamed(context, '/level');
+        Navigator.pushReplacementNamed(context, '/level_transition');
       }
     });
   }
