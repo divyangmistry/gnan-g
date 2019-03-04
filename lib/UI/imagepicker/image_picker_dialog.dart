@@ -124,9 +124,9 @@ class ImagePickerDialog extends StatelessWidget {
         borderRadius: new BorderRadius.all(const Radius.circular(100.0)),
         boxShadow: <BoxShadow>[
           BoxShadow(
-            color: const Color(0xFF696969),
-            offset: Offset(1.0, 6.0),
-            blurRadius: 0.001,
+            //color: const Color(0xFF696969),
+            //offset: Offset(1.0, 6.0),
+            //blurRadius: 0.001,
           ),
         ],
       ),
