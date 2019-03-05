@@ -34,7 +34,9 @@ class ApiService {
   /// * [url] - API endpoint url e.g. : '/login'
   Future<http.Response> getApi({@required String url}) async {
     await checkLogin();
+    print('Get Url:' + url);
     http.Response res = await http.get(_apiUrl + url, headers: headers);
+    print('Response:' + res.body);
     return res;
   }
 
@@ -49,7 +51,7 @@ class ApiService {
     print('Post Url:' + postUrl + '\tReq:' + data.toString());
     http.Response res = await http.post(_apiUrl + url,
         body: json.encode(data), headers: headers);
-    print('Response' + res.body);
+    print('Response:' + res.body);
     return res;
   }
 
@@ -187,7 +189,10 @@ class ApiService {
     return res;
   }
 
-
+  Future<http.Response> getAppSetting() async {
+    http.Response res = await getApi(url: '/app_getversion');
+    return res;
+  }
 
   Future<http.Response> updateNotificationToken(
       {@required int mhtId,
@@ -240,7 +245,7 @@ class ApiService {
   Future<void> logout() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.clear();
-    AppSetting.stopBackgroundMusic();
+    AppSettingUtil.stopBackgroundMusic();
   }
 
   // Check Login Status

@@ -37,16 +37,16 @@ class _QuizAppState extends State<QuizApp> {
   @override
   void initState() {
     super.initState();
-    AppSetting.startBackgroundMusic();
+    AppSettingUtil.startBackgroundMusic();
     registerForAppStateChange();
   }
 
   void registerForAppStateChange() {
     SystemChannels.lifecycle.setMessageHandler((msg) {
       if (msg == "AppLifecycleState.paused" || msg == "AppLifecycleState.inactive" || msg == "AppLifecycleState.suspending") {
-        AppSetting.stopBackgroundMusic();
+        AppSettingUtil.stopBackgroundMusic();
       } else if (msg == "AppLifecycleState.resumed") {
-        AppSetting.startBackgroundMusic();
+        AppSettingUtil.startBackgroundMusic();
       }
     });
   }

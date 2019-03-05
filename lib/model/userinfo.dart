@@ -34,9 +34,13 @@ class UserInfo {
       isactive = json['isactive'];
       sId = json['_id'];
       mobile = json['mobile'];
+      if(mobile == null)
+        mobile = "";
       password = json['password'];
       name = json['name'];
       email = json['email'];
+      if(email == null)
+        email = "";
       mhtId = json['mht_id'];
       center = json['center'];
       bonus = json['bonus'];

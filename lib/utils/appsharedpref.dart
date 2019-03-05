@@ -58,4 +58,17 @@ class AppSharedPrefUtil {
     SharedPreferences pref = await SharedPreferences.getInstance();
     return CommonFunction.getImageFromBase64Img(base64Img: pref.getString(SharedPrefConstant.s_profileImage));
   }
+
+  static Future<bool> saveAppUpdateCheckAfter(int futureTime) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.setInt(SharedPrefConstant.l_appUpdate_Check_after, futureTime);
+    return true;
+  }
+
+  static Future<int> getAppUpdateCheckAfter() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    return pref.getInt(SharedPrefConstant.l_appUpdate_Check_after) == null
+        ? -1
+        : pref.getInt(SharedPrefConstant.l_appUpdate_Check_after);
+  }
 }

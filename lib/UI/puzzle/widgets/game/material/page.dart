@@ -73,7 +73,8 @@ class GameMaterialPage extends StatelessWidget {
                       height: 20.0,
                     ),
                     Text(
-                      'Solve this PUZZLE to get LIFE !',
+                      //'Solve this PUZZLE to get LIFE !',
+                      'PUZZLE',
                       style: Theme.of(context).textTheme.title,
                     ),
                     Expanded(

@@ -104,9 +104,9 @@ class FabAnimatedButtonState extends State<FabAnimatedButton>
       setState(() {
         isMuteEnabled = isMute;
         if (!isMuteEnabled)
-          AppSetting.startBackgroundMusic();
+          AppSettingUtil.startBackgroundMusic();
         else
-          AppSetting.stopBackgroundMusic();
+          AppSettingUtil.stopBackgroundMusic();
       });
     });
   }

@@ -53,7 +53,6 @@ class MainGamePageState extends BaseState<MainGamePage> {
     print(widget.level);
     super.initState();
     _loadData();
-    // Flame.audio.play('music/bensound-epic.mp3', volume: 0.5);
   }
 
   _loadData() {
@@ -110,6 +109,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
     if (appResponse.data is Map && appResponse.data['msg'] != null) {
       CommonFunction.alertDialog(
           context: context,
+          type: "success",
           msg: appResponse.data['msg'],
           barrierDismissible: false,
           doneButtonFn: () {

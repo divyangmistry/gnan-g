@@ -1,6 +1,7 @@
 import 'package:GnanG/Service/apiservice.dart';
 import 'package:GnanG/UI/game/fab_animated_button.dart';
 import 'package:GnanG/UI/game/mainGame.dart';
+import 'package:GnanG/UI/widgets/appupdatecheck.dart';
 import 'package:GnanG/colors.dart';
 import 'package:GnanG/common.dart';
 import 'package:GnanG/model/cacheData.dart';
@@ -27,7 +28,7 @@ class DashboardPageState extends State<DashboardPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    //Future.delayed(const Duration(seconds: 2), () => AppSetting.checkForNewAppUpdate(context));
+    AppUpdateCheck.startAppUpdateCheckThread(context);
   }
   @override
   Widget build(BuildContext context) {
@@ -279,9 +280,9 @@ class DashboardPageState extends State<DashboardPage> {
       setState(() {
         isMuteEnabled = isMute;
         if (!isMuteEnabled)
-          AppSetting.startBackgroundMusic();
+          AppSettingUtil.startBackgroundMusic();
         else
-          AppSetting.stopBackgroundMusic();
+          AppSettingUtil.stopBackgroundMusic();
       });
     });
   }

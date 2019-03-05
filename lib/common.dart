@@ -346,7 +346,7 @@ class CommonFunction {
     await NotificationSetup.setupNotification(userInfo: userInfo, context: context);
     await CommonFunction.loadUserState(context, userInfo.mhtId);
     await AppSharedPrefUtil.saveMuteEnabled(false);
-    AppSetting.startBackgroundMusic();
+    AppSettingUtil.startBackgroundMusic();
     return true;
   }
 
@@ -509,7 +509,7 @@ class CommonFunction {
             new Container(
               width: MediaQuery.of(context).size.width / 2.5,
               child: new Text(
-                data,
+                data != null ? data : "",
                 overflow: TextOverflow.fade,
                 textScaleFactor: 1.2,
                 style: TextStyle(

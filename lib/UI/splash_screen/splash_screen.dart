@@ -34,7 +34,8 @@ class SplashScreenState extends State<StatefulWidget> {
         await CommonFunction.loadUserState(context, CacheData.userInfo.mhtId);
         Navigator.pushReplacementNamed(context, '/dashboardPage');
       } else {
-        Navigator.pushReplacementNamed(context, '/introPage');
+        //Navigator.pushReplacementNamed(context, '/introPage');
+        Navigator.pushReplacementNamed(context, '/login_new');
       }
     }
   }

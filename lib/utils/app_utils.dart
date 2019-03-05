@@ -1,6 +1,8 @@
+import 'package:GnanG/constans/appconstant.dart';
 import 'package:GnanG/utils/appsharedpref.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flame/flame.dart';
+import 'package:url_launcher/url_launcher.dart';
 //import 'package:launch_review/launch_review.dart';
 
 class AppUtils {
@@ -34,6 +36,7 @@ class AppUtils {
   }
 
   static void launchPlaystoreApp(String appId) {
+    launch(AppConstant.PLAYSTORE_URL);
 //    LaunchReview.launch(androidAppId: "org.dadabhagwan.AKonnect",
 //        iOSAppId: "585027354");
   }
