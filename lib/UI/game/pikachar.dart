@@ -278,6 +278,9 @@ class _PikacharState extends State<Pikachar> {
       setOpIndex(i, char, opTileIndex);
     }
     findIndexToInsert();
+    if (shouldAnswerBeSubmitted(_answerChars["indexToInsert"])) {
+      checkAnswer();
+    }
     return true;
   }
 
@@ -288,11 +291,11 @@ class _PikacharState extends State<Pikachar> {
       print("Hi");
       _answerChars["indexToInsert"]++;
       _answerChars[i] = char;
-      if (i == _answerChars["length"] - 1) {
-        // Answer complete, so check answer
-        checkAnswer();
-      }
     });
+  }
+
+  bool shouldAnswerBeSubmitted(int indexToInsert) {
+    return indexToInsert >= _answerChars["length"];
   }
 
   Widget answerTiles(int startingIndex, int numTiles) {
