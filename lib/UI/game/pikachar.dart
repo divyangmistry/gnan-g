@@ -301,7 +301,9 @@ class _PikacharState extends State<Pikachar> {
       child: Wrap(
         children: createAnswerTiles(startingIndex, numTiles),
         runAlignment: WrapAlignment.spaceAround,
+        alignment: WrapAlignment.spaceAround,
         spacing: 10,
+        runSpacing: 10,
       ),
     );
   }
