@@ -11,7 +11,7 @@ class RulesPagePageState extends State<RulesPagePage> {
   @override
   Widget build(BuildContext context) {
     return new WebviewScaffold(
-      url: "https://akonnect.org/i-card/",
+      url: "http://purecelibacy.org/gnang-rules.php",
       appBar: AppBar(
         backgroundColor: kBackgroundGrediant1,
         title: Text('Rules')

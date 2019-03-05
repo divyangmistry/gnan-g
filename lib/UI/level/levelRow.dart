@@ -143,7 +143,7 @@ class LevelCardRow extends StatelessWidget {
             } else {
               bool isLevelCompleted = isCompleted(levelDetails.levelIndex);
               CommonFunction.alertDialog(
-                  context: context, msg: isLevelCompleted ? 'Hooray !!  You have already cleared this level' : 'This level is lock for you',
+                  context: context, msg: isLevelCompleted ? 'Hooray !!  You have already cleared this level' : 'This level is locked for you',
                   type: isLevelCompleted ? "success" : 'error'
                 );
             }

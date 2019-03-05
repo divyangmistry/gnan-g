@@ -93,7 +93,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
           } else {
             CommonFunction.alertDialog(
                 context: context,
-                msg: 'There is no any question',
+                msg: 'There are no questions',
                 barrierDismissible: false,
                 doneButtonFn: () {
                   Navigator.pop(context);
