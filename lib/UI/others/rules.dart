@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
+import 'package:GnanG/colors.dart';
 
 class RulesPagePage extends StatefulWidget {
   @override
@@ -8,11 +10,11 @@ class RulesPagePage extends StatefulWidget {
 class RulesPagePageState extends State<RulesPagePage> {
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      body: new SafeArea(
-        child: new Center(
-          child: new Text('Rules Page ... !!'),
-        ),
+    return new WebviewScaffold(
+      url: "https://akonnect.org/i-card/",
+      appBar: AppBar(
+        backgroundColor: kBackgroundGrediant1,
+        title: Text('Rules')
       ),
     );
   }

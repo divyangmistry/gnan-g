@@ -93,11 +93,9 @@ class ProfilePagePageState extends BaseState<ProfilePagePage> {
             color: Colors.white,
           ),
               () {
-            Navigator.push(
+            Navigator.pushNamed(
               context,
-              MaterialPageRoute(
-                builder: (context) => new SucessAnimationPage(),
-              ),
+              '/rules',
             );
             // Navigator.pushNamed(context, '/rules');
           },
