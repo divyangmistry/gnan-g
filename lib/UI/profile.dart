@@ -50,19 +50,19 @@ class ProfilePagePageState extends BaseState<ProfilePagePage> {
       body: BackgroundGredient(
         child: new SafeArea(
           child: new ListView(
-              padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 20.0),
-              children: <Widget>[
-                _gameBar(),
-                SizedBox(
-                  height: 20.0,
-                ),
-                _userCard(),
-                SizedBox(
-                  height: 20.0,
-                ),
-                _profileData(),
-              ],
-            ),
+            padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 20.0),
+            children: <Widget>[
+              _gameBar(),
+              SizedBox(
+                height: 20.0,
+              ),
+              _userCard(),
+              SizedBox(
+                height: 20.0,
+              ),
+              _profileData(),
+            ],
+          ),
         ),
       ),
     );
@@ -73,7 +73,7 @@ class ProfilePagePageState extends BaseState<ProfilePagePage> {
       children: <Widget>[
         _iconButton(
           Icon(Icons.power_settings_new, color: Colors.white),
-              () {
+          () {
             _api.logout();
             Navigator.pop(context);
             Navigator.pushReplacementNamed(context, '/login_new');
@@ -92,10 +92,12 @@ class ProfilePagePageState extends BaseState<ProfilePagePage> {
             Icons.help_outline,
             color: Colors.white,
           ),
-              () {
-            Navigator.pushNamed(
+          () {
+            Navigator.push(
               context,
-              '/rules',
+              MaterialPageRoute(
+                builder: (context) => new SucessAnimationPage(),
+              ),
             );
             // Navigator.pushNamed(context, '/rules');
           },
@@ -112,10 +114,7 @@ class ProfilePagePageState extends BaseState<ProfilePagePage> {
           _userDetail(),
           Positioned(
             top: 0,
-            left: MediaQuery
-                .of(context)
-                .size
-                .width / 2 - 80,
+            left: MediaQuery.of(context).size.width / 2 - 80,
             child: _userAvatar(),
           ),
         ],
@@ -186,8 +185,7 @@ class ProfilePagePageState extends BaseState<ProfilePagePage> {
             ),
             new Row(
               children: <Widget>[
-                _scoreData(
-                    'Points', CacheData.userState.totalscore.toString()),
+                _scoreData('Points', CacheData.userState.totalscore.toString()),
                 CustomVerticalDivider(height: 60),
                 _scoreData('Lives', CacheData.userState.lives.toString()),
               ],

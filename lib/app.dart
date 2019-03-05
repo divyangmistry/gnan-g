@@ -1,3 +1,4 @@
+import 'package:GnanG/UI/auth/registration_request.dart';
 import 'package:GnanG/UI/game/dashboard.dart';
 import 'package:GnanG/UI/intro/intro.dart';
 import 'package:GnanG/UI/leaderboard.dart';
@@ -76,6 +77,7 @@ class _QuizAppState extends State<QuizApp> {
         '/t&c': (BuildContext context) => new TermsAndConditionPage(),
         '/gameOf15': (BuildContext context) => new GameOfFifteen(),
         '/about': (BuildContext context) => new About(),
+        '/registrationrequest': (BuildContext context) => new RegistrationRequestPage(),
       },
     );
   }

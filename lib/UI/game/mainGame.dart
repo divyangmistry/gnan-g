@@ -14,6 +14,7 @@ import 'package:GnanG/model/validateQuestion.dart';
 import 'package:GnanG/utils/app_utils.dart';
 import 'package:GnanG/utils/response_parser.dart';
 import 'package:flame/flame.dart';
+import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
@@ -246,20 +247,40 @@ class MainGamePageState extends BaseState<MainGamePage> {
       ),
       bottomNavigationBar:
           !widget.isBonusLevel ? _buildbottomNavigationBar() : null,
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: !widget.isBonusLevel
-          ? CacheData.userState.lives <= 1
-              ? FloatingActionButton.extended(
-                  backgroundColor: kQuizMain500,
-                  icon: Icon(Icons.help_outline),
-                  label: Text('Get Hint'),
-                  onPressed: _getHint,
-                )
-              : null
-          : null,
-//      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-//      floatingActionButton: FabAnimatedButton(),
+      floatingActionButtonLocation: widget.isBonusLevel
+          ? FloatingActionButtonLocation.endFloat
+          : FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: widget.isBonusLevel
+          ? getFloatingActionButtonForBonus()
+          : getFloatingButForNonBonus(),
     );
+  }
+
+  Widget getFloatingButForNonBonus() {
+    return CacheData.userState.lives <= 1
+        ? FloatingActionButton.extended(
+            backgroundColor: kQuizMain500,
+            icon: Icon(Icons.help_outline),
+            label: Text('Get Hint'),
+            onPressed: _getHint,
+          )
+        : null;
+  }
+
+  Widget getFloatingActionButtonForBonus() {
+    return question.score != null
+        ? FloatingActionButton(
+            backgroundColor: kQuizSurfaceWhite,
+            child: Text(
+              question.score.toString(),
+              style: TextStyle(
+                color: kQuizMain400,
+                fontSize: 25,
+              ),
+            ),
+            onPressed: () {},
+          )
+        : null;
   }
 
   int getTotalQuestion() {
@@ -516,7 +537,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
           SizedBox(
             height: 20.0,
           ),
-          new Row(
+          /*new Row(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
@@ -535,10 +556,10 @@ class MainGamePageState extends BaseState<MainGamePage> {
               ),
               SizedBox(width: 20),
             ],
-          ),
-          SizedBox(
+          ),*/
+          /*SizedBox(
             height: 20,
-          )
+          )*/
         ],
       ),
     );

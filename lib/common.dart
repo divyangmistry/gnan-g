@@ -393,7 +393,7 @@ class CommonFunction {
     bool showCancelButton = false,
     Function doneCancelFn,
     AlertDialog Function() builder,
-    bool displayImage = true,
+    Widget widget,
   }) {
     showDialog(
       context: context,
@@ -406,16 +406,16 @@ class CommonFunction {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              displayImage
-                  ? Container(
+              widget != null
+                  ? widget
+                  : Container(
                       height: 150,
                       width: 150,
                       child: FlareActor(
                         'assets/animation/Teddy.flr',
                         animation: type == 'success' ? "success" : 'fail',
                       ),
-                    )
-                  : Container(),
+                    ),
               SizedBox(
                 height: 20,
               ),

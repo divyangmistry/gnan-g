@@ -58,11 +58,11 @@ class FabAnimatedButtonState extends State<FabAnimatedButton>
       children: [
         SpeedDialChild(
             child: Icon(Icons.feedback),
-            label: 'Feedback',
+            label: 'Rules',
             backgroundColor: Colors.red,
             labelStyle: TextStyle(fontSize: 18.0),
             onTap: () {
-              Navigator.pushNamed(context, '/feedback');
+              Navigator.pushNamed(context, '/rules');
             }),
         SpeedDialChild(
           child: Icon(Icons.info_outline),

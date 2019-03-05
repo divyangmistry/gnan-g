@@ -87,6 +87,13 @@ class ApiService {
     return res;
   }
 
+  Future<http.Response> changeMobile({@required UserData userData}) async {
+    Map<String, dynamic> data = userData.toJson();
+    data['new_mobile'] = userData.mobile;
+    Response res = await postApi(url: '/change_mobile', data: data);
+    return res;
+  }
+
   Future<http.Response> updatePassword(
       {@required int mhtId, @required String password}) async {
     Map<String, dynamic> data = {'mht_id': mhtId, 'password': password};

@@ -1,28 +1,38 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/gestures.dart';
-import 'package:GnanG/constans/appconstant.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:GnanG/colors.dart';
+import 'package:GnanG/constans/appconstant.dart';
+import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class _LinkText extends GestureDetector {
-
-  _LinkText({ TextStyle style, String url, String text }) : super(
-    child: Text(
-      text ?? url,
-      style: style,
-    ),
-    onTap: () {
-      launch(url, forceSafariVC: false);
-    }
-  );
+  _LinkText({TextStyle style, String url, String text})
+      : super(
+          child: Container(
+            margin: EdgeInsets.all(1),
+            padding: EdgeInsets.all(1),
+            child: Text(
+              text ?? url,
+              style: style,
+            ),
+            decoration: new BoxDecoration(
+              color: Colors.white,
+              border: new Border(
+                bottom:
+                    new BorderSide(color: Colors.blue, style: BorderStyle.solid),
+              ),
+            ),
+          ),
+          onTap: () {
+            launch(url, forceSafariVC: false);
+          },
+        );
 }
 
 final TextStyle linkStyle = TextStyle(
   color: Colors.blue,
-  decoration: TextDecoration.underline);
+  decoration: TextDecoration.none
+ );
 
 class About extends StatelessWidget {
-  
   @override
   Widget build(BuildContext context) {
     // TODO: implement build

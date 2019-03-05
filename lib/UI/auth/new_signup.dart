@@ -12,7 +12,6 @@ import '../../colors.dart';
 import '../../common.dart';
 // File import
 
-
 class SignUpPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => new SignUpPageState();
@@ -35,9 +34,9 @@ class SignUpPageState extends BaseState<SignUpPage> {
       child: new Scaffold(
         backgroundColor: kQuizSurfaceWhite,
         body: new BackgroundGredient(
-            child: TabBarView(
-              children: <Widget>[_indiaSignupPage(), _otherSignupPage()],
-            ),
+          child: TabBarView(
+            children: <Widget>[_indiaSignupPage(), _otherSignupPage()],
+          ),
         ),
       ),
     );
@@ -175,7 +174,7 @@ class SignUpPageState extends BaseState<SignUpPage> {
             ),
             elevation: 4.0,
             padding: EdgeInsets.all(20.0),
-            onPressed: _submitIndia,
+            onPressed: _submitMobile,
           ),
         )
       ],
@@ -234,7 +233,7 @@ class SignUpPageState extends BaseState<SignUpPage> {
             ),
             elevation: 4.0,
             padding: EdgeInsets.all(20.0),
-            onPressed: _submitOther,
+            onPressed: _submitEmail,
           ),
         )
       ],
@@ -290,79 +289,67 @@ class SignUpPageState extends BaseState<SignUpPage> {
     );
   }
 
-  void _submitIndia() async {
+  void _submitMobile() async {
     if (_formIndiaKey.currentState.validate()) {
-      try {
-        _formIndiaKey.currentState.save();
-        Response res =
-            await _api.validateUserIndia(mhtId: _mhtId, mobileNo: _mobile);
-        AppResponse appResponse =
-            ResponseParser.parseResponse(context: context, res: res);
-        if (appResponse.status == 200) {
-          SignUpSession signUpSession =
-              SignUpSession.fromJson(appResponse.data);
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => new OtpVerifyPage(
-                    otp: signUpSession.otp,
-                    userData: signUpSession.userData,
-                    fromForgotPassword: false,
-                  ),
-            ),
-          );
-        }
-      } catch (err) {
-        print('CATCH :: ');
-        print(err);
-        CommonFunction.displayErrorDialog(
-          context: context,
-          msg: err.toString(),
-        );
-      }
+      _formIndiaKey.currentState.save();
+      _validateUser(mht_id: _mhtId, mobile: _mobile);
     } else {
       _autoValidate = true;
     }
   }
 
-  void _submitOther() async {
+  void _submitEmail() async {
     if (_formOtherKey.currentState.validate()) {
-      setState(() {
-        isOverlay = true;
-      });
-      try {
-        _formOtherKey.currentState.save();
-        Response res =
-            await _api.validateUserOther(mhtId: _mhtId, emailId: _emailId);
-        AppResponse appResponse =
-            ResponseParser.parseResponse(context: context, res: res);
-        if (appResponse.status == 200) {
-          SignUpSession signUpSession =
-              SignUpSession.fromJson(appResponse.data);
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => new OtpVerifyPage(
-                    otp: signUpSession.otp,
-                    userData: signUpSession.userData,
-                    fromForgotPassword: false,
-                  ),
-            ),
-          );
-        }
-      } catch (err) {
-        print('CATCH :: ');
-        print(err);
-        CommonFunction.displayErrorDialog(
-          context: context,
-          msg: err.toString(),
-        );
-      }
-      setState(() {
-        isOverlay = false;
-      });
+      _formOtherKey.currentState.save();
+      _validateUser(mht_id: _mhtId, emailId: _emailId, validateByEmail: true);
     } else {
       _autoValidate = true;
     }
   }
+
+  void _validateUser({
+    @required String mht_id,
+    bool validateByEmail = false,
+    String mobile,
+    String emailId,
+  }) async {
+    setState(() {
+      isOverlay = true;
+    });
+    try {
+      Response res;
+      if (validateByEmail) {
+        res = await _api.validateUserOther(mhtId: mht_id, emailId: emailId);
+      } else {
+        res = await _api.validateUserIndia(mhtId: mht_id, mobileNo: mobile);
+      }
+      AppResponse appResponse = ResponseParser.parseResponse(context: context, res: res);
+      if (appResponse.status == 200) {
+        SignUpSession signUpSession = SignUpSession.fromJson(appResponse.data);
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => new OtpVerifyPage(
+                  otp: signUpSession.otp,
+                  userData: signUpSession.userData,
+                  fromForgotPassword: false,
+                ),
+          ),
+        );
+      }
+    } catch (err) {
+      print('CATCH :: ');
+      print(err);
+      CommonFunction.displayErrorDialog(
+        context: context,
+        msg: err.toString(),
+      );
+    }
+    setState(() {
+      isOverlay = false;
+    });
+  }
+
+
+
 }
