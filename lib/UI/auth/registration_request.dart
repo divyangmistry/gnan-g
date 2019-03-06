@@ -246,6 +246,7 @@ class RegistrationRequestPageState extends BaseState<RegistrationRequestPage> {
         userData.email = _emailId;
         userData.center = _center;
         userData.mobile = _mobile;
+        userData.name = _name;
         Response res = await _api.requestRegistration(userData: userData);
         AppResponse appResponse = ResponseParser.parseResponse(context: context, res: res);
         if (appResponse.status == 200) {

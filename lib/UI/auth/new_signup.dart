@@ -341,7 +341,7 @@ class SignUpPageState extends BaseState<SignUpPage> {
         CommonFunction.alertDialog(
           context: context,
           title: 'Data Not Found',
-          msg: 'Your MHT ID & Mobile No. is not registred with us, Kindly click below to enter registration detail.',
+          msg: appResponse.message != null ? appResponse.message :'Your MHT ID & Mobile No. is not registred with us, Kindly click below to enter registration detail.',
           doneButtonText: 'Register',
           doneButtonFn: () {
             Navigator.pushReplacementNamed(context, '/registrationrequest');
