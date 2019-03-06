@@ -45,20 +45,20 @@ class GameMaterialPage extends StatelessWidget {
           );
         },
         child: OrientationBuilder(builder: (context, orientation) {
-          final statusWidget = Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              GameStopwatchWidget(
-                time: presenter.time,
-                fontSize: orientation == Orientation.landscape && !isLargeScreen
-                    ? 56.0
-                    : 72.0,
-              ),
-              // GameStepsWidget(
-              //   steps: presenter.steps,
-              // ),
-            ],
-          );
+//          final statusWidget = Column(
+//            mainAxisSize: MainAxisSize.min,
+//            children: <Widget>[
+//              GameStopwatchWidget(
+//                time: presenter.time,
+//                fontSize: orientation == Orientation.landscape && !isLargeScreen
+//                    ? 56.0
+//                    : 72.0,
+//              ),
+//              // GameStepsWidget(
+//              //   steps: presenter.steps,
+//              // ),
+//            ],
+//          );
 
           if (orientation == Orientation.portrait) {
             //
@@ -76,11 +76,6 @@ class GameMaterialPage extends StatelessWidget {
                       //'Solve this PUZZLE to get LIFE !',
                       'PUZZLE',
                       style: Theme.of(context).textTheme.title,
-                    ),
-                    Expanded(
-                      child: Center(
-                        child: statusWidget,
-                      ),
                     ),
                     SizedBox(
                       height: 50.0,
@@ -106,7 +101,6 @@ class GameMaterialPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
                     boardWidget,
-                    statusWidget,
                   ],
                 ),
               ),
