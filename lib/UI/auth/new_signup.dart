@@ -337,7 +337,7 @@ class SignUpPageState extends BaseState<SignUpPage> {
                 ),
           ),
         );
-      } else if (1 == 1) {
+      } else if (appResponse.status == 400) {
         CommonFunction.alertDialog(
           context: context,
           title: 'Data Not Found',
