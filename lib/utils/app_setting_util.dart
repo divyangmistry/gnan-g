@@ -2,10 +2,10 @@ import 'package:GnanG/constans/appconstant.dart';
 import 'package:package_info/package_info.dart';
 class AppSettingUtil {
 
-  static String getAppVersion() {
-    /*PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    String version = packageInfo.version;*/
-    return AppConstant.APP_VERSION;
+  static Future<String> getAppVersion() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    return packageInfo.version;
+    //return AppConstant.APP_VERSION;
   }
 
   static Future<String> getAppID() async {

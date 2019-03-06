@@ -1,9 +1,9 @@
 import 'package:GnanG/constans/appconstant.dart';
-import 'package:GnanG/model/appsetting.dart';
 import 'package:GnanG/utils/app_setting_util.dart';
 import 'package:GnanG/utils/appsharedpref.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flame/flame.dart';
+import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 //import 'package:launch_review/launch_review.dart';
 
@@ -42,5 +42,11 @@ class AppUtils {
     launch(AppConstant.BASE_PLAYSTORE_URL + appId);
     /*LaunchReview.launch(androidAppId: "org.dadabhagwan.AKonnect",
         iOSAppId: "585027354");*/
+  }
+
+  static void showInSnackBar(BuildContext context, String value) {
+    Scaffold.of(context).showSnackBar(new SnackBar(
+        content: new Text(value)
+    ));
   }
 }

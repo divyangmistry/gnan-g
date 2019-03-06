@@ -54,13 +54,13 @@ class SplashScreenState extends State<StatefulWidget> {
                 height: MediaQuery
                     .of(context)
                     .size
-                    .height / 2,
+                    .height / 1.5,
                 width: MediaQuery
                     .of(context)
                     .size
-                    .width / 2,
+                    .width / 1.5,
               ),
-              SizedBox(height: 10),
+              SizedBox(height: 5),
               new CircularProgressIndicator(),
             ],
           ),

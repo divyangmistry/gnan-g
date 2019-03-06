@@ -298,7 +298,17 @@ class MainGamePageState extends BaseState<MainGamePage> {
                 fontSize: 25,
               ),
             ),
-            onPressed: () {},
+            onPressed: () {
+              //AppUtils.showInSnackBar(context, "You can get " + question.score.toString() + " score by giving correct answer on this question.");
+              CommonFunction.alertDialog(
+                context: context,
+                msg: "You can get " + question.score.toString() + " score by giving correct answer on this question.",
+                barrierDismissible: false,
+                type: 'info',
+                playSound: false,
+                displayImage: false
+              );
+            },
           )
         : null;
   }

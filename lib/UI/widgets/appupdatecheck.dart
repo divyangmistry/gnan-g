@@ -34,7 +34,7 @@ class AppUpdateCheck {
       if (appResponse.status == WSConstant.SUCCESS_CODE) {
         AppSetting appSetting = AppSetting.fromJson(appResponse.data);
         if (appSetting.appversion != null) {
-          String version = AppSettingUtil.getAppVersion();
+          String version = await AppSettingUtil.getAppVersion();
           Version currentVersion = Version(version: version);
           Version playStoreVersion = Version(version: appSetting.appversion);
           if (playStoreVersion.compareTo(currentVersion) > 0) {
@@ -114,7 +114,7 @@ class AppUpdateCheck {
 
   void onRemindLater(BuildContext context) {
     DateTime today = new DateTime.now();
-    DateTime twoDaysFromNow = today.add(new Duration(hours: AppConstant.REMIND_LATER_IN_DAYS));
+    DateTime twoDaysFromNow = today.add(new Duration(hours: AppConstant.REMIND_LATER_IN_HOURS));
     AppSharedPrefUtil.saveAppUpdateCheckAfter(twoDaysFromNow.millisecondsSinceEpoch).then((isUpdated) {
       Navigator.pop(context);
     });
