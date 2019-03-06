@@ -323,7 +323,7 @@ class SignUpPageState extends BaseState<SignUpPage> {
       } else {
         res = await _api.validateUserIndia(mhtId: mht_id, mobileNo: mobile);
       }
-      AppResponse appResponse = ResponseParser.parseResponse(context: context, res: res);
+      AppResponse appResponse = ResponseParser.parseResponse(context: context, res: res, showDialog: false);
       if (appResponse.status == 200) {
         SignUpSession signUpSession = SignUpSession.fromJson(appResponse.data);
         Navigator.pushReplacement(
@@ -336,6 +336,8 @@ class SignUpPageState extends BaseState<SignUpPage> {
                 ),
           ),
         );
+      } else {
+
       }
     } catch (err) {
       print('CATCH :: ');
@@ -349,7 +351,5 @@ class SignUpPageState extends BaseState<SignUpPage> {
       isOverlay = false;
     });
   }
-
-
 
 }

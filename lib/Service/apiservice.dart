@@ -7,6 +7,7 @@ import 'package:GnanG/model/cacheData.dart';
 import 'package:GnanG/model/signupsession.dart';
 import 'package:GnanG/utils/app_setting_util.dart';
 import 'package:GnanG/utils/appsharedpref.dart';
+import 'package:GnanG/utils/audio_utilsdart.dart';
 import 'package:http/http.dart';
 import 'package:http/http.dart' as http;
 import 'package:meta/meta.dart';
@@ -252,7 +253,7 @@ class ApiService {
   Future<void> logout() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.clear();
-    AppSettingUtil.stopBackgroundMusic();
+    AppAudioUtils.stopBackgroundMusic();
   }
 
   // Check Login Status

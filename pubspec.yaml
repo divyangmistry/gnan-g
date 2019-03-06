@@ -39,7 +39,7 @@ dependencies:
   nima: ^1.0.0
   image_picker: "0.4.5"
   image_cropper: 1.0.0
-  flutter_webview_plugin: ^0.3.0+2
+  flutter_webview_plugin: 0.3.0
   #package_info: ^0.4.0
 #  launch_review: ^1.0.1
 
@@ -74,6 +74,21 @@ flutter:
     - assets/audio/music/background_music.mp3
     - assets/audio/music/Pac man dies.mp3
     - assets/audio/music/party_horn-Mike_Koenig-76599891.mp3
+    - assets/audio/music/CHANDELIER_FALLS.mp3
+
+    - assets/audio/music/right/right1.WAV
+    - assets/audio/music/right/right2.WAV
+    - assets/audio/music/right/right3.WAV
+
+    - assets/audio/music/wrong/wrong1.WAV
+    - assets/audio/music/wrong/wrong2.WAV
+    - assets/audio/music/wrong/wrong3.WAV
+    - assets/audio/music/wrong/wrong4.WAV
+    - assets/audio/music/wrong/wrong5.WAV
+    - assets/audio/music/game/gameEnd.WAV
+
+    - assets/audio/music/level/levelCompleted.WAV
+
     - assets/animation/noInternet.flr
     - assets/animation/Teddy.flr
     - assets/animation/Dancing.flr

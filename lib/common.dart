@@ -14,6 +14,7 @@ import 'package:GnanG/model/userinfo.dart';
 import 'package:GnanG/notification/notifcation_setup.dart';
 import 'package:GnanG/utils/app_setting_util.dart';
 import 'package:GnanG/utils/appsharedpref.dart';
+import 'package:GnanG/utils/audio_utilsdart.dart';
 import 'package:GnanG/utils/response_parser.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
@@ -275,7 +276,7 @@ class CommonFunction {
           context: context,
           msg: 'You can buy life for 100 points.',
           doneButtonText: 'Yes take it',
-          type: 'success',
+          type: 'info',
           title: 'Oh Yeah ..',
           barrierDismissible: false,
           showCancelButton: true,
@@ -346,7 +347,7 @@ class CommonFunction {
     await NotificationSetup.setupNotification(userInfo: userInfo, context: context);
     await CommonFunction.loadUserState(context, userInfo.mhtId);
     await AppSharedPrefUtil.saveMuteEnabled(false);
-    AppSettingUtil.startBackgroundMusic();
+    AppAudioUtils.startBackgroundMusic();
     return true;
   }
 
@@ -383,7 +384,7 @@ class CommonFunction {
   // common Alert dialog
   static alertDialog({
     @required BuildContext context,
-    String type = 'error', // 'success' || 'error'
+    String type = 'error', // 'success' || 'error' || 'info'
     String title,
     @required String msg,
     bool showDoneButton = true,
@@ -394,7 +395,14 @@ class CommonFunction {
     Function doneCancelFn,
     AlertDialog Function() builder,
     Widget widget,
+    bool playSound = true,
   }) {
+    if(type == 'error' && playSound) {
+      AppAudioUtils.playWrongMusic();
+    } else if(type == 'success' && playSound){
+      if(playSound)
+        AppAudioUtils.playCorrectMusic();
+    }
     showDialog(
       context: context,
       barrierDismissible: barrierDismissible,
@@ -453,11 +461,16 @@ class CommonFunction {
                         )
                       ],
                     ),
-                    onPressed: doneButtonFn != null
-                        ? doneButtonFn
-                        : () {
-                            Navigator.pop(context);
-                          },
+                    onPressed: () {
+                        if(playSound && type == 'success')
+                            AppAudioUtils.stopCorrectMusic();
+                        if(doneButtonFn != null) {
+                          doneButtonFn();
+                        } else {
+                          Navigator.pop(context);
+                        }
+                      }
+                    ,
                   ),
                   showCancelButton ? SizedBox(width: 10) : new Container(),
                   showCancelButton
@@ -475,11 +488,15 @@ class CommonFunction {
                               )
                             ],
                           ),
-                          onPressed: doneCancelFn != null
-                              ? doneCancelFn
-                              : () {
-                                  Navigator.pop(context);
-                                },
+                          onPressed: () {
+                            if(playSound && type == 'success')
+                              AppAudioUtils.stopCorrectMusic();
+                            if(doneCancelFn != null) {
+                                doneCancelFn();
+                            } else {
+                              Navigator.pop(context);
+                            }
+                          },
                         )
                       : new Container(),
                 ],

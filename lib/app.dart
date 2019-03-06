@@ -7,6 +7,7 @@ import 'package:GnanG/UI/profile.dart';
 import 'package:GnanG/UI/puzzle/main.dart';
 import 'package:GnanG/no-internet-page.dart';
 import 'package:GnanG/utils/app_setting_util.dart';
+import 'package:GnanG/utils/audio_utilsdart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -38,16 +39,16 @@ class _QuizAppState extends State<QuizApp> {
   @override
   void initState() {
     super.initState();
-    AppSettingUtil.startBackgroundMusic();
+    AppAudioUtils.startBackgroundMusic();
     registerForAppStateChange();
   }
 
   void registerForAppStateChange() {
     SystemChannels.lifecycle.setMessageHandler((msg) {
       if (msg == "AppLifecycleState.paused" || msg == "AppLifecycleState.inactive" || msg == "AppLifecycleState.suspending") {
-        AppSettingUtil.stopBackgroundMusic();
+        AppAudioUtils.stopBackgroundMusic();
       } else if (msg == "AppLifecycleState.resumed") {
-        AppSettingUtil.startBackgroundMusic();
+        AppAudioUtils.startBackgroundMusic();
       }
     });
   }

@@ -1,6 +1,7 @@
 import 'package:GnanG/colors.dart';
 import 'package:GnanG/utils/app_setting_util.dart';
 import 'package:GnanG/utils/appsharedpref.dart';
+import 'package:GnanG/utils/audio_utilsdart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
@@ -104,9 +105,9 @@ class FabAnimatedButtonState extends State<FabAnimatedButton>
       setState(() {
         isMuteEnabled = isMute;
         if (!isMuteEnabled)
-          AppSettingUtil.startBackgroundMusic();
+          AppAudioUtils.startBackgroundMusic();
         else
-          AppSettingUtil.stopBackgroundMusic();
+          AppAudioUtils.stopBackgroundMusic();
       });
     });
   }

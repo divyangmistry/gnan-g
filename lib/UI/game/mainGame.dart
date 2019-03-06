@@ -11,8 +11,11 @@ import 'package:GnanG/model/current_stat.dart';
 import 'package:GnanG/model/question.dart';
 import 'package:GnanG/model/user_score_state.dart';
 import 'package:GnanG/model/validateQuestion.dart';
+import 'package:GnanG/utils/app_setting_util.dart';
 import 'package:GnanG/utils/app_utils.dart';
+import 'package:GnanG/utils/audio_utilsdart.dart';
 import 'package:GnanG/utils/response_parser.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flame/flame.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/cupertino.dart';
@@ -55,8 +58,11 @@ class MainGamePageState extends BaseState<MainGamePage> {
     super.initState();
     _loadData();
   }
-
+  AudioPlayer levelStartPlayer;
   _loadData() {
+    AppAudioUtils.playMusic(url:'music/CHANDELIER_FALLS.mp3', volume: 0.7).then((player) {
+      levelStartPlayer = player;
+    });
     isLoading = true;
     currentState = CacheData.userState.currentState;
     print('currentState ::::::::: ');
@@ -108,6 +114,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
 
   bool isBonusCompleted(AppResponse appResponse) {
     if (appResponse.data is Map && appResponse.data['msg'] != null) {
+      AppAudioUtils.stopMusic(levelStartPlayer);
       CommonFunction.alertDialog(
           context: context,
           type: "success",
@@ -133,7 +140,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
     });
   }
 
-  _loadNextQuestion() {
+  _loadNextQuestion() async {
     if (currentQueIndex < questions.length - 1) {
       setState(() {
         _reInitForQuestion();
@@ -142,6 +149,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
             questions.getRange(currentQueIndex, currentQueIndex + 1).first;
       });
     } else {
+      AudioPlayer audioPlayer = await AppAudioUtils.playMusic(url: "music/level/levelCompleted.WAV");
       CommonFunction.alertDialog(
           context: context,
           msg: (widget.isBonusLevel)
@@ -149,13 +157,14 @@ class MainGamePageState extends BaseState<MainGamePage> {
               : 'Level ' + question.level.toString() + ' completed !! ',
           barrierDismissible: false,
           type: 'success',
+          playSound: false,
           doneButtonFn: () async {
+            AppAudioUtils.stopMusic(audioPlayer);
             Navigator.pop(context);
             setState(() {
               isOverlay = true;
             });
-            bool result = await CommonFunction.loadUserState(
-                context, CacheData.userInfo.mhtId);
+            bool result = await CommonFunction.loadUserState(context, CacheData.userInfo.mhtId);
             setState(() {
               isOverlay = false;
             });
@@ -184,14 +193,17 @@ class MainGamePageState extends BaseState<MainGamePage> {
           if (CacheData.userState.lives == 1) {
             CommonFunction.alertDialog(
               context: context,
+              type: 'success',
               msg: 'You have only 1 Life remaining. Now you can access hint.',
               barrierDismissible: false,
             );
           }
           if (CacheData.userState.lives == 0) {
+            AppAudioUtils.playMusic(url: "music/game/gameEnd.WAV");
             CommonFunction.alertDialog(
                 context: context,
                 msg: 'Game-over',
+                playSound: false,
                 barrierDismissible: false,
                 doneButtonFn: () {
                   Navigator.pop(context);
@@ -315,11 +327,9 @@ class MainGamePageState extends BaseState<MainGamePage> {
     setState(() {
       isOverlay = false;
     });
-    AppResponse appResponse =
-        ResponseParser.parseResponse(context: context, res: res);
+    AppResponse appResponse = ResponseParser.parseResponse(context: context, res: res);
     if (appResponse.status == WSConstant.SUCCESS_CODE) {
-      ValidateQuestion validateQuestion =
-          ValidateQuestion.fromJson(appResponse.data);
+      ValidateQuestion validateQuestion = ValidateQuestion.fromJson(appResponse.data);
       setState(() {
         isGivenCorrectAns = true;
         validateQuestion.updateSessionScore();
@@ -332,9 +342,6 @@ class MainGamePageState extends BaseState<MainGamePage> {
           barrierDismissible: false,
           doneButtonFn: onAnswerStatusDialogOK,
         );
-        AppUtils.appSound(() {
-          Flame.audio.play('music/party_horn-Mike_Koenig-76599891.mp3');
-        });
       } else {
         isGivenCorrectAns = false;
         CommonFunction.alertDialog(
@@ -343,12 +350,10 @@ class MainGamePageState extends BaseState<MainGamePage> {
           barrierDismissible: false,
           doneButtonFn: onAnswerStatusDialogOK,
         );
-        AppUtils.appSound(() {
-          Flame.audio.play('music/Pac man dies.mp3');
-        });
       }
     }
   }
+
 
   void onAnswerStatusDialogOK() {
     Navigator.pop(context);
