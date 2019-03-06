@@ -408,7 +408,9 @@ class CommonFunction {
       context: context,
       barrierDismissible: barrierDismissible,
       builder: (_) {
-        return AlertDialog(
+        return WillPopScope(
+            onWillPop: () async => false,
+        child: AlertDialog(
           shape: new RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(25.0),
           ),
@@ -416,13 +418,13 @@ class CommonFunction {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               displayImage ? Container(
-                      height: 150,
-                      width: 150,
-                      child: FlareActor(
-                        'assets/animation/Teddy.flr',
-                        animation: type == 'success' ? "success" : 'fail',
-                      ),
-                    ) : new Container(),
+                height: 150,
+                width: 150,
+                child: FlareActor(
+                  'assets/animation/Teddy.flr',
+                  animation: type == 'success' ? "success" : 'fail',
+                ),
+              ) : new Container(),
               SizedBox(
                 height: 20,
               ),
@@ -432,8 +434,8 @@ class CommonFunction {
                   msg != null
                       ? msg
                       : type == 'error'
-                          ? "Looks like your lack of \n Imagination ! "
-                          : "Looks like today is your luckyday ... !!",
+                      ? "Looks like your lack of \n Imagination ! "
+                      : "Looks like today is your luckyday ... !!",
                   textAlign: TextAlign.center,
                   style: TextStyle(color: Colors.blueGrey, height: 1.5),
                   textScaleFactor: 1.1,
@@ -461,47 +463,48 @@ class CommonFunction {
                       ],
                     ),
                     onPressed: () {
-                        if(playSound && type == 'success')
-                            AppAudioUtils.stopCorrectMusic();
-                        if(doneButtonFn != null) {
-                          doneButtonFn();
-                        } else {
-                          Navigator.pop(context);
-                        }
+                      if(playSound && type == 'success')
+                        AppAudioUtils.stopCorrectMusic();
+                      if(doneButtonFn != null) {
+                        doneButtonFn();
+                      } else {
+                        Navigator.pop(context);
                       }
+                    }
                     ,
                   ),
                   showCancelButton ? SizedBox(width: 10) : new Container(),
                   showCancelButton
                       ? FlatButton(
-                          padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
-                          color: kQuizErrorRed,
-                          child: Row(
-                            children: <Widget>[
-                              Text(
-                                "Cancel",
-                                textScaleFactor: 1.2,
-                                style: TextStyle(
-                                  color: kQuizBackgroundWhite,
-                                ),
-                              )
-                            ],
+                    padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+                    color: kQuizErrorRed,
+                    child: Row(
+                      children: <Widget>[
+                        Text(
+                          "Cancel",
+                          textScaleFactor: 1.2,
+                          style: TextStyle(
+                            color: kQuizBackgroundWhite,
                           ),
-                          onPressed: () {
-                            if(playSound && type == 'success')
-                              AppAudioUtils.stopCorrectMusic();
-                            if(doneCancelFn != null) {
-                                doneCancelFn();
-                            } else {
-                              Navigator.pop(context);
-                            }
-                          },
                         )
+                      ],
+                    ),
+                    onPressed: () {
+                      if(playSound && type == 'success')
+                        AppAudioUtils.stopCorrectMusic();
+                      if(doneCancelFn != null) {
+                        doneCancelFn();
+                      } else {
+                        Navigator.pop(context);
+                      }
+                    },
+                  )
                       : new Container(),
                 ],
               ),
             ],
           ),
+        ),
         );
       },
     );
