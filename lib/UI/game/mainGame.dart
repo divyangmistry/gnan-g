@@ -195,7 +195,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
         _loadNextQuestion();
       } else {
         if (isGivenCorrectAns) {
-          //_loadNextQuestion();
+          _loadNextQuestion();
         } else {
           if (CacheData.userState.lives == 1) {
             CommonFunction.alertDialog(
@@ -351,7 +351,6 @@ class MainGamePageState extends BaseState<MainGamePage> {
       setState(() {
         isGivenCorrectAns = true;
         validateQuestion.updateSessionScore();
-        _loadNextQuestion();
       });
       if (validateQuestion.answerStatus) {
         CommonFunction.alertDialog(
