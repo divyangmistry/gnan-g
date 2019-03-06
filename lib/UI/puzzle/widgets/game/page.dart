@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:GnanG/utils/audio_utilsdart.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -70,6 +72,7 @@ class GamePage extends StatelessWidget {
         builder: (context) => Text(''),
       );
     } else {
+      AppAudioUtils.playMusic(url: "music/level/levelCompleted.WAV");
       showDialog(
         barrierDismissible: false,
         context: context,

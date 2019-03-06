@@ -3,10 +3,40 @@ import 'dart:io';
 import 'package:GnanG/UI/puzzle/play_games.dart';
 import 'package:GnanG/UI/puzzle/widgets/game/page.dart';
 import 'package:GnanG/common.dart';
+import 'package:GnanG/utils/audio_utilsdart.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class GameOfFifteen extends StatelessWidget {
+class GameOfFifteen extends StatefulWidget {
+
+
+
+  @override
+  GameOfFifteenState createState() {
+    return new GameOfFifteenState();
+  }
+}
+
+class GameOfFifteenState extends State<GameOfFifteen> {
+
+  AudioPlayer audioPlayer;
+  @override
+  void initState() {
+    super.initState();
+    AppAudioUtils.stopBackgroundMusic();
+    AppAudioUtils.playMusic(url : 'music/puzzel.wav').then((player) {
+      audioPlayer = player;
+    });
+  }
+  @override
+  void dispose() {
+    super.dispose();
+    if(audioPlayer != null)
+      audioPlayer.stop();
+    AppAudioUtils.startBackgroundMusic();
+  }
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build

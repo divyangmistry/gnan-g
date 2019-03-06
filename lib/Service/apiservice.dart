@@ -88,10 +88,10 @@ class ApiService {
     return res;
   }
 
-  Future<http.Response> changeMobile({@required UserData userData}) async {
+  Future<http.Response> requestRegistration({@required UserData userData}) async {
     Map<String, dynamic> data = userData.toJson();
     data['new_mobile'] = userData.mobile;
-    Response res = await postApi(url: '/change_mobile', data: data);
+    Response res = await postApi(url: '/request_registration', data: data);
     return res;
   }
 

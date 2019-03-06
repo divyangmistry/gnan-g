@@ -72,11 +72,18 @@ class ProfilePagePageState extends BaseState<ProfilePagePage> {
     return new Row(
       children: <Widget>[
         _iconButton(
-          Icon(Icons.power_settings_new, color: Colors.white),
-          () {
-            _api.logout();
-            Navigator.pop(context);
-            Navigator.pushReplacementNamed(context, '/login_new');
+          Icon(
+            Icons.help_outline,
+            color: Colors.white,
+          ),
+              () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => new SucessAnimationPage(),
+              ),
+            );
+            // Navigator.pushNamed(context, '/rules');
           },
         ),
         new Expanded(
@@ -88,18 +95,11 @@ class ProfilePagePageState extends BaseState<ProfilePagePage> {
           ),
         ),
         _iconButton(
-          Icon(
-            Icons.help_outline,
-            color: Colors.white,
-          ),
-          () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => new SucessAnimationPage(),
-              ),
-            );
-            // Navigator.pushNamed(context, '/rules');
+          Icon(Icons.power_settings_new, color: Colors.white),
+              () {
+            _api.logout();
+            Navigator.pop(context);
+            Navigator.pushReplacementNamed(context, '/login_new');
           },
         ),
       ],

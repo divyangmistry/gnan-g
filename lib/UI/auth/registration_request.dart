@@ -143,7 +143,7 @@ class RegistrationRequestPageState extends BaseState<RegistrationRequestPage> {
           child: new TextFormField(
             validator: CommonFunction.mobileValidation,
             decoration: InputDecoration(
-              labelText: 'New Mobile no.',
+              labelText: 'Mobile no.',
               hintText: 'Enter 10 digit Mobile no.',
               prefixIcon: Icon(
                 Icons.call,
@@ -246,14 +246,12 @@ class RegistrationRequestPageState extends BaseState<RegistrationRequestPage> {
         userData.email = _emailId;
         userData.center = _center;
         userData.mobile = _mobile;
-        //Response res = await _api.changeMobile(userData: userData);
-        //AppResponse appResponse = ResponseParser.parseResponse(context: context, res: res);
-        AppResponse appResponse = AppResponse();
-        appResponse.status = 200;
+        Response res = await _api.requestRegistration(userData: userData);
+        AppResponse appResponse = ResponseParser.parseResponse(context: context, res: res);
         if (appResponse.status == 200) {
           CommonFunction.alertDialog(
               context: context,
-              msg: "Your request is successfully sent. You can try SIGN UP after 24 hours or can contact to " +
+              msg: "You will get confirmation on your mobile within 24 Hours or You can contact to " +
                   AppConstant.MBA_MAILID,
               type: "success",
               doneButtonText: "OK",

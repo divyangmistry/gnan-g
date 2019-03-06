@@ -1,6 +1,7 @@
 // Package import
 import 'package:GnanG/UI/auth/new_otp.dart';
 import 'package:GnanG/UI/widgets/base_state.dart';
+import 'package:GnanG/constans/message_constant.dart';
 import 'package:GnanG/model/appresponse.dart';
 import 'package:GnanG/model/signupsession.dart';
 import 'package:GnanG/utils/response_parser.dart';
@@ -54,8 +55,8 @@ class SignUpPageState extends BaseState<SignUpPage> {
             _indiaLoginFields(),
             new SizedBox(height: 50.0),
             _loginBox(),
-            new SizedBox(height: 15.0),
-            _termsAndCondition(),
+            /*new SizedBox(height: 15.0),
+            _termsAndCondition(),*/
           ],
         ),
       ),
@@ -336,8 +337,26 @@ class SignUpPageState extends BaseState<SignUpPage> {
                 ),
           ),
         );
+      } else if (1 == 1) {
+        CommonFunction.alertDialog(
+          context: context,
+          title: 'Data Not Found',
+          msg: 'Your MHT ID & Mobile No. is not registred with us, Kindly click below to enter registration detail.',
+          doneButtonText: 'Register',
+          doneButtonFn: () {
+            Navigator.pushReplacementNamed(context, '/registrationrequest');
+          },
+          showCancelButton: true
+        );
       } else {
-
+        CommonFunction.alertDialog(
+          context: context,
+          title: 'Error - ' + appResponse.status.toString(),
+          msg: appResponse.message != null
+              ? appResponse.message
+              : MessageConstant.COMMON_ERROR_MSG,
+          doneButtonText: 'Okay',
+        );
       }
     } catch (err) {
       print('CATCH :: ');

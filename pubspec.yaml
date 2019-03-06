@@ -40,7 +40,7 @@ dependencies:
   image_picker: "0.4.5"
   image_cropper: 1.0.0
   flutter_webview_plugin: 0.3.0
-  #package_info: ^0.4.0
+  package_info: 0.4.0
 #  launch_review: ^1.0.1
 
   # The following adds the Cupertino Icons font to your application.
@@ -89,6 +89,7 @@ flutter:
 
     - assets/audio/music/level/levelCompleted.WAV
 
+    - assets/audio/music/puzzel.wav
     - assets/animation/noInternet.flr
     - assets/animation/Teddy.flr
     - assets/animation/Dancing.flr

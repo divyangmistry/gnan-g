@@ -207,8 +207,7 @@ class CommonFunction {
 
   // email Validation
   static String emailValidation(String value) {
-    Pattern pattern =
-        r'^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$';
+    String pattern = r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
     RegExp regex = new RegExp(pattern);
     if (value.isEmpty) {
       return 'Email-Id is required';
@@ -281,14 +280,14 @@ class CommonFunction {
           barrierDismissible: false,
           showCancelButton: true,
           doneButtonFn: () {
-            _getLife(context);
+            getLife(context);
           },
         );
       },
     );
   }
 
-  static _getLife(BuildContext context) async {
+  static getLife(BuildContext context) async {
     try {
       Response res = await _api.requestLife(mhtId: CacheData.userInfo.mhtId);
       AppResponse appResponse = ResponseParser.parseResponse(context: context, res: res);
@@ -447,7 +446,7 @@ class CommonFunction {
                 children: <Widget>[
                   FlatButton(
                     padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
-                    color: type == 'error' ? kQuizErrorRed : Colors.green[600],
+                    color: type == 'error' ? kQuizErrorRed : kQuizMain500,
                     child: Row(
                       children: <Widget>[
                         Text(

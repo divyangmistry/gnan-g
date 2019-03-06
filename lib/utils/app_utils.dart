@@ -1,4 +1,6 @@
 import 'package:GnanG/constans/appconstant.dart';
+import 'package:GnanG/model/appsetting.dart';
+import 'package:GnanG/utils/app_setting_util.dart';
 import 'package:GnanG/utils/appsharedpref.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flame/flame.dart';
@@ -35,9 +37,10 @@ class AppUtils {
     }
   }
 
-  static void launchPlaystoreApp(String appId) {
-    launch(AppConstant.PLAYSTORE_URL);
-//    LaunchReview.launch(androidAppId: "org.dadabhagwan.AKonnect",
-//        iOSAppId: "585027354");
+  static void launchPlaystoreApp() async {
+    String appId = await AppSettingUtil.getAppID();
+    launch(AppConstant.BASE_PLAYSTORE_URL + appId);
+    /*LaunchReview.launch(androidAppId: "org.dadabhagwan.AKonnect",
+        iOSAppId: "585027354");*/
   }
 }

@@ -124,10 +124,10 @@ class LoginPageState extends BaseState<LoginPage> {
                 ),
                 new SizedBox(height: 15.0),
                 _forgotPasswordBox(),
-                new SizedBox(height: 20.0),
+                new SizedBox(height: 10.0),
                 _signupBox(),
-                new SizedBox(height: 5.0),
-                _termsAndCondition(),
+                /*new SizedBox(height: 5.0),
+                _termsAndCondition(),*/
               ],
             ),
           ),

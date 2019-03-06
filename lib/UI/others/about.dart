@@ -65,8 +65,8 @@ class About extends StatelessWidget {
                 SizedBox(height: 10),
                 _LinkText(
                   style: linkStyle,
-                  text: "mbaapps@googlegroups.com",
-                  url: "mailto:mbaapps@googlegroups.com?subject=Feedback of GnanG",
+                  text: AppConstant.MBA_MAILID,
+                  url: "mailto:" + AppConstant.MBA_MAILID +"?subject=Feedback of GnanG",
                 ),
                 SizedBox(height: 40),
                 Text("Send Bug Report to us with screenshots @", style: TextStyle(fontSize: 14),),
@@ -74,7 +74,7 @@ class About extends StatelessWidget {
                 _LinkText(
                   style: linkStyle,
                   text: "mbaapps@googlegroups.com",
-                  url: "mailto:mbaapps@googlegroups.com?subject=Bug Report of GnanG",
+                  url: "mailto:" + AppConstant.MBA_MAILID + "?subject=Bug Report of GnanG",
                 ),
               ],
             ),

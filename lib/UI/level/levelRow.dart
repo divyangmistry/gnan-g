@@ -35,9 +35,8 @@ class LevelCardRow extends StatelessWidget {
 
   bool isCompleted(int levelIndex) {
     List<CompletedLevel> completedLevels = CacheData.userState.completed;
-    for(CompletedLevel completedLevel in completedLevels) {
-      if(completedLevel.level == levelIndex)
-        return true;
+    for (CompletedLevel completedLevel in completedLevels) {
+      if (completedLevel.level == levelIndex) return true;
     }
     return false;
   }
@@ -109,9 +108,7 @@ class LevelCardRow extends StatelessWidget {
                   style: TextStyle(color: kQuizMain50),
                 ),
                 new Text(
-                  levelDetails.totalscores != null
-                      ? levelDetails.totalscores.toString()
-                      : "",
+                  levelDetails.totalscores != null ? levelDetails.totalscores.toString() : "",
                   style: TextStyle(color: kQuizMain400),
                 ),
               ],
@@ -130,52 +127,55 @@ class LevelCardRow extends StatelessWidget {
         onTap: () {
           print('LEVEL DETAILS :: ');
           print(levelDetails);
-          if (CacheData.userState.lives > 0) {
-            if (!lock) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => new MainGamePage(
-                        level: levelDetails,
-                      ),
-                ),
-              );
-            } else {
-              bool isLevelCompleted = isCompleted(levelDetails.levelIndex);
-              CommonFunction.alertDialog(
-                  context: context, msg: isLevelCompleted ? 'Hooray !!  You have already cleared this level' : 'This level is locked for you',
-                  type: isLevelCompleted ? "success" : 'error'
-                );
-            }
+          if (isCompleted(levelDetails.levelIndex)) {
+            CommonFunction.alertDialog(
+                context: context, msg: 'Hooray !!  You have already cleared this level', type: "success");
           } else {
-            if (CacheData.userState.totalscore > 100) {
-              CommonFunction.alertDialog(
-                context: context,
-                msg:
-                    'You don\'t have enough points.\nYou can earn life from 100 Points',
-                barrierDismissible: false,
-                doneButtonText: 'Get Life',
-                doneButtonFn: () {
-                  Navigator.pop(context);
-                },
-              );
+            if (CacheData.userState.lives > 0) {
+              if (!lock) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => new MainGamePage(
+                          level: levelDetails,
+                        ),
+                  ),
+                );
+              } else {
+                bool isLevelCompleted = isCompleted(levelDetails.levelIndex);
+                CommonFunction.alertDialog(
+                    context: context,
+                    msg: 'This level is locked for you',
+                    type: isLevelCompleted ? "success" : 'error');
+              }
             } else {
-              CommonFunction.alertDialog(
-                context: context,
-                msg:
-                    'You don\'t have enough lifes.\nYou can earn points and get life from puzzeles',
-                barrierDismissible: false,
-                doneButtonText: 'Play puzzle',
-                doneButtonFn: () {
-                  Navigator.pop(context);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => new GameOfFifteen(),
-                    ),
-                  );
-                },
-              );
+              if (CacheData.userState.totalscore > 100) {
+                CommonFunction.alertDialog(
+                    context: context,
+                    msg: 'You don\'t have enough points.\nYou can earn life from 100 Points',
+                    barrierDismissible: false,
+                    doneButtonText: 'Get Life',
+                    doneButtonFn: () {
+                      CommonFunction.getLife(context);
+                    },
+                    showCancelButton: true);
+              } else {
+                CommonFunction.alertDialog(
+                  context: context,
+                  msg: 'You don\'t have enough lifes.\nYou can earn points and get life from puzzeles',
+                  barrierDismissible: false,
+                  doneButtonText: 'Play puzzle',
+                  doneButtonFn: () {
+                    Navigator.pop(context);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => new GameOfFifteen(),
+                      ),
+                    );
+                  },
+                );
+              }
             }
           }
         },

@@ -108,7 +108,7 @@ class AppUpdateCheck {
   }
 
   void onUpdateNow(BuildContext context) {
-    AppUtils.launchPlaystoreApp(AppSettingUtil.getAppID());
+    AppUtils.launchPlaystoreApp();
     Navigator.pop(context);
   }
 

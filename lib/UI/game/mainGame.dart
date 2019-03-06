@@ -70,6 +70,13 @@ class MainGamePageState extends BaseState<MainGamePage> {
     _loadAllQuestions();
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+    if(levelStartPlayer != null)
+      levelStartPlayer.stop();
+  }
+
   _loadAllQuestions() async {
     image = await CommonFunction.getUserProfileImg(context: context);
     Response res;
@@ -154,7 +161,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
           context: context,
           msg: (widget.isBonusLevel)
               ? "All Question of Daily Bonus is completed !!"
-              : 'Level ' + question.level.toString() + ' completed !! ',
+              : widget.level.name + ' level is completed !! ',
           barrierDismissible: false,
           type: 'success',
           playSound: false,

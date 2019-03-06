@@ -58,7 +58,7 @@ class FabAnimatedButtonState extends State<FabAnimatedButton>
       shape: CircleBorder(),
       children: [
         SpeedDialChild(
-            child: Icon(Icons.feedback),
+            child: Icon(Icons.help),
             label: 'Rules',
             backgroundColor: Colors.red,
             labelStyle: TextStyle(fontSize: 18.0),
