@@ -45,20 +45,20 @@ class GameMaterialPage extends StatelessWidget {
           );
         },
         child: OrientationBuilder(builder: (context, orientation) {
-//          final statusWidget = Column(
-//            mainAxisSize: MainAxisSize.min,
-//            children: <Widget>[
-//              GameStopwatchWidget(
-//                time: presenter.time,
-//                fontSize: orientation == Orientation.landscape && !isLargeScreen
-//                    ? 56.0
-//                    : 72.0,
-//              ),
-//              // GameStepsWidget(
-//              //   steps: presenter.steps,
-//              // ),
-//            ],
-//          );
+          final statusWidget = Column(	//          final statusWidget = Column(
+            mainAxisSize: MainAxisSize.min,	//            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[	//            children: <Widget>[
+              GameStopwatchWidget(	//              GameStopwatchWidget(
+                time: presenter.time,	//                time: presenter.time,
+                fontSize: orientation == Orientation.landscape && !isLargeScreen	//                fontSize: orientation == Orientation.landscape && !isLargeScreen
+                    ? 46.0	//                    ? 56.0
+                    : 62.0,	//                    : 72.0,
+              ),	//              ),
+              // GameStepsWidget(	//              // GameStepsWidget(
+              //   steps: presenter.steps,	//              //   steps: presenter.steps,
+              // ),	//              // ),
+            ],	//            ],
+          );
 
           if (orientation == Orientation.portrait) {
             //
@@ -77,13 +77,18 @@ class GameMaterialPage extends StatelessWidget {
                       'PUZZLE',
                       style: Theme.of(context).textTheme.title,
                     ),
+                    Expanded(
+                      child: Center(
+                        child: statusWidget,
+                      ),
+                    ),
                     SizedBox(
                       height: 50.0,
                     ),
                     boardWidget,
                     isLargeScreen && isTallScreen
-                        ? const SizedBox(height: 116.0)
-                        : const SizedBox(height: 72.0),
+                        ? const SizedBox(height: 106.0)
+                        : const SizedBox(height: 52.0),
                   ],
                 ),
               ),
@@ -101,6 +106,7 @@ class GameMaterialPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
                     boardWidget,
+                    statusWidget
                   ],
                 ),
               ),

@@ -275,8 +275,9 @@ class CommonFunction {
           context: context,
           msg: 'You can buy life for 100 points.',
           doneButtonText: 'Yes take it',
-          type: 'info',
+          type: 'success',
           title: 'Oh Yeah ..',
+          playSound: false,
           barrierDismissible: false,
           showCancelButton: true,
           doneButtonFn: () {

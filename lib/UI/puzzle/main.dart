@@ -3,8 +3,10 @@ import 'dart:io';
 import 'package:GnanG/UI/puzzle/play_games.dart';
 import 'package:GnanG/UI/puzzle/widgets/game/page.dart';
 import 'package:GnanG/common.dart';
+import 'package:GnanG/utils/app_utils.dart';
 import 'package:GnanG/utils/audio_utilsdart.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flame/flame.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -20,21 +22,13 @@ class GameOfFifteen extends StatefulWidget {
 
 class GameOfFifteenState extends State<GameOfFifteen> {
 
-  AudioPlayer audioPlayer;
   @override
   void initState() {
     super.initState();
-    AppAudioUtils.stopBackgroundMusic();
-    AppAudioUtils.playMusic(url : 'music/puzzel.wav').then((player) {
-      audioPlayer = player;
-    });
   }
   @override
   void dispose() {
     super.dispose();
-    if(audioPlayer != null)
-      audioPlayer.stop();
-    AppAudioUtils.startBackgroundMusic();
   }
 
   @override

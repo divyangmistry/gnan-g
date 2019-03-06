@@ -162,7 +162,7 @@ class LevelCardRow extends StatelessWidget {
               } else {
                 CommonFunction.alertDialog(
                   context: context,
-                  msg: 'You don\'t have enough lifes.\nYou can earn points and get life from puzzeles',
+                  msg: 'You don\'t have enough lives.\nYou can earn points and get life from puzzeles',
                   barrierDismissible: false,
                   doneButtonText: 'Play puzzle',
                   doneButtonFn: () {

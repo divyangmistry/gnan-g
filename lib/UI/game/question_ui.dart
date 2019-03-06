@@ -80,9 +80,7 @@ class QuestionUIState extends State<QuestionUI> {
           barrierDismissible: false,
           doneButtonFn: onAnswerStatusDialogOK,
         );
-        AppUtils.appSound(() {
-          Flame.audio.play('music/party_horn-Mike_Koenig-76599891.mp3');
-        });
+
       } else {
         isGivenCorrectAns = false;
         CommonFunction.alertDialog(

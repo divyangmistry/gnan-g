@@ -10,7 +10,7 @@ class AppAudioUtils {
   static void startBackgroundMusic() {
     AppUtils.appSound(() async {
       if (backgroundMusic == null)
-        backgroundMusic = await Flame.audio.loop('music/background_music.mp3', volume: 0.5);
+        backgroundMusic = await Flame.audio.loop('music/background_music.mp3', volume: 0.2);
       else
         backgroundMusic.resume();
     });
@@ -21,11 +21,11 @@ class AppAudioUtils {
   }
 
   static void decreaseBackgroundMusic() {
-    if (backgroundMusic != null) backgroundMusic.setVolume(0.2);
+    if (backgroundMusic != null) backgroundMusic.setVolume(0.09);
   }
 
   static void startOriginalBackgroundMusic() {
-    if (backgroundMusic != null) backgroundMusic.setVolume(0.5);
+    if (backgroundMusic != null) backgroundMusic.setVolume(0.2);
   }
 
   static Future<AudioPlayer> playMusic({String url, double volume}) async {

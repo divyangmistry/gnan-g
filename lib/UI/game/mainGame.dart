@@ -60,9 +60,9 @@ class MainGamePageState extends BaseState<MainGamePage> {
   }
   AudioPlayer levelStartPlayer;
   _loadData() {
-    AppAudioUtils.playMusic(url:'music/CHANDELIER_FALLS.mp3', volume: 0.7).then((player) {
+    /*AppAudioUtils.playMusic(url:'music/CHANDELIER_FALLS.mp3', volume: 0.3).then((player) {
       levelStartPlayer = player;
-    });
+    });*/
     isLoading = true;
     currentState = CacheData.userState.currentState;
     print('currentState ::::::::: ');
@@ -160,7 +160,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
       CommonFunction.alertDialog(
           context: context,
           msg: (widget.isBonusLevel)
-              ? "All Question of Daily Bonus is completed !!"
+              ? "All Questions of Daily Bonus are completed !!"
               : widget.level.name + ' level is completed !! ',
           barrierDismissible: false,
           type: 'success',
@@ -201,6 +201,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
             CommonFunction.alertDialog(
               context: context,
               type: 'success',
+              playSound: false,
               msg: 'You have only 1 Life remaining. Now you can access hint.',
               barrierDismissible: false,
             );
@@ -426,11 +427,9 @@ class MainGamePageState extends BaseState<MainGamePage> {
       if (!isHintTaken) {
         Response res = await _api.hintTaken(
             questionId: question.questionId, mhtId: CacheData.userInfo.mhtId);
-        AppResponse appResponse =
-            ResponseParser.parseResponse(context: context, res: res);
+        AppResponse appResponse = ResponseParser.parseResponse(context: context, res: res);
         if (appResponse.status == WSConstant.SUCCESS_CODE) {
-          UserScoreState userScoreState =
-              UserScoreState.fromJson(appResponse.data);
+          UserScoreState userScoreState = UserScoreState.fromJson(appResponse.data);
           setState(() {
             userScoreState.updateSessionScore();
           });
@@ -444,13 +443,20 @@ class MainGamePageState extends BaseState<MainGamePage> {
         }
       }
       if (!isApiFailed) {
+        AudioPlayer audioPlayer = await AppAudioUtils.playMusic(url: 'music/hint.WAV', volume: 2.6);
         CommonFunction.alertDialog(
             context: context,
             msg: question.reference,
             type: 'success',
             doneButtonText: 'Okay',
             title: 'Here is your hint ...',
-            barrierDismissible: false);
+            playSound: false,
+            doneButtonFn: () {
+              AppAudioUtils.stopMusic(audioPlayer);
+              Navigator.pop(context);
+            },
+            barrierDismissible: false,
+        );
       }
     } catch (err) {
       print('CATCH IN HINT :: ');
@@ -537,7 +543,10 @@ class MainGamePageState extends BaseState<MainGamePage> {
               question.questionType == 'MCQ' ? CustomVerticalDivider(
                 height: 100,
               ) : new Container(),
-              (question.questionType == 'MCQ' && CacheData.userState.currentState.fifty_fifty != null && CacheData.userState.currentState.fifty_fifty && CacheData.userState.lives <= 1) ? lifeline(Icons.star_half, '50 - 50', _fiftyFifty) : new Container(),
+              (question.questionType == 'MCQ' && CacheData.userState.currentState.fifty_fifty != null
+                  && CacheData.userState.currentState.fifty_fifty && CacheData.userState.lives <= 1) ?
+                  lifeline(Icons.star_half, '50 - 50', _fiftyFifty)
+                  : new Container(),
             ],
           ),
           SizedBox(
@@ -606,11 +615,9 @@ class MainGamePageState extends BaseState<MainGamePage> {
           mht_id: CacheData.userInfo.mhtId,
           level: CacheData.userState.currentState.level,
         );
-        AppResponse appResponse =
-            ResponseParser.parseResponse(context: context, res: res);
+        AppResponse appResponse = ResponseParser.parseResponse(context: context, res: res);
         if (appResponse.status == WSConstant.SUCCESS_CODE) {
-          UserScoreState userScoreState =
-              UserScoreState.fromJson(appResponse.data);
+          UserScoreState userScoreState = UserScoreState.fromJson(appResponse.data);
           setState(() {
             userScoreState.updateSessionScore();
             CacheData.userState.currentState.fifty_fifty = false;
@@ -625,6 +632,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
         }
       }
       if (!isApiFailed) {
+        AppAudioUtils.playMusic(url: 'music/hint.WAV', volume: 2.6);
         var rng = new Random();
         while (hiddenOptionIndex.length < 2) {
           int temp = rng.nextInt(3);

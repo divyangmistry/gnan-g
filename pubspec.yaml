@@ -73,7 +73,6 @@ flutter:
     - images/logo1.png
     - assets/audio/music/background_music.mp3
     - assets/audio/music/Pac man dies.mp3
-    - assets/audio/music/party_horn-Mike_Koenig-76599891.mp3
     - assets/audio/music/CHANDELIER_FALLS.mp3
 
     - assets/audio/music/right/right1.WAV
@@ -88,8 +87,8 @@ flutter:
     - assets/audio/music/game/gameEnd.WAV
 
     - assets/audio/music/level/levelCompleted.WAV
+    - assets/audio/music/hint.WAV
 
-    - assets/audio/music/puzzel.wav
     - assets/animation/noInternet.flr
     - assets/animation/Teddy.flr
     - assets/animation/Dancing.flr
