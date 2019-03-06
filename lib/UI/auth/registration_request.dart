@@ -224,7 +224,7 @@ class RegistrationRequestPageState extends BaseState<RegistrationRequestPage> {
                 elevation: 4.0,
                 padding: EdgeInsets.all(20.0),
                 onPressed: () {
-                  Navigator.pushNamed(context, '/login_new');
+                  Navigator.pop(context);
                 },
               ),
             )

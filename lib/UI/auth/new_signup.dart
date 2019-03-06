@@ -344,6 +344,7 @@ class SignUpPageState extends BaseState<SignUpPage> {
           msg: appResponse.message != null ? appResponse.message :'Your MHT ID & Mobile No. is not registred with us, Kindly click below to enter registration detail.',
           doneButtonText: 'Register',
           doneButtonFn: () {
+            Navigator.pop(context);
             Navigator.pushReplacementNamed(context, '/registrationrequest');
           },
           showCancelButton: true
