@@ -1,5 +1,7 @@
+import 'package:GnanG/UI/widgets/base_state.dart';
 import 'package:GnanG/colors.dart';
 import 'package:GnanG/constans/appconstant.dart';
+import 'package:GnanG/utils/app_setting_util.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -32,9 +34,28 @@ final TextStyle linkStyle = TextStyle(
   decoration: TextDecoration.none
  );
 
-class About extends StatelessWidget {
+class About extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
+  AboutState createState() {
+    return new AboutState();
+  }
+}
+
+class AboutState extends BaseState<About> {
+  String appVersion = '';
+
+  AboutState() {
+    isLoading = true;
+    AppSettingUtil.getAppVersion().then((version) {
+      setState(() {
+        appVersion = version;
+        isLoading = false;
+      });
+    });
+  }
+
+  @override
+  Widget pageToDisplay() {
     // TODO: implement build
     return Scaffold(
       appBar: AppBar(
@@ -55,7 +76,7 @@ class About extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Text("Version: ", style: TextStyle(color: kBackgroundGrediant3),),
-                    Text(AppConstant.APP_VERSION),
+                    Text(appVersion),
                   ],
                 ),
                 SizedBox(height: 20),
@@ -82,5 +103,4 @@ class About extends StatelessWidget {
         ]
       ));
   }
-
 }
