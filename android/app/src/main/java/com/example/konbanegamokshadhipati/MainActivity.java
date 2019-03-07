@@ -1,4 +1,4 @@
-package com.mba.sheelquotient;
+package org.mba.gnang;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;

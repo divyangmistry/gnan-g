@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:446394926699:android:5d5c195a000bb4a5",
         "android_client_info": {
-          "package_name": "com.mba.sheelquotient"
+          "package_name": "org.mba.gnang"
         }
       },
       "oauth_client": [
@@ -18,7 +18,7 @@
           "client_id": "446394926699-q2t94qe6kjn12qm7dsdkgs8ovp61o642.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.mba.sheelquotient",
+            "package_name": "org.mba.gnang",
             "certificate_hash": "f754eeef75349572bfe5bf411b469ee8a4bd0a91"
           }
         },
