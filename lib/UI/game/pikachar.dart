@@ -54,6 +54,7 @@ class _PikacharState extends State<Pikachar> {
         question(),
         answerRows(),
         optionTiles(),
+        SizedBox(height: 20,)
       ],
     );
   }

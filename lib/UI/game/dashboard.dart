@@ -78,7 +78,7 @@ class DashboardPageState extends State<DashboardPage> {
         ),
         _profile(),
         SizedBox(
-          height: 15.0,
+          height: 55.0,
         ),
       ],
     );

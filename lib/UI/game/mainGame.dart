@@ -435,8 +435,10 @@ class MainGamePageState extends BaseState<MainGamePage> {
     try {
       bool isApiFailed = false;
       if (!isHintTaken) {
-        Response res = await _api.hintTaken(
-            questionId: question.questionId, mhtId: CacheData.userInfo.mhtId);
+        setState(() {
+          isOverlay = true;
+        });
+        Response res = await _api.hintTaken(questionId: question.questionId, mhtId: CacheData.userInfo.mhtId);
         AppResponse appResponse = ResponseParser.parseResponse(context: context, res: res);
         if (appResponse.status == WSConstant.SUCCESS_CODE) {
           UserScoreState userScoreState = UserScoreState.fromJson(appResponse.data);
@@ -473,6 +475,9 @@ class MainGamePageState extends BaseState<MainGamePage> {
       print(err);
       CommonFunction.displayErrorDialog(context: context, msg: err.toString());
     }
+    setState(() {
+      isOverlay = false;
+    });
   }
 
   Widget _bottomDrawer() {
@@ -621,6 +626,9 @@ class MainGamePageState extends BaseState<MainGamePage> {
     try {
       bool isApiFailed = false;
       if (!isHintTaken) {
+        setState(() {
+          isOverlay = true;
+        });
         Response res = await _api.fiftyFifty(
           mht_id: CacheData.userInfo.mhtId,
           level: CacheData.userState.currentState.level,
@@ -660,6 +668,9 @@ class MainGamePageState extends BaseState<MainGamePage> {
       print(err);
       CommonFunction.displayErrorDialog(context: context, msg: err.toString());
     }
+    setState(() {
+      isOverlay = false;
+    });
   }
 
   Widget lifeline(IconData icon, String lifelineName, Function fn) {
