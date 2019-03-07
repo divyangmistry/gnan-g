@@ -92,7 +92,8 @@ class GameVictoryDialog extends StatelessWidget {
         new FlatButton(
           child: new Text("Voo Hoo, YOU DID IT !"),
           onPressed: () {
-            Navigator.of(context).popAndPushNamed('/dashboardPage');
+            Navigator.pop(context);
+            Navigator.pop(context);
           },
         ),
       ],

@@ -65,6 +65,6 @@ class AppAudioUtils {
   }
 
   static void stopCorrectMusic() async {
-    if (correctPlayer != null) correctPlayer.stop();
+    stopMusic(correctPlayer);
   }
 }
