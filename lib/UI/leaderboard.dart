@@ -77,10 +77,11 @@ class LeaderBoardState extends BaseState<LeaderBoard> {
           padding: EdgeInsets.all(16),
           child: Row(
             children: <Widget>[
-              Container(
-                  width: 25,
-                  child:Text(
-                  rank.toString(),
+              SizedBox(
+                width: 40,
+                child: Center(
+                  child: Text(
+                    rank.toString(),
                   style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
                 )
               ),
