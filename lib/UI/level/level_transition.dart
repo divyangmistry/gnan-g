@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:GnanG/model/user_state.dart';
 
 class LevelTransitionPage extends StatefulWidget {
   @override
@@ -15,21 +16,10 @@ class LevelTransitionPageState extends State<LevelTransitionPage> {
   @override
   Widget build(BuildContext buildContext) {
     return new Scaffold(
-        appBar: AppBar(
-          title: Center(
-            child: Text('Congratulations',
-              style: TextStyle(fontSize: 30.0, color: Colors.brown[400],),
-            ),
-          ),
-          backgroundColor: Colors.blue,
-        ),
-//        backgroundColor: Colors.cyan,
-        body:
-        SafeArea(
-//            height: 400,
-//            width: 400,
-//            margin: EdgeInsets.all(5.0),
+        backgroundColor: Colors.cyan,
+        body: SafeArea(
             child: Column(
+              mainAxisSize: MainAxisSize.max,
                 children: <Widget>[
                   new SizedBox(
                       height: 50
@@ -41,8 +31,7 @@ class LevelTransitionPageState extends State<LevelTransitionPage> {
                           height: 300,
                           width: 300,
                           foregroundDecoration: BoxDecoration(border: Border.all(width: 1.0)),
-                          child: Image.asset('images/Firework Icon 02.jpg'),
-//                      child: Image.asset('bulb.png'),
+                          child: Image.asset('images/Firework Icon 01.jpg'),
                         ),
                       ]
                   ),
