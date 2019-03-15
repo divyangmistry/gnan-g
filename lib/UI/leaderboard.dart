@@ -84,7 +84,7 @@ class LeaderBoardState extends BaseState<LeaderBoard> {
                     rank.toString(),
                   style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
                 )
-              ),
+              )),
               SizedBox(width: 9,)
               ,CircleAvatar(
                   maxRadius: 25,
