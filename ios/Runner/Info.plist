@@ -30,11 +30,15 @@
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>GnanG uses Photo Library for Profile picture</string>
+	<key>NSCameraUsageDescription</key>
+	<string>GnanG uses Camera for profile picture</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>GnanG uses Microphone</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
