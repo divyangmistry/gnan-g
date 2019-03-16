@@ -48,7 +48,7 @@ class LeaderBoardState extends BaseState<LeaderBoard> {
           print(leaderList);
           _userRank = leaders.userRank;
         });
-        loadPersonsImg();
+//        loadPersonsImg();
       }
     } catch (err) {
       CommonFunction.displayErrorDialog(context: context, msg: err.toString());
@@ -67,49 +67,6 @@ class LeaderBoardState extends BaseState<LeaderBoard> {
           });
         });
     });
-  }
-
-  Widget _buildLeaderRow(int rank, String name, int points, IconData icon,
-      Image image, int mhtId) {
-    return Column(
-      children: <Widget>[
-        Container(
-          padding: EdgeInsets.all(16),
-          child: Row(
-            children: <Widget>[
-              Container(
-                  width: 25,
-                  child:Text(
-                  rank.toString(),
-                  style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
-                )
-              ),
-              SizedBox(width: 9,)
-              ,CircleAvatar(
-                  maxRadius: 25,
-                  child: HeroImage(image: image,maxRadius: 23,heroTag: name,),
-                  backgroundColor: CacheData.userInfo.mhtId == mhtId ? kQuizBrown900 : kQuizMain50,
-              ),
-              SizedBox(width: 9,),
-              Expanded(
-                child: Text(
-                  name,
-                  style: TextStyle(fontSize: 18),
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.fromLTRB(0, 0, 6, 0),
-                child: Text(
-                  points.toString(),
-                  style: TextStyle(fontSize: 32.0, fontWeight: FontWeight.bold),
-                ),
-              )
-            ],
-          ),
-        ),
-        new Divider(),
-      ],
-    );
   }
 
   Widget _buildUserRow(int rank, int points) {
@@ -221,13 +178,13 @@ class LeaderBoardState extends BaseState<LeaderBoard> {
             body: ListView.builder(
               itemCount: leaderList.length,
               itemBuilder: (BuildContext context, int index) {
-                Image leaderImage = CommonFunction.getImageFromBase64Img(base64Img:leaderList[index].img, returnDefault: true);
-                return _buildLeaderRow(
+//                Image leaderImage = CommonFunction.getImageFromBase64Img(base64Img:leaderList[index].img, returnDefault: true);
+                return LeaderRow(
                   index + 1,
                   leaderList[index].name,
                   leaderList[index].totalscore,
                   Icons.face,
-                  leaderImage,
+                  null,
                   leaderList[index].mhtId,
                 );
               },
@@ -250,6 +207,94 @@ class Rank extends StatelessWidget {
     return Text(
       rank.toString(),
       style: TextStyle(fontSize: 32, color: Colors.white),
+    );
+  }
+}
+
+class LeaderRow extends StatefulWidget {
+
+  int rank, points, mhtId;
+  String name;
+  IconData icon;
+  Image image;
+
+  LeaderRow(this.rank, this.name, this.points, this.icon, this.image, this.mhtId);
+
+  @override
+  State<StatefulWidget> createState() {
+    // TODO: implement createState
+    return new LeaderRowState();
+  }
+}
+
+class LeaderRowState extends State<LeaderRow> {
+
+  Image cachedImage;
+
+  @override
+  void initState() {
+    super.initState();
+    CommonFunction.getProfilePictureFromServer(context, widget.mhtId).then((base64Img) {
+      setState(() {
+        widget.image = CommonFunction.getImageFromBase64Img(base64Img:base64Img, returnDefault: true);
+        cachedImage = widget.image;
+      });
+    });
+  }
+
+  // This will always refresh the images
+//  @override
+//  void didUpdateWidget(LeaderRow oldWidget) {
+//    super.didUpdateWidget(oldWidget);
+//    CommonFunction.getProfilePictureFromServer(context, widget.mhtId).then((base64Img) {
+//      setState(() {
+//        widget.image = CommonFunction.getImageFromBase64Img(base64Img:base64Img, returnDefault: true);
+//      });
+//    });
+//  }
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return Column(
+      children: <Widget>[
+        Container(
+          padding: EdgeInsets.all(16),
+          child: Row(
+            children: <Widget>[
+              SizedBox(
+                width: 40,
+                child: Center(
+                  child: Text(
+                    widget.rank.toString(),
+                    style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+                  )
+                )),
+              SizedBox(width: 9,)
+              ,CircleAvatar(
+                maxRadius: 25,
+                child: HeroImage(image: cachedImage,maxRadius: 23,heroTag: widget.name,),
+                backgroundColor: CacheData.userInfo.mhtId == widget.mhtId ? kQuizBrown900 : kQuizMain50,
+              ),
+              SizedBox(width: 9,),
+              Expanded(
+                child: Text(
+                  widget.name,
+                  style: TextStyle(fontSize: 18),
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.fromLTRB(0, 0, 6, 0),
+                child: Text(
+                  widget.points.toString(),
+                  style: TextStyle(fontSize: 32.0, fontWeight: FontWeight.bold),
+                ),
+              )
+            ],
+          ),
+        ),
+        new Divider(),
+      ],
     );
   }
 }

@@ -22,6 +22,7 @@ class OneSignalNotification {
 
       var settings = {
         OSiOSSettings.autoPrompt: false,
+        OSiOSSettings.inAppLaunchUrl: true,
         OSiOSSettings.promptBeforeOpeningPushUrl: true
       };
 
