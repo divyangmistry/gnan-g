@@ -4,7 +4,7 @@ Gnan-G GAME - Frontend
 
 ## Installation
 
-Gana-G requires Flutter SDK v1.0 to run.
+GnanG requires Flutter SDK v1.0 to run.
 
 Install the dependencies to run app - 
 
@@ -12,3 +12,12 @@ Install the dependencies to run app -
 $ flutter packages get
 $ flutter run
 ```
+
+## For IOS
+
+Run
+```bash
+$ flutter doctor 
+```
+
+and install everything that flutter doctor says

@@ -21,7 +21,7 @@ class OneSignalNotification {
       OneSignal.shared.setRequiresUserPrivacyConsent(_requireConsent);
 
       var settings = {
-        OSiOSSettings.autoPrompt: false,
+        OSiOSSettings.autoPrompt: true,
         OSiOSSettings.inAppLaunchUrl: true,
         OSiOSSettings.promptBeforeOpeningPushUrl: true
       };
