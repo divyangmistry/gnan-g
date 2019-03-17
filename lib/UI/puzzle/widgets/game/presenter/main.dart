@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
 
-import 'package:encrypt/encrypt.dart';
+import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:flutter/widgets.dart';
 import 'package:GnanG/UI/puzzle/data/board.dart';
 import 'package:GnanG/UI/puzzle/data/result.dart';
@@ -32,14 +32,14 @@ class GamePresenterWidgetState extends State<GamePresenterWidget>
     with WidgetsBindingObserver {
   static const TIME_STOPPED = 0;
 
-  static const _SALSA_KEY = 'Ro9ndPUceXQQL8GS';
-  static const _SALSA_IV = '84bgee3v';
+  static final _SALSA_KEY = encrypt.Key.fromUtf8('Ro9ndPUceXQQL8GS');
+  static final _SALSA_IV = encrypt.IV.fromUtf8('84bgee3v');
 
   static const _KEY_STATE = 'state';
 
   /// Encrypter to protected saved states of the game and
   /// make hacking a lil bit harder.
-  final _encrypter = Encrypter(Salsa20(_SALSA_KEY, _SALSA_IV));
+  final _encrypter = encrypt.Encrypter(encrypt.Salsa20(_SALSA_KEY, _SALSA_IV));
 
   final Game game = Game.instance;
 
@@ -63,15 +63,17 @@ class GamePresenterWidgetState extends State<GamePresenterWidget>
 
   void _loadState() async {
     final prefs = await SharedPreferences.getInstance();
-    final encryptedText = prefs.getString(_KEY_STATE) ?? '';
-    final plainText = _encrypter.decrypt(encryptedText);
 
     dynamic jsonMap;
-    try {
-      jsonMap = json.decode(plainText);
-    } catch (FormatException) {
-      jsonMap = Map<String, dynamic>();
-    }
+    jsonMap = Map<String, dynamic>();
+//    try {
+//      final encrypted = encrypt.Encrypted.fromBase64(prefs.getString(_KEY_STATE) ?? '');
+//      final plainText = _encrypter.decrypt(encrypted);
+//
+//      jsonMap = json.decode(plainText);
+//    } catch (FormatException) {
+//      jsonMap = Map<String, dynamic>();
+//    }
 
     int elapsedTime;
     int time;
@@ -89,15 +91,15 @@ class GamePresenterWidgetState extends State<GamePresenterWidget>
 
     final now = DateTime.now().millisecondsSinceEpoch;
     if ( // validate time
-        time == null ||
-            time < 0 ||
-            time > now ||
-            time > 0 && elapsedTime > now - time ||
-            // validate steps
-            steps == null ||
-            steps < 0 ||
-            // validate board
-            board == null) {
+    time == null ||
+      time < 0 ||
+      time > now ||
+      time > 0 && elapsedTime > now - time ||
+      // validate steps
+      steps == null ||
+      steps < 0 ||
+      // validate board
+      board == null) {
       time = TIME_STOPPED;
       steps = 0;
       // Initialize empty board with a classic
@@ -217,7 +219,7 @@ class GamePresenterWidgetState extends State<GamePresenterWidget>
     serializer.writeSerializable(board);
 
     final plainText = serializer.toJsonString();
-    final encryptedText = _encrypter.encrypt(plainText);
+    final encryptedText = _encrypter.encrypt(plainText).base64;
     prefs.setString(_KEY_STATE, encryptedText);
   }
 

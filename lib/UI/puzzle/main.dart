@@ -11,9 +11,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class GameOfFifteen extends StatefulWidget {
-
-
-
   @override
   GameOfFifteenState createState() {
     return new GameOfFifteenState();
@@ -21,11 +18,11 @@ class GameOfFifteen extends StatefulWidget {
 }
 
 class GameOfFifteenState extends State<GameOfFifteen> {
-
   @override
   void initState() {
     super.initState();
   }
+
   @override
   void dispose() {
     super.dispose();
@@ -46,13 +43,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final title = 'Gnan-G';
-    if (Platform.isIOS) {
-      return _MyCupertinoApp(title: title);
-    } else {
+//    if (Platform.isIOS) {
+//      return _MyCupertinoApp(title: title);
+//    } else {
       // Every other OS is based on a material
       // design application.
       return _MyMaterialApp(title: title);
-    }
+//    }
   }
 }
 
@@ -110,6 +107,7 @@ class _MyCupertinoApp extends _MyPlatformApp {
   Widget build(BuildContext context) {
     return CupertinoApp(
       title: title,
+      home: GamePage(),
     );
   }
 }

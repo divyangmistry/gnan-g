@@ -9,7 +9,6 @@ import 'package:http/http.dart';
 import 'package:GnanG/Service/apiservice.dart';
 import 'package:GnanG/UI/puzzle/data/result.dart';
 import 'package:GnanG/UI/puzzle/play_games.dart';
-import 'package:GnanG/UI/puzzle/widgets/game/cupertino/page.dart';
 import 'package:GnanG/UI/puzzle/widgets/game/material/page.dart';
 import 'package:GnanG/UI/puzzle/widgets/game/material/victory.dart';
 import 'package:GnanG/UI/puzzle/widgets/game/presenter/main.dart';
@@ -35,13 +34,7 @@ class GamePage extends StatelessWidget {
   }
 
   Widget _buildRoot(BuildContext context) {
-    if (Platform.isIOS) {
-      return GameCupertinoPage();
-    } else {
-      // Every other OS is based on a material
-      // design application.
-      return GameMaterialPage();
-    }
+    return GameMaterialPage();
   }
 
   void _puzzleCompletedApiCall(context) async {
@@ -66,19 +59,19 @@ class GamePage extends StatelessWidget {
   }
 
   void _showVictoryDialog(BuildContext context, Result result) {
-    if (Platform.isIOS) {
-      showCupertinoDialog(
-        context: context,
-        builder: (context) => Text(''),
-      );
-    } else {
+//    if (Platform.isIOS) {
+//      showCupertinoDialog(
+//        context: context,
+//        builder: (context) => Text(''),
+//      );
+//    } else {
       AppAudioUtils.playMusic(url: "music/level/levelCompleted.WAV");
       showDialog(
         barrierDismissible: false,
         context: context,
         builder: (context) => GameVictoryDialog(result: result),
       );
-    }
+//    }
   }
 
   void _submitResult(BuildContext context, Result result) {
