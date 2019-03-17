@@ -129,7 +129,7 @@ class ProfilePagePageState extends BaseState<ProfilePagePage> {
       color: Colors.grey[50],
       elevation: 4,
       child: new Padding(
-        padding: EdgeInsets.all(30),
+        padding: EdgeInsets.all(20),
         child: new Column(
           children: <Widget>[
             Text(
