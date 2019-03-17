@@ -93,7 +93,7 @@ class DashboardPageState extends State<DashboardPage> {
           Colors.deepPurple.shade300,
           Container(
             height: 180,
-            width: 150,
+            width: 120,
             child: FlareActor(
               'assets/animation/person_floating.flr',
               animation: 'Relaxing',
@@ -113,7 +113,7 @@ class DashboardPageState extends State<DashboardPage> {
           Container(
             decoration: BoxDecoration(shape: BoxShape.circle),
             height: 100,
-            width: 150,
+            width: 120,
             child: FlareActor(
               'assets/animation/leader.flr',
               animation: 'after_success',
@@ -133,7 +133,7 @@ class DashboardPageState extends State<DashboardPage> {
           Colors.green.shade400,
           Container(
             height: 150,
-            width: 150,
+            width: 120,
             child: FlareActor(
               'assets/animation/world.flr',
               animation: 'move',
@@ -161,7 +161,7 @@ class DashboardPageState extends State<DashboardPage> {
           Colors.orange.shade300,
           Container(
             height: 150,
-            width: 150,
+            width: 120,
             child: FlareActor(
               'assets/animation/bonus.flr',
               animation: 'Notification Loop',
@@ -180,7 +180,7 @@ class DashboardPageState extends State<DashboardPage> {
           Colors.blue.shade400,
           Container(
             height: 120,
-            width: 150,
+            width: 120,
             child: FlareActor(
               'assets/animation/puzzl.flr',
               animation: 'rotating',
@@ -193,6 +193,7 @@ class DashboardPageState extends State<DashboardPage> {
 
   Widget _gameMenu(Color color, Container imageContainer, String menu) {
     return Container(
+      padding: EdgeInsets.only(right: 10),
       height: MediaQuery.of(context).size.height / 8.0,
       decoration: BoxDecoration(
         shape: BoxShape.rectangle,
@@ -206,19 +207,13 @@ class DashboardPageState extends State<DashboardPage> {
         ),
       ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
           imageContainer,
-          Container(
-            alignment: Alignment(0.5, 0.0),
-            child: Text(
-              menu,
-              style: TextStyle(fontSize: 25.0, color: Colors.white),
-            ),
-          ),
-          SizedBox(
-            width: 10,
-          ),
+          Text(
+            menu,
+            style: TextStyle(fontSize: 25.0, color: Colors.white),
+          )
         ],
       ),
     );
