@@ -16,7 +16,8 @@ class HeroImage extends StatelessWidget {
         backgroundImage: image != null ? image.image : null,
         backgroundColor: backgroundColor,
       )),
-      onTap: () {
+      onTap: image == null ? null :
+        () {
         _onProfileImageClick(context);
       },
     );
