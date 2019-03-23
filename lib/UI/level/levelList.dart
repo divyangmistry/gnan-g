@@ -84,7 +84,6 @@ class LevelList extends StatelessWidget {
     return new Flexible(
       child: new Container(
         child: new ListView.builder(
-          itemExtent: 160.0,
           itemCount: CacheData.userState.quizLevels.length,
           itemBuilder: (_, index) {
             print('CacheData.userState :: ');

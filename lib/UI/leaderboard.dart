@@ -86,6 +86,7 @@ class LeaderBoardState extends BaseState<LeaderBoard> {
                   Rank(rank: _userRank),
                   Text(
                     getOrdinalOfNumber(_userRank),
+                    textScaleFactor: 1,
                     style: TextStyle(
                       color: kQuizSurfaceWhite,
                     ),
@@ -111,6 +112,7 @@ class LeaderBoardState extends BaseState<LeaderBoard> {
                 children: <Widget>[
                   Text(
                     points.toString(),
+                    textScaleFactor: 1,
                     style: TextStyle(
                       fontSize: 32,
                       color: kQuizSurfaceWhite,
@@ -118,6 +120,7 @@ class LeaderBoardState extends BaseState<LeaderBoard> {
                   ),
                   Text(
                     'pts',
+                    textScaleFactor: 1,
                     style: TextStyle(
                       textBaseline: TextBaseline.alphabetic,
                       color: kQuizSurfaceWhite,
@@ -156,6 +159,7 @@ class LeaderBoardState extends BaseState<LeaderBoard> {
             padding: EdgeInsets.all(16),
             child: Text(
               'Leaderboard',
+              textScaleFactor: 1,
               style: TextStyle(
                 fontSize: 25,
                 color: kQuizSurfaceWhite,
@@ -171,6 +175,7 @@ class LeaderBoardState extends BaseState<LeaderBoard> {
     return leaderList != null
         ? new Scaffold(
             appBar: AppBar(
+              automaticallyImplyLeading: false,
               bottom: PreferredSize(
                   child: topSection, preferredSize: Size(100, 100)),
               backgroundColor: kQuizMain400,
@@ -206,6 +211,7 @@ class Rank extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       rank.toString(),
+      textScaleFactor: 1,
       style: TextStyle(fontSize: 32, color: Colors.white),
     );
   }
@@ -260,37 +266,40 @@ class LeaderRowState extends State<LeaderRow> {
       children: <Widget>[
         Container(
           padding: EdgeInsets.all(16),
-          child: Row(
-            children: <Widget>[
-              SizedBox(
-                width: 40,
-                child: Center(
+          child: ListTile(
+            leading: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+//    SizedBox(
+//                width: 41,
+//                child:
+                Center(
                   child: Text(
-                    widget.rank.toString(),
-                    style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
-                  )
+                  widget.rank.toString(),
+                  textScaleFactor: 1,
+                  style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
                 )),
-              SizedBox(width: 9,)
-              ,CircleAvatar(
-                maxRadius: 25,
-                child: HeroImage(image: cachedImage,maxRadius: 23,heroTag: widget.name,),
-                backgroundColor: CacheData.userInfo.mhtId == widget.mhtId ? kQuizBrown900 : kQuizMain50,
-              ),
-              SizedBox(width: 9,),
-              Expanded(
-                child: Text(
-                  widget.name,
-                  style: TextStyle(fontSize: 18),
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.fromLTRB(0, 0, 6, 0),
-                child: Text(
-                  widget.points.toString(),
-                  style: TextStyle(fontSize: 32.0, fontWeight: FontWeight.bold),
-                ),
-              )
-            ],
+//    ),
+                SizedBox(width: 9,)
+                , CircleAvatar(
+                  maxRadius: 25,
+                  child: HeroImage(
+                    image: cachedImage, maxRadius: 23, heroTag: widget.name,),
+                  backgroundColor: CacheData.userInfo.mhtId == widget.mhtId
+                    ? kQuizBrown900
+                    : kQuizMain50,
+                )
+              ]),
+            title: Text(
+              widget.name,
+              textScaleFactor: 1,
+              style: TextStyle(fontSize: 18),
+            ),
+            trailing: Text(
+              widget.points.toString(),
+              textScaleFactor: 1,
+              style: TextStyle(fontSize: 32.0, fontWeight: FontWeight.bold),
+            ),
           ),
         ),
         new Divider(),

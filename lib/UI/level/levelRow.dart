@@ -15,21 +15,24 @@ class LevelCardRow extends StatelessWidget {
   LevelCardRow(this.levelDetails, this.lock);
 
   Widget levelThumbnail() {
-    return new Container(
-      alignment: new FractionalOffset(0.0, 0.5),
-      margin: const EdgeInsets.only(left: 24.0),
-      child: new Container(
-        width: 100.0,
-        height: 100.0,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: Colors.white54,
-          image: DecorationImage(
-            fit: BoxFit.fill,
-            image: AssetImage('images/bkg.jpg'),
-          ),
-        ),
-      ),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: <Widget>[
+        new Container(
+            margin: const EdgeInsets.only(left: 24.0),
+            child: new Container(
+              width: 100.0,
+              height: 100.0,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.white54,
+                image: DecorationImage(
+                  fit: BoxFit.fill,
+                  image: AssetImage('images/bkg.jpg'),
+                ),
+              ),
+            ))
+      ],
     );
   }
 
@@ -44,14 +47,14 @@ class LevelCardRow extends StatelessWidget {
   Widget levelCard() {
     return new Card(
       color: lock ? Colors.grey[200] : kQuizSurfaceWhite,
-      margin: const EdgeInsets.only(left: 72.0, right: 20.0),
+      margin: const EdgeInsets.only(left: 20.0, right: 20.0),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20.0),
       ),
       elevation: lock ? 0 : 5,
       child: new Container(
-        margin: const EdgeInsets.only(top: 18.0, left: 72.0),
-        constraints: new BoxConstraints.expand(),
+        margin: const EdgeInsets.only(top: 18.0, left: 18.0),
+//        constraints: new BoxConstraints.expand(),
         child: new Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -68,50 +71,54 @@ class LevelCardRow extends StatelessWidget {
                 ),
                 Padding(
                   padding: EdgeInsets.fromLTRB(0, 0, 20, 0),
-                  child: lock ? Icon(Icons.lock) : new Container(),
+                  child: lock
+                      ? isCompleted(levelDetails.levelIndex)
+                          ? Icon(Icons.done, color: Colors.green)
+                          : Icon(Icons.lock)
+                      : new Container(),
                 )
               ],
             ),
             new SizedBox(height: 10),
-            new Text(
-              levelDetails.description != null ? levelDetails.description : "",
-              style: TextStyle(
-                color: kQuizMain50,
-              ),
-              textScaleFactor: 1.1,
-            ),
             new SizedBox(
               height: 2,
-            ),
-            new Container(
-              color: kQuizMain400,
-              width: 48.0,
-              height: 2.0,
-              margin: EdgeInsets.symmetric(vertical: 8.0),
             ),
             new SizedBox(
               height: 4,
             ),
             new Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
-                new Text(
-                  'Level : ',
-                  style: TextStyle(color: kQuizMain50),
+                Row(
+                  children: <Widget>[
+                    new Text(
+                      'Level : ',
+                      style: TextStyle(color: kQuizMain50),
+                    ),
+                    new Text(
+                      levelDetails.levelIndex.toString(),
+                      style: TextStyle(color: kQuizMain400),
+                    )
+                  ],
                 ),
-                new Text(
-                  levelDetails.levelIndex.toString(),
-                  style: TextStyle(color: kQuizMain400),
-                ),
-                new SizedBox(width: 25),
-                new Text(
-                  'Max. Points : ',
-                  style: TextStyle(color: kQuizMain50),
-                ),
-                new Text(
-                  levelDetails.totalscores != null ? levelDetails.totalscores.toString() : "",
-                  style: TextStyle(color: kQuizMain400),
+                Row(
+                  children: <Widget>[
+                    new Text(
+                      'Max. Points : ',
+                      style: TextStyle(color: kQuizMain50),
+                    ),
+                    new Text(
+                      levelDetails.totalscores != null
+                          ? levelDetails.totalscores.toString()
+                          : "",
+                      style: TextStyle(color: kQuizMain400),
+                    )
+                  ],
                 ),
               ],
+            ),
+            new SizedBox(
+              height: 6,
             ),
           ],
         ),
@@ -129,7 +136,9 @@ class LevelCardRow extends StatelessWidget {
           print(levelDetails);
           if (isCompleted(levelDetails.levelIndex)) {
             CommonFunction.alertDialog(
-                context: context, msg: 'Hooray !!  You have already cleared this level', type: "success");
+                context: context,
+                msg: 'Hooray !!  You have already cleared this level',
+                type: "success");
           } else {
             if (CacheData.userState.lives > 0) {
               if (!lock) {
@@ -152,7 +161,8 @@ class LevelCardRow extends StatelessWidget {
               if (CacheData.userState.totalscore > 100) {
                 CommonFunction.alertDialog(
                     context: context,
-                    msg: 'You don\'t have enough points.\nYou can earn life from 100 Points',
+                    msg:
+                        'You don\'t have enough points.\nYou can earn life from 100 Points',
                     barrierDismissible: false,
                     doneButtonText: 'Get Life',
                     doneButtonFn: () {
@@ -162,7 +172,8 @@ class LevelCardRow extends StatelessWidget {
               } else {
                 CommonFunction.alertDialog(
                   context: context,
-                  msg: 'You don\'t have enough lives.\nYou can earn points and get life from puzzeles',
+                  msg:
+                      'You don\'t have enough lives.\nYou can earn points and get life from puzzeles',
                   barrierDismissible: false,
                   doneButtonText: 'Play puzzle',
                   doneButtonFn: () {
@@ -179,12 +190,7 @@ class LevelCardRow extends StatelessWidget {
             }
           }
         },
-        child: new Stack(
-          children: <Widget>[
-            levelCard(),
-            levelThumbnail(),
-          ],
-        ),
+        child: levelCard(),
       ),
     );
   }
