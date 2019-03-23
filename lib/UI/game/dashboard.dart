@@ -232,6 +232,7 @@ class DashboardPageState extends State<DashboardPage> {
           imageContainer,
           Text(
             menu,
+            textScaleFactor: 1,
             style: TextStyle(fontSize: 25.0, color: Colors.white),
           )
         ],

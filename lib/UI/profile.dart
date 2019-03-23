@@ -205,6 +205,7 @@ class ProfilePagePageState extends BaseState<ProfilePagePage> {
           children: <Widget>[
             Text(
               title,
+              textScaleFactor: 1,
               style: TextStyle(color: kQuizMain50),
             ),
             SizedBox(height: 5.0),

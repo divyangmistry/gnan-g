@@ -93,10 +93,12 @@ class LevelCardRow extends StatelessWidget {
                   children: <Widget>[
                     new Text(
                       'Level : ',
+                      textScaleFactor: 1,
                       style: TextStyle(color: kQuizMain50),
                     ),
                     new Text(
                       levelDetails.levelIndex.toString(),
+                      textScaleFactor: 1,
                       style: TextStyle(color: kQuizMain400),
                     )
                   ],
@@ -105,12 +107,14 @@ class LevelCardRow extends StatelessWidget {
                   children: <Widget>[
                     new Text(
                       'Max. Points : ',
+                      textScaleFactor: 1,
                       style: TextStyle(color: kQuizMain50),
                     ),
                     new Text(
                       levelDetails.totalscores != null
                           ? levelDetails.totalscores.toString()
                           : "",
+                      textScaleFactor: 1,
                       style: TextStyle(color: kQuizMain400),
                     )
                   ],
