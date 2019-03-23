@@ -624,6 +624,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
 
   _fiftyFifty() async {
     try {
+      Navigator.pop(context);
       bool isApiFailed = false;
       if (!isHintTaken) {
         setState(() {
@@ -662,7 +663,6 @@ class MainGamePageState extends BaseState<MainGamePage> {
           }
         }
       }
-      Navigator.pop(context);
     } catch (err) {
       print('CATCH IN HINT :: ');
       print(err);

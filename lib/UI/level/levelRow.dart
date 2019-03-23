@@ -73,7 +73,15 @@ class LevelCardRow extends StatelessWidget {
                   padding: EdgeInsets.fromLTRB(0, 0, 20, 0),
                   child: lock
                       ? isCompleted(levelDetails.levelIndex)
-                          ? Icon(Icons.done, color: Colors.green)
+                          ? CircleAvatar(
+                              backgroundColor: Colors.green,
+//                              color: Color.fromARGB(0, 1, 1, 1),
+//                              shape: CircleBorder(side: BorderSide(style: BorderStyle.solid, color: Colors.green)),
+                              child: CircleAvatar(
+                                backgroundColor: Colors.grey[200],
+                                child: Icon(Icons.done, color: Colors.green),
+                                radius: 18,
+                              ))
                           : Icon(Icons.lock)
                       : new Container(),
                 )

@@ -241,10 +241,13 @@ class LeaderRowState extends State<LeaderRow> {
   void initState() {
     super.initState();
     CommonFunction.getProfilePictureFromServer(context, widget.mhtId).then((base64Img) {
-      setState(() {
-        widget.image = CommonFunction.getImageFromBase64Img(base64Img:base64Img, returnDefault: true);
-        cachedImage = widget.image;
-      });
+      if (mounted) {
+        setState(() {
+          widget.image = CommonFunction.getImageFromBase64Img(
+            base64Img: base64Img, returnDefault: true);
+          cachedImage = widget.image;
+        });
+      }
     });
   }
 
