@@ -4,12 +4,15 @@ import 'package:GnanG/UI/game/mainGame.dart';
 import 'package:GnanG/UI/widgets/appupdatecheck.dart';
 import 'package:GnanG/colors.dart';
 import 'package:GnanG/common.dart';
+import 'package:GnanG/model/appresponse.dart';
 import 'package:GnanG/model/cacheData.dart';
 import 'package:GnanG/utils/app_setting_util.dart';
 import 'package:GnanG/utils/appsharedpref.dart';
 import 'package:GnanG/utils/audio_utilsdart.dart';
+import 'package:GnanG/utils/response_parser.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 
 import '../../common.dart';
 
@@ -24,13 +27,29 @@ class DashboardPage extends StatefulWidget {
 class DashboardPageState extends State<DashboardPage> {
   ApiService _api = new ApiService();
   bool isMuteEnabled = false;
+  Response checkBonus;
+  bool _bonusLevelFinished = false;
+  // bool checkBonus;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    checkBonusLevel();
     AppUpdateCheck.startAppUpdateCheckThread(context);
   }
+
+  checkBonusLevel() async {
+    checkBonus = await _api.getBonusQuestion(mhtId: CacheData.userInfo.mhtId);
+    AppResponse appResponse =
+        ResponseParser.parseResponse(context: context, res: checkBonus);
+    if (appResponse.status == 200) {
+      setState(() {
+        _bonusLevelFinished = true;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -164,7 +183,8 @@ class DashboardPageState extends State<DashboardPage> {
             width: 120,
             child: FlareActor(
               'assets/animation/bonus.flr',
-              animation: 'Notification Loop',
+              animation:
+                  _bonusLevelFinished ? 'No Notification' : 'Notification Loop',
             ),
           ),
           "Daily Bonus"),
@@ -227,7 +247,7 @@ class DashboardPageState extends State<DashboardPage> {
           child: new RaisedButton(
             padding: EdgeInsets.all(1),
             shape: CircleBorder(),
-            onPressed: (){},
+            onPressed: () {},
             color: kQuizSurfaceWhite,
             child: _buildMuteIcon(),
           ),
@@ -271,7 +291,8 @@ class DashboardPageState extends State<DashboardPage> {
   }
 
   void toggleMuteSound() async {
-    await AppSharedPrefUtil.saveMuteEnabled(!await AppSharedPrefUtil.isMuteEnabled());
+    await AppSharedPrefUtil.saveMuteEnabled(
+        !await AppSharedPrefUtil.isMuteEnabled());
     AppSharedPrefUtil.isMuteEnabled().then((isMute) {
       setState(() {
         isMuteEnabled = isMute;
