@@ -289,4 +289,9 @@ class ApiService {
       return false;
     }
   }
+
+  Future<http.Response> getRules() async {
+    http.Response res = await getApi(url: '/rules');
+    return res;
+  }
 }

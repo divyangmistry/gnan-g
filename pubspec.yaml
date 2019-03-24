@@ -23,9 +23,9 @@ dependencies:
 #  firebase_messaging: "0.2.1"
   flutter_spinkit: "3.1.0"
   flare_flutter: "1.0.7"
-  vector_math: ^2.0.8
-  flutter_speed_dial: ^1.1.1
-
+  vector_math: "2.0.8"
+  flutter_speed_dial: "1.1.1"
+  flutter_markdown: "0.2.0"
 
   # For Puzzle -
   # cupertino_icons: ^0.1.2
@@ -124,6 +124,9 @@ flutter:
       fonts:
         - asset: fonts/CmSans.ttf
           weight: 500
+    - family: Gujarati
+      fonts:
+        - asset: fonts/Lohit-Gujarati.ttf
   # fonts:
   #   - family: Schyler
   #     fonts:

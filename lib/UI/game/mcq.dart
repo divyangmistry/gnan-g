@@ -26,6 +26,7 @@ class MCQState extends State<MCQ> {
             ((widget.question != null) ? widget.question.question : ''),
             textAlign: TextAlign.center,
             style: TextStyle(
+              fontFamily: 'Gujarati',
               color: kQuizMain400,
               height: 1.5,
             ),
@@ -96,6 +97,7 @@ class MCQState extends State<MCQ> {
                 text,
                 textScaleFactor: 1.1,
                 style: TextStyle(
+                  fontFamily: 'Gujarati',
                   color:
                   selectedIndex == index ? kQuizBackgroundWhite : kQuizBackgroundWhite,
                 ),

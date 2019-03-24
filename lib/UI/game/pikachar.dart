@@ -54,7 +54,9 @@ class _PikacharState extends State<Pikachar> {
         question(),
         answerRows(),
         optionTiles(),
-        SizedBox(height: 20,)
+        SizedBox(
+          height: 20,
+        )
       ],
     );
   }
@@ -133,6 +135,7 @@ class _PikacharState extends State<Pikachar> {
         widget.questText,
         textAlign: TextAlign.center,
         style: TextStyle(
+          fontFamily: 'Gujarati',
           color: kQuizMain400,
         ),
         textScaleFactor: 2,
@@ -199,6 +202,9 @@ class _PikacharState extends State<Pikachar> {
       color: kQuizMain400,
       child: Text(
         char,
+        style: TextStyle(
+          fontFamily: 'Gujarati',
+        ),
         textScaleFactor: 1.3,
       ),
     );
@@ -224,7 +230,8 @@ class _PikacharState extends State<Pikachar> {
           child: Text(
             char,
             textScaleFactor: 2,
-            style: TextStyle(fontWeight: FontWeight.bold),
+            style:
+                TextStyle(fontFamily: 'Gujarati', fontWeight: FontWeight.bold),
           ),
         ),
         color: isActiveArr[index] ? kQuizMain50 : kQuizBackgroundWhite,
@@ -345,6 +352,9 @@ class _PikacharState extends State<Pikachar> {
       color: kQuizMain500,
       child: Text(
         _answerChars[index],
+        style: TextStyle(
+          fontFamily: 'Gujarati',
+        ),
         textScaleFactor: 1.5,
       ),
     );
@@ -373,7 +383,9 @@ class _PikacharState extends State<Pikachar> {
             _answerChars[index],
             textScaleFactor: 2,
             style: TextStyle(
-                fontWeight: FontWeight.bold, color: kQuizSurfaceWhite),
+                fontFamily: 'Gujarati',
+                fontWeight: FontWeight.bold,
+                color: kQuizSurfaceWhite),
           ),
         ),
         color: kQuizMain400,
