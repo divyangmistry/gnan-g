@@ -29,6 +29,8 @@ class RegistrationRequestPageState extends BaseState<RegistrationRequestPage> {
   String _emailId;
   String _name;
 
+  bool _dadasMba;
+
   @override
   Widget pageToDisplay() {
     return new Scaffold(
@@ -48,10 +50,56 @@ class RegistrationRequestPageState extends BaseState<RegistrationRequestPage> {
           padding: EdgeInsets.symmetric(horizontal: 30.0),
           children: <Widget>[
             _titleAndLogo(),
-            _indiaLoginFields(),
+            _areyouMBA(),
+            _dadasMba == null ? Container() : _dadasMba ? _indiaLoginFields() : Container(
+              child: Center(
+                child: Text("Currently the app is only for MBA and Sankul Bhaio")
+              ),
+            ),
           ],
         ),
       ),
+    );
+  }
+
+  void _handleRadioValueChange(bool value) {
+    setState(() {
+      _dadasMba = value;
+    });
+  }
+
+  Widget _areyouMBA() {
+    return Column(
+      children: <Widget>[
+        Text(
+          "Are you part of Dada's MBA / Sankul Bhaio?"
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Radio(
+              value: false,
+              groupValue: _dadasMba,
+              onChanged: _handleRadioValueChange,
+            ),
+            new Text(
+              'No',
+              style: new TextStyle(fontSize: 16.0),
+            ),
+            Radio(
+              value: true,
+              groupValue: _dadasMba,
+              onChanged: _handleRadioValueChange,
+            ),
+            new Text(
+              'Yes',
+              style: new TextStyle(
+                fontSize: 16.0,
+              ),
+            ),
+          ],
+        )
+      ],
     );
   }
 
