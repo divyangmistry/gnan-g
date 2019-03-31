@@ -12,7 +12,6 @@ import 'package:GnanG/model/user_score_state.dart';
 import 'package:GnanG/model/user_state.dart';
 import 'package:GnanG/model/userinfo.dart';
 import 'package:GnanG/notification/notifcation_setup.dart';
-import 'package:GnanG/utils/app_setting_util.dart';
 import 'package:GnanG/utils/appsharedpref.dart';
 import 'package:GnanG/utils/audio_utilsdart.dart';
 import 'package:GnanG/utils/response_parser.dart';
@@ -243,15 +242,12 @@ class CommonFunction {
       {@required BuildContext context, String point = '100'}) {
     return GestureDetector(
       child: new Container(
-        height: 40,
+        height: 35,
         padding: EdgeInsets.only(right: 10, left: 10),
         decoration: BoxDecoration(
-            color: kQuizSurfaceWhite,
-            borderRadius: BorderRadius.circular(10),
-            boxShadow: [
-              BoxShadow(
-                  color: Colors.black, blurRadius: 5.0, offset: Offset(-2, 2))
-            ]),
+            color: Colors.black12,
+            borderRadius: BorderRadius.circular(25),
+        ),
         child: new Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -265,7 +261,7 @@ class CommonFunction {
               ),
               textScaleFactor: 1.5,
             ),
-            SizedBox(width: 5),
+            SizedBox(width: 15),
             Image.asset('images/coin.png', height: 20),
           ],
         ),

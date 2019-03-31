@@ -34,13 +34,14 @@ dependencies:
   share: "0.5.3"
   color: any
   rxdart: "0.20.0"
-  encrypt: ^2.0.0
+  encrypt: "2.0.0"
   connectivity: "0.3.2"
-  nima: ^1.0.0
+  nima: "1.0.0"
   image_picker: "0.4.5"
-  image_cropper: 1.0.0
-  flutter_webview_plugin: 0.3.0
-  package_info: 0.4.0
+  image_cropper: "1.0.0"
+  flutter_webview_plugin: "0.3.0"
+  package_info: "0.4.0"
+  flutter_circular_chart: "0.1.0"
 #  launch_review: ^1.0.1
 
   # The following adds the Cupertino Icons font to your application.
