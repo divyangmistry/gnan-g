@@ -6,20 +6,15 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 abstract class BaseState<T extends StatefulWidget> extends State<T> {
   bool isLoading = false;
   bool isOverlay = false;
+
   @override
   Widget build(BuildContext context) {
-    return new SafeArea(
-        child: new BackgroundGredient(
-        child: new Stack(
-          children: <Widget>[
-            !isLoading
-                ? pageToDisplay()
-                : buildLoading(),
-            isOverlay
-                ? buildLoading()
-                : new Container(),
-          ],
-        ),
+    return new BackgroundGredient(
+      child: new Stack(
+        children: <Widget>[
+          !isLoading ? pageToDisplay() : buildLoading(),
+          isOverlay ? buildLoading() : new Container(),
+        ],
       ),
     );
   }
@@ -43,5 +38,6 @@ abstract class BaseState<T extends StatefulWidget> extends State<T> {
       ],
     );
   }
+
   Widget pageToDisplay();
 }

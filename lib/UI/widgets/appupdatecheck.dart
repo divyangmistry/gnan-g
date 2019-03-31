@@ -33,10 +33,10 @@ class AppUpdateCheck {
       AppResponse appResponse = ResponseParser.parseResponse(res: res, context: context);
       if (appResponse.status == WSConstant.SUCCESS_CODE) {
         AppSetting appSetting = AppSetting.fromJson(appResponse.data);
-        if (appSetting.appversion != null) {
+        if (appSetting.version != null ) {
           String version = await AppSettingUtil.getAppVersion();
           Version currentVersion = Version(version: version);
-          Version playStoreVersion = Version(version: appSetting.appversion);
+          Version playStoreVersion = Version(version: appSetting.version);
           if (playStoreVersion.compareTo(currentVersion) > 0) {
             showUpdateDialog(context: context);
           }
@@ -108,7 +108,7 @@ class AppUpdateCheck {
   }
 
   void onUpdateNow(BuildContext context) {
-    AppUtils.launchPlaystoreApp();
+    AppUtils.launchStoreApp();
     Navigator.pop(context);
   }
 

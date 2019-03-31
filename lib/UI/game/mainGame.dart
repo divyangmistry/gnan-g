@@ -23,6 +23,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'dart:io' show Platform;
 
 import '../../colors.dart';
 import '../../common.dart';
@@ -612,7 +613,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
       await intent.launch();
     }*/
     try {
-      launch("tel:");
+      Platform.isIOS ? launch("telprompt:4141") : launch("tel:");
       print('Phone a Friend');
       Navigator.pop(context);
     } catch (err) {

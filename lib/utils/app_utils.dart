@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 //import 'package:launch_review/launch_review.dart';
 
+import 'dart:io' show Platform;
+
 class AppUtils {
   static Future<bool> isInternetConnected() async {
     var connectivityResult = await (Connectivity().checkConnectivity());
@@ -37,9 +39,20 @@ class AppUtils {
     }
   }
 
+  static launchStoreApp() {
+    return Platform.isIOS ? launchAppstoreApp() : launchPlaystoreApp();
+  }
+
   static void launchPlaystoreApp() async {
     String appId = await AppSettingUtil.getAppID();
     launch(AppConstant.BASE_PLAYSTORE_URL + appId);
+    /*LaunchReview.launch(androidAppId: "org.dadabhagwan.AKonnect",
+        iOSAppId: "585027354");*/
+  }
+
+  static void launchAppstoreApp() async {
+    String appId = await AppSettingUtil.getAppID();
+    launch(AppConstant.BASE_APPSTORE_URL);
     /*LaunchReview.launch(androidAppId: "org.dadabhagwan.AKonnect",
         iOSAppId: "585027354");*/
   }
