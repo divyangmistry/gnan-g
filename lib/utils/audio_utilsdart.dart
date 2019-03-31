@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:synchronized/synchronized.dart';
 
 import 'package:GnanG/utils/app_utils.dart';
 import 'package:GnanG/utils/appsharedpref.dart';
@@ -7,13 +8,18 @@ import 'package:flame/flame.dart';
 
 class AppAudioUtils {
   static AudioPlayer backgroundMusic;
-  static void startBackgroundMusic() {
-    AppUtils.appSound(() async {
-      if (backgroundMusic == null)
-        backgroundMusic = await Flame.audio.loop('music/background_music.mp3', volume: 0.2);
-      else
-        backgroundMusic.resume();
-    });
+  static var lock = new Lock();
+
+  static void startBackgroundMusic() async {
+    if (!await AppSharedPrefUtil.isMuteEnabled()) {
+      await lock.synchronized(() async {
+        if (backgroundMusic == null) {
+          backgroundMusic =
+              await Flame.audio.loop('music/background_music.mp3', volume: 0.2);
+        } else
+          backgroundMusic.resume();
+      });
+    };
   }
 
   static void stopBackgroundMusic() {
