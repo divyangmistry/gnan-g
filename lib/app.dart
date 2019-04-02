@@ -6,7 +6,6 @@ import 'package:GnanG/UI/others/feedback.dart';
 import 'package:GnanG/UI/profile.dart';
 import 'package:GnanG/UI/puzzle/main.dart';
 import 'package:GnanG/no-internet-page.dart';
-import 'package:GnanG/utils/app_setting_util.dart';
 import 'package:GnanG/utils/audio_utilsdart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -19,9 +18,9 @@ import 'UI/auth/register_new.dart';
 import 'UI/game/mainGame.dart';
 import 'UI/game/simple_game.dart';
 import 'UI/level/levelList.dart';
+import 'UI/others/about.dart';
 import 'UI/others/rules.dart';
 import 'UI/others/terms&condition.dart';
-import 'UI/others/about.dart';
 import 'UI/profile.dart';
 import 'colors.dart';
 
@@ -103,7 +102,7 @@ ThemeData _buildQuizTheme() {
       buttonColor: kQuizMain400,
       textTheme: ButtonTextTheme.normal,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(30.0),
+        borderRadius: BorderRadius.circular(10.0),
       ),
     ),
     primaryIconTheme: base.iconTheme.copyWith(color: kQuizBrown900),

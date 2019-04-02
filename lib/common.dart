@@ -408,7 +408,7 @@ class CommonFunction {
             onWillPop: () async => false,
         child: AlertDialog(
           shape: new RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(25.0),
+            borderRadius: BorderRadius.circular(10.0),
           ),
           content: Column(
             mainAxisSize: MainAxisSize.min,

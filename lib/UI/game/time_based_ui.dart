@@ -101,6 +101,42 @@ class TimeBasedUIState extends State<TimeBasedUI> {
       );
     }
 
+    Widget _getAnswerDataTile(String char) {
+      return Padding(
+        padding: EdgeInsets.all(5),
+        child: MaterialButton(
+          color: char == ' ' ? Colors.black38 : Colors.white,
+          onPressed: char == ' ' ? null : () {},
+          minWidth: 55,
+          height: 55,
+          elevation: char == ' ' ? 0 : 2,
+          child: Text(
+            char,
+            textScaleFactor: 1.5,
+            style: TextStyle(color: kQuizMain400),
+          ),
+        ),
+      );
+    }
+
+    Widget _getJumbleDataTile(String char) {
+      return Padding(
+        padding: EdgeInsets.all(5),
+        child: MaterialButton(
+          color: char == 'D' ? Colors.white70 : Colors.white,
+          onPressed: char == 'D' ? null : () {},
+          minWidth: 55,
+          height: 55,
+          elevation: char == 'D' ? 0 : 5,
+          child: Text(
+            char,
+            textScaleFactor: 1.5,
+            style: TextStyle(color: kQuizMain400),
+          ),
+        ),
+      );
+    }
+
     Widget _appBar() {
       return new Container(
         padding: EdgeInsets.fromLTRB(15, 15, 15, 10),
@@ -114,7 +150,10 @@ class TimeBasedUIState extends State<TimeBasedUI> {
                 print('back button');
               },
             ),
-            Text('Time based UI',textScaleFactor: 1.5,),
+            Text(
+              'Time based UI',
+              textScaleFactor: 1.5,
+            ),
             CommonFunction.pointsUI(context: context, point: '120'),
           ],
         ),
@@ -122,7 +161,7 @@ class TimeBasedUIState extends State<TimeBasedUI> {
     }
 
     return Scaffold(
-      backgroundColor: kBackgroundGrediant1,
+      backgroundColor: Colors.blue.shade200,
       body: SafeArea(
         child: ListView(
           children: <Widget>[
@@ -132,7 +171,41 @@ class TimeBasedUIState extends State<TimeBasedUI> {
               children: <Widget>[
                 _timeIndicator(),
               ],
-            )
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text('\nAnswer Tiles\n' , textScaleFactor: 1.5,),
+              ],
+            ),
+            Wrap(
+              crossAxisAlignment: WrapCrossAlignment.center,
+              runAlignment: WrapAlignment.center,
+              alignment: WrapAlignment.center,
+              children: <Widget>[
+                _getAnswerDataTile('D'),
+                _getAnswerDataTile(' '),
+                _getAnswerDataTile('D'),
+                _getAnswerDataTile(' '),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text('\n\nJumble Tiles\n' , textScaleFactor: 1.5,),
+              ],
+            ),
+            Wrap(
+              crossAxisAlignment: WrapCrossAlignment.center,
+              runAlignment: WrapAlignment.center,
+              alignment: WrapAlignment.center,
+              children: <Widget>[
+                _getJumbleDataTile('D'),
+                _getJumbleDataTile('A'),
+                _getJumbleDataTile('D'),
+                _getJumbleDataTile('A'),
+              ],
+            ),
           ],
         ),
       ),
