@@ -14,10 +14,12 @@ import 'package:http/http.dart';
 
 class AppUpdateCheck {
   static void startAppUpdateCheckThread(BuildContext context) {
-    Future.delayed(const Duration(seconds: 1), () => AppUpdateCheck().checkForNewAppUpdate(context));
+    Future.delayed(const Duration(seconds: 1),
+        () => AppUpdateCheck().checkForNewAppUpdate(context));
   }
 
   ApiService _api = ApiService();
+
   void checkForNewAppUpdate(BuildContext context) async {
     bool check = true;
     int checkAfter = await AppSharedPrefUtil.getAppUpdateCheckAfter();
@@ -30,10 +32,11 @@ class AppUpdateCheck {
     }
     if (check) {
       Response res = await _api.getAppSetting();
-      AppResponse appResponse = ResponseParser.parseResponse(res: res, context: context);
+      AppResponse appResponse =
+          ResponseParser.parseResponse(res: res, context: context);
       if (appResponse.status == WSConstant.SUCCESS_CODE) {
         AppSetting appSetting = AppSetting.fromJson(appResponse.data);
-        if (appSetting.version != null ) {
+        if (appSetting.version != null) {
           String version = await AppSettingUtil.getAppVersion();
           Version currentVersion = Version(version: version);
           Version playStoreVersion = Version(version: appSetting.version);
@@ -50,12 +53,13 @@ class AppUpdateCheck {
   }) {
     showDialog(
       context: context,
-      barrierDismissible: true,
+      barrierDismissible: false,
       builder: (_) {
         return AlertDialog(
-          contentPadding: EdgeInsets.only(top: 10.0, bottom: 10.0, right: 2, left: 2),
+          contentPadding:
+              EdgeInsets.only(top: 10.0, bottom: 10.0, right: 2, left: 2),
           shape: new RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(55.0),
+            borderRadius: BorderRadius.circular(20.0),
           ),
           title: Center(child: Text("App Update")),
           content: Column(
@@ -64,7 +68,7 @@ class AppUpdateCheck {
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 10),
                 child: Text(
-                  "New App Version is avaliable do you want to update now?",
+                  "New App Version is avaliable.\n You need to update the app to continue ... !!",
                   textAlign: TextAlign.center,
                   style: TextStyle(color: Colors.blueGrey, height: 1.5),
                   textScaleFactor: 1.1,
@@ -75,31 +79,20 @@ class AppUpdateCheck {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  getButton(
-                    context: context,
-                    text: "Update Now",
+                  FlatButton(
+                    color: kQuizMain500,
+                    padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                    child: Text(
+                      "Update Now",
+                      textScaleFactor: 1,
+                      style: TextStyle(color: Colors.white),
+                    ),
                     onPressed: () {
                       onUpdateNow(context);
                     },
                   ),
-                  SizedBox(width: 5.0),
-                  getButton(
-                    context: context,
-                    text: "Remind Later",
-                    onPressed: () {
-                      onRemindLater(context);
-                    },
-                  ),
                 ],
               ),
-              SizedBox(height: 1.0),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  getButton(context: context, text: "Cancel"),
-                ],
-              )
             ],
           ),
         );
@@ -109,18 +102,23 @@ class AppUpdateCheck {
 
   void onUpdateNow(BuildContext context) {
     AppUtils.launchStoreApp();
-    Navigator.pop(context);
   }
 
   void onRemindLater(BuildContext context) {
     DateTime today = new DateTime.now();
-    DateTime twoDaysFromNow = today.add(new Duration(hours: AppConstant.REMIND_LATER_IN_HOURS));
-    AppSharedPrefUtil.saveAppUpdateCheckAfter(twoDaysFromNow.millisecondsSinceEpoch).then((isUpdated) {
+    DateTime twoDaysFromNow =
+        today.add(new Duration(hours: AppConstant.REMIND_LATER_IN_HOURS));
+    AppSharedPrefUtil.saveAppUpdateCheckAfter(
+            twoDaysFromNow.millisecondsSinceEpoch)
+        .then((isUpdated) {
       Navigator.pop(context);
     });
   }
 
-  Widget getButton({@required BuildContext context, @required String text, Function onPressed}) {
+  Widget getButton(
+      {@required BuildContext context,
+      @required String text,
+      Function onPressed}) {
     return FlatButton(
       padding: EdgeInsets.fromLTRB(8, 10, 8, 10),
       color: kQuizMain500,
