@@ -549,16 +549,20 @@ class MainGamePageState extends BaseState<MainGamePage> {
               ),
             ),
           ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              CacheData.userState.lives > 1 ? Text('\nWill be available only \nwhen your 1 life is left.', textScaleFactor: 1.2,) : new Container(),
+              (question.questionType != 'MCQ' && CacheData.userState.lives <= 1) ? Text('\nFill in the blanks will \nnot have any lifelines.',textScaleFactor: 1.2,) : new Container(),
+              (question.questionType == 'MCQ' && CacheData.userState.lives <= 1 && !CacheData.userState.currentState.fifty_fifty) ? Text('\nYou have already used \nlifeline in this level.',textScaleFactor: 1.2,) : new Container(),
+            ],
+          ),
           SizedBox(
             height: 30.0,
           ),
           new Row(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              lifeline(Icons.call, 'Phone a Friend', _phoneAFriend),
-              question.questionType == 'MCQ' ? CustomVerticalDivider(
-                height: 100,
-              ) : new Container(),
               (question.questionType == 'MCQ' && CacheData.userState.currentState.fifty_fifty != null
                   && CacheData.userState.currentState.fifty_fifty && CacheData.userState.lives <= 1) ?
                   lifeline(Icons.star_half, '50 - 50', _fiftyFifty)

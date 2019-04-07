@@ -274,7 +274,8 @@ class CommonFunction {
         CommonFunction.alertDialog(
           context: context,
           msg: 'You can buy life for 100 points.',
-          doneButtonText: 'Yes take it',
+          doneButtonText: 'Yes',
+          cancelButtonText: 'No',
           type: 'success',
           title: 'Oh Yeah ..',
           playSound: false,
@@ -282,6 +283,7 @@ class CommonFunction {
           showCancelButton: true,
           doneButtonFn: () {
             getLife(context);
+            Navigator.pop(context);
           },
         );
       },
@@ -295,7 +297,6 @@ class CommonFunction {
       if (appResponse.status == WSConstant.SUCCESS_CODE) {
         UserScoreState userState = UserScoreState.fromJson(appResponse.data);
         userState.updateSessionScore();
-        Navigator.pop(context);
         main();
       }
     } catch (e) {
@@ -389,6 +390,7 @@ class CommonFunction {
     @required String msg,
     bool showDoneButton = true,
     String doneButtonText = 'Okay',
+    String cancelButtonText = 'Cancel',
     Function doneButtonFn,
     bool barrierDismissible = true,
     bool showCancelButton = false,
@@ -481,7 +483,7 @@ class CommonFunction {
                     child: Row(
                       children: <Widget>[
                         Text(
-                          "Cancel",
+                          cancelButtonText,
                           textScaleFactor: 1.2,
                           style: TextStyle(
                             color: kQuizBackgroundWhite,
