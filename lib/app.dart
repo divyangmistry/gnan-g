@@ -107,7 +107,7 @@ ThemeData _buildQuizTheme() {
     ),
     primaryIconTheme: base.iconTheme.copyWith(color: kQuizBrown900),
     inputDecorationTheme: InputDecorationTheme(
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(30.0)),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0)),
         prefixStyle: TextStyle(color: kQuizBrown900)),
     textTheme: _buildQuizTextTheme(base.textTheme),
     primaryTextTheme: _buildQuizTextTheme(base.primaryTextTheme),
