@@ -41,6 +41,7 @@ dependencies:
   image_cropper: 1.0.0
   flutter_webview_plugin: 0.3.0
   package_info: 0.4.0
+#  fancy_bottom_navigation: "0.3.2"
 #  launch_review: ^1.0.1
 
   # The following adds the Cupertino Icons font to your application.
