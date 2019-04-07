@@ -55,45 +55,48 @@ class AppUpdateCheck {
       context: context,
       barrierDismissible: false,
       builder: (_) {
-        return AlertDialog(
-          contentPadding:
-              EdgeInsets.only(top: 10.0, bottom: 10.0, right: 2, left: 2),
-          shape: new RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20.0),
-          ),
-          title: Center(child: Text("App Update")),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10),
-                child: Text(
-                  "New App Version is avaliable.\n You need to update the app to continue ... !!",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.blueGrey, height: 1.5),
-                  textScaleFactor: 1.1,
-                ),
-              ),
-              SizedBox(height: 20.0),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  FlatButton(
-                    color: kQuizMain500,
-                    padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-                    child: Text(
-                      "Update Now",
-                      textScaleFactor: 1,
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    onPressed: () {
-                      onUpdateNow(context);
-                    },
+        return WillPopScope(
+          onWillPop: () async => false,
+          child: AlertDialog(
+            contentPadding:
+                EdgeInsets.only(top: 10.0, bottom: 10.0, right: 2, left: 2),
+            shape: new RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20.0),
+            ),
+            title: Center(child: Text("App Update")),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: Text(
+                    "New App Version is avaliable.\n You need to update the app to continue ... !!",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.blueGrey, height: 1.5),
+                    textScaleFactor: 1.1,
                   ),
-                ],
-              ),
-            ],
+                ),
+                SizedBox(height: 20.0),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    FlatButton(
+                      color: kQuizMain500,
+                      padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                      child: Text(
+                        "Update Now",
+                        textScaleFactor: 1,
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      onPressed: () {
+                        onUpdateNow(context);
+                      },
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         );
       },
