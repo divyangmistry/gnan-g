@@ -1,10 +1,10 @@
-# Quiz Gateway
+# Gnan-G
 
-Quiz Gateway GAME - Frontend
+Gnan-G GAME - Frontend
 
 ## Installation
 
-Quiz Gateway requires Flutter SDK v1.0 to run.
+GnanG requires Flutter SDK v1.0 to run.
 
 Install the dependencies to run app - 
 
@@ -12,3 +12,13 @@ Install the dependencies to run app -
 $ flutter packages get
 $ flutter run
 ```
+
+## For IOS
+
+Run
+```bash
+$ flutter doctor 
+```
+
+and install everything that flutter doctor says
+

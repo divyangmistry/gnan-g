@@ -1,4 +1,4 @@
-name: kon_banega_mokshadhipati
+name: GnanG
 description: A new Flutter project.
 
 # The following defines the version and build number for your application.
@@ -17,16 +17,46 @@ dependencies:
     sdk: flutter
   shared_preferences: "0.4.3"
   http: "0.11.3+17"
+  flame: "0.10.0"
+  onesignal: "1.0.5"
+#  firebase_core:
+#  firebase_messaging: "0.2.1"
+  flutter_spinkit: "3.1.0"
+  flare_flutter: "1.0.7"
+  vector_math: "2.0.8"
+  flutter_speed_dial: "1.1.1"
+  flutter_markdown: "0.2.0"
 
+  # For Puzzle -
+  # cupertino_icons: ^0.1.2
+  fluttertoast: "2.2.2"
+  url_launcher: "4.0.3"
+  share: "0.5.3"
+  color: any
+  rxdart: "0.20.0"
+  encrypt: ^2.0.0
+  connectivity: "0.3.2"
+  nima: ^1.0.0
+  image_picker: "0.4.5"
+  image_cropper: 1.0.0
+  flutter_webview_plugin: 0.3.0
+  package_info: 0.4.0
+#  launch_review: ^1.0.1
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^0.1.2
+  cupertino_icons: "0.1.2"
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: 0.7.0
 
+flutter_icons:
+  ios: true
+  android: "ic_launcher"
+  image_path: "assets/icon/icon.png"
+#  image_path: "assets/icon/icon_square.png" for ios
 
 # For information on the generic Dart part of this file, see the
 # following page: https://www.dartlang.org/tools/pub/pubspec
@@ -40,14 +70,43 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #  - images/a_dot_burr.jpeg
-  #  - images/a_dot_ham.jpeg
-
   assets:
     - images/TZLogo.jpg
+    - images/coin.png
     - images/face.png
-    - images/planet.png
+    - images/logo.png
+    - images/bkg.jpg
+    - images/logo1.png
+    - assets/audio/music/background_music.mp3
+    - assets/audio/music/Pac man dies.mp3
+    - assets/audio/music/CHANDELIER_FALLS.mp3
+
+    - assets/audio/music/right/right1.WAV
+    - assets/audio/music/right/right2.WAV
+    - assets/audio/music/right/right3.WAV
+
+    - assets/audio/music/wrong/wrong1.WAV
+    - assets/audio/music/wrong/wrong2.WAV
+    - assets/audio/music/wrong/wrong3.WAV
+    - assets/audio/music/wrong/wrong4.WAV
+    - assets/audio/music/wrong/wrong5.WAV
+    - assets/audio/music/game/gameEnd.WAV
+
+    - assets/audio/music/level/levelCompleted.WAV
+    - assets/audio/music/hint.WAV
+
+    - assets/animation/noInternet.flr
+    - assets/animation/Teddy.flr
+    - assets/animation/Dancing.flr
+    - assets/animation/person_floating.flr
+    - assets/animation/bonus.flr
+    - assets/animation/puzzl.flr
+    - assets/animation/world.flr
+    - assets/animation/leader.flr
+    - assets/animation/bigbang.flr
+    - images/photo_camera.png
+    
+
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.
@@ -60,6 +119,14 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
+  fonts:
+    - family: CmSans
+      fonts:
+        - asset: fonts/CmSans.ttf
+          weight: 500
+    - family: Gujarati
+      fonts:
+        - asset: fonts/Lohit-Gujarati.ttf
   # fonts:
   #   - family: Schyler
   #     fonts:

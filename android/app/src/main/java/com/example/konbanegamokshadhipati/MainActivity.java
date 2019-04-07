@@ -1,4 +1,4 @@
-package com.example.konbanegamokshadhipati;
+package org.mba.gnang;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;

@@ -8,19 +8,41 @@
 
 /* Begin PBXBuildFile section */
 		1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */ = {isa = PBXBuildFile; fileRef = 1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */; };
-		2D5378261FAA1A9400D5DBA9 /* flutter_assets in Resources */ = {isa = PBXBuildFile; fileRef = 2D5378251FAA1A9400D5DBA9 /* flutter_assets */; };
 		3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */; };
 		3B80C3941E831B6300D905FE /* App.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B80C3931E831B6300D905FE /* App.framework */; };
 		3B80C3951E831B6300D905FE /* App.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3B80C3931E831B6300D905FE /* App.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		882B1FBE607B09B8073CDDE4 /* libPods-Runner.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2CE97F225C0595C2E09FCF56 /* libPods-Runner.a */; };
 		9705A1C61CF904A100538489 /* Flutter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9740EEBA1CF902C7004384FC /* Flutter.framework */; };
 		9705A1C71CF904A300538489 /* Flutter.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9740EEBA1CF902C7004384FC /* Flutter.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		9740EEB41CF90195004384FC /* Debug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 9740EEB21CF90195004384FC /* Debug.xcconfig */; };
 		978B8F6F1D3862AE00F588F7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AFFD8EE1D35381100E5BB4D /* AppDelegate.m */; };
 		97C146F31CF9000F007C117D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 97C146F21CF9000F007C117D /* main.m */; };
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
+		D435F6DDA1711C893C4C31E6 /* libPods-OneSignalNotificationServiceExtensio.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A891D69F09E08882767415D1 /* libPods-OneSignalNotificationServiceExtensio.a */; };
+		E52762B3224A8A870094E6E8 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E52762B2224A8A870094E6E8 /* SystemConfiguration.framework */; };
+		E5AD7A09224F7D36002BD027 /* NotificationService.m in Sources */ = {isa = PBXBuildFile; fileRef = E5AD7A08224F7D36002BD027 /* NotificationService.m */; };
+		E5AD7A0D224F7D36002BD027 /* OneSignalNotificationServiceExtensio.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = E5AD7A05224F7D35002BD027 /* OneSignalNotificationServiceExtensio.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		E5AD7A14224F8642002BD027 /* libimage_cropper.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E5AD7A13224F8642002BD027 /* libimage_cropper.a */; };
+		E5AD7A16224F865D002BD027 /* libimage_picker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E5AD7A15224F865D002BD027 /* libimage_picker.a */; };
+		E5AD7A18224F88CA002BD027 /* libpath_provider.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E5AD7A17224F88CA002BD027 /* libpath_provider.a */; };
+		E5AD7A1A224F88E7002BD027 /* libshare.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E5AD7A19224F88E7002BD027 /* libshare.a */; };
+		E5AD7A1C224F8906002BD027 /* liburl_launcher.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E5AD7A1B224F8906002BD027 /* liburl_launcher.a */; };
+		E5AD7A1E224F8939002BD027 /* libpackage_info.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E5AD7A1D224F8939002BD027 /* libpackage_info.a */; };
+		E5AD7A20224F895C002BD027 /* libfluttertoast.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E5AD7A1F224F895C002BD027 /* libfluttertoast.a */; };
+		E5AD7A22224F8984002BD027 /* libshared_preferences.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E5AD7A21224F8984002BD027 /* libshared_preferences.a */; };
+		E5F972A42250BE590054CDEA /* libonesignal.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E5F972A32250BE590054CDEA /* libonesignal.a */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		E5AD7A0B224F7D36002BD027 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 97C146E61CF9000F007C117D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E5AD7A04224F7D35002BD027;
+			remoteInfo = OneSignalNotificationServiceExtension;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		9705A1C41CF9048500538489 /* Embed Frameworks */ = {
@@ -35,14 +57,30 @@
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		E57BFE8E223A37D40089D607 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 8;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				E5AD7A0D224F7D36002BD027 /* OneSignalNotificationServiceExtensio.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 1;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		1498D2321E8E86230040F4C2 /* GeneratedPluginRegistrant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeneratedPluginRegistrant.h; sourceTree = "<group>"; };
 		1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeneratedPluginRegistrant.m; sourceTree = "<group>"; };
-		2D5378251FAA1A9400D5DBA9 /* flutter_assets */ = {isa = PBXFileReference; lastKnownFileType = folder; name = flutter_assets; path = Flutter/flutter_assets; sourceTree = SOURCE_ROOT; };
+		15B1228616EC8C04540A21DD /* Pods-OneSignalNotificationServiceExtensio.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OneSignalNotificationServiceExtensio.profile.xcconfig"; path = "Pods/Target Support Files/Pods-OneSignalNotificationServiceExtensio/Pods-OneSignalNotificationServiceExtensio.profile.xcconfig"; sourceTree = "<group>"; };
+		2CE97F225C0595C2E09FCF56 /* libPods-Runner.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Runner.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		31CC93BB64EC7B7697E814AB /* Pods-OneSignalNotificationServiceExtension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OneSignalNotificationServiceExtension.debug.xcconfig"; path = "Pods/Target Support Files/Pods-OneSignalNotificationServiceExtension/Pods-OneSignalNotificationServiceExtension.debug.xcconfig"; sourceTree = "<group>"; };
 		3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = AppFrameworkInfo.plist; path = Flutter/AppFrameworkInfo.plist; sourceTree = "<group>"; };
 		3B80C3931E831B6300D905FE /* App.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = App.framework; path = Flutter/App.framework; sourceTree = "<group>"; };
+		3FA8FD32381E1E4EB842C2A0 /* Pods-OneSignalNotificationServiceExtension.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OneSignalNotificationServiceExtension.profile.xcconfig"; path = "Pods/Target Support Files/Pods-OneSignalNotificationServiceExtension/Pods-OneSignalNotificationServiceExtension.profile.xcconfig"; sourceTree = "<group>"; };
+		4BEC93980EB14092D7A5D86A /* Pods-OneSignalNotificationServiceExtensio.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OneSignalNotificationServiceExtensio.release.xcconfig"; path = "Pods/Target Support Files/Pods-OneSignalNotificationServiceExtensio/Pods-OneSignalNotificationServiceExtensio.release.xcconfig"; sourceTree = "<group>"; };
+		6D7C3EEB448E5672E5353E5E /* Pods-OneSignalNotificationServiceExtensio.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OneSignalNotificationServiceExtensio.debug.xcconfig"; path = "Pods/Target Support Files/Pods-OneSignalNotificationServiceExtensio/Pods-OneSignalNotificationServiceExtensio.debug.xcconfig"; sourceTree = "<group>"; };
 		7AFA3C8E1D35360C0083082E /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Release.xcconfig; path = Flutter/Release.xcconfig; sourceTree = "<group>"; };
 		7AFFD8ED1D35381100E5BB4D /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		7AFFD8EE1D35381100E5BB4D /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -55,6 +93,32 @@
 		97C146FD1CF9000F007C117D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		97C147001CF9000F007C117D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		97C147021CF9000F007C117D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A84974BC506294F4C11F396A /* libPods-OneSignalNotificationServiceExtension.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OneSignalNotificationServiceExtension.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A891D69F09E08882767415D1 /* libPods-OneSignalNotificationServiceExtensio.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OneSignalNotificationServiceExtensio.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E525C73A224CF83800F5317A /* NotificationService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NotificationService.h; sourceTree = "<group>"; };
+		E525C73B224CF83900F5317A /* NotificationService.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NotificationService.m; sourceTree = "<group>"; };
+		E525C73D224CF83900F5317A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E52762B2224A8A870094E6E8 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		E57BFE83223A37D40089D607 /* NotificationService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NotificationService.h; sourceTree = "<group>"; };
+		E57BFE84223A37D40089D607 /* NotificationService.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NotificationService.m; sourceTree = "<group>"; };
+		E57BFE86223A37D40089D607 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E57BFE8F223A38010089D607 /* OneSignalNotificationServiceExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = OneSignalNotificationServiceExtension.entitlements; sourceTree = "<group>"; };
+		E5A86BCB223A3C2900EE883C /* Runner.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Runner.entitlements; sourceTree = "<group>"; };
+		E5AD7A05224F7D35002BD027 /* OneSignalNotificationServiceExtensio.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = OneSignalNotificationServiceExtensio.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		E5AD7A07224F7D36002BD027 /* NotificationService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NotificationService.h; sourceTree = "<group>"; };
+		E5AD7A08224F7D36002BD027 /* NotificationService.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NotificationService.m; sourceTree = "<group>"; };
+		E5AD7A0A224F7D36002BD027 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E5AD7A12224F7E5D002BD027 /* OneSignalNotificationServiceExtensio.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = OneSignalNotificationServiceExtensio.entitlements; sourceTree = "<group>"; };
+		E5AD7A13224F8642002BD027 /* libimage_cropper.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libimage_cropper.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		E5AD7A15224F865D002BD027 /* libimage_picker.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libimage_picker.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		E5AD7A17224F88CA002BD027 /* libpath_provider.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libpath_provider.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		E5AD7A19224F88E7002BD027 /* libshare.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libshare.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		E5AD7A1B224F8906002BD027 /* liburl_launcher.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = liburl_launcher.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		E5AD7A1D224F8939002BD027 /* libpackage_info.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libpackage_info.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		E5AD7A1F224F895C002BD027 /* libfluttertoast.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libfluttertoast.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		E5AD7A21224F8984002BD027 /* libshared_preferences.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libshared_preferences.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		E5F972A32250BE590054CDEA /* libonesignal.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libonesignal.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		F207B79ED01E6DE52A298CDB /* Pods-OneSignalNotificationServiceExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OneSignalNotificationServiceExtension.release.xcconfig"; path = "Pods/Target Support Files/Pods-OneSignalNotificationServiceExtension/Pods-OneSignalNotificationServiceExtension.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,18 +126,56 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E52762B3224A8A870094E6E8 /* SystemConfiguration.framework in Frameworks */,
 				9705A1C61CF904A100538489 /* Flutter.framework in Frameworks */,
 				3B80C3941E831B6300D905FE /* App.framework in Frameworks */,
+				882B1FBE607B09B8073CDDE4 /* libPods-Runner.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E5AD7A02224F7D35002BD027 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E5F972A42250BE590054CDEA /* libonesignal.a in Frameworks */,
+				E5AD7A22224F8984002BD027 /* libshared_preferences.a in Frameworks */,
+				E5AD7A20224F895C002BD027 /* libfluttertoast.a in Frameworks */,
+				E5AD7A1E224F8939002BD027 /* libpackage_info.a in Frameworks */,
+				E5AD7A1C224F8906002BD027 /* liburl_launcher.a in Frameworks */,
+				E5AD7A1A224F88E7002BD027 /* libshare.a in Frameworks */,
+				E5AD7A18224F88CA002BD027 /* libpath_provider.a in Frameworks */,
+				E5AD7A16224F865D002BD027 /* libimage_picker.a in Frameworks */,
+				E5AD7A14224F8642002BD027 /* libimage_cropper.a in Frameworks */,
+				D435F6DDA1711C893C4C31E6 /* libPods-OneSignalNotificationServiceExtensio.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		831646D04EF7E35C3A6EA34F /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				E5F972A32250BE590054CDEA /* libonesignal.a */,
+				E5AD7A21224F8984002BD027 /* libshared_preferences.a */,
+				E5AD7A1F224F895C002BD027 /* libfluttertoast.a */,
+				E5AD7A1D224F8939002BD027 /* libpackage_info.a */,
+				E5AD7A1B224F8906002BD027 /* liburl_launcher.a */,
+				E5AD7A19224F88E7002BD027 /* libshare.a */,
+				E5AD7A17224F88CA002BD027 /* libpath_provider.a */,
+				E5AD7A15224F865D002BD027 /* libimage_picker.a */,
+				E5AD7A13224F8642002BD027 /* libimage_cropper.a */,
+				E52762B2224A8A870094E6E8 /* SystemConfiguration.framework */,
+				2CE97F225C0595C2E09FCF56 /* libPods-Runner.a */,
+				A84974BC506294F4C11F396A /* libPods-OneSignalNotificationServiceExtension.a */,
+				A891D69F09E08882767415D1 /* libPods-OneSignalNotificationServiceExtensio.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		9740EEB11CF90186004384FC /* Flutter */ = {
 			isa = PBXGroup;
 			children = (
-				2D5378251FAA1A9400D5DBA9 /* flutter_assets */,
 				3B80C3931E831B6300D905FE /* App.framework */,
 				3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */,
 				9740EEBA1CF902C7004384FC /* Flutter.framework */,
@@ -89,8 +191,12 @@
 			children = (
 				9740EEB11CF90186004384FC /* Flutter */,
 				97C146F01CF9000F007C117D /* Runner */,
+				E57BFE82223A37D40089D607 /* OneSignalNotificationServiceExtension */,
+				E525C739224CF83800F5317A /* OneSignalNotificationServiceExtensio */,
+				E5AD7A06224F7D36002BD027 /* OneSignalNotificationServiceExtension */,
 				97C146EF1CF9000F007C117D /* Products */,
-				CF3B75C9A7D2FA2A4C99F110 /* Frameworks */,
+				C894B253498D1D3631020838 /* Pods */,
+				831646D04EF7E35C3A6EA34F /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -98,6 +204,7 @@
 			isa = PBXGroup;
 			children = (
 				97C146EE1CF9000F007C117D /* Runner.app */,
+				E5AD7A05224F7D35002BD027 /* OneSignalNotificationServiceExtensio.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -105,6 +212,7 @@
 		97C146F01CF9000F007C117D /* Runner */ = {
 			isa = PBXGroup;
 			children = (
+				E5A86BCB223A3C2900EE883C /* Runner.entitlements */,
 				7AFFD8ED1D35381100E5BB4D /* AppDelegate.h */,
 				7AFFD8EE1D35381100E5BB4D /* AppDelegate.m */,
 				97C146FA1CF9000F007C117D /* Main.storyboard */,
@@ -126,6 +234,51 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		C894B253498D1D3631020838 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				31CC93BB64EC7B7697E814AB /* Pods-OneSignalNotificationServiceExtension.debug.xcconfig */,
+				F207B79ED01E6DE52A298CDB /* Pods-OneSignalNotificationServiceExtension.release.xcconfig */,
+				3FA8FD32381E1E4EB842C2A0 /* Pods-OneSignalNotificationServiceExtension.profile.xcconfig */,
+				6D7C3EEB448E5672E5353E5E /* Pods-OneSignalNotificationServiceExtensio.debug.xcconfig */,
+				4BEC93980EB14092D7A5D86A /* Pods-OneSignalNotificationServiceExtensio.release.xcconfig */,
+				15B1228616EC8C04540A21DD /* Pods-OneSignalNotificationServiceExtensio.profile.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		E525C739224CF83800F5317A /* OneSignalNotificationServiceExtensio */ = {
+			isa = PBXGroup;
+			children = (
+				E5AD7A12224F7E5D002BD027 /* OneSignalNotificationServiceExtensio.entitlements */,
+				E525C73A224CF83800F5317A /* NotificationService.h */,
+				E525C73B224CF83900F5317A /* NotificationService.m */,
+				E525C73D224CF83900F5317A /* Info.plist */,
+			);
+			path = OneSignalNotificationServiceExtensio;
+			sourceTree = "<group>";
+		};
+		E57BFE82223A37D40089D607 /* OneSignalNotificationServiceExtension */ = {
+			isa = PBXGroup;
+			children = (
+				E57BFE8F223A38010089D607 /* OneSignalNotificationServiceExtension.entitlements */,
+				E57BFE83223A37D40089D607 /* NotificationService.h */,
+				E57BFE84223A37D40089D607 /* NotificationService.m */,
+				E57BFE86223A37D40089D607 /* Info.plist */,
+			);
+			path = OneSignalNotificationServiceExtension;
+			sourceTree = "<group>";
+		};
+		E5AD7A06224F7D36002BD027 /* OneSignalNotificationServiceExtension */ = {
+			isa = PBXGroup;
+			children = (
+				E5AD7A07224F7D36002BD027 /* NotificationService.h */,
+				E5AD7A08224F7D36002BD027 /* NotificationService.m */,
+				E5AD7A0A224F7D36002BD027 /* Info.plist */,
+			);
+			path = OneSignalNotificationServiceExtension;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -133,21 +286,44 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 97C147051CF9000F007C117D /* Build configuration list for PBXNativeTarget "Runner" */;
 			buildPhases = (
+				9E95E8A5369DF6851B23A04C /* [CP] Check Pods Manifest.lock */,
 				9740EEB61CF901F6004384FC /* Run Script */,
 				97C146EA1CF9000F007C117D /* Sources */,
 				97C146EB1CF9000F007C117D /* Frameworks */,
 				97C146EC1CF9000F007C117D /* Resources */,
 				9705A1C41CF9048500538489 /* Embed Frameworks */,
 				3B06AD1E1E4923F5004D2608 /* Thin Binary */,
+				D969292F030DC9851FE20AAE /* [CP] Embed Pods Frameworks */,
+				4544980F774E7963FBA04C72 /* [CP] Copy Pods Resources */,
+				E57BFE8E223A37D40089D607 /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				E5AD7A0C224F7D36002BD027 /* PBXTargetDependency */,
 			);
 			name = Runner;
 			productName = Runner;
 			productReference = 97C146EE1CF9000F007C117D /* Runner.app */;
 			productType = "com.apple.product-type.application";
+		};
+		E5AD7A04224F7D35002BD027 /* OneSignalNotificationServiceExtensio */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E5AD7A0E224F7D36002BD027 /* Build configuration list for PBXNativeTarget "OneSignalNotificationServiceExtensio" */;
+			buildPhases = (
+				BBACC54B55FAACA64A2E0285 /* [CP] Check Pods Manifest.lock */,
+				E5AD7A01224F7D35002BD027 /* Sources */,
+				E5AD7A02224F7D35002BD027 /* Frameworks */,
+				E5AD7A03224F7D35002BD027 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = OneSignalNotificationServiceExtensio;
+			productName = OneSignalNotificationServiceExtension;
+			productReference = E5AD7A05224F7D35002BD027 /* OneSignalNotificationServiceExtensio.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -155,11 +331,38 @@
 		97C146E61CF9000F007C117D /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0910;
+				DefaultBuildSystemTypeForWorkspace = Original;
+				LastUpgradeCheck = 1010;
 				ORGANIZATIONNAME = "The Chromium Authors";
 				TargetAttributes = {
 					97C146ED1CF9000F007C117D = {
 						CreatedOnToolsVersion = 7.3.1;
+						DevelopmentTeam = EMDJBANZF9;
+						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 0;
+							};
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+							com.apple.Push = {
+								enabled = 1;
+							};
+						};
+					};
+					E5AD7A04224F7D35002BD027 = {
+						CreatedOnToolsVersion = 10.1;
+						DevelopmentTeam = EMDJBANZF9;
+						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 0;
+							};
+							com.apple.Push = {
+								enabled = 0;
+							};
+						};
 					};
 				};
 			};
@@ -177,6 +380,7 @@
 			projectRoot = "";
 			targets = (
 				97C146ED1CF9000F007C117D /* Runner */,
+				E5AD7A04224F7D35002BD027 /* OneSignalNotificationServiceExtensio */,
 			);
 		};
 /* End PBXProject section */
@@ -188,10 +392,15 @@
 			files = (
 				97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */,
 				3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */,
-				9740EEB41CF90195004384FC /* Debug.xcconfig in Resources */,
 				97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */,
-				2D5378261FAA1A9400D5DBA9 /* flutter_assets in Resources */,
 				97C146FC1CF9000F007C117D /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E5AD7A03224F7D35002BD027 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -210,7 +419,29 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" thin";
+			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" thin\n";
+		};
+		4544980F774E7963FBA04C72 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-Runner/Pods-Runner-resources.sh",
+				"${PODS_CONFIGURATION_BUILD_DIR}/TOCropViewController/TOCropViewControllerBundle.bundle",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/TOCropViewControllerBundle.bundle",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Runner/Pods-Runner-resources.sh\"\n";
+			showEnvVarsInLog = 0;
 		};
 		9740EEB61CF901F6004384FC /* Run Script */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -224,7 +455,73 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" build";
+			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" build\n";
+		};
+		9E95E8A5369DF6851B23A04C /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Runner-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		BBACC54B55FAACA64A2E0285 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-OneSignalNotificationServiceExtensio-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D969292F030DC9851FE20AAE /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-Runner/Pods-Runner-frameworks.sh",
+				"${PODS_ROOT}/../.symlinks/flutter/ios-release/Flutter.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Flutter.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Runner/Pods-Runner-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -239,7 +536,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		E5AD7A01224F7D35002BD027 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E5AD7A09224F7D36002BD027 /* NotificationService.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		E5AD7A0C224F7D36002BD027 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E5AD7A04224F7D35002BD027 /* OneSignalNotificationServiceExtensio */;
+			targetProxy = E5AD7A0B224F7D36002BD027 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		97C146FA1CF9000F007C117D /* Main.storyboard */ = {
@@ -275,12 +588,14 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -291,6 +606,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_BITCODE = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -301,11 +617,12 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
+				VALID_ARCHS = "arm64 armv7s armv7 arm64e";
 			};
 			name = Profile;
 		};
@@ -313,22 +630,29 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 7AFA3C8E1D35360C0083082E /* Release.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
-				DEVELOPMENT_TEAM = S8QB4VV633;
+				DEVELOPMENT_TEAM = EMDJBANZF9;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
 				INFOPLIST_FILE = Runner/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.example.konBanegaMokshadhipati;
+				PRODUCT_BUNDLE_IDENTIFIER = org.mba.gnang;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				VALID_ARCHS = "arm64 arm64e armv7s armv7";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Profile;
@@ -347,12 +671,14 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -363,6 +689,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -379,11 +706,12 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VALID_ARCHS = "arm64 armv7s armv7 arm64e";
 			};
 			name = Debug;
 		};
@@ -401,12 +729,14 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -417,6 +747,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_BITCODE = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -427,11 +758,13 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
+				VALID_ARCHS = "arm64 armv7s armv7 arm64e";
 			};
 			name = Release;
 		};
@@ -439,21 +772,57 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 9740EEB21CF90195004384FC /* Debug.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
+				DEVELOPMENT_TEAM = EMDJBANZF9;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
 				INFOPLIST_FILE = Runner/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.example.konBanegaMokshadhipati;
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-l\"Reachability\"",
+					"-l\"audioplayers\"",
+					"-l\"connectivity\"",
+					"-l\"flutter_webview_plugin\"",
+					"-l\"fluttertoast\"",
+					"-l\"image_cropper\"",
+					"-l\"image_picker\"",
+					"-l\"onesignal\"",
+					"-l\"package_info\"",
+					"-l\"path_provider\"",
+					"-l\"share\"",
+					"-l\"shared_preferences\"",
+					"-l\"url_launcher\"",
+					"-framework",
+					"\"Flutter\"",
+					"-framework",
+					"\"OneSignal\"",
+					"-framework",
+					"\"SystemConfiguration\"",
+					"-framework",
+					"\"UIKit\"",
+					"-framework",
+					"\"UserNotifications\"",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = org.mba.gnang;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				VALID_ARCHS = "arm64 arm64e armv7s armv7";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -462,24 +831,143 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 7AFA3C8E1D35360C0083082E /* Release.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
+				DEVELOPMENT_TEAM = EMDJBANZF9;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
 				INFOPLIST_FILE = Runner/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.example.konBanegaMokshadhipati;
+				"LIBRARY_SEARCH_PATHS[arch=*]" = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Flutter",
+				);
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-l\"audioplayers\"",
+					"-l\"connectivity\"",
+					"-l\"flutter_webview_plugin\"",
+					"-l\"fluttertoast\"",
+					"-l\"image_cropper\"",
+					"-l\"image_picker\"",
+					"-l\"onesignal\"",
+					"-l\"package_info\"",
+					"-l\"path_provider\"",
+					"-l\"share\"",
+					"-l\"shared_preferences\"",
+					"-l\"url_launcher\"",
+					"-framework",
+					"\"Flutter\"",
+					"-framework",
+					"\"OneSignal\"",
+					"-framework",
+					"\"SystemConfiguration\"",
+					"-framework",
+					"\"UIKit\"",
+					"-framework",
+					"\"UserNotifications\"",
+					"$(inherited)",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = org.mba.gnang;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				VALID_ARCHS = "arm64 arm64e armv7s armv7";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
+		};
+		E5AD7A0F224F7D36002BD027 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6D7C3EEB448E5672E5353E5E /* Pods-OneSignalNotificationServiceExtensio.debug.xcconfig */;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = OneSignalNotificationServiceExtension/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = org.mba.gnang.OneSignalNotificationServiceExtensio;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALID_ARCHS = "arm64 arm64e armv7s armv7";
+			};
+			name = Debug;
+		};
+		E5AD7A10224F7D36002BD027 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4BEC93980EB14092D7A5D86A /* Pods-OneSignalNotificationServiceExtensio.release.xcconfig */;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = OneSignalNotificationServiceExtension/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = org.mba.gnang.OneSignalNotificationServiceExtensio;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALID_ARCHS = "arm64 arm64e armv7s armv7";
+			};
+			name = Release;
+		};
+		E5AD7A11224F7D36002BD027 /* Profile */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 15B1228616EC8C04540A21DD /* Pods-OneSignalNotificationServiceExtensio.profile.xcconfig */;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = OneSignalNotificationServiceExtension/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = org.mba.gnang.OneSignalNotificationServiceExtensio;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALID_ARCHS = "arm64 arm64e armv7s armv7";
+			};
+			name = Profile;
 		};
 /* End XCBuildConfiguration section */
 
@@ -500,6 +988,16 @@
 				97C147061CF9000F007C117D /* Debug */,
 				97C147071CF9000F007C117D /* Release */,
 				249021D4217E4FDB00AE95B9 /* Profile */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E5AD7A0E224F7D36002BD027 /* Build configuration list for PBXNativeTarget "OneSignalNotificationServiceExtensio" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E5AD7A0F224F7D36002BD027 /* Debug */,
+				E5AD7A10224F7D36002BD027 /* Release */,
+				E5AD7A11224F7D36002BD027 /* Profile */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

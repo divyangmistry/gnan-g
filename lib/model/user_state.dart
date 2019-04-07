@@ -1,15 +1,20 @@
-
-
-import 'package:kon_banega_mokshadhipati/model/current_stat.dart';
-import 'package:kon_banega_mokshadhipati/model/quizlevel.dart';
+import 'package:GnanG/model/current_stat.dart';
+import 'package:GnanG/model/quizlevel.dart';
 
 class UserState {
-
   List<QuizLevel> quizLevels;
   List<CompletedLevel> completed;
-  CurrentState currentStat;
+  CurrentState currentState;
+  int totalscore;
+  int lives;
 
-  UserState({this.quizLevels, this.completed, this.currentStat});
+  UserState(
+      {this.quizLevels,
+      this.completed,
+      this.currentState,
+      this.totalscore,
+      this.lives,
+      });
 
   UserState.fromJson(Map<String, dynamic> json) {
     if (json['quiz_levels'] != null) {
@@ -24,14 +29,11 @@ class UserState {
         completed.add(new CompletedLevel.fromJson(v));
       });
     }
-    if (json['current'] != null) {
-      List<CurrentState> currents = new List<CurrentState>();
-      json['current'].forEach((v) {
-        currents.add(new CurrentState.fromJson(v));
-      });
-      if(currents.isNotEmpty)
-        currentStat = currents.first;
+    if (json['current'] != null && json['current'][0] != null) {
+      currentState = new CurrentState.fromJson(json['current'][0]);
     }
+    totalscore = json['totalscore'];
+    lives = json['lives'];
   }
 
   Map<String, dynamic> toJson() {
@@ -42,18 +44,22 @@ class UserState {
     if (this.completed != null) {
       data['completed'] = this.completed.map((v) => v.toJson()).toList();
     }
-/*    if (this.current != null) {
-      data['current'] = this.current.map((v) => v.toJson()).toList();
-    }*/
+    // if (this.current != null) {
+    //   data['current'] = this.current.map((v) => v.toJson()).toList();
+    // }
+    data['totalscore'] = this.totalscore;
+    data['lives'] = this.lives;
     return data;
   }
 
+  // @override
+  // String toString() {
+  //   return 'CompletedLevel{quizLevels: $quizLevels, completed: $completed, current: $currentState, totalscore: $totalscore, lives: $lives}';
+  // } ---> ORIGINAL <----
   @override
   String toString() {
-    return 'UserState{quizLevels: $quizLevels, completed: $completed, current: $currentStat}';
+    return 'CompletedLevel{ totalscore: $totalscore, lives: $lives}';
   }
-
-
 }
 
 class CompletedLevel {
@@ -78,6 +84,4 @@ class CompletedLevel {
   String toString() {
     return 'CompletedLevel{level: $level, score: $score}';
   }
-
-
 }
