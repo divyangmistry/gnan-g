@@ -355,15 +355,17 @@ class CommonFunction {
   static Future<Image> getUserProfileImg({BuildContext context}) async {
     Image userProfile;
     userProfile = await AppSharedPrefUtil.getProfileImage();
-    if (userProfile == null)
-      userProfile = getImageFromBase64Img(base64Img: await getProfilePictureFromServer(context, CacheData.userInfo.mhtId));
+    if (userProfile == null) {
+      String base64Img = await getProfilePictureFromServer(context, CacheData.userInfo.mhtId);
+      userProfile = getImageFromBase64Img(base64Img: base64Img);
+      AppSharedPrefUtil.saveProfileImage(base64Img);
+    }
     if (userProfile == null)
       userProfile = Image(image: AssetImage(AppConstant.DEFAULT_USER_IMG_PATH));
     return userProfile;
   }
 
-  static Future<String> getProfilePictureFromServer(
-      BuildContext context, int mhtId) async {
+  static Future<String> getProfilePictureFromServer(BuildContext context, int mhtId) async {
     String profileBase64Image;
     Response res = await _api.getProfilePicture(mhtId: mhtId);
     AppResponse appResponse = ResponseParser.parseResponse(context: context, res: res);
@@ -378,7 +380,7 @@ class CommonFunction {
     if (base64Img != null)
       image = Image(image: MemoryImage(base64Decode(base64Img)));
     if (returnDefault && image == null)
-      image = Image(image: AssetImage(AppConstant.DEFAULT_USER_IMG_PATH));
+      image = CacheData.getUserDefaultImg();
     return image;
   }
 

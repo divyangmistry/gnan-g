@@ -189,7 +189,6 @@ class LeaderBoardState extends BaseState<LeaderBoard> {
                   leaderList[index].name,
                   leaderList[index].totalscore,
                   Icons.face,
-                  null,
                   leaderList[index].mhtId,
                 );
               },
@@ -222,9 +221,9 @@ class LeaderRow extends StatefulWidget {
   int rank, points, mhtId;
   String name;
   IconData icon;
-  Image image;
 
-  LeaderRow(this.rank, this.name, this.points, this.icon, this.image, this.mhtId);
+
+  LeaderRow(this.rank, this.name, this.points, this.icon, this.mhtId);
 
   @override
   State<StatefulWidget> createState() {
@@ -235,17 +234,15 @@ class LeaderRow extends StatefulWidget {
 
 class LeaderRowState extends State<LeaderRow> {
 
-  Image cachedImage;
+  Image image = CacheData.getUserDefaultImg();
 
   @override
   void initState() {
     super.initState();
-    CommonFunction.getProfilePictureFromServer(context, widget.mhtId).then((base64Img) {
-      if (mounted) {
+    CacheData.getUserProfileImages(context, widget.mhtId).then((userImage) {
+      if(mounted) {
         setState(() {
-          widget.image = CommonFunction.getImageFromBase64Img(
-            base64Img: base64Img, returnDefault: true);
-          cachedImage = widget.image;
+          image = userImage;
         });
       }
     });
@@ -287,7 +284,7 @@ class LeaderRowState extends State<LeaderRow> {
                 , CircleAvatar(
                   maxRadius: 25,
                   child: HeroImage(
-                    image: cachedImage, maxRadius: 23, heroTag: widget.name,),
+                    image: image, maxRadius: 23, heroTag: widget.name,),
                   backgroundColor: CacheData.userInfo.mhtId == widget.mhtId
                     ? kQuizBrown900
                     : kQuizMain50,
