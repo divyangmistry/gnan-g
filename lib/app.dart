@@ -57,7 +57,7 @@ class _QuizAppState extends State<QuizApp> {
     return MaterialApp(
       title: 'Gnan-G',
       home: widget.defaultHome,
-      theme: _kQuizTheme,
+      theme: ThemeData(primaryColor: kQuizMain400),
       routes: <String, WidgetBuilder>{
         '/noInternet': (BuildContext context) => new NoInternetPage(),
         '/introPage': (BuildContext context) => new IntroPage(),
