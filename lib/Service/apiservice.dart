@@ -13,9 +13,10 @@ import 'package:meta/meta.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiService {
-   final _apiUrl = 'http://192.168.43.23:3000';
+  //final _apiUrl = 'http://192.168.43.23:3000';
   // final _apiUrl = 'http://192.168.1.103:3000';
-//  final _apiUrl = 'http://104.211.88.75:3000'; // live API
+  final _apiUrl = 'http://gnang.purecelibacy.org:3000'; // live API
+
 
   Map<String, String> headers = {'content-type': 'application/json'};
   bool enableMock = false;
