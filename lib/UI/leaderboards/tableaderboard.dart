@@ -32,7 +32,7 @@ class MyTabbedPage extends StatefulWidget {
 }
 class _MyTabbedPageState extends State<MyTabbedPage> with SingleTickerProviderStateMixin {
   final List<Tab> myTabs = <Tab>[
-    new Tab(text: 'Weekly',icon: Icon(Icons.weekend)),
+    //new Tab(text: 'Weekly',icon: Icon(Icons.weekend)),
     new Tab(text: 'Monthly',icon: Icon(Icons.access_time)),
     new Tab(text: 'World',icon: Icon(Icons.account_balance)),
   ];
@@ -91,7 +91,7 @@ class _MyTabbedPageState extends State<MyTabbedPage> with SingleTickerProviderSt
       body: new TabBarView(
         controller: _tabController,
         children:  [
-              WeeklyLeaderBoard(),
+              //WeeklyLeaderBoard(),
               MonthlyLeaderBoard(),
               LeaderBoard(),
             ],

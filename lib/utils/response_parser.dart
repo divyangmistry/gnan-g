@@ -16,6 +16,9 @@ class ResponseParser {
       {BuildContext context,
       @required Response res,
       bool showDialog = true}) {
+
+    ApiService _api = new ApiService();
+
     AppResponse appResponse = AppResponse.fromJson(json.decode(res.body));
     if (appResponse.status == 0 || appResponse.status == null)
       appResponse.status = res.statusCode;
@@ -29,6 +32,11 @@ class ResponseParser {
               : MessageConstant.COMMON_ERROR_MSG,
           doneButtonText: 'Okay',
         );
+        if(appResponse.status == 227) {
+            _api.logout();
+            Navigator.pop(context);
+            Navigator.pushReplacementNamed(context, '/login_new');
+        }
       }
     }
     return appResponse;
