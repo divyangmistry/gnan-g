@@ -11,13 +11,9 @@ import 'package:GnanG/model/current_stat.dart';
 import 'package:GnanG/model/question.dart';
 import 'package:GnanG/model/user_score_state.dart';
 import 'package:GnanG/model/validateQuestion.dart';
-import 'package:GnanG/utils/app_setting_util.dart';
-import 'package:GnanG/utils/app_utils.dart';
 import 'package:GnanG/utils/audio_utilsdart.dart';
 import 'package:GnanG/utils/response_parser.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:flame/flame.dart';
-import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
@@ -438,7 +434,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
         setState(() {
           isOverlay = true;
         });
-        Response res = await _api.hintTaken(questionId: question.questionId, mhtId: CacheData.userInfo.mhtId);
+        Response res = await _api.hintTaken(questionId: question.questionId, mhtId: CacheData.userInfo.mhtId, userLevel: question.level);
         AppResponse appResponse = ResponseParser.parseResponse(context: context, res: res);
         if (appResponse.status == WSConstant.SUCCESS_CODE) {
           UserScoreState userScoreState = UserScoreState.fromJson(appResponse.data);

@@ -6,7 +6,6 @@ import 'package:GnanG/colors.dart';
 import 'package:GnanG/common.dart';
 import 'package:GnanG/model/appresponse.dart';
 import 'package:GnanG/model/cacheData.dart';
-import 'package:GnanG/utils/app_setting_util.dart';
 import 'package:GnanG/utils/appsharedpref.dart';
 import 'package:GnanG/utils/audio_utilsdart.dart';
 import 'package:GnanG/utils/response_parser.dart';
@@ -125,7 +124,7 @@ class DashboardPageState extends State<DashboardPage> {
   Widget _leaderBoard() {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, '/leaderboard');
+        Navigator.pushNamed(context, '/tableaderboard');
       },
       child: _gameMenu(
           Colors.pinkAccent.shade100,

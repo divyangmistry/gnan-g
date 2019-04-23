@@ -5,7 +5,6 @@ import 'dart:io';
 import 'package:GnanG/constans/sharedpref_constant.dart';
 import 'package:GnanG/model/cacheData.dart';
 import 'package:GnanG/model/signupsession.dart';
-import 'package:GnanG/utils/app_setting_util.dart';
 import 'package:GnanG/utils/appsharedpref.dart';
 import 'package:GnanG/utils/audio_utilsdart.dart';
 import 'package:http/http.dart';
@@ -14,8 +13,8 @@ import 'package:meta/meta.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiService {
-  // final _apiUrl = 'http://192.168.43.23:3000';
-  // final _apiUrl = 'http://192.168.1.103:3000';
+//   final _apiUrl = 'http://192.168.43.23:3001';
+//   final _apiUrl = 'http://192.168.1.105:3001';
   final _apiUrl = 'http://104.211.88.75:3000'; // live API
 
   Map<String, String> headers = {'content-type': 'application/json'};
@@ -218,8 +217,9 @@ class ApiService {
   Future<http.Response> hintTaken({
     @required int questionId,
     @required int mhtId,
+    @required int userLevel
   }) async {
-    Map<String, dynamic> data = {"question_id": questionId, "mht_id": mhtId};
+    Map<String, dynamic> data = {"question_id": questionId, "mht_id": mhtId, "user_level": userLevel};
     http.Response res = await postApi(url: '/hint_question', data: data);
     return res;
   }

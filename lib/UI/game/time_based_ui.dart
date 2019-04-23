@@ -13,7 +13,7 @@ class TimeBasedUI extends StatefulWidget {
 
 class TimeBasedUIState extends State<TimeBasedUI> {
   Timer _timer;
-  int _timeInSeconds = 30; // question timer
+  int _timeInSeconds = 40; // question timer
   double _remaining = 100; // do not edit
   double _step = 0; // do not edit
 
@@ -139,22 +139,32 @@ class TimeBasedUIState extends State<TimeBasedUI> {
 
     Widget _appBar() {
       return new Container(
-        padding: EdgeInsets.fromLTRB(15, 15, 15, 10),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
+        padding: EdgeInsets.fromLTRB(15, 30, 15, 10),
+        child: Column(
           children: <Widget>[
-            IconButton(
-              icon: Icon(Icons.arrow_back),
-              onPressed: () {
-                print('back button');
-              },
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                IconButton(
+                  icon: Icon(Icons.arrow_back),
+                  onPressed: () {
+                    print('back button');
+                  },
+                ),
+                Text(
+                  'Time based UI',
+                  textScaleFactor: 1.5,
+                ),
+                CommonFunction.pointsUI(context: context, point: '120'),
+              ],
             ),
-            Text(
-              'Time based UI',
-              textScaleFactor: 1.5,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                _timeIndicator(),
+              ],
             ),
-            CommonFunction.pointsUI(context: context, point: '120'),
           ],
         ),
       );
@@ -162,20 +172,17 @@ class TimeBasedUIState extends State<TimeBasedUI> {
 
     return Scaffold(
       backgroundColor: Colors.blue.shade200,
+      appBar: PreferredSize(child: _appBar(), preferredSize: Size.fromHeight(170.0)),
       body: SafeArea(
         child: ListView(
           children: <Widget>[
-            _appBar(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: <Widget>[
-                _timeIndicator(),
-              ],
-            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Text('\nAnswer Tiles\n' , textScaleFactor: 1.5,),
+                Text(
+                  '\nAnswer Tiles\n',
+                  textScaleFactor: 1.5,
+                ),
               ],
             ),
             Wrap(
@@ -192,7 +199,10 @@ class TimeBasedUIState extends State<TimeBasedUI> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Text('\n\nJumble Tiles\n' , textScaleFactor: 1.5,),
+                Text(
+                  '\n\nJumble Tiles\n',
+                  textScaleFactor: 1.5,
+                ),
               ],
             ),
             Wrap(

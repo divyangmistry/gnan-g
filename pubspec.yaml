@@ -125,6 +125,9 @@ flutter:
       fonts:
         - asset: fonts/CmSans.ttf
           weight: 500
+    - family: GoogleSans
+      fonts:
+        - asset: assets/GoogleSans-Medium.ttf
     - family: Gujarati
       fonts:
         - asset: fonts/Lohit-Gujarati.ttf
