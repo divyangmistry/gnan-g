@@ -1,21 +1,19 @@
 import 'dart:convert';
 
-import 'package:GnanG/model/cacheData.dart';
-import 'package:GnanG/model/user_state.dart';
-import 'package:flutter/material.dart';
-import 'package:http/http.dart';
+import 'package:GnanG/Service/apiservice.dart';
 import 'package:GnanG/common.dart';
-import 'package:GnanG/constans/appconstant.dart';
 import 'package:GnanG/constans/message_constant.dart';
 import 'package:GnanG/constans/wsconstants.dart';
 import 'package:GnanG/model/appresponse.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 
 class ResponseParser {
   static AppResponse parseResponse(
       {BuildContext context,
       @required Response res,
       bool showDialog = true}) {
+    ApiService _api = new ApiService();
     AppResponse appResponse = AppResponse.fromJson(json.decode(res.body));
     if (appResponse.status == 0 || appResponse.status == null)
       appResponse.status = res.statusCode;
@@ -30,6 +28,10 @@ class ResponseParser {
           doneButtonText: 'Okay',
         );
       }
+    }
+    if(appResponse.status == 227) {
+      _api.logout();
+      Navigator.popUntil(context, ModalRoute.withName('/login_new'));
     }
     return appResponse;
   }
