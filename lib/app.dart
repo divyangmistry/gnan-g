@@ -1,8 +1,8 @@
 import 'package:GnanG/UI/auth/registration_request.dart';
 import 'package:GnanG/UI/game/dashboard.dart';
-import 'package:GnanG/UI/game/leaderboard_tab.dart';
 import 'package:GnanG/UI/intro/intro.dart';
 import 'package:GnanG/UI/leaderboard.dart';
+import 'package:GnanG/UI/new_leaderboard/new_leaderboard.dart';
 import 'package:GnanG/UI/others/feedback.dart';
 import 'package:GnanG/UI/profile.dart';
 import 'package:GnanG/UI/puzzle/main.dart';
@@ -58,10 +58,22 @@ class _QuizAppState extends State<QuizApp> {
     return MaterialApp(
       title: 'Gnan-G',
       home: widget.defaultHome,
-      theme: _kQuizTheme,
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        fontFamily: 'GoogleSans',
+        inputDecorationTheme: InputDecorationTheme(
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0)),
+        ),
+        buttonTheme: ButtonThemeData(
+          textTheme: ButtonTextTheme.normal,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+        ),
+      ),
       routes: <String, WidgetBuilder>{
         '/noInternet': (BuildContext context) => new NoInternetPage(),
-        '/tableaderboard': (BuildContext context) => new BottomNavigationDemo(),
+        '/tableaderboard': (BuildContext context) => new NewLeaderBoard(),
         '/introPage': (BuildContext context) => new IntroPage(),
         '/feedback': (BuildContext context) => new FeedbackPage(),
         '/simpleGame': (BuildContext context) => new SimpleGame(),
