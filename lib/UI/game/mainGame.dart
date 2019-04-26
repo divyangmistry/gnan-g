@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:GnanG/Service/apiservice.dart';
 import 'package:GnanG/UI/game/mcq.dart';
+import 'package:GnanG/UI/game/time_based_ui.dart';
 import 'package:GnanG/UI/game/title_bar.dart';
 import 'package:GnanG/UI/widgets/base_state.dart';
 import 'package:GnanG/constans/wsconstants.dart';
@@ -54,7 +55,9 @@ class MainGamePageState extends BaseState<MainGamePage> {
     super.initState();
     _loadData();
   }
+
   AudioPlayer levelStartPlayer;
+
   _loadData() {
     /*AppAudioUtils.playMusic(url:'music/CHANDELIER_FALLS.mp3', volume: 0.3).then((player) {
       levelStartPlayer = player;
@@ -69,8 +72,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
   @override
   void dispose() {
     super.dispose();
-    if(levelStartPlayer != null)
-      levelStartPlayer.stop();
+    if (levelStartPlayer != null) levelStartPlayer.stop();
   }
 
   _loadAllQuestions() async {
@@ -152,7 +154,8 @@ class MainGamePageState extends BaseState<MainGamePage> {
             questions.getRange(currentQueIndex, currentQueIndex + 1).first;
       });
     } else {
-      AudioPlayer audioPlayer = await AppAudioUtils.playMusic(url: "music/level/levelCompleted.WAV");
+      AudioPlayer audioPlayer =
+          await AppAudioUtils.playMusic(url: "music/level/levelCompleted.WAV");
       CommonFunction.alertDialog(
           context: context,
           msg: (widget.isBonusLevel)
@@ -167,7 +170,8 @@ class MainGamePageState extends BaseState<MainGamePage> {
             setState(() {
               isOverlay = true;
             });
-            bool result = await CommonFunction.loadUserState(context, CacheData.userInfo.mhtId);
+            bool result = await CommonFunction.loadUserState(
+                context, CacheData.userInfo.mhtId);
             setState(() {
               isOverlay = false;
             });
@@ -175,6 +179,10 @@ class MainGamePageState extends BaseState<MainGamePage> {
               Navigator.pop(context);
             }
           });
+    }
+    if (widget.level.levelType == 'TIME_BASED') {
+      Navigator.pop(context);
+      TimeBasedUI _
     }
   }
 
@@ -230,36 +238,57 @@ class MainGamePageState extends BaseState<MainGamePage> {
   Widget pageToDisplay() {
     return new Scaffold(
       body: new BackgroundGredient(
-        child: SafeArea(
-          child: new Container(
+        child: widget.level.levelType == 'REGULAR'
+            ? SafeArea(
+                child: new Container(
 //            padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
-            padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
-            child: new Column(
-              children: <Widget>[
-                GameTitleBar(
-                  title:
-                      (widget.isBonusLevel) ? "Daily Bonus" : widget.level.name,
-                  questionNumber: question != null ? question.questionSt : 1,
-                  totalQuestion: getTotalQuestion(),
+                  padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
+                  child: new Column(
+                    children: <Widget>[
+                      GameTitleBar(
+                        title: (widget.isBonusLevel)
+                            ? "Daily Bonus"
+                            : widget.level.name,
+                        questionNumber:
+                            question != null ? question.questionSt : 1,
+                        totalQuestion: getTotalQuestion(),
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Expanded(
+                          child: question != null
+                              ? question.questionType == "MCQ"
+                                  ? new MCQ(question, validateAnswer,
+                                      hiddenOptionIndex)
+                                  : new Pikachar(
+                                      question.question,
+                                      question.jumbledata,
+                                      question.pikacharAnswer,
+                                      validateAnswer)
+                              : new Container())
+                    ],
+                  ),
                 ),
-                SizedBox(
-                  height: 15,
-                ),
-                Expanded(
-                    child: question != null
-                        ? question.questionType == "MCQ"
-                            ? new MCQ(
-                                question, validateAnswer, hiddenOptionIndex)
-                            : new Pikachar(
-                                question.question,
-                                question.jumbledata,
-                                question.pikacharAnswer,
-                                validateAnswer)
-                        : new Container())
-              ],
-            ),
-          ),
-        ),
+              )
+            : TimeBasedUI(
+                title:
+                    (widget.isBonusLevel) ? "Daily Bonus" : widget.level.name,
+                questionNumber: question != null ? question.questionSt : 1,
+                totalQuestion: getTotalQuestion(),
+                timeLimit: question.timeLimit,
+                timesUp: timeOverDialog,
+                gameUI: question != null
+                    ? question.questionType == "MCQ"
+                    ? new MCQ(question, validateAnswer,
+                    hiddenOptionIndex)
+                    : new Pikachar(
+                    question.question,
+                    question.jumbledata,
+                    question.pikacharAnswer,
+                    validateAnswer)
+                    : new Container()
+              ),
       ),
       bottomNavigationBar:
           !widget.isBonusLevel ? _buildbottomNavigationBar() : null,
@@ -297,13 +326,14 @@ class MainGamePageState extends BaseState<MainGamePage> {
             onPressed: () {
               //AppUtils.showInSnackBar(context, "You can get " + question.score.toString() + " score by giving correct answer on this question.");
               CommonFunction.alertDialog(
-                context: context,
-                msg: "You can get " + question.score.toString() + " score by giving correct answer on this question.",
-                barrierDismissible: false,
-                type: 'info',
-                playSound: false,
-                displayImage: false
-              );
+                  context: context,
+                  msg: "You can get " +
+                      question.score.toString() +
+                      " score by giving correct answer on this question.",
+                  barrierDismissible: false,
+                  type: 'info',
+                  playSound: false,
+                  displayImage: false);
             },
           )
         : null;
@@ -341,9 +371,11 @@ class MainGamePageState extends BaseState<MainGamePage> {
     setState(() {
       isOverlay = false;
     });
-    AppResponse appResponse = ResponseParser.parseResponse(context: context, res: res);
+    AppResponse appResponse =
+        ResponseParser.parseResponse(context: context, res: res);
     if (appResponse.status == WSConstant.SUCCESS_CODE) {
-      ValidateQuestion validateQuestion = ValidateQuestion.fromJson(appResponse.data);
+      ValidateQuestion validateQuestion =
+          ValidateQuestion.fromJson(appResponse.data);
       setState(() {
         isGivenCorrectAns = true;
         validateQuestion.updateSessionScore();
@@ -368,6 +400,24 @@ class MainGamePageState extends BaseState<MainGamePage> {
     }
   }
 
+  void timeOverDialog() {
+    CommonFunction.alertDialog(
+      context: context,
+      msg: 'Time\'s up !!',
+      type: 'info',
+      showCancelButton: true,
+      barrierDismissible: false,
+      cancelButtonText: 'Exit Level',
+      doneCancelFn: _goToLevel,
+      doneButtonText: 'Next Question',
+      doneButtonFn: _loadNextQuestion,
+    );
+  }
+
+  void _goToLevel() {
+    Navigator.pop(context);
+    Navigator.pop(context);
+  }
 
   void onAnswerStatusDialogOK() {
     Navigator.pop(context);
@@ -434,10 +484,15 @@ class MainGamePageState extends BaseState<MainGamePage> {
         setState(() {
           isOverlay = true;
         });
-        Response res = await _api.hintTaken(questionId: question.questionId, mhtId: CacheData.userInfo.mhtId, userLevel: question.level);
-        AppResponse appResponse = ResponseParser.parseResponse(context: context, res: res);
+        Response res = await _api.hintTaken(
+            questionId: question.questionId,
+            mhtId: CacheData.userInfo.mhtId,
+            userLevel: question.level);
+        AppResponse appResponse =
+            ResponseParser.parseResponse(context: context, res: res);
         if (appResponse.status == WSConstant.SUCCESS_CODE) {
-          UserScoreState userScoreState = UserScoreState.fromJson(appResponse.data);
+          UserScoreState userScoreState =
+              UserScoreState.fromJson(appResponse.data);
           setState(() {
             userScoreState.updateSessionScore();
           });
@@ -451,19 +506,20 @@ class MainGamePageState extends BaseState<MainGamePage> {
         }
       }
       if (!isApiFailed) {
-        AudioPlayer audioPlayer = await AppAudioUtils.playMusic(url: 'music/hint.WAV', volume: 2.6);
+        AudioPlayer audioPlayer =
+            await AppAudioUtils.playMusic(url: 'music/hint.WAV', volume: 2.6);
         CommonFunction.alertDialog(
-            context: context,
-            msg: question.reference,
-            type: 'success',
-            doneButtonText: 'Okay',
-            title: 'Here is your hint ...',
-            playSound: false,
-            doneButtonFn: () {
-              AppAudioUtils.stopMusic(audioPlayer);
-              Navigator.pop(context);
-            },
-            barrierDismissible: false,
+          context: context,
+          msg: question.reference,
+          type: 'success',
+          doneButtonText: 'Okay',
+          title: 'Here is your hint ...',
+          playSound: false,
+          doneButtonFn: () {
+            AppAudioUtils.stopMusic(audioPlayer);
+            Navigator.pop(context);
+          },
+          barrierDismissible: false,
         );
       }
     } catch (err) {
@@ -551,12 +607,16 @@ class MainGamePageState extends BaseState<MainGamePage> {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               lifeline(Icons.call, 'Phone a Friend', _phoneAFriend),
-              question.questionType == 'MCQ' ? CustomVerticalDivider(
-                height: 100,
-              ) : new Container(),
-              (question.questionType == 'MCQ' && CacheData.userState.currentState.fifty_fifty != null
-                  && CacheData.userState.currentState.fifty_fifty && CacheData.userState.lives <= 1) ?
-                  lifeline(Icons.star_half, '50 - 50', _fiftyFifty)
+              question.questionType == 'MCQ'
+                  ? CustomVerticalDivider(
+                      height: 100,
+                    )
+                  : new Container(),
+              (question.questionType == 'MCQ' &&
+                      CacheData.userState.currentState.fifty_fifty != null &&
+                      CacheData.userState.currentState.fifty_fifty &&
+                      CacheData.userState.lives <= 1)
+                  ? lifeline(Icons.star_half, '50 - 50', _fiftyFifty)
                   : new Container(),
             ],
           ),
@@ -630,9 +690,11 @@ class MainGamePageState extends BaseState<MainGamePage> {
           mht_id: CacheData.userInfo.mhtId,
           level: CacheData.userState.currentState.level,
         );
-        AppResponse appResponse = ResponseParser.parseResponse(context: context, res: res);
+        AppResponse appResponse =
+            ResponseParser.parseResponse(context: context, res: res);
         if (appResponse.status == WSConstant.SUCCESS_CODE) {
-          UserScoreState userScoreState = UserScoreState.fromJson(appResponse.data);
+          UserScoreState userScoreState =
+              UserScoreState.fromJson(appResponse.data);
           setState(() {
             userScoreState.updateSessionScore();
             CacheData.userState.currentState.fifty_fifty = false;

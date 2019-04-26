@@ -15,6 +15,7 @@ class Question {
   String date;
   String reference;
   List<String> jumbledata;
+  int timeLimit;
   int iV;
 
   Question(
@@ -31,6 +32,7 @@ class Question {
         this.date,
         this.reference,
         this.jumbledata,
+        this.timeLimit,
         this.iV});
 
   static List<Question> fromJsonArray(List<dynamic> json) {
@@ -55,6 +57,7 @@ class Question {
     questionId = json['question_id'];
     questionSt = json['question_st'];
     question = json['question'];
+    timeLimit = json['time_limit'];
     if (json['options'] != null) {
       options = new List<Options>();
       json['options'].forEach((v) {

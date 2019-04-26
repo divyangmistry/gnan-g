@@ -7,17 +7,27 @@ import '../../colors.dart';
 import '../../common.dart';
 
 class TimeBasedUI extends StatefulWidget {
+  final String title;
+  final int questionNumber;
+  final int totalQuestion;
+  final int timeLimit;
+  final Widget gameUI;
+  final Function timesUp;
+
+  TimeBasedUI({this.title, this.questionNumber, this.totalQuestion, this.timeLimit, this.gameUI, this.timesUp});
+
   @override
   State createState() => new TimeBasedUIState();
 }
 
 class TimeBasedUIState extends State<TimeBasedUI> {
   Timer _timer;
-  int _timeInSeconds = 40; // question timer
+  int _timeInSeconds = 500; // question timer
   double _remaining = 100; // do not edit
   double _step = 0; // do not edit
 
   void startTimer() {
+    _timeInSeconds = widget.timeLimit;
     _step = 100 / _timeInSeconds;
     const oneSec = const Duration(seconds: 1);
     _timer = new Timer.periodic(
@@ -25,6 +35,8 @@ class TimeBasedUIState extends State<TimeBasedUI> {
       (Timer timer) => setState(
             () {
               if (_timeInSeconds < 1) {
+                print(widget.timesUp);
+                widget.timesUp();
                 timer.cancel();
               } else {
                 _remaining = _remaining - _step;
@@ -150,11 +162,30 @@ class TimeBasedUIState extends State<TimeBasedUI> {
                   icon: Icon(Icons.arrow_back),
                   onPressed: () {
                     print('back button');
+                    Navigator.pop(context);
                   },
                 ),
-                Text(
-                  'Time based UI',
-                  textScaleFactor: 1.5,
+                Container(
+                  child: Column(
+                    children: <Widget>[
+                      Text(
+                        widget.title.toUpperCase(),
+                        textScaleFactor: 1.2,
+                        style: TextStyle(color: kQuizMain500),
+                      ),
+                      widget.questionNumber != null
+                          ? Row(
+                        children: <Widget>[
+                          Text(
+                            widget.questionNumber.toString() + " / " + widget.totalQuestion.toString(),
+                            textScaleFactor: 1.2,
+                            style: TextStyle(color: kQuizMain500),
+                          )
+                        ],
+                      )
+                          : Container()
+                    ],
+                  ),
                 ),
                 CommonFunction.pointsUI(context: context, point: '120'),
               ],
@@ -172,53 +203,54 @@ class TimeBasedUIState extends State<TimeBasedUI> {
 
     return Scaffold(
       backgroundColor: Colors.blue.shade200,
-      appBar: PreferredSize(child: _appBar(), preferredSize: Size.fromHeight(170.0)),
+      appBar: PreferredSize(child: _appBar(), preferredSize: Size.fromHeight(190.0)),
       body: SafeArea(
-        child: ListView(
-          children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text(
-                  '\nAnswer Tiles\n',
-                  textScaleFactor: 1.5,
-                ),
-              ],
-            ),
-            Wrap(
-              crossAxisAlignment: WrapCrossAlignment.center,
-              runAlignment: WrapAlignment.center,
-              alignment: WrapAlignment.center,
-              children: <Widget>[
-                _getAnswerDataTile('D'),
-                _getAnswerDataTile(' '),
-                _getAnswerDataTile('D'),
-                _getAnswerDataTile(' '),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text(
-                  '\n\nJumble Tiles\n',
-                  textScaleFactor: 1.5,
-                ),
-              ],
-            ),
-            Wrap(
-              crossAxisAlignment: WrapCrossAlignment.center,
-              runAlignment: WrapAlignment.center,
-              alignment: WrapAlignment.center,
-              children: <Widget>[
-                _getJumbleDataTile('D'),
-                _getJumbleDataTile('A'),
-                _getJumbleDataTile('D'),
-                _getJumbleDataTile('A'),
-              ],
-            ),
-          ],
-        ),
+        child: widget.gameUI,
       ),
     );
   }
 }
+//ListView(
+//children: <Widget>[
+//Row(
+//mainAxisAlignment: MainAxisAlignment.center,
+//children: <Widget>[
+//Text(
+//'\nAnswer Tiles\n',
+//textScaleFactor: 1.5,
+//),
+//],
+//),
+//Wrap(
+//crossAxisAlignment: WrapCrossAlignment.center,
+//runAlignment: WrapAlignment.center,
+//alignment: WrapAlignment.center,
+//children: <Widget>[
+//_getAnswerDataTile('D'),
+//_getAnswerDataTile(' '),
+//_getAnswerDataTile('D'),
+//_getAnswerDataTile(' '),
+//],
+//),
+//Row(
+//mainAxisAlignment: MainAxisAlignment.center,
+//children: <Widget>[
+//Text(
+//'\n\nJumble Tiles\n',
+//textScaleFactor: 1.5,
+//),
+//],
+//),
+//Wrap(
+//crossAxisAlignment: WrapCrossAlignment.center,
+//runAlignment: WrapAlignment.center,
+//alignment: WrapAlignment.center,
+//children: <Widget>[
+//_getJumbleDataTile('D'),
+//_getJumbleDataTile('A'),
+//_getJumbleDataTile('D'),
+//_getJumbleDataTile('A'),
+//],
+//),
+//],
+//)

@@ -389,6 +389,7 @@ class CommonFunction {
     bool barrierDismissible = true,
     bool showCancelButton = false,
     Function doneCancelFn,
+    String cancelButtonText = 'Cancel',
     AlertDialog Function() builder,
     Widget widget,
     bool displayImage = true,
@@ -477,7 +478,7 @@ class CommonFunction {
                     child: Row(
                       children: <Widget>[
                         Text(
-                          "Cancel",
+                          cancelButtonText,
                           textScaleFactor: 1.2,
                           style: TextStyle(
                             color: kQuizBackgroundWhite,
