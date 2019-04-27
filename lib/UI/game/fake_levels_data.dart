@@ -48,7 +48,7 @@ class LevelNameList {
 
 List<LevelNameList> allLevels = [
   LevelNameList(levelName: 'GNAN GANGA', levelColor: Colors.red, levelCards: [
-    NewCardView(levelNumber: 01, levelScore: '200', selectedLevel: false),
+    NewCardView(levelNumber: 01, levelScore: '200', selectedLevel: true),
     NewCardView(levelNumber: 02, levelScore: '200', selectedLevel: false),
     NewCardView(levelNumber: 03, levelScore: '200', selectedLevel: false),
     NewCardView(levelNumber: 04, levelScore: '200', selectedLevel: false),
@@ -60,7 +60,7 @@ List<LevelNameList> allLevels = [
     NewCardView(levelNumber: 10, levelScore: '200', selectedLevel: false),
   ]),
   LevelNameList(levelName: 'GNAN GOAL', levelColor: Colors.green, levelCards: [
-    NewCardView(levelNumber: 01, levelScore: '300', selectedLevel: false),
+    NewCardView(levelNumber: 01, levelScore: '300', selectedLevel: true),
     NewCardView(levelNumber: 02, levelScore: '300', selectedLevel: false),
     NewCardView(levelNumber: 03, levelScore: '300', selectedLevel: false),
     NewCardView(levelNumber: 04, levelScore: '300', selectedLevel: false),
@@ -72,8 +72,8 @@ List<LevelNameList> allLevels = [
     NewCardView(levelNumber: 10, levelScore: '300', selectedLevel: false),
   ]),
   LevelNameList(levelName: 'GNAN IS GOD', levelColor: Colors.blue, levelCards: [
-    NewCardView(levelNumber: 01, levelScore: '400', selectedLevel: false),
-    NewCardView(levelNumber: 04, levelScore: '400', selectedLevel: false),
+    NewCardView(levelNumber: 01, levelScore: '400', selectedLevel: true),
+    NewCardView(levelNumber: 02, levelScore: '400', selectedLevel: false),
     NewCardView(levelNumber: 03, levelScore: '400', selectedLevel: false),
     NewCardView(levelNumber: 04, levelScore: '400', selectedLevel: false),
     NewCardView(levelNumber: 05, levelScore: '400', selectedLevel: false),
@@ -84,8 +84,8 @@ List<LevelNameList> allLevels = [
     NewCardView(levelNumber: 10, levelScore: '400', selectedLevel: false),
   ]),
   LevelNameList(levelName: 'GNAN GHAR', levelColor: Colors.yellow, levelCards: [
-    NewCardView(levelNumber: 01, levelScore: '500', selectedLevel: false),
-    NewCardView(levelNumber: 05, levelScore: '500', selectedLevel: false),
+    NewCardView(levelNumber: 01, levelScore: '500', selectedLevel: true),
+    NewCardView(levelNumber: 02, levelScore: '500', selectedLevel: false),
     NewCardView(levelNumber: 03, levelScore: '500', selectedLevel: false),
     NewCardView(levelNumber: 04, levelScore: '500', selectedLevel: false),
     NewCardView(levelNumber: 05, levelScore: '500', selectedLevel: false),

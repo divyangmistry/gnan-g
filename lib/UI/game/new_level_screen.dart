@@ -1,4 +1,3 @@
-
 import 'package:GnanG/UI/game/fake_levels_data.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +6,6 @@ import '../../colors.dart';
 class NewLevelScreen extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
     return NewLevelScreenState();
   }
 }
@@ -16,17 +14,17 @@ class NewLevelScreenState extends State<NewLevelScreen> {
   int cardHeight;
   bool smallCardHeight = false;
   int numberOfLevel = 0;
-  // int numberOfSelectedLevel
+  double foo = 80;
+  int currentLevel = 0;
 
   List<LevelNameList> allLevelsData = allLevels;
   List<NewCardView> allLevelCards;
 
-  PageController ctrl = PageController(viewportFraction: 0.7);
+  PageController ctrl = PageController(viewportFraction: 0.7, keepPage: false);
   PageController nameCtrl = PageController(viewportFraction: 0.7);
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     setState(() {
       allLevelCards = allLevelsData[0].levelCards;
@@ -36,150 +34,181 @@ class NewLevelScreenState extends State<NewLevelScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text('New Level Screen !'),
-      // ),
       body: _bodyView(),
     );
   }
 
   _bodyView() {
     return Container(
-      padding: EdgeInsets.only(top: 30),
-      color: kBackgroundGrediant1,
-      child: Column(
+      child: Stack(
         children: <Widget>[
           Container(
-            height: MediaQuery.of(context).size.height / 5,
-            child: PageView(
-              controller: nameCtrl,
-              onPageChanged: (int) {
-                setState(() {
-                  allLevelCards = allLevelsData[int].levelCards;
-                  numberOfLevel = int;
-                  getSelectedCard(1);
-                });
-              },
-              scrollDirection: Axis.horizontal,
-              children: List.generate(
-                allLevelsData.length,
-                (index) {
-                  return
-                      // ClipPath(
-                      //   clipper: BottomWaveClipper(),
-                      //   child:
-                      Container(
-                    width: MediaQuery.of(context).size.width / 3,
-                    child: Card(
-                      color: allLevelsData[index].levelColor,
-                      margin: EdgeInsets.all(10),
-                      clipBehavior: Clip.antiAliasWithSaveLayer,
-                      elevation: 10,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(25.0),
-                      ),
-                      child: Container(
-                        width: MediaQuery.of(context).size.width / 4,
-                        child: Center(
-                          child: Text(
-                            allLevelsData[index].levelName,
-                            style: TextStyle(
-                              fontSize: 30,
-                              fontWeight: FontWeight.w800,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    // ),
-                  );
-                },
-              ),
+            color: Colors.black,
+            height: MediaQuery.of(context).size.height,
+            child: Container(
+              child: allLevelsData[this.numberOfLevel].levelColor == Colors.red
+                  ? backgroundFullImage(
+                      'images/toy-plane-clouds-blue-background_23-2148109217.jpg')
+                  : allLevelsData[this.numberOfLevel].levelColor == Colors.green
+                      ? backgroundFullImage(
+                          'images/pattern-daysies-yellow-background-with-space-left_24972-210.jpg')
+                      : allLevelsData[this.numberOfLevel].levelColor ==
+                              Colors.blue
+                          ? backgroundFullImage(
+                              'images/circle-with-hiking-camping-symbols_9202-898.png')
+                          : backgroundFullImage(
+                              'images/realistic-beautiful-sea-view-summer-vacation-concept_1262-11902.jpg'),
             ),
           ),
-          Expanded(
-            child: Container(
-              child: PageView(
-                controller: ctrl,
-                onPageChanged: (int) => getSelectedCard(int),
-                scrollDirection: Axis.horizontal,
-                physics: ScrollPhysics(),
-                dragStartBehavior: DragStartBehavior.down,
-                pageSnapping: smallCardHeight ? false : true,
-                children: List.generate(
-                  allLevelCards.length,
-                  (index) {
-                    return GestureDetector(
-                      child: Center(
-                        // child: ClipPath(
-                        //   clipBehavior: Clip.antiAliasWithSaveLayer,
-                        //   clipper: TopWaveClipper(),
-                        child: Card(
-                          clipBehavior: Clip.hardEdge,
-                          color: allLevelsData[numberOfLevel].levelColor,
-                          elevation: 10,
-                          semanticContainer: true,
-                          borderOnForeground: true,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(50.0),
-                          ),
-                          margin: EdgeInsets.all(10.0),
-                          child: Container(
-                            padding: EdgeInsets.all(10.0),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: <Widget>[
-                                Container(
-                                  alignment: Alignment(1, 1),
-                                  child: Center(
-                                    child: Transform.rotate(
-                                      angle: 0.0,
-                                      child: Text(
-                                        allLevelCards[index]
-                                            .levelNumber
-                                            .toString(),
-                                        softWrap: false,
-                                        style: TextStyle(
-                                            fontSize: allLevelCards[index]
-                                                    .selectedLevel
-                                                ? 250
-                                                : 150,
-                                            fontWeight: FontWeight.w800,
-                                            color: kQuizBrown900),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  child: Center(
-                                    child: Text(
-                                      allLevelCards[index]
-                                          .levelScore
-                                          .toString(),
-                                      style: TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.w800,
-                                          color: kQuizBrown900),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      // ),
-                    );
-                  },
+          Container(
+            child: Column(
+              children: <Widget>[
+                Container(
+                  padding: EdgeInsets.only(top: 30),
+                  height: MediaQuery.of(context).size.height / 4.5,
+                  child: PageView(
+                    controller: nameCtrl,
+                    onPageChanged: (int) {
+                      setState(() {
+                        foo = 80;
+                        allLevelCards = [];
+                        allLevelCards = allLevelsData[int].levelCards;
+                        ctrl.jumpTo(1);
+                        allLevelCards[0].selectedLevel = true;
+                        numberOfLevel = int;
+                        currentLevel = 0;
+                      });
+                    },
+                    scrollDirection: Axis.horizontal,
+                    children: List.generate(
+                      allLevelsData.length,
+                      (index) {
+                        return levelTitleCard(index);
+                      },
+                    ),
+                  ),
                 ),
-              ),
+                Expanded(
+                  child: Container(
+                    child: PageView(
+                      controller: ctrl,
+                      onPageChanged: (int) {
+                        currentLevel >= int ? foo += 20 : foo -= 20;
+                        currentLevel = int;
+                        getSelectedCard(int);
+                      },
+                      scrollDirection: Axis.horizontal,
+                      physics: ScrollPhysics(),
+                      pageSnapping: smallCardHeight ? false : true,
+                      children: List.generate(
+                        allLevelCards.length,
+                        (index) {
+                          return levelCards(index);
+                        },
+                      ),
+                    ),
+                  ),
+                )
+              ],
             ),
           )
         ],
+      ),
+    );
+  }
+
+  backgroundFullImage(image) {
+    return Transform.scale(
+      scale: 2.0,
+      child: Transform.translate(
+        offset: new Offset(foo, 0.0),
+        child: new Image.asset(
+          image,
+          fit: BoxFit.cover,
+        ),
+      ),
+    );
+  }
+
+  levelTitleCard(index) {
+    return Container(
+      padding: EdgeInsets.only(bottom: 30),
+      width: MediaQuery.of(context).size.width / 3,
+      child: Card(
+        color: allLevelsData[index].levelColor,
+        margin: EdgeInsets.all(10),
+        clipBehavior: Clip.antiAliasWithSaveLayer,
+        elevation: 10,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(25.0),
+        ),
+        child: Container(
+          width: MediaQuery.of(context).size.width / 4,
+          child: Center(
+            child: Text(
+              allLevelsData[index].levelName,
+              style: TextStyle(
+                fontSize: 30,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  levelCards(index) {
+    return Center(
+      child: Card(
+        clipBehavior: Clip.hardEdge,
+        color: allLevelsData[numberOfLevel].levelColor,
+        elevation: 10,
+        semanticContainer: true,
+        borderOnForeground: true,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(50.0),
+        ),
+        margin: EdgeInsets.all(10.0),
+        child: Container(
+          padding: EdgeInsets.all(10.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              Container(
+                alignment: Alignment(1, 1),
+                child: Center(
+                  child: Transform.rotate(
+                    angle: 0.0,
+                    child: Text(
+                      allLevelCards[index].levelNumber.toString(),
+                      softWrap: false,
+                      style: TextStyle(
+                          fontSize:
+                              allLevelCards[index].selectedLevel ? 250 : 150,
+                          fontWeight: FontWeight.w800,
+                          color: kQuizBrown900),
+                    ),
+                  ),
+                ),
+              ),
+              Container(
+                child: Center(
+                  child: Text(
+                    allLevelCards[index].levelScore.toString(),
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w800,
+                        color: kQuizBrown900),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -192,60 +221,4 @@ class NewLevelScreenState extends State<NewLevelScreen> {
           : allLevelCards[val].selectedLevel = false;
     });
   }
-}
-
-class BottomWaveClipper extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    var path = new Path();
-    path.lineTo(0.0, size.height - 20);
-
-    var firstControlPoint = Offset(size.width / 4, size.height);
-    var firstEndPoint = Offset(size.width / 2.25, size.height - 30.0);
-    path.quadraticBezierTo(firstControlPoint.dx, firstControlPoint.dy,
-        firstEndPoint.dx, firstEndPoint.dy);
-
-    var secondControlPoint =
-        Offset(size.width - (size.width / 3.25), size.height - 65);
-    var secondEndPoint = Offset(size.width, size.height - 40);
-    path.quadraticBezierTo(secondControlPoint.dx, secondControlPoint.dy,
-        secondEndPoint.dx, secondEndPoint.dy);
-
-    path.lineTo(size.width, size.height - 40);
-    path.lineTo(size.width, 0.0);
-    path.close();
-
-    return path;
-  }
-
-  @override
-  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
-}
-
-class TopWaveClipper extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    var path = new Path();
-    path.lineTo(0.0, size.height - 20);
-
-    var firstControlPoint = Offset(size.width / 4, size.height);
-    var firstEndPoint = Offset(size.width / 2.25, size.height - 30.0);
-    path.quadraticBezierTo(firstControlPoint.dx, firstControlPoint.dy,
-        firstEndPoint.dx, firstEndPoint.dy);
-
-    var secondControlPoint =
-        Offset(size.width - (size.width / 3.25), size.height - 65);
-    var secondEndPoint = Offset(size.width, size.height - 40);
-    path.quadraticBezierTo(secondControlPoint.dx, secondControlPoint.dy,
-        secondEndPoint.dx, secondEndPoint.dy);
-
-    path.lineTo(size.width, size.height - 40);
-    path.lineTo(size.width, 0.0);
-    path.close();
-
-    return path;
-  }
-
-  @override
-  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
 }

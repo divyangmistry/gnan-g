@@ -71,6 +71,10 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
+    - images/pattern-daysies-yellow-background-with-space-left_24972-210.jpg
+    - images/toy-plane-clouds-blue-background_23-2148109217.jpg
+    - images/circle-with-hiking-camping-symbols_9202-898.png
+    - images/realistic-beautiful-sea-view-summer-vacation-concept_1262-11902.jpg
     - images/TZLogo.jpg
     - images/coin.png
     - images/face.png
