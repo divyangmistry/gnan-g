@@ -146,7 +146,7 @@ class DashboardPageState extends State<DashboardPage> {
   Widget _playGame() {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, '/level_new');
+        Navigator.pushNamed(context, '/newLevelScreen');
       },
       child: _gameMenu(
           Colors.green.shade400,

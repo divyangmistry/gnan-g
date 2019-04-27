@@ -1,5 +1,6 @@
 import 'package:GnanG/UI/auth/registration_request.dart';
 import 'package:GnanG/UI/game/dashboard.dart';
+import 'package:GnanG/UI/game/new_level_screen.dart';
 import 'package:GnanG/UI/intro/intro.dart';
 import 'package:GnanG/UI/leaderboard.dart';
 import 'package:GnanG/UI/others/feedback.dart';
@@ -35,7 +36,6 @@ class QuizApp extends StatefulWidget {
 }
 
 class _QuizAppState extends State<QuizApp> {
-
   @override
   void initState() {
     super.initState();
@@ -45,7 +45,9 @@ class _QuizAppState extends State<QuizApp> {
 
   void registerForAppStateChange() {
     SystemChannels.lifecycle.setMessageHandler((msg) {
-      if (msg == "AppLifecycleState.paused" || msg == "AppLifecycleState.inactive" || msg == "AppLifecycleState.suspending") {
+      if (msg == "AppLifecycleState.paused" ||
+          msg == "AppLifecycleState.inactive" ||
+          msg == "AppLifecycleState.suspending") {
         AppAudioUtils.stopBackgroundMusic();
       } else if (msg == "AppLifecycleState.resumed") {
         AppAudioUtils.startBackgroundMusic();
@@ -61,6 +63,7 @@ class _QuizAppState extends State<QuizApp> {
       theme: _kQuizTheme,
       routes: <String, WidgetBuilder>{
         '/noInternet': (BuildContext context) => new NoInternetPage(),
+        '/newLevelScreen': (BuildContext context) => new NewLevelScreen(),
         '/introPage': (BuildContext context) => new IntroPage(),
         '/feedback': (BuildContext context) => new FeedbackPage(),
         '/simpleGame': (BuildContext context) => new SimpleGame(),
@@ -78,7 +81,8 @@ class _QuizAppState extends State<QuizApp> {
         '/t&c': (BuildContext context) => new TermsAndConditionPage(),
         '/gameOf15': (BuildContext context) => new GameOfFifteen(),
         '/about': (BuildContext context) => new About(),
-        '/registrationrequest': (BuildContext context) => new RegistrationRequestPage(),
+        '/registrationrequest': (BuildContext context) =>
+            new RegistrationRequestPage(),
       },
     );
   }
@@ -120,22 +124,23 @@ ThemeData _buildQuizTheme() {
 TextTheme _buildQuizTextTheme(TextTheme base) {
   return base
       .copyWith(
-    headline: base.headline.copyWith(
-      fontWeight: FontWeight.w500,
-    ),
-    title: base.title.copyWith(fontSize: 18.0),
-    caption: base.caption.copyWith(
-      fontWeight: FontWeight.w400,
-      fontSize: 14.0,
-    ),
-    body2: base.body2.copyWith(
-      fontWeight: FontWeight.w500,
-      fontSize: 16.0,
-    ),
-  )
+        headline: base.headline.copyWith(
+          fontWeight: FontWeight.w500,
+        ),
+        title: base.title.copyWith(fontSize: 18.0),
+        caption: base.caption.copyWith(
+          fontWeight: FontWeight.w400,
+          fontSize: 14.0,
+        ),
+        body2: base.body2.copyWith(
+          fontWeight: FontWeight.w500,
+          fontSize: 16.0,
+        ),
+      )
       .apply(
-    fontFamily: 'CmSans',
-    displayColor: kQuizBrown900,
-    bodyColor: kQuizBrown900,
-  );
+        fontFamily: 'CmSans',
+        displayColor: kQuizBrown900,
+        bodyColor: kQuizBrown900,
+      );
 }
+ 
