@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:GnanG/Service/apiservice.dart';
@@ -17,6 +18,7 @@ import 'package:GnanG/utils/response_parser.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_circular_chart/flutter_circular_chart.dart';
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -25,6 +27,9 @@ import '../../colors.dart';
 import '../../common.dart';
 import '../../model/quizlevel.dart';
 import 'pikachar.dart';
+
+final GlobalKey<AnimatedCircularChartState> _chartKey =
+    new GlobalKey<AnimatedCircularChartState>();
 
 class MainGamePage extends StatefulWidget {
   final QuizLevel level;
@@ -50,9 +55,13 @@ class MainGamePageState extends BaseState<MainGamePage> {
   Image image;
   ValueNotifier<bool> isReset = new ValueNotifier(false);
 
+  Timer _timer;
+  int _timeInSeconds = 0; // question timer
+  double _remaining = 100; // do not edit
+  double _step = 0; // do not edit
+
   @override
   void initState() {
-
     print(widget.level);
     super.initState();
     _loadData();
@@ -151,6 +160,9 @@ class MainGamePageState extends BaseState<MainGamePage> {
   }
 
   _loadNextQuestion() async {
+    print('****************');
+    print(currentQueIndex);
+    print(questions.length);
     if (currentQueIndex < questions.length - 1) {
       setState(() {
         _reInitForQuestion();
@@ -158,6 +170,11 @@ class MainGamePageState extends BaseState<MainGamePage> {
         question =
             questions.getRange(currentQueIndex, currentQueIndex + 1).first;
       });
+      if (widget.level.levelType == 'TIME_BASED') {
+        Navigator.pop(context);
+        _markReadQuestion();
+        _resetTimer();
+      }
     } else {
       AudioPlayer audioPlayer =
           await AppAudioUtils.playMusic(url: "music/level/levelCompleted.WAV");
@@ -185,14 +202,12 @@ class MainGamePageState extends BaseState<MainGamePage> {
             }
           });
     }
-    if (widget.level.levelType == 'TIME_BASED') {
-      Navigator.pop(context);
-      _markReadQuestion();
-      isReset.value = true;
-      new Future.delayed(Duration(microseconds: 100), () {
-        isReset.value = false;
-      });
-    }
+  }
+
+  _resetTimer() {
+    _timer.cancel();
+    _remaining = 100;
+    startTimer();
   }
 
   _reInitForQuestion() {
@@ -218,8 +233,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
               msg: 'You have only 1 Life remaining. Now you can access hint.',
               barrierDismissible: false,
             );
-          }
-          if (CacheData.userState.lives == 0) {
+          } else if (CacheData.userState.lives == 0) {
             AppAudioUtils.playMusic(url: "music/game/gameEnd.WAV");
             CommonFunction.alertDialog(
                 context: context,
@@ -230,6 +244,10 @@ class MainGamePageState extends BaseState<MainGamePage> {
                   Navigator.pop(context);
                   Navigator.pop(context);
                 });
+          } else {
+            if (widget.level.levelType == 'TIME_BASED') {
+              Navigator.pop(context);
+            }
           }
         }
       }
@@ -260,8 +278,93 @@ class MainGamePageState extends BaseState<MainGamePage> {
     }
   }
 
+  void timeOverDialog({String msg = 'Time\'s up !!'}) {
+    _timer.cancel();
+    CommonFunction.alertDialog(
+      context: context,
+      msg: msg,
+      type: 'info',
+      showCancelButton: true,
+      barrierDismissible: false,
+      cancelButtonText: 'Exit Level',
+      doneCancelFn: () {
+        Navigator.pop(context);
+        Navigator.pop(context);
+      },
+      doneButtonText: 'Next Question',
+      doneButtonFn: _loadNextQuestion,
+    );
+  }
+
+  void startTimer() {
+    _timeInSeconds = question.timeLimit;
+    _step = 100 / _timeInSeconds;
+    const oneSec = const Duration(seconds: 1);
+    _timer = new Timer.periodic(
+      oneSec,
+      (Timer timer) => setState(
+            () {
+              if (_timeInSeconds < 1) {
+                timeOverDialog();
+                timer.cancel();
+              } else {
+                _remaining = _remaining - _step;
+                _chartKey.currentState.updateData(
+                  <CircularStackEntry>[
+                    new CircularStackEntry(
+                      <CircularSegmentEntry>[
+                        new CircularSegmentEntry(
+                            _timeInSeconds == 1 ? 0 : _remaining, kQuizMain400,
+                            rankKey: 'completed'),
+                        new CircularSegmentEntry(
+                            100, kQuizMain400.withAlpha(50),
+                            rankKey: 'remaining'),
+                      ],
+                      rankKey: 'progress',
+                    ),
+                  ],
+                );
+                _timeInSeconds = _timeInSeconds - 1;
+              }
+            },
+          ),
+    );
+  }
+
   @override
   Widget pageToDisplay() {
+    Widget _timeIndicator = new AnimatedCircularChart(
+      key: _chartKey,
+      size: const Size(100.0, 100.0),
+      edgeStyle: SegmentEdgeStyle.round,
+      holeRadius: 25,
+      initialChartData: <CircularStackEntry>[
+        new CircularStackEntry(
+          <CircularSegmentEntry>[
+            new CircularSegmentEntry(
+              0,
+              kQuizMain400,
+              rankKey: 'completed',
+            ),
+            new CircularSegmentEntry(
+              100,
+              kQuizMain400.withAlpha(50),
+              rankKey: 'remaining',
+            ),
+          ],
+          rankKey: 'progress',
+        ),
+      ],
+      chartType: CircularChartType.Radial,
+      percentageValues: true,
+      holeLabel: "$_timeInSeconds",
+      labelStyle: new TextStyle(
+        color: Colors.blueGrey[600],
+        fontWeight: FontWeight.bold,
+        fontSize: 30.0,
+      ),
+    );
+
     return new Scaffold(
       body: new BackgroundGredient(
         child: widget.level.levelType != 'TIME_BASED'
@@ -304,7 +407,9 @@ class MainGamePageState extends BaseState<MainGamePage> {
                 timeLimit: question.timeLimit,
                 loadNextQuestion: _loadNextQuestion,
                 questionInfo: question,
-                isReset: isReset,
+                timeIndicator: _timeIndicator,
+                timer: startTimer,
+                timeOverDialog: timeOverDialog,
                 gameUI: question != null
                     ? question.questionType == "MCQ"
                         ? new MCQ(question, validateAnswer, hiddenOptionIndex)
@@ -405,6 +510,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
         validateQuestion.updateSessionScore();
       });
       if (validateQuestion.answerStatus) {
+        _timer.cancel();
         CommonFunction.alertDialog(
           context: context,
           msg: 'Your answer is correct !!',
@@ -413,6 +519,9 @@ class MainGamePageState extends BaseState<MainGamePage> {
           doneButtonFn: onAnswerStatusDialogOK,
         );
       } else {
+//        if (widget.level.levelType == 'TIME_BASED') {
+//          timeOverDialog(msg: 'Your answer is wrong !!!');
+//        } else {
         isGivenCorrectAns = false;
         CommonFunction.alertDialog(
           context: context,
@@ -420,13 +529,14 @@ class MainGamePageState extends BaseState<MainGamePage> {
           barrierDismissible: false,
           doneButtonFn: onAnswerStatusDialogOK,
         );
+//        }
       }
     }
   }
 
   void onAnswerStatusDialogOK() {
     if (widget.level.levelType != 'TIME_BASED') {
-      Navigator.pop(context);
+        Navigator.pop(context);
     }
     onAnswerGiven(isGivenCorrectAns);
   }
