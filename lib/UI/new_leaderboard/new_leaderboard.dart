@@ -1,16 +1,15 @@
+import 'dart:math';
+
 import 'package:GnanG/Service/apiservice.dart';
-import 'package:GnanG/UI/widgets/base_state.dart';
 import 'package:GnanG/UI/widgets/hero_image.dart';
 import 'package:GnanG/common.dart';
 import 'package:GnanG/constans/wsconstants.dart';
 import 'package:GnanG/model/appresponse.dart';
-import 'package:GnanG/model/cacheData.dart';
 import 'package:GnanG/model/leaders.dart';
 import 'package:GnanG/utils/response_parser.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:http/http.dart';
-import 'dart:math';
 
 final colors = [
   Colors.red,
@@ -84,7 +83,6 @@ class _NewLeaderBoardState extends State<NewLeaderBoard> {
           });
           _children[0] = ListView(children: tempList);
           _userRank = leaders.userRank;
-//          loadPersonsImg();
         });
       }
     } catch (err) {
@@ -113,33 +111,11 @@ class _NewLeaderBoardState extends State<NewLeaderBoard> {
           });
           _children[1] = ListView(children: tempList);
           _userRank = leaders.userRank;
-//          loadPersonsImgMonth();
         });
       }
     } catch (err) {
       CommonFunction.displayErrorDialog(context: context, msg: err.toString());
     }
-  }
-
-  void loadPersonsImg() async {
-    leaderList.forEach((leader) {
-      CommonFunction.getProfilePictureFromServer(context, leader.mhtId)
-          .then((base64Img) {
-        setState(() {
-          leader.img = base64Img;
-        });
-      });
-    });
-  }
-  void loadPersonsImgMonth() async {
-    leaderListMonth.forEach((leader) {
-      CommonFunction.getProfilePictureFromServer(context, leader.mhtId)
-          .then((base64Img) {
-        setState(() {
-          leader.img = base64Img;
-        });
-      });
-    });
   }
 
   List<Widget> _children = [
@@ -164,7 +140,6 @@ class _NewLeaderBoardState extends State<NewLeaderBoard> {
       appBar: AppBar(
         title: Text('Leaderboard'),
       ),
-//      body: SafeArea(child: _children[_currentIndex]),
       body: SafeArea(
         child: _children.length > _currentIndex
             ? _currentIndex == 0 && leaderList != null
@@ -228,9 +203,7 @@ class _NewLeaderBoardState extends State<NewLeaderBoard> {
   }
 }
 
-
 class LeaderRow extends StatefulWidget {
-
   final int rank, points, mhtId;
   final String name;
   Image image;
@@ -245,13 +218,13 @@ class LeaderRow extends StatefulWidget {
 }
 
 class LeaderRowState extends State<LeaderRow> {
-
   Image cachedImage;
 
   @override
   void initState() {
     super.initState();
-    CommonFunction.getProfilePictureFromServer(context, widget.mhtId).then((base64Img) {
+    CommonFunction.getProfilePictureFromServer(context, widget.mhtId)
+        .then((base64Img) {
       if (mounted) {
         setState(() {
           widget.image = CommonFunction.getImageFromBase64Img(
@@ -267,18 +240,29 @@ class LeaderRowState extends State<LeaderRow> {
     final Random _random = Random();
     return Column(
       children: <Widget>[
-        ListTile(
-          title: Text(widget.name),
-          trailing: Text(
-            widget.rank.toString(),
-            textAlign: TextAlign.right,
-            textScaleFactor: 1.5,
-          ),
-          leading: CircleAvatar(
-            child: HeroImage(image: cachedImage, maxRadius: 23, heroTag: widget.name),
-            backgroundColor: colors[_random.nextInt(colors.length)],
-          ),
-          subtitle: Text('Points : ' + (widget.points == null ? '0' : widget.points.toString())),
+        Row(
+          children: <Widget>[
+            Container(
+              child: Title(
+                child: Text(widget.rank.toString()),
+                color: Colors.blue,
+              ),
+              width: 60.0,
+            ),
+            ListTile(
+              title: Text(widget.name),
+              trailing: Text(
+                widget.points.toString(),
+                textAlign: TextAlign.right,
+                textScaleFactor: 1.5,
+              ),
+              leading: CircleAvatar(
+                child: HeroImage(
+                    image: cachedImage, maxRadius: 23, heroTag: widget.name),
+                backgroundColor: colors[_random.nextInt(colors.length)],
+              ),
+            ),
+          ],
         ),
         Divider(),
       ],

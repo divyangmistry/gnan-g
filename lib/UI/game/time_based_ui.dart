@@ -1,5 +1,8 @@
 import 'dart:async';
 
+import 'package:GnanG/Service/apiservice.dart';
+import 'package:GnanG/model/question.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_circular_chart/flutter_circular_chart.dart';
 
@@ -12,15 +15,21 @@ class TimeBasedUI extends StatefulWidget {
   final int totalQuestion;
   final int timeLimit;
   final Widget gameUI;
-  final Function timesUp;
+  final Function loadNextQuestion;
+  final Question questionInfo;
+  ValueListenable<bool> isReset;
+  final Function markRead;
 
-  TimeBasedUI({this.title, this.questionNumber, this.totalQuestion, this.timeLimit, this.gameUI, this.timesUp});
+  TimeBasedUI({this.title, this.questionNumber, this.totalQuestion, this.timeLimit = 0, this.gameUI, this.loadNextQuestion, this.questionInfo, this.isReset, this.markRead});
 
   @override
   State createState() => new TimeBasedUIState();
 }
 
 class TimeBasedUIState extends State<TimeBasedUI> {
+
+  ApiService _api = new ApiService();
+
   Timer _timer;
   int _timeInSeconds = 500; // question timer
   double _remaining = 100; // do not edit
@@ -35,8 +44,7 @@ class TimeBasedUIState extends State<TimeBasedUI> {
       (Timer timer) => setState(
             () {
               if (_timeInSeconds < 1) {
-                print(widget.timesUp);
-                widget.timesUp();
+                timeOverDialog();
                 timer.cancel();
               } else {
                 _remaining = _remaining - _step;
@@ -62,10 +70,71 @@ class TimeBasedUIState extends State<TimeBasedUI> {
     );
   }
 
+  void timeOverDialog() {
+    _timer.cancel();
+    CommonFunction.alertDialog(
+      context: context,
+      msg: 'Time\'s up !!',
+      type: 'info',
+      showCancelButton: true,
+      barrierDismissible: false,
+      cancelButtonText: 'Exit Level',
+      doneCancelFn: _goToLevel,
+      doneButtonText: 'Next Question',
+      doneButtonFn: _loadNextQuestion,
+    );
+  }
+
+  void stopTimer() {
+    _timer.cancel();
+  }
+
+  void resetTimer() {
+    stopTimer();
+    _remaining = 100;
+    startTimer();
+  }
+
+  _loadNextQuestion()  {
+    widget.loadNextQuestion();
+    widget.questionInfo.questionSt += 1;
+    resetTimer();
+    widget.markRead();
+  }
+
+  void _goToLevel() {
+    Navigator.pop(context);
+    Navigator.pop(context);
+  }
+
+//  _markReadQuestion() async {
+//    Response res = await _api.markReadQuestion(
+//      level: widget.questionInfo.level,
+//      mhtId: CacheData.userInfo.mhtId,
+//      questionId: widget.questionInfo.questionId,
+//      questionSt: widget.questionInfo.questionSt
+//    );
+//    AppResponse appResponse =
+//    ResponseParser.parseResponse(context: context, res: res);
+//    if (appResponse.status == WSConstant.SUCCESS_CODE) {
+//      print('ReadQuestion :: ');
+//      print(appResponse.data);
+//      CacheData.userState.currentState.questionReadSt = appResponse.data['question_read_st'];
+//    }
+//  }
+
   @override
   initState() {
+    widget.isReset.addListener(() {
+    if (widget.isReset.value) {
+      resetTimer();
+//      widget.isReset.value = false;
+    }
+  });
+
     super.initState();
     startTimer();
+    widget.markRead();
   }
 
   @override
@@ -79,6 +148,14 @@ class TimeBasedUIState extends State<TimeBasedUI> {
 
   @override
   Widget build(BuildContext context) {
+
+    print('VALUE CHANGED .. :::: ');
+    print(widget.isReset.value);
+//    if (widget.isReset.value == true) {
+//      print('VALUE CHANGED .. ');
+//      resetTimer();
+//    }
+
     Widget _timeIndicator() {
       return new AnimatedCircularChart(
         key: _chartKey,
@@ -210,6 +287,7 @@ class TimeBasedUIState extends State<TimeBasedUI> {
     );
   }
 }
+
 //ListView(
 //children: <Widget>[
 //Row(

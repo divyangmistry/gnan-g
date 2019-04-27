@@ -5,6 +5,7 @@ class ValidateQuestion {
   int lives;
   int totalscore;
   int questionSt;
+  int questionReadSt;
 
   ValidateQuestion({this.answerStatus, this.lives, this.totalscore});
 
@@ -13,6 +14,7 @@ class ValidateQuestion {
     lives = json['lives'];
     totalscore = json['totalscore'];
     questionSt = json['question_st'];
+    questionReadSt = json['question_read_st'];
   }
 
   Map<String, dynamic> toJson() {
@@ -21,6 +23,7 @@ class ValidateQuestion {
     data['lives'] = this.lives;
     data['totalscore'] = this.totalscore;
     data['question_st'] = this.questionSt;
+    data['question_read_st'] = this.questionReadSt;
     return data;
   }
 
@@ -29,5 +32,7 @@ class ValidateQuestion {
     if (totalscore != null) CacheData.userState.totalscore = totalscore;
     if (questionSt != null)
       CacheData.userState.currentState.questionSt = questionSt;
+    if (questionReadSt != null)
+      CacheData.userState.currentState.questionReadSt = questionReadSt;
   }
 }

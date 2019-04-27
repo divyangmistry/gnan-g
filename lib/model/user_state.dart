@@ -10,15 +10,14 @@ class UserState {
   int totalscore_week;
   int lives;
 
-  UserState(
-      {this.quizLevels,
-      this.completed,
-      this.currentState,
-      this.totalscore,
-      this.totalscore_month,
-      this.totalscore_week,
-      this.lives,
-      });
+  UserState({this.quizLevels,
+    this.completed,
+    this.currentState,
+    this.totalscore,
+    this.totalscore_month,
+    this.totalscore_week,
+    this.lives
+  });
 
   UserState.fromJson(Map<String, dynamic> json) {
     if (json['quiz_levels'] != null) {

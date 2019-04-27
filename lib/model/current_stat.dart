@@ -8,17 +8,20 @@ class CurrentState {
   String updatedAt;
   String createdAt;
   bool fifty_fifty;
+  int questionReadSt;
 
-  CurrentState(
-      {this.questionSt,
-      this.level,
-      this.score,
-      this.completed,
-      this.mhtId,
-      this.totalQuestions,
-      this.updatedAt,
-      this.createdAt,
-        this.fifty_fifty});
+  CurrentState({
+    this.questionSt,
+    this.level,
+    this.score,
+    this.completed,
+    this.mhtId,
+    this.totalQuestions,
+    this.updatedAt,
+    this.createdAt,
+    this.fifty_fifty,
+    this.questionReadSt,
+  });
 
   CurrentState.fromJson(Map<String, dynamic> json) {
     questionSt = json['question_st'];
@@ -30,6 +33,7 @@ class CurrentState {
     updatedAt = json['updatedAt'];
     createdAt = json['createdAt'];
     fifty_fifty = json['fifty_fifty'];
+    questionReadSt = json['question_read_st'];
   }
 
   Map<String, dynamic> toJson() {
@@ -43,11 +47,12 @@ class CurrentState {
     data['updatedAt'] = this.updatedAt;
     data['createdAt'] = this.createdAt;
     data['fifty_fifty'] = this.fifty_fifty;
+    data['question_read_st'] = this.questionReadSt;
     return data;
   }
 
   @override
   String toString() {
-    return 'Current{questionSt: $questionSt, level: $level, score: $score, completed: $completed, mhtId: $mhtId, totalQuestions: $totalQuestions, fiftyFifty:$fifty_fifty, updatedAt: $updatedAt, createdAt: $createdAt}';
+    return 'Current{questionSt: $questionSt, level: $level, score: $score, completed: $completed, mhtId: $mhtId, totalQuestions: $totalQuestions, fiftyFifty:$fifty_fifty, questionReadSt:$questionReadSt, updatedAt: $updatedAt, createdAt: $createdAt}';
   }
 }

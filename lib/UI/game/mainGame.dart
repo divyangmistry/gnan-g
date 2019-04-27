@@ -48,9 +48,11 @@ class MainGamePageState extends BaseState<MainGamePage> {
   ApiService _api = new ApiService();
   CurrentState currentState;
   Image image;
+  ValueNotifier<bool> isReset = new ValueNotifier(false);
 
   @override
   void initState() {
+
     print(widget.level);
     super.initState();
     _loadData();
@@ -82,7 +84,10 @@ class MainGamePageState extends BaseState<MainGamePage> {
       res = await _api.getBonusQuestion(mhtId: CacheData.userInfo.mhtId);
     } else {
       res = await _api.getQuestions(
-          level: widget.level.levelIndex, from: currentState.questionSt);
+          level: widget.level.levelIndex,
+          from: widget.level.levelType == 'TIME_BASED'
+              ? currentState.questionReadSt + 1
+              : currentState.questionSt);
     }
     AppResponse appResponse =
         ResponseParser.parseResponse(context: context, res: res);
@@ -182,7 +187,11 @@ class MainGamePageState extends BaseState<MainGamePage> {
     }
     if (widget.level.levelType == 'TIME_BASED') {
       Navigator.pop(context);
-      TimeBasedUI _
+      _markReadQuestion();
+      isReset.value = true;
+      new Future.delayed(Duration(microseconds: 100), () {
+        isReset.value = false;
+      });
     }
   }
 
@@ -234,14 +243,30 @@ class MainGamePageState extends BaseState<MainGamePage> {
     }
   }
 
+  _markReadQuestion() async {
+    Response res = await _api.markReadQuestion(
+      level: question.level,
+      mhtId: CacheData.userInfo.mhtId,
+      questionId: question.questionId,
+      questionSt: question.questionSt,
+    );
+    AppResponse appResponse =
+        ResponseParser.parseResponse(context: context, res: res);
+    if (appResponse.status == WSConstant.SUCCESS_CODE) {
+      print('ReadQuestion :: ');
+      print(appResponse.data);
+      CacheData.userState.currentState.questionReadSt =
+          appResponse.data['question_read_st'];
+    }
+  }
+
   @override
   Widget pageToDisplay() {
     return new Scaffold(
       body: new BackgroundGredient(
-        child: widget.level.levelType == 'REGULAR'
+        child: widget.level.levelType != 'TIME_BASED'
             ? SafeArea(
                 child: new Container(
-//            padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
                   padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
                   child: new Column(
                     children: <Widget>[
@@ -277,17 +302,16 @@ class MainGamePageState extends BaseState<MainGamePage> {
                 questionNumber: question != null ? question.questionSt : 1,
                 totalQuestion: getTotalQuestion(),
                 timeLimit: question.timeLimit,
-                timesUp: timeOverDialog,
+                loadNextQuestion: _loadNextQuestion,
+                questionInfo: question,
+                isReset: isReset,
                 gameUI: question != null
                     ? question.questionType == "MCQ"
-                    ? new MCQ(question, validateAnswer,
-                    hiddenOptionIndex)
-                    : new Pikachar(
-                    question.question,
-                    question.jumbledata,
-                    question.pikacharAnswer,
-                    validateAnswer)
-                    : new Container()
+                        ? new MCQ(question, validateAnswer, hiddenOptionIndex)
+                        : new Pikachar(question.question, question.jumbledata,
+                            question.pikacharAnswer, validateAnswer)
+                    : new Container(),
+                markRead: _markReadQuestion,
               ),
       ),
       bottomNavigationBar:
@@ -400,27 +424,10 @@ class MainGamePageState extends BaseState<MainGamePage> {
     }
   }
 
-  void timeOverDialog() {
-    CommonFunction.alertDialog(
-      context: context,
-      msg: 'Time\'s up !!',
-      type: 'info',
-      showCancelButton: true,
-      barrierDismissible: false,
-      cancelButtonText: 'Exit Level',
-      doneCancelFn: _goToLevel,
-      doneButtonText: 'Next Question',
-      doneButtonFn: _loadNextQuestion,
-    );
-  }
-
-  void _goToLevel() {
-    Navigator.pop(context);
-    Navigator.pop(context);
-  }
-
   void onAnswerStatusDialogOK() {
-    Navigator.pop(context);
+    if (widget.level.levelType != 'TIME_BASED') {
+      Navigator.pop(context);
+    }
     onAnswerGiven(isGivenCorrectAns);
   }
 

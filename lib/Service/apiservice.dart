@@ -249,6 +249,22 @@ class ApiService {
     return res;
   }
 
+  Future<http.Response> markReadQuestion({
+    @required int questionId,
+    @required int mhtId,
+    @required int questionSt,
+    @required int level,
+  }) async {
+    Map<String, dynamic> data = {
+      "question_id": questionId,
+      "mht_id": mhtId,
+      "question_st": questionSt,
+      "level": level
+    };
+    http.Response res = await postApi(url: '/mark_read', data: data);
+    return res;
+  }
+
   // Logout
   Future<void> logout() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
