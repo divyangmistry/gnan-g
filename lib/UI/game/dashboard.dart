@@ -36,7 +36,7 @@ class DashboardPageState extends State<DashboardPage> {
     // TODO: implement initState
     super.initState();
     checkBonusLevel();
-    AppUpdateCheck.startAppUpdateCheckThread(context);
+    // AppUpdateCheck.startAppUpdateCheckThread(context);
   }
 
   checkBonusLevel() async {

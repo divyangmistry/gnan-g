@@ -2,6 +2,7 @@ import 'package:GnanG/UI/game/fake_levels_data.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import '../../colors.dart';
+import 'package:animated_background/animated_background.dart';
 
 class NewLevelScreen extends StatefulWidget {
   @override
@@ -10,7 +11,8 @@ class NewLevelScreen extends StatefulWidget {
   }
 }
 
-class NewLevelScreenState extends State<NewLevelScreen> {
+class NewLevelScreenState extends State<NewLevelScreen>
+    with TickerProviderStateMixin {
   int cardHeight;
   bool smallCardHeight = false;
   int numberOfLevel = 0;
@@ -44,22 +46,27 @@ class NewLevelScreenState extends State<NewLevelScreen> {
       child: Stack(
         children: <Widget>[
           Container(
-            color: Colors.black,
             height: MediaQuery.of(context).size.height,
             child: Container(
-              child: allLevelsData[this.numberOfLevel].levelColor == Colors.red
-                  ? backgroundFullImage(
-                      'images/toy-plane-clouds-blue-background_23-2148109217.jpg')
-                  : allLevelsData[this.numberOfLevel].levelColor == Colors.green
-                      ? backgroundFullImage(
-                          'images/pattern-daysies-yellow-background-with-space-left_24972-210.jpg')
-                      : allLevelsData[this.numberOfLevel].levelColor ==
-                              Colors.blue
-                          ? backgroundFullImage(
-                              'images/circle-with-hiking-camping-symbols_9202-898.png')
-                          : backgroundFullImage(
-                              'images/realistic-beautiful-sea-view-summer-vacation-concept_1262-11902.jpg'),
-            ),
+                child: allLevelsData[this.numberOfLevel].levelColor ==
+                        Colors.orange.shade400
+                    ? animatedWall(Color.fromRGBO(31, 169, 224, 1.0))
+                    // backgroundFullImage(
+                    //     'images/toy-plane-clouds-blue-background_23-2148109217.jpg')
+                    : allLevelsData[this.numberOfLevel].levelColor ==
+                            Colors.green
+                        ? animatedWall(Color.fromRGBO(232, 216, 46, 1.0))
+                        // backgroundFullImage(
+                        //     'images/pattern-daysies-yellow-background-with-space-left_24972-210.jpg')
+                        : allLevelsData[this.numberOfLevel].levelColor ==
+                                Colors.blue
+                            ? animatedWall(Color.fromRGBO(232, 140, 48, 1.0))
+                            // backgroundFullImage(
+                            //     'images/circle-with-hiking-camping-symbols_9202-898.png')
+                            : animatedWall(Color.fromRGBO(32, 200, 51, 1.0))
+                // backgroundFullImage(
+                //     'images/realistic-beautiful-sea-view-summer-vacation-concept_1262-11902.jpg'),
+                ),
           ),
           Container(
             child: Column(
@@ -114,6 +121,25 @@ class NewLevelScreenState extends State<NewLevelScreen> {
             ),
           )
         ],
+      ),
+    );
+  }
+
+  animatedWall(color) {
+    return Container(
+      color: color,
+      child: AnimatedBackground(
+        behaviour: BubblesBehaviour(
+          options: BubbleOptions(
+            bubbleCount: 20,
+            growthRate: 10.0,
+            maxTargetRadius: 50,
+            minTargetRadius: 20,
+            popRate: 50,
+          ),
+        ),
+        child: Container(),
+        vsync: this,
       ),
     );
   }

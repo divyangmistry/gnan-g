@@ -47,18 +47,21 @@ class LevelNameList {
 }
 
 List<LevelNameList> allLevels = [
-  LevelNameList(levelName: 'GNAN GANGA', levelColor: Colors.red, levelCards: [
-    NewCardView(levelNumber: 01, levelScore: '200', selectedLevel: true),
-    NewCardView(levelNumber: 02, levelScore: '200', selectedLevel: false),
-    NewCardView(levelNumber: 03, levelScore: '200', selectedLevel: false),
-    NewCardView(levelNumber: 04, levelScore: '200', selectedLevel: false),
-    NewCardView(levelNumber: 05, levelScore: '200', selectedLevel: false),
-    NewCardView(levelNumber: 06, levelScore: '200', selectedLevel: false),
-    NewCardView(levelNumber: 07, levelScore: '200', selectedLevel: false),
-    NewCardView(levelNumber: 08, levelScore: '200', selectedLevel: false),
-    NewCardView(levelNumber: 09, levelScore: '200', selectedLevel: false),
-    NewCardView(levelNumber: 10, levelScore: '200', selectedLevel: false),
-  ]),
+  LevelNameList(
+      levelName: 'GNAN GANGA',
+      levelColor: Colors.orange.shade400,
+      levelCards: [
+        NewCardView(levelNumber: 01, levelScore: '200', selectedLevel: true),
+        NewCardView(levelNumber: 02, levelScore: '200', selectedLevel: false),
+        NewCardView(levelNumber: 03, levelScore: '200', selectedLevel: false),
+        NewCardView(levelNumber: 04, levelScore: '200', selectedLevel: false),
+        NewCardView(levelNumber: 05, levelScore: '200', selectedLevel: false),
+        NewCardView(levelNumber: 06, levelScore: '200', selectedLevel: false),
+        NewCardView(levelNumber: 07, levelScore: '200', selectedLevel: false),
+        NewCardView(levelNumber: 08, levelScore: '200', selectedLevel: false),
+        NewCardView(levelNumber: 09, levelScore: '200', selectedLevel: false),
+        NewCardView(levelNumber: 10, levelScore: '200', selectedLevel: false),
+      ]),
   LevelNameList(levelName: 'GNAN GOAL', levelColor: Colors.green, levelCards: [
     NewCardView(levelNumber: 01, levelScore: '300', selectedLevel: true),
     NewCardView(levelNumber: 02, levelScore: '300', selectedLevel: false),
