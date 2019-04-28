@@ -1,7 +1,6 @@
 import 'package:GnanG/UI/auth/registration_request.dart';
 import 'package:GnanG/UI/game/dashboard.dart';
 import 'package:GnanG/UI/intro/intro.dart';
-import 'package:GnanG/UI/leaderboard.dart';
 import 'package:GnanG/UI/new_leaderboard/new_leaderboard.dart';
 import 'package:GnanG/UI/others/feedback.dart';
 import 'package:GnanG/UI/profile.dart';
@@ -87,7 +86,6 @@ class _QuizAppState extends State<QuizApp> {
         '/otp_new': (BuildContext context) => new OtpVerifyPage(),
         '/rules': (BuildContext context) => new RulesPagePage(),
         '/profile': (BuildContext context) => new ProfilePagePage(),
-        '/leaderboard': (BuildContext context) => new LeaderBoard(),
         '/t&c': (BuildContext context) => new TermsAndConditionPage(),
         '/gameOf15': (BuildContext context) => new GameOfFifteen(),
         '/about': (BuildContext context) => new About(),

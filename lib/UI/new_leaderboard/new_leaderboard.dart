@@ -1,10 +1,13 @@
 import 'dart:math';
 
 import 'package:GnanG/Service/apiservice.dart';
+import 'package:GnanG/UI/new_leaderboard/new_monthly.dart';
+import 'package:GnanG/UI/new_leaderboard/new_overall.dart';
 import 'package:GnanG/UI/widgets/hero_image.dart';
 import 'package:GnanG/common.dart';
 import 'package:GnanG/constans/wsconstants.dart';
 import 'package:GnanG/model/appresponse.dart';
+import 'package:GnanG/model/cacheData.dart';
 import 'package:GnanG/model/leaders.dart';
 import 'package:GnanG/utils/response_parser.dart';
 import 'package:flutter/material.dart';
@@ -49,6 +52,20 @@ Widget build_users_row(String name, String rank, String points, img) {
   );
 }
 
+class Rank extends StatelessWidget {
+  Rank({Key key, this.rank: 0}) : super(key: key);
+
+  final int rank;
+
+  Widget build(BuildContext context) {
+    return Text(
+      rank.toString(),
+      textScaleFactor: 1,
+      style: TextStyle(fontSize: 32, color: Colors.white),
+    );
+  }
+}
+
 class NewLeaderBoard extends StatefulWidget {
   @override
   _NewLeaderBoardState createState() => _NewLeaderBoardState();
@@ -60,6 +77,7 @@ class _NewLeaderBoardState extends State<NewLeaderBoard> {
   List<Leaders> leaderList;
   List<Leaders> leaderListMonth;
   int _userRank = 0;
+  int _userRankMonth = 0;
   Image _userImage;
 
   _getLeaderList() async {
@@ -72,16 +90,6 @@ class _NewLeaderBoardState extends State<NewLeaderBoard> {
         _userImage = await CommonFunction.getUserProfileImg(context: context);
         setState(() {
           leaderList = leaders.leaders;
-          print(leaderList);
-          List<Widget> tempList = [];
-          int i = 1;
-          leaderList.forEach((leader) {
-            tempList.add(build_users_row(
-                leader.name, i.toString(), leader.totalscore.toString(), ''));
-            tempList.add(Divider());
-            i += 1;
-          });
-          _children[0] = ListView(children: tempList);
           _userRank = leaders.userRank;
         });
       }
@@ -101,31 +109,13 @@ class _NewLeaderBoardState extends State<NewLeaderBoard> {
         setState(() {
           leaderListMonth = leaders.leaders;
           print(leaderListMonth);
-          List<Widget> tempList = [];
-          int i = 1;
-          leaderListMonth.forEach((leader) {
-            tempList.add(build_users_row(leader.name, i.toString(),
-                leader.totalscoreMonth.toString(), ''));
-            tempList.add(Divider());
-            i += 1;
-          });
-          _children[1] = ListView(children: tempList);
-          _userRank = leaders.userRank;
+          _userRankMonth = leaders.userRank;
         });
       }
     } catch (err) {
       CommonFunction.displayErrorDialog(context: context, msg: err.toString());
     }
   }
-
-  List<Widget> _children = [
-    Center(
-      child: CircularProgressIndicator(),
-    ),
-    Center(
-      child: CircularProgressIndicator(),
-    )
-  ];
 
   @override
   void initState() {
@@ -134,52 +124,115 @@ class _NewLeaderBoardState extends State<NewLeaderBoard> {
     super.initState();
   }
 
+  String getOrdinalOfNumber(int n) {
+    int j = n % 10;
+    int k = n % 100;
+    if (j == 1 && k != 11) {
+      return "st";
+    }
+    if (j == 2 && k != 12) {
+      return "nd";
+    }
+    if (j == 3 && k != 13) {
+      return "rd";
+    }
+    return "th";
+  }
+
   @override
   Widget build(BuildContext context) {
+
+    Widget myRank = Container(
+      padding: EdgeInsets.all(16),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: <Widget>[
+          Container(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.baseline,
+              textBaseline: TextBaseline.alphabetic,
+              children: <Widget>[
+                Rank(rank: _currentIndex == 0 ? _userRank : _userRankMonth),
+                Text(
+                  getOrdinalOfNumber(
+                      _currentIndex == 0 ? _userRank : _userRankMonth),
+                  textScaleFactor: 1,
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                )
+              ],
+            ),
+          ),
+          CircleAvatar(
+            child: HeroImage(
+              image: _userImage,
+              maxRadius: 32,
+            ),
+            minRadius: 35,
+          ),
+          Container(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.baseline,
+              textBaseline: TextBaseline.alphabetic,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  _currentIndex == 0
+                      ? CacheData.userState.totalscore.toString()
+                      : CacheData.userState.totalscore_month.toString(),
+                  textScaleFactor: 1,
+                  style: TextStyle(
+                    fontSize: 32,
+                    color: Colors.white,
+                  ),
+                ),
+                Text(
+                  'pts',
+                  textScaleFactor: 1,
+                  style: TextStyle(
+                    textBaseline: TextBaseline.alphabetic,
+                    color: Colors.white,
+                  ),
+                )
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+
+    Widget topSection = Column(
+      children: <Widget>[
+        Container(
+          padding: EdgeInsets.all(16),
+          child: Text(
+            _currentIndex == 0 ? 'Overall Leaderboard' : 'Monthly Leaderboard',
+            textScaleFactor: 1,
+            style: TextStyle(
+              fontSize: 25,
+              color: Colors.white,
+            ),
+          ),
+        ),
+        myRank
+      ],
+    );
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Leaderboard'),
+        automaticallyImplyLeading: false,
+        bottom: PreferredSize(
+          child: topSection,
+          preferredSize: Size(100, 110),
+        ),
       ),
       body: SafeArea(
-        child: _children.length > _currentIndex
-            ? _currentIndex == 0 && leaderList != null
-                ? ListView.builder(
-                    itemCount: leaderList.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      CommonFunction.getImageFromBase64Img(
-                          base64Img: leaderList[index].img,
-                          returnDefault: true);
-                      return LeaderRow(
-                        index + 1,
-                        leaderList[index].name,
-                        leaderList[index].totalscore,
-                        null,
-                        leaderList[index].mhtId,
-                      );
-                    },
-                  )
-                : Center(
-                    child: CircularProgressIndicator(),
-                  )
-            : _currentIndex == 1 && leaderListMonth != null
-                ? ListView.builder(
-                    itemCount: leaderListMonth.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      CommonFunction.getImageFromBase64Img(
-                          base64Img: leaderListMonth[index].img,
-                          returnDefault: true);
-                      return LeaderRow(
-                        index + 1,
-                        leaderListMonth[index].name,
-                        leaderListMonth[index].totalscore,
-                        null,
-                        leaderListMonth[index].mhtId,
-                      );
-                    },
-                  )
-                : Center(
-                    child: CircularProgressIndicator(),
-                  ),
+        child: _currentIndex == 0
+            ? NewOverAllLeaderBoard(leaderList)
+            : NewMonthlyLeaderBoard(leaderListMonth),
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
@@ -204,11 +257,11 @@ class _NewLeaderBoardState extends State<NewLeaderBoard> {
 }
 
 class LeaderRow extends StatefulWidget {
-  final int rank, points, mhtId;
-  final String name;
-  Image image;
+  int rank, points, mhtId;
+  String name;
+  IconData icon;
 
-  LeaderRow(this.rank, this.name, this.points, this.image, this.mhtId);
+  LeaderRow(this.rank, this.name, this.points, this.icon, this.mhtId);
 
   @override
   State<StatefulWidget> createState() {
@@ -217,19 +270,17 @@ class LeaderRow extends StatefulWidget {
   }
 }
 
-class LeaderRowState extends State<LeaderRow> {
-  Image cachedImage;
+class LeaderRowState extends State<LeaderRow>
+    with AutomaticKeepAliveClientMixin<LeaderRow> {
+  Image image = CacheData.getUserDefaultImg();
 
   @override
   void initState() {
     super.initState();
-    CommonFunction.getProfilePictureFromServer(context, widget.mhtId)
-        .then((base64Img) {
+    CacheData.getUserProfileImages(context, widget.mhtId).then((userImage) {
       if (mounted) {
         setState(() {
-          widget.image = CommonFunction.getImageFromBase64Img(
-              base64Img: base64Img, returnDefault: true);
-          cachedImage = widget.image;
+          image = userImage;
         });
       }
     });
@@ -237,35 +288,45 @@ class LeaderRowState extends State<LeaderRow> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final Random _random = Random();
     return Column(
       children: <Widget>[
-        Row(
-          children: <Widget>[
-            Container(
-              child: Title(
-                child: Text(widget.rank.toString()),
-                color: Colors.blue,
-              ),
-              width: 60.0,
+        ListTile(
+          title: Text(widget.name),
+          subtitle: Text('Points : ' + widget.points.toString()),
+          trailing: Padding(
+            padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+            child: Text(
+              widget.rank.toString(),
+              textAlign: TextAlign.right,
+              textScaleFactor: 1.5,
             ),
-            ListTile(
-              title: Text(widget.name),
-              trailing: Text(
-                widget.points.toString(),
-                textAlign: TextAlign.right,
-                textScaleFactor: 1.5,
-              ),
-              leading: CircleAvatar(
-                child: HeroImage(
-                    image: cachedImage, maxRadius: 23, heroTag: widget.name),
-                backgroundColor: colors[_random.nextInt(colors.length)],
-              ),
-            ),
-          ],
+          ),
+          leading: CircleAvatar(
+            radius: 28,
+            child: HeroImage(image: image, maxRadius: 30, heroTag: widget.name),
+            backgroundColor: colors[_random.nextInt(colors.length)],
+          ),
         ),
+//        Row(
+//          children: <Widget>[
+//            Container(
+//              child: Title(
+//                child: Text(widget.rank.toString()),
+//                color: Colors.blue,
+//              ),
+//              width: 60.0,
+//            ),
+//
+//          ],
+//        ),
         Divider(),
       ],
     );
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => false;
 }
