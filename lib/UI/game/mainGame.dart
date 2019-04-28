@@ -171,9 +171,9 @@ class MainGamePageState extends BaseState<MainGamePage> {
             questions.getRange(currentQueIndex, currentQueIndex + 1).first;
       });
       if (widget.level.levelType == 'TIME_BASED') {
-        Navigator.pop(context);
-        _markReadQuestion();
+//        Navigator.pop(context);
         _resetTimer();
+        _markReadQuestion();
       }
     } else {
       AudioPlayer audioPlayer =
@@ -244,10 +244,6 @@ class MainGamePageState extends BaseState<MainGamePage> {
                   Navigator.pop(context);
                   Navigator.pop(context);
                 });
-          } else {
-            if (widget.level.levelType == 'TIME_BASED') {
-              Navigator.pop(context);
-            }
           }
         }
       }
@@ -292,8 +288,13 @@ class MainGamePageState extends BaseState<MainGamePage> {
         Navigator.pop(context);
       },
       doneButtonText: 'Next Question',
-      doneButtonFn: _loadNextQuestion,
+      doneButtonFn: nextQuestion,
     );
+  }
+
+  nextQuestion() {
+    Navigator.pop(context);
+    _loadNextQuestion();
   }
 
   void startTimer() {
@@ -535,9 +536,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
   }
 
   void onAnswerStatusDialogOK() {
-    if (widget.level.levelType != 'TIME_BASED') {
-        Navigator.pop(context);
-    }
+    Navigator.pop(context);
     onAnswerGiven(isGivenCorrectAns);
   }
 
