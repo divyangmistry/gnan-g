@@ -79,6 +79,23 @@ class _NewLeaderBoardState extends State<NewLeaderBoard> {
   int _userRank = 0;
   int _userRankMonth = 0;
   Image _userImage;
+  Leaders pujyashree = new Leaders.fromJson({
+    "lives": 3,
+    "isactive": true,
+    "user_group": "MBA",
+    "totalscore_month": 0,
+    "totalscore_week": 0,
+    "mobile": "9924343401",
+    "name": "Pujyashree",
+    "email": "pujyashree@dadabhagwan.org",
+    "mht_id": 1,
+    "center": "Sim-City",
+    "bonus": 30,
+    "totalscore": 4000,
+    "fb_token": null,
+    "onesignal_token": "7f97262d-f4ca-4cd1-be8c-600687895a69",
+    "question_id": 507
+  });
 
   _getLeaderList() async {
     try {
@@ -90,6 +107,7 @@ class _NewLeaderBoardState extends State<NewLeaderBoard> {
         _userImage = await CommonFunction.getUserProfileImg(context: context);
         setState(() {
           leaderList = leaders.leaders;
+          leaderList.insert(0, pujyashree);
           _userRank = leaders.userRank;
         });
       }
@@ -108,6 +126,7 @@ class _NewLeaderBoardState extends State<NewLeaderBoard> {
         _userImage = await CommonFunction.getUserProfileImg(context: context);
         setState(() {
           leaderListMonth = leaders.leaders;
+          leaderListMonth.insert(0, pujyashree);
           print(leaderListMonth);
           _userRankMonth = leaders.userRank;
         });
@@ -141,7 +160,6 @@ class _NewLeaderBoardState extends State<NewLeaderBoard> {
 
   @override
   Widget build(BuildContext context) {
-
     Widget myRank = Container(
       padding: EdgeInsets.all(16),
       child: Row(
@@ -278,9 +296,16 @@ class LeaderRowState extends State<LeaderRow>
   void initState() {
     super.initState();
     CacheData.getUserProfileImages(context, widget.mhtId).then((userImage) {
-      if (mounted) {
+      if (mounted && widget.mhtId != 1) {
         setState(() {
           image = userImage;
+        });
+      } else {
+        setState(() {
+          image = CommonFunction.getImageFromBase64Img(
+            base64Img: CacheData.pujyashreeImg,
+            returnDefault: true,
+          );
         });
       }
     });
@@ -294,7 +319,8 @@ class LeaderRowState extends State<LeaderRow>
       children: <Widget>[
         ListTile(
           title: Text(widget.name),
-          subtitle: Text('Points : ' + widget.points.toString()),
+          subtitle: Text(
+              widget.mhtId != 1 ? 'Points : ' + widget.points.toString() : ""),
           trailing: Padding(
             padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
             child: Text(
@@ -305,7 +331,7 @@ class LeaderRowState extends State<LeaderRow>
           ),
           leading: CircleAvatar(
             radius: 28,
-            child: HeroImage(image: image, maxRadius: 30, heroTag: widget.name),
+            child: HeroImage(image: image, maxRadius: 30, heroTag: widget.name + widget.rank.toString()),
             backgroundColor: colors[_random.nextInt(colors.length)],
           ),
         ),
