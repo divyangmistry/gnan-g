@@ -15,7 +15,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiService {
   // final _apiUrl = 'http://192.168.43.23:3000';
-  // final _apiUrl = 'http://192.168.1.103:3000';
+  // final _apiUrl = 'http://192.168.43.130:3000';
   final _apiUrl = 'http://104.211.88.75:3000'; // live API
 
   Map<String, String> headers = {'content-type': 'application/json'};
@@ -62,7 +62,7 @@ class ApiService {
   /// * [token] - For authenticate api
   appendTokenToHeader(token) {
     headers['x-access-token'] = token;
-    if(CacheData.userInfo != null && CacheData.userInfo.mhtId != null)
+    if (CacheData.userInfo != null && CacheData.userInfo.mhtId != null)
       headers['mht_id'] = CacheData.userInfo.mhtId.toString();
     print(headers);
   }
@@ -88,7 +88,8 @@ class ApiService {
     return res;
   }
 
-  Future<http.Response> requestRegistration({@required UserData userData}) async {
+  Future<http.Response> requestRegistration(
+      {@required UserData userData}) async {
     Map<String, dynamic> data = userData.toJson();
     data['new_mobile'] = userData.mobile;
     Response res = await postApi(url: '/request_registration', data: data);
@@ -151,11 +152,8 @@ class ApiService {
   }
 
   // Bonus Question
-  Future<http.Response> getBonusQuestion(
-      {@required int mhtId}) async {
-    Map<String, dynamic> data = {
-      'mht_id': mhtId
-    };
+  Future<http.Response> getBonusQuestion({@required int mhtId}) async {
+    Map<String, dynamic> data = {'mht_id': mhtId};
     http.Response res = await postApi(url: '/bonus_question', data: data);
     return res;
   }
@@ -174,22 +172,17 @@ class ApiService {
     return res;
   }
 
-  Future<http.Response> uploadProfilePicture(
-      {@required int mhtId,
-        @required File file,
-      }) async {
+  Future<http.Response> uploadProfilePicture({
+    @required int mhtId,
+    @required File file,
+  }) async {
     String base64Image = base64Encode(file.readAsBytesSync());
-    Map<String, dynamic> data = {
-      'mht_id': mhtId,
-      'image' : base64Image
-    };
+    Map<String, dynamic> data = {'mht_id': mhtId, 'image': base64Image};
     http.Response res = await postApi(url: '/upload_photo', data: data);
     return res;
   }
 
-  Future<http.Response> getProfilePicture(
-      {@required int mhtId
-      }) async {
+  Future<http.Response> getProfilePicture({@required int mhtId}) async {
     Map<String, dynamic> data = {
       'mht_id': mhtId,
     };
@@ -204,14 +197,15 @@ class ApiService {
 
   Future<http.Response> updateNotificationToken(
       {@required int mhtId,
-        @required String fbToken,
-        @required String oneSignalToken}) async {
+      @required String fbToken,
+      @required String oneSignalToken}) async {
     Map<String, dynamic> data = {
       'mht_id': mhtId,
       'fb_token': fbToken,
       'onesignal_token': oneSignalToken
     };
-    http.Response res = await postApi(url: '/update_notification_token', data: data);
+    http.Response res =
+        await postApi(url: '/update_notification_token', data: data);
     return res;
   }
 

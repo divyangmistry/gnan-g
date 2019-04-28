@@ -37,10 +37,10 @@ class LevelCardRow extends StatelessWidget {
   }
 
   bool isCompleted(int levelIndex) {
-    List<CompletedLevel> completedLevels = CacheData.userState.completed;
-    for (CompletedLevel completedLevel in completedLevels) {
-      if (completedLevel.level == levelIndex) return true;
-    }
+    // List<CompletedLevel> completedLevels = CacheData.userState.completed;
+    // for (CompletedLevel completedLevel in completedLevels) {
+    //   if (completedLevel.level == levelIndex) return true;
+    // }
     return false;
   }
 

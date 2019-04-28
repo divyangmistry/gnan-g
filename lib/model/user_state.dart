@@ -30,6 +30,7 @@ class UserState {
       });
     }
     if (json['current'] != null && json['current'][0] != null) {
+      print(json['current']);
       currentState = new CurrentState.fromJson(json['current'][0]);
     }
     totalscore = json['totalscore'];
