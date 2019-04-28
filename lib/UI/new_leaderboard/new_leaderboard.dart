@@ -108,7 +108,7 @@ class _NewLeaderBoardState extends State<NewLeaderBoard> {
         setState(() {
           leaderList = leaders.leaders;
           leaderList.insert(0, pujyashree);
-          _userRank = leaders.userRank;
+          _userRank = leaders.userRank + 1;
         });
       }
     } catch (err) {
@@ -128,7 +128,7 @@ class _NewLeaderBoardState extends State<NewLeaderBoard> {
           leaderListMonth = leaders.leaders;
           leaderListMonth.insert(0, pujyashree);
           print(leaderListMonth);
-          _userRankMonth = leaders.userRank;
+          _userRankMonth = leaders.userRank + 1;
         });
       }
     } catch (err) {
