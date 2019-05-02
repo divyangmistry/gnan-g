@@ -31,6 +31,8 @@ import 'pikachar.dart';
 final GlobalKey<AnimatedCircularChartState> _chartKey =
     new GlobalKey<AnimatedCircularChartState>();
 
+int popupCount = 0;
+
 class MainGamePage extends StatefulWidget {
   final QuizLevel level;
   final bool isBonusLevel;
@@ -65,6 +67,13 @@ class MainGamePageState extends BaseState<MainGamePage> {
     print(widget.level);
     super.initState();
     _loadData();
+  }
+
+  void closeAllPopup() {
+    for (int i = 0; i < popupCount; i++) {
+      Navigator.pop(context);
+    }
+    popupCount = 0;
   }
 
   AudioPlayer levelStartPlayer;
@@ -116,12 +125,13 @@ class MainGamePageState extends BaseState<MainGamePage> {
             question = questions.getRange(0, 1).first;
             currentQueIndex = 0;
           } else {
+            popupCount += 1;
             CommonFunction.alertDialog(
                 context: context,
                 msg: 'There are no questions',
                 barrierDismissible: false,
                 doneButtonFn: () {
-                  Navigator.pop(context);
+                  closeAllPopup();
                   Navigator.pop(context);
                 });
           }
@@ -134,13 +144,14 @@ class MainGamePageState extends BaseState<MainGamePage> {
   bool isBonusCompleted(AppResponse appResponse) {
     if (appResponse.data is Map && appResponse.data['msg'] != null) {
       AppAudioUtils.stopMusic(levelStartPlayer);
+      popupCount += 1;
       CommonFunction.alertDialog(
           context: context,
           type: "success",
           msg: appResponse.data['msg'],
           barrierDismissible: false,
           doneButtonFn: () {
-            Navigator.pop(context);
+            closeAllPopup();
             Navigator.pop(context);
           });
       return true;
@@ -170,14 +181,14 @@ class MainGamePageState extends BaseState<MainGamePage> {
         question =
             questions.getRange(currentQueIndex, currentQueIndex + 1).first;
       });
-      if (widget.level.levelType == 'TIME_BASED') {
-//        Navigator.pop(context);
+      if (!widget.isBonusLevel && widget.level.levelType == 'TIME_BASED') {
         _resetTimer();
         _markReadQuestion();
       }
     } else {
       AudioPlayer audioPlayer =
           await AppAudioUtils.playMusic(url: "music/level/levelCompleted.WAV");
+      popupCount += 1;
       CommonFunction.alertDialog(
           context: context,
           msg: (widget.isBonusLevel)
@@ -188,7 +199,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
           playSound: false,
           doneButtonFn: () async {
             AppAudioUtils.stopMusic(audioPlayer);
-            Navigator.pop(context);
+            closeAllPopup();
             setState(() {
               isOverlay = true;
             });
@@ -226,22 +237,27 @@ class MainGamePageState extends BaseState<MainGamePage> {
           _loadNextQuestion();
         } else {
           if (CacheData.userState.lives == 1) {
+            popupCount += 1;
             CommonFunction.alertDialog(
               context: context,
               type: 'success',
               playSound: false,
               msg: 'You have only 1 Life remaining. Now you can access hint.',
               barrierDismissible: false,
+              doneButtonFn: () {
+                closeAllPopup();
+              }
             );
           } else if (CacheData.userState.lives == 0) {
             AppAudioUtils.playMusic(url: "music/game/gameEnd.WAV");
+            popupCount += 1;
             CommonFunction.alertDialog(
                 context: context,
                 msg: 'Game-over',
                 playSound: false,
                 barrierDismissible: false,
                 doneButtonFn: () {
-                  Navigator.pop(context);
+                  closeAllPopup();
                   Navigator.pop(context);
                 });
           }
@@ -276,6 +292,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
 
   void timeOverDialog({String msg = 'Time\'s up !!'}) {
     _timer.cancel();
+    popupCount += 1;
     CommonFunction.alertDialog(
       context: context,
       msg: msg,
@@ -284,7 +301,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
       barrierDismissible: false,
       cancelButtonText: 'Exit Level',
       doneCancelFn: () {
-        Navigator.pop(context);
+        closeAllPopup();
         Navigator.pop(context);
       },
       doneButtonText: 'Next Question',
@@ -455,6 +472,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
             ),
             onPressed: () {
               //AppUtils.showInSnackBar(context, "You can get " + question.score.toString() + " score by giving correct answer on this question.");
+              popupCount += 1;
               CommonFunction.alertDialog(
                   context: context,
                   msg: "You can get " +
@@ -463,7 +481,11 @@ class MainGamePageState extends BaseState<MainGamePage> {
                   barrierDismissible: false,
                   type: 'info',
                   playSound: false,
-                  displayImage: false);
+                  displayImage: false,
+                doneButtonFn: () {
+                  closeAllPopup();
+                }
+              );
             },
           )
         : null;
@@ -504,6 +526,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
     AppResponse appResponse =
         ResponseParser.parseResponse(context: context, res: res);
     if (appResponse.status == WSConstant.SUCCESS_CODE) {
+      _timer.cancel();
       ValidateQuestion validateQuestion =
           ValidateQuestion.fromJson(appResponse.data);
       setState(() {
@@ -511,33 +534,32 @@ class MainGamePageState extends BaseState<MainGamePage> {
         validateQuestion.updateSessionScore();
       });
       if (validateQuestion.answerStatus) {
-        _timer.cancel();
+        popupCount += 1;
         CommonFunction.alertDialog(
           context: context,
           msg: 'Your answer is correct !!',
           type: 'success',
           barrierDismissible: false,
-          doneButtonFn: onAnswerStatusDialogOK,
+          doneButtonFn: () {
+            closeAllPopup();
+            onAnswerGiven(isGivenCorrectAns);
+          },
+
         );
       } else {
-//        if (widget.level.levelType == 'TIME_BASED') {
-//          timeOverDialog(msg: 'Your answer is wrong !!!');
-//        } else {
         isGivenCorrectAns = false;
+        popupCount += 1;
         CommonFunction.alertDialog(
           context: context,
           msg: 'Your answer is wrong !!',
           barrierDismissible: false,
-          doneButtonFn: onAnswerStatusDialogOK,
+          doneButtonFn: () {
+            closeAllPopup();
+            onAnswerGiven(isGivenCorrectAns);
+          },
         );
-//        }
       }
     }
-  }
-
-  void onAnswerStatusDialogOK() {
-    Navigator.pop(context);
-    onAnswerGiven(isGivenCorrectAns);
   }
 
   Widget _buildbottomNavigationBar() {
@@ -624,6 +646,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
       if (!isApiFailed) {
         AudioPlayer audioPlayer =
             await AppAudioUtils.playMusic(url: 'music/hint.WAV', volume: 2.6);
+        popupCount += 1;
         CommonFunction.alertDialog(
           context: context,
           msg: question.reference,
