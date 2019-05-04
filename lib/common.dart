@@ -395,6 +395,7 @@ class CommonFunction {
     bool displayImage = true,
     bool playSound = true,
   }) {
+    AppConstant.POPUP_COUNT += 1;
     if(type == 'error' && playSound) {
       AppAudioUtils.playWrongMusic();
     } else if(type == 'success' && playSound){
@@ -460,6 +461,7 @@ class CommonFunction {
                       ],
                     ),
                     onPressed: () {
+                      AppConstant.POPUP_COUNT -= 1;
                       if(playSound && type == 'success')
                         AppAudioUtils.stopCorrectMusic();
                       if(doneButtonFn != null) {
@@ -487,6 +489,7 @@ class CommonFunction {
                       ],
                     ),
                     onPressed: () {
+                      AppConstant.POPUP_COUNT -= 1;
                       if(playSound && type == 'success')
                         AppAudioUtils.stopCorrectMusic();
                       if(doneCancelFn != null) {

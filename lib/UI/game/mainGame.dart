@@ -6,6 +6,7 @@ import 'package:GnanG/UI/game/mcq.dart';
 import 'package:GnanG/UI/game/time_based_ui.dart';
 import 'package:GnanG/UI/game/title_bar.dart';
 import 'package:GnanG/UI/widgets/base_state.dart';
+import 'package:GnanG/constans/appconstant.dart';
 import 'package:GnanG/constans/wsconstants.dart';
 import 'package:GnanG/model/appresponse.dart';
 import 'package:GnanG/model/cacheData.dart';
@@ -31,8 +32,6 @@ import 'pikachar.dart';
 final GlobalKey<AnimatedCircularChartState> _chartKey =
     new GlobalKey<AnimatedCircularChartState>();
 
-int popupCount = 0;
-
 class MainGamePage extends StatefulWidget {
   final QuizLevel level;
   final bool isBonusLevel;
@@ -56,6 +55,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
   CurrentState currentState;
   Image image;
   ValueNotifier<bool> isReset = new ValueNotifier(false);
+  bool isTimeBasedLevel = false;
 
   Timer _timer;
   int _timeInSeconds = 0; // question timer
@@ -66,14 +66,18 @@ class MainGamePageState extends BaseState<MainGamePage> {
   void initState() {
     print(widget.level);
     super.initState();
+    AppConstant.POPUP_COUNT = 0;
+    if (widget.level != null && widget.level.levelType == 'TIME_BASED') {
+      isTimeBasedLevel = true;
+    }
     _loadData();
   }
 
   void closeAllPopup() {
-    for (int i = 0; i < popupCount; i++) {
+    for (int i = 0; i < AppConstant.POPUP_COUNT; i++) {
       Navigator.pop(context);
     }
-    popupCount = 0;
+    AppConstant.POPUP_COUNT = 0;
   }
 
   AudioPlayer levelStartPlayer;
@@ -125,13 +129,12 @@ class MainGamePageState extends BaseState<MainGamePage> {
             question = questions.getRange(0, 1).first;
             currentQueIndex = 0;
           } else {
-            popupCount += 1;
             CommonFunction.alertDialog(
                 context: context,
                 msg: 'There are no questions',
                 barrierDismissible: false,
                 doneButtonFn: () {
-                  closeAllPopup();
+                  Navigator.pop(context);
                   Navigator.pop(context);
                 });
           }
@@ -144,14 +147,12 @@ class MainGamePageState extends BaseState<MainGamePage> {
   bool isBonusCompleted(AppResponse appResponse) {
     if (appResponse.data is Map && appResponse.data['msg'] != null) {
       AppAudioUtils.stopMusic(levelStartPlayer);
-      popupCount += 1;
       CommonFunction.alertDialog(
           context: context,
           type: "success",
           msg: appResponse.data['msg'],
           barrierDismissible: false,
           doneButtonFn: () {
-            closeAllPopup();
             Navigator.pop(context);
           });
       return true;
@@ -188,7 +189,6 @@ class MainGamePageState extends BaseState<MainGamePage> {
     } else {
       AudioPlayer audioPlayer =
           await AppAudioUtils.playMusic(url: "music/level/levelCompleted.WAV");
-      popupCount += 1;
       CommonFunction.alertDialog(
           context: context,
           msg: (widget.isBonusLevel)
@@ -199,7 +199,6 @@ class MainGamePageState extends BaseState<MainGamePage> {
           playSound: false,
           doneButtonFn: () async {
             AppAudioUtils.stopMusic(audioPlayer);
-            closeAllPopup();
             setState(() {
               isOverlay = true;
             });
@@ -237,28 +236,25 @@ class MainGamePageState extends BaseState<MainGamePage> {
           _loadNextQuestion();
         } else {
           if (CacheData.userState.lives == 1) {
-            popupCount += 1;
             CommonFunction.alertDialog(
                 context: context,
                 type: 'success',
                 playSound: false,
                 msg: 'You have only 1 Life remaining. Now you can access hint.',
                 barrierDismissible: false,
-                doneButtonFn: () {
-                  closeAllPopup();
-                });
+                doneButtonFn: () {});
           } else if (CacheData.userState.lives == 0) {
             AppAudioUtils.playMusic(url: "music/game/gameEnd.WAV");
-            popupCount += 1;
             CommonFunction.alertDialog(
-                context: context,
-                msg: 'Game-over',
-                playSound: false,
-                barrierDismissible: false,
-                doneButtonFn: () {
-                  closeAllPopup();
-                  Navigator.pop(context);
-                });
+              context: context,
+              msg: 'Game-over',
+              playSound: false,
+              barrierDismissible: false,
+              doneButtonFn: () {
+                Navigator.pop(context);
+                exitLevel();
+              },
+            );
           }
         }
       }
@@ -291,7 +287,6 @@ class MainGamePageState extends BaseState<MainGamePage> {
 
   void timeOverDialog({String msg = 'Time\'s up !!'}) {
     _timer.cancel();
-    popupCount += 1;
     CommonFunction.alertDialog(
       context: context,
       msg: msg,
@@ -299,13 +294,16 @@ class MainGamePageState extends BaseState<MainGamePage> {
       showCancelButton: true,
       barrierDismissible: false,
       cancelButtonText: 'Exit Level',
-      doneCancelFn: () {
-        closeAllPopup();
-        Navigator.pop(context);
-      },
+      doneCancelFn: exitLevel,
       doneButtonText: 'Next Question',
       doneButtonFn: nextQuestion,
     );
+  }
+
+  void exitLevel() {
+    Navigator.pop(context); // For current popup
+    closeAllPopup();
+    Navigator.pop(context); // For exit game screen
   }
 
   nextQuestion() {
@@ -314,7 +312,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
   }
 
   void startTimer() {
-    _timeInSeconds = question.timeLimit;
+    _timeInSeconds = question != null ? question.timeLimit : 0;
     _step = 100 / _timeInSeconds;
     const oneSec = const Duration(seconds: 1);
     _timer = new Timer.periodic(
@@ -382,69 +380,79 @@ class MainGamePageState extends BaseState<MainGamePage> {
       ),
     );
 
-    return new Scaffold(
-      body: new BackgroundGredient(
-        child: widget.level.levelType != 'TIME_BASED'
-            ? SafeArea(
-                child: new Container(
-                  padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
-                  child: new Column(
-                    children: <Widget>[
-                      GameTitleBar(
-                        title: (widget.isBonusLevel)
-                            ? "Daily Bonus"
-                            : widget.level.name,
-                        questionNumber:
-                            question != null ? question.questionSt : 1,
-                        totalQuestion: getTotalQuestion(),
+    return question != null
+        ? new Scaffold(
+            body: new BackgroundGredient(
+              child: widget.level.levelType != 'TIME_BASED'
+                  ? SafeArea(
+                      child: new Container(
+                        padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
+                        child: new Column(
+                          children: <Widget>[
+                            GameTitleBar(
+                              title: (widget.isBonusLevel)
+                                  ? "Daily Bonus"
+                                  : widget.level.name,
+                              questionNumber:
+                                  question != null ? question.questionSt : 1,
+                              totalQuestion: getTotalQuestion(),
+                            ),
+                            SizedBox(
+                              height: 15,
+                            ),
+                            Expanded(
+                                child: question != null
+                                    ? question.questionType == "MCQ"
+                                        ? new MCQ(question, validateAnswer,
+                                            hiddenOptionIndex)
+                                        : new Pikachar(
+                                            question.question,
+                                            question.jumbledata,
+                                            question.pikacharAnswer,
+                                            validateAnswer)
+                                    : new Container())
+                          ],
+                        ),
                       ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      Expanded(
-                          child: question != null
-                              ? question.questionType == "MCQ"
-                                  ? new MCQ(question, validateAnswer,
-                                      hiddenOptionIndex)
-                                  : new Pikachar(
-                                      question.question,
-                                      question.jumbledata,
-                                      question.pikacharAnswer,
-                                      validateAnswer)
-                              : new Container())
-                    ],
-                  ),
-                ),
-              )
-            : TimeBasedUI(
-                title:
-                    (widget.isBonusLevel) ? "Daily Bonus" : widget.level.name,
-                questionNumber: question != null ? question.questionSt : 1,
-                totalQuestion: getTotalQuestion(),
-                timeLimit: question.timeLimit,
-                loadNextQuestion: _loadNextQuestion,
-                questionInfo: question,
-                timeIndicator: _timeIndicator,
-                timer: startTimer,
-                timeOverDialog: timeOverDialog,
-                gameUI: question != null
-                    ? question.questionType == "MCQ"
-                        ? new MCQ(question, validateAnswer, hiddenOptionIndex)
-                        : new Pikachar(question.question, question.jumbledata,
-                            question.pikacharAnswer, validateAnswer)
-                    : new Container(),
-                markRead: _markReadQuestion,
-              ),
-      ),
-      bottomNavigationBar:
-          !widget.isBonusLevel ? _buildbottomNavigationBar() : null,
-      floatingActionButtonLocation: widget.isBonusLevel
-          ? FloatingActionButtonLocation.endFloat
-          : FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: widget.isBonusLevel
-          ? getFloatingActionButtonForBonus()
-          : getFloatingButForNonBonus(),
-    );
+                    )
+                  : TimeBasedUI(
+                      title: (widget.isBonusLevel)
+                          ? "Daily Bonus"
+                          : widget.level.name,
+                      questionNumber:
+                          question != null ? question.questionSt : 1,
+                      totalQuestion: getTotalQuestion(),
+                      timeLimit: question != null ? question.timeLimit : 0,
+                      loadNextQuestion: _loadNextQuestion,
+                      questionInfo: question,
+                      timeIndicator: _timeIndicator,
+                      timer: startTimer,
+                      timeOverDialog: timeOverDialog,
+                      gameUI: question != null
+                          ? question.questionType == "MCQ"
+                              ? new MCQ(
+                                  question, validateAnswer, hiddenOptionIndex)
+                              : new Pikachar(
+                                  question.question,
+                                  question.jumbledata,
+                                  question.pikacharAnswer,
+                                  validateAnswer)
+                          : new Container(),
+                      markRead: _markReadQuestion,
+                    ),
+            ),
+            bottomNavigationBar:
+                !widget.isBonusLevel ? _buildbottomNavigationBar() : null,
+            floatingActionButtonLocation: widget.isBonusLevel
+                ? FloatingActionButtonLocation.endFloat
+                : FloatingActionButtonLocation.centerDocked,
+            floatingActionButton: widget.isBonusLevel
+                ? getFloatingActionButtonForBonus()
+                : getFloatingButForNonBonus(),
+          )
+        : new Scaffold(
+            body: Container(),
+          );
   }
 
   Widget getFloatingButForNonBonus() {
@@ -471,7 +479,6 @@ class MainGamePageState extends BaseState<MainGamePage> {
             ),
             onPressed: () {
               //AppUtils.showInSnackBar(context, "You can get " + question.score.toString() + " score by giving correct answer on this question.");
-              popupCount += 1;
               CommonFunction.alertDialog(
                   context: context,
                   msg: "You can get " +
@@ -481,9 +488,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
                   type: 'info',
                   playSound: false,
                   displayImage: false,
-                  doneButtonFn: () {
-                    closeAllPopup();
-                  });
+                  doneButtonFn: () {});
             },
           )
         : null;
@@ -532,26 +537,31 @@ class MainGamePageState extends BaseState<MainGamePage> {
         validateQuestion.updateSessionScore();
       });
       if (validateQuestion.answerStatus) {
-        popupCount += 1;
         CommonFunction.alertDialog(
           context: context,
           msg: 'Your answer is correct !!',
           type: 'success',
+          doneButtonText: isTimeBasedLevel ? 'Next Question' : 'Okay',
+          showCancelButton: isTimeBasedLevel,
+          cancelButtonText: isTimeBasedLevel ? 'Exit Level' : 'Okay',
+          doneCancelFn: exitLevel,
           barrierDismissible: false,
           doneButtonFn: () {
-            closeAllPopup();
             onAnswerGiven(isGivenCorrectAns);
           },
         );
       } else {
         isGivenCorrectAns = false;
-        popupCount += 1;
         CommonFunction.alertDialog(
           context: context,
           msg: 'Your answer is wrong !!',
+          type: isTimeBasedLevel ? 'info' : 'error',
+          doneButtonText: isTimeBasedLevel ? 'Next Question' : 'Okay',
+          showCancelButton: isTimeBasedLevel,
           barrierDismissible: false,
+          doneCancelFn: exitLevel,
+          cancelButtonText: isTimeBasedLevel ? 'Exit Level' : 'Okay',
           doneButtonFn: () {
-            closeAllPopup();
             onAnswerGiven(isGivenCorrectAns);
           },
         );
@@ -614,7 +624,6 @@ class MainGamePageState extends BaseState<MainGamePage> {
   void _getHint() async {
     AudioPlayer audioPlayer =
         await AppAudioUtils.playMusic(url: 'music/hint.WAV', volume: 2.6);
-    popupCount += 1;
     CommonFunction.alertDialog(
       context: context,
       msg: question.reference,
@@ -659,7 +668,6 @@ class MainGamePageState extends BaseState<MainGamePage> {
 //      if (!isApiFailed) {
 //        AudioPlayer audioPlayer =
 //            await AppAudioUtils.playMusic(url: 'music/hint.WAV', volume: 2.6);
-//        popupCount += 1;
 //        CommonFunction.alertDialog(
 //          context: context,
 //          msg: question.reference,

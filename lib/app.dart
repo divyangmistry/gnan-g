@@ -58,7 +58,7 @@ class _QuizAppState extends State<QuizApp> {
       title: 'Gnan-G',
       home: widget.defaultHome,
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.red,
         fontFamily: 'GoogleSans',
         inputDecorationTheme: InputDecorationTheme(
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0)),

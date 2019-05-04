@@ -7,4 +7,6 @@ class AppConstant {
   //static final String PLAYSTORE_URL = "https://play.google.com/store/apps/details?id=" + APP_ID;
   static final int REMIND_LATER_IN_HOURS = 24;
   static final String DEFAULT_USER_IMG_PATH = "images/face.png";
+
+  static int POPUP_COUNT = 0;
 }

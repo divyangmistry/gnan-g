@@ -188,6 +188,8 @@ class LevelCardRow extends StatelessWidget {
                       'You don\'t have enough lives.\nYou can earn points and get life from puzzeles',
                   barrierDismissible: false,
                   doneButtonText: 'Play puzzle',
+                  showCancelButton: true,
+                  type: 'info',
                   doneButtonFn: () {
                     Navigator.pop(context);
                     Navigator.push(
