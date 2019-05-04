@@ -138,11 +138,14 @@ class TimeBasedUIState extends State<TimeBasedUI> {
     }
 
     return Scaffold(
-      backgroundColor: Colors.blue.shade200,
       appBar: PreferredSize(
-          child: _appBar(), preferredSize: Size.fromHeight(190.0)),
-      body: SafeArea(
-        child: widget.gameUI,
+          child: new BackgroundGredient(
+            child: _appBar(),
+          ), preferredSize: Size.fromHeight(190.0)),
+      body: new BackgroundGredient(
+        child: SafeArea(
+          child: widget.gameUI,
+        ),
       ),
     );
   }

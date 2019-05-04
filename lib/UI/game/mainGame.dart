@@ -40,7 +40,6 @@ class MainGamePage extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() => new MainGamePageState();
-
 }
 
 class MainGamePageState extends BaseState<MainGamePage> {
@@ -74,8 +73,6 @@ class MainGamePageState extends BaseState<MainGamePage> {
     _loadData();
   }
 
-
-
   void closeAllPopup() {
     for (int i = 0; i < AppConstant.POPUP_COUNT; i++) {
       Navigator.pop(context);
@@ -100,7 +97,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
   void dispose() {
     super.dispose();
     if (levelStartPlayer != null) levelStartPlayer.stop();
-    if(_timer != null) _timer.cancel();
+    if (_timer != null) _timer.cancel();
   }
 
   _loadAllQuestions() async {
@@ -235,7 +232,8 @@ class MainGamePageState extends BaseState<MainGamePage> {
     setState(() {
       isOverlay = true;
     });
-    bool result = await CommonFunction.loadUserState(context, CacheData.userInfo.mhtId);
+    bool result =
+        await CommonFunction.loadUserState(context, CacheData.userInfo.mhtId);
     setState(() {
       isOverlay = false;
     });
@@ -252,7 +250,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
         barrierDismissible: false,
         doneButtonFn: () async {
           //Navigator.pop(context);
-          if(await loadUserState()) {
+          if (await loadUserState()) {
             exitLevel();
           }
         },
@@ -260,11 +258,11 @@ class MainGamePageState extends BaseState<MainGamePage> {
     } else {
       if (!isGivenCorrectAns && CacheData.userState.lives == 1) {
         CommonFunction.alertDialog(
-            context: context,
-            type: 'success',
-            playSound: false,
-            msg: 'You have only 1 Life remaining. Now you can access hint.',
-            barrierDismissible: false,
+          context: context,
+          type: 'success',
+          playSound: false,
+          msg: 'You have only 1 Life remaining. Now you can access hint.',
+          barrierDismissible: false,
         );
       }
       _loadNextQuestion();
@@ -281,11 +279,11 @@ class MainGamePageState extends BaseState<MainGamePage> {
       } else {
         if (CacheData.userState.lives == 1) {
           CommonFunction.alertDialog(
-              context: context,
-              type: 'success',
-              playSound: false,
-              msg: 'You have only 1 Life remaining. Now you can access hint.',
-              barrierDismissible: false,
+            context: context,
+            type: 'success',
+            playSound: false,
+            msg: 'You have only 1 Life remaining. Now you can access hint.',
+            barrierDismissible: false,
           );
         } else if (CacheData.userState.lives == 0) {
           AppAudioUtils.playMusic(url: "music/game/gameEnd.WAV");
@@ -307,7 +305,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
   void onAnswerGiven(bool isGivenCorrectAns) {
     try {
       print('Inside onAnswerGiven' + isGivenCorrectAns.toString());
-      if(isTimeBasedLevel)
+      if (isTimeBasedLevel)
         onAnswerGivenTimebased(isGivenCorrectAns);
       else
         onAnswerGivenNonTimeBased(isGivenCorrectAns);
@@ -370,40 +368,33 @@ class MainGamePageState extends BaseState<MainGamePage> {
     _step = 100 / _timeInSeconds;
     const oneSec = const Duration(seconds: 1);
     _timer = new Timer.periodic(
-        oneSec,
-            (Timer timer) =>
-        {
-
-          setState(
-                  () {
-                if (mounted) {
-                  if (_timeInSeconds < 1) {
-                    timeOverDialog();
-                    timer.cancel();
-                  } else {
-                    _remaining = _remaining - _step;
-                    _chartKey.currentState.updateData(
-                      <CircularStackEntry>[
-                        new CircularStackEntry(
-                          <CircularSegmentEntry>[
-                            new CircularSegmentEntry(
-                                _timeInSeconds == 1 ? 0 : _remaining, kQuizMain400,
-                                rankKey: 'completed'),
-                            new CircularSegmentEntry(
-                                100, kQuizMain400.withAlpha(50),
-                                rankKey: 'remaining'),
-                          ],
-                          rankKey: 'progress',
-                        ),
+      oneSec,
+      (Timer timer) => setState(() {
+            if (mounted) {
+              if (_timeInSeconds < 1) {
+                timeOverDialog();
+                timer.cancel();
+              } else {
+                _remaining = _remaining - _step;
+                _chartKey.currentState.updateData(
+                  <CircularStackEntry>[
+                    new CircularStackEntry(
+                      <CircularSegmentEntry>[
+                        new CircularSegmentEntry(
+                            _timeInSeconds == 1 ? 0 : _remaining, kQuizMain400,
+                            rankKey: 'completed'),
+                        new CircularSegmentEntry(
+                            100, kQuizMain400.withAlpha(50),
+                            rankKey: 'remaining'),
                       ],
-                    );
-                    _timeInSeconds = _timeInSeconds - 1;
-                  }
-                }
+                      rankKey: 'progress',
+                    ),
+                  ],
+                );
+                _timeInSeconds = _timeInSeconds - 1;
               }
-          ),
-        }
-
+            }
+          }),
     );
   }
 
@@ -587,11 +578,12 @@ class MainGamePageState extends BaseState<MainGamePage> {
     setState(() {
       isOverlay = false;
     });
-    AppResponse appResponse = ResponseParser.parseResponse(context: context, res: res);
+    AppResponse appResponse =
+        ResponseParser.parseResponse(context: context, res: res);
     if (appResponse.status == WSConstant.SUCCESS_CODE) {
-      if(isTimeBasedLevel)
-        _timer.cancel();
-      ValidateQuestion validateQuestion = ValidateQuestion.fromJson(appResponse.data);
+      if (isTimeBasedLevel) _timer.cancel();
+      ValidateQuestion validateQuestion =
+          ValidateQuestion.fromJson(appResponse.data);
       setState(() {
         isGivenCorrectAns = true;
         validateQuestion.updateSessionScore();
@@ -601,9 +593,9 @@ class MainGamePageState extends BaseState<MainGamePage> {
           context: context,
           msg: 'Your answer is correct !!',
           type: 'success',
-          doneButtonText: isTimeBasedLevel ? 'Next Question' : 'Okay',
+          doneButtonText: isTimeBasedLevel ? 'Next Que.' : 'Okay',
           showCancelButton: isTimeBasedLevel,
-          cancelButtonText: isTimeBasedLevel ? 'Exit Level' : 'Okay',
+          cancelButtonText: isTimeBasedLevel ? 'Exit' : 'Okay',
           doneCancelFn: exitLevel,
           barrierDismissible: false,
           doneButtonFn: () {
@@ -822,23 +814,23 @@ class MainGamePageState extends BaseState<MainGamePage> {
               ),
             ),
           ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              CacheData.userState.lives > 1 ? Text('\nWill be available only \nwhen your 1 life is left.', textScaleFactor: 1.2,) : new Container(),
+              (question.questionType != 'MCQ' && CacheData.userState.lives <= 1) ? Text('\nFill in the blanks will \nnot have any lifelines.',textScaleFactor: 1.2,) : new Container(),
+              (question.questionType == 'MCQ' && CacheData.userState.lives <= 1 && !CacheData.userState.currentState.fifty_fifty) ? Text('\nYou have already used \nlifeline in this level.',textScaleFactor: 1.2,) : new Container(),
+            ],
+          ),
           SizedBox(
             height: 30.0,
           ),
           new Row(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              lifeline(Icons.call, 'Phone a Friend', _phoneAFriend),
-              question.questionType == 'MCQ'
-                  ? CustomVerticalDivider(
-                      height: 100,
-                    )
-                  : new Container(),
-              (question.questionType == 'MCQ' &&
-                      CacheData.userState.currentState.fifty_fifty != null &&
-                      CacheData.userState.currentState.fifty_fifty &&
-                      CacheData.userState.lives <= 1)
-                  ? lifeline(Icons.star_half, '50 - 50', _fiftyFifty)
+              (question.questionType == 'MCQ' && CacheData.userState.currentState.fifty_fifty != null
+                  && CacheData.userState.currentState.fifty_fifty && CacheData.userState.lives <= 1) ?
+              lifeline(Icons.star_half, '50 - 50', _fiftyFifty)
                   : new Container(),
             ],
           ),

@@ -14,15 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:http/http.dart';
 
-final colors = [
-  Colors.red,
-  Colors.amber,
-  Colors.purple,
-  Colors.blue,
-  Colors.green,
-  Colors.deepOrange,
-  Colors.teal
-];
+final colors = [Colors.red, Colors.amber, Colors.purple, Colors.blue, Colors.green, Colors.deepOrange, Colors.teal];
 
 // ignore: non_constant_identifier_names
 Widget build_users_row(String name, String rank, String points, img) {
@@ -100,8 +92,7 @@ class _NewLeaderBoardState extends State<NewLeaderBoard> {
   _getLeaderList() async {
     try {
       Response res = await _api.getApi(url: '/leaders');
-      AppResponse appResponse =
-          ResponseParser.parseResponse(context: context, res: res);
+      AppResponse appResponse = ResponseParser.parseResponse(context: context, res: res);
       if (appResponse.status == WSConstant.SUCCESS_CODE) {
         LeaderList leaders = LeaderList.fromJson(appResponse.data);
         _userImage = await CommonFunction.getUserProfileImg(context: context);
@@ -112,15 +103,14 @@ class _NewLeaderBoardState extends State<NewLeaderBoard> {
         });
       }
     } catch (err) {
-      CommonFunction.displayErrorDialog(context: context, msg: err.toString());
+      if (mounted) CommonFunction.displayErrorDialog(context: context, msg: err.toString());
     }
   }
 
   _getLeaderListByMonth() async {
     try {
       Response res = await _api.getApi(url: '/leaders_month');
-      AppResponse appResponse =
-          ResponseParser.parseResponse(context: context, res: res);
+      AppResponse appResponse = ResponseParser.parseResponse(context: context, res: res);
       if (appResponse.status == WSConstant.SUCCESS_CODE) {
         LeaderList leaders = LeaderList.fromJson(appResponse.data);
         _userImage = await CommonFunction.getUserProfileImg(context: context);
@@ -132,7 +122,7 @@ class _NewLeaderBoardState extends State<NewLeaderBoard> {
         });
       }
     } catch (err) {
-      CommonFunction.displayErrorDialog(context: context, msg: err.toString());
+      if (mounted) CommonFunction.displayErrorDialog(context: context, msg: err.toString());
     }
   }
 
@@ -174,8 +164,7 @@ class _NewLeaderBoardState extends State<NewLeaderBoard> {
               children: <Widget>[
                 Rank(rank: _currentIndex == 0 ? _userRank : _userRankMonth),
                 Text(
-                  getOrdinalOfNumber(
-                      _currentIndex == 0 ? _userRank : _userRankMonth),
+                  getOrdinalOfNumber(_currentIndex == 0 ? _userRank : _userRankMonth),
                   textScaleFactor: 1,
                   style: TextStyle(
                     color: Colors.white,
@@ -198,9 +187,7 @@ class _NewLeaderBoardState extends State<NewLeaderBoard> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Text(
-                  _currentIndex == 0
-                      ? CacheData.userState.totalscore.toString()
-                      : CacheData.userState.totalscore_month.toString(),
+                  _currentIndex == 0 ? CacheData.userState.totalscore.toString() : CacheData.userState.totalscore_month.toString(),
                   textScaleFactor: 1,
                   style: TextStyle(
                     fontSize: 32,
@@ -248,9 +235,7 @@ class _NewLeaderBoardState extends State<NewLeaderBoard> {
         ),
       ),
       body: SafeArea(
-        child: _currentIndex == 0
-            ? NewOverAllLeaderBoard(leaderList)
-            : NewMonthlyLeaderBoard(leaderListMonth),
+        child: _currentIndex == 0 ? NewOverAllLeaderBoard(leaderList) : NewMonthlyLeaderBoard(leaderListMonth),
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
@@ -288,25 +273,26 @@ class LeaderRow extends StatefulWidget {
   }
 }
 
-class LeaderRowState extends State<LeaderRow>
-    with AutomaticKeepAliveClientMixin<LeaderRow> {
+class LeaderRowState extends State<LeaderRow> with AutomaticKeepAliveClientMixin<LeaderRow> {
   Image image = CacheData.getUserDefaultImg();
 
   @override
   void initState() {
     super.initState();
     CacheData.getUserProfileImages(context, widget.mhtId).then((userImage) {
-      if (mounted && widget.mhtId != 1) {
-        setState(() {
-          image = userImage;
-        });
-      } else {
-        setState(() {
-          image = CommonFunction.getImageFromBase64Img(
-            base64Img: CacheData.pujyashreeImg,
-            returnDefault: true,
-          );
-        });
+      if (mounted) {
+        if (widget.mhtId != 1) {
+          setState(() {
+            image = userImage;
+          });
+        } else {
+          setState(() {
+            image = CommonFunction.getImageFromBase64Img(
+              base64Img: CacheData.pujyashreeImg,
+              returnDefault: true,
+            );
+          });
+        }
       }
     });
   }
@@ -319,8 +305,7 @@ class LeaderRowState extends State<LeaderRow>
       children: <Widget>[
         ListTile(
           title: Text(widget.name),
-          subtitle: Text(
-              widget.mhtId != 1 ? 'Points : ' + widget.points.toString() : ""),
+          subtitle: Text(widget.mhtId != 1 ? 'Points : ' + widget.points.toString() : ""),
           trailing: Padding(
             padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
             child: Text(

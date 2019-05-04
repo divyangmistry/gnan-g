@@ -30,7 +30,7 @@ class MCQState extends State<MCQ> {
               color: kQuizMain400,
               height: 1.5,
             ),
-            textScaleFactor: 1.6,
+            textScaleFactor: 2,
           ),
         ),
         new Container(
