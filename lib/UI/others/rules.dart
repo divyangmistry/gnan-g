@@ -39,7 +39,7 @@ class RulesPagePageState extends State<RulesPagePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: new AppBar(title: const Text('Markdown Demo')),
+        appBar: new AppBar(title: const Text('Rules')),
         body: _rulesData == null
             ? Center(child: CircularProgressIndicator())
             : Markdown(data: _rulesData));

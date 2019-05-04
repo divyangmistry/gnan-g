@@ -98,7 +98,6 @@ class ForgotPasswordState extends State<ForgotPassword> {
         AppResponse appResponse = ResponseParser.parseResponse(context: context, res: res);
         if (appResponse.status == 200) {
           SignUpSession signUpSession = SignUpSession.fromJson(appResponse.data);
-          Navigator.pop(context);
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(

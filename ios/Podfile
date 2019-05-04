@@ -60,7 +60,7 @@ target 'Runner' do
   }
 end
 
-target 'OneSignalNotificationServiceExtension' do
+target 'OneSignalNotificationServiceExtensio' do
   pod 'OneSignal', '>= 2.9.3', '< 3.0'
 end
 
