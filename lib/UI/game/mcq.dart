@@ -28,7 +28,6 @@ class MCQState extends State<MCQ> {
             style: TextStyle(
               fontFamily: 'Gujarati',
               color: kQuizMain400,
-              height: 1.5,
             ),
             textScaleFactor: 2,
           ),

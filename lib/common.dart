@@ -36,8 +36,7 @@ class AccentColorOverride extends StatelessWidget {
   Widget build(BuildContext context) {
     return Theme(
       child: child,
-      data: Theme.of(context)
-          .copyWith(accentColor: color, brightness: Brightness.dark),
+      data: Theme.of(context).copyWith(accentColor: color, brightness: Brightness.dark),
     );
   }
 }
@@ -119,8 +118,7 @@ class CustomLoading extends StatelessWidget {
   final Widget child;
   final bool isOverlay;
 
-  CustomLoading(
-      {@required this.isLoading, @required this.child, this.isOverlay = false});
+  CustomLoading({@required this.isLoading, @required this.child, this.isOverlay = false});
 
   @override
   Widget build(BuildContext context) {
@@ -206,7 +204,8 @@ class CommonFunction {
 
   // email Validation
   static String emailValidation(String value) {
-    String pattern = r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+    String pattern =
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
     RegExp regex = new RegExp(pattern);
     if (value.isEmpty) {
       return 'Email-Id is required';
@@ -238,15 +237,14 @@ class CommonFunction {
   }
 
   // points ui
-  static Widget pointsUI(
-      {@required BuildContext context, String point = '100'}) {
+  static Widget pointsUI({@required BuildContext context, String point = '100'}) {
     return GestureDetector(
       child: new Container(
         height: 35,
         padding: EdgeInsets.only(right: 10, left: 10),
         decoration: BoxDecoration(
-            color: Colors.black12,
-            borderRadius: BorderRadius.circular(25),
+          color: Colors.black12,
+          borderRadius: BorderRadius.circular(25),
         ),
         child: new Row(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -267,19 +265,23 @@ class CommonFunction {
         ),
       ),
       onTap: () {
-        CommonFunction.alertDialog(
-          context: context,
-          msg: 'You can buy life for 100 points.',
-          doneButtonText: 'Yes take it',
-          type: 'success',
-          title: 'Oh Yeah ..',
-          playSound: false,
-          barrierDismissible: false,
-          showCancelButton: true,
-          doneButtonFn: () {
-            getLife(context);
-          },
-        );
+        if (CacheData.userState.lives >= 3) {
+          CommonFunction.alertDialog(context: context, msg: 'You have enough lives !!', type: 'success');
+        } else {
+          CommonFunction.alertDialog(
+            context: context,
+            msg: 'You can buy life for 100 points.',
+            doneButtonText: 'Yes take it',
+            type: 'success',
+            title: 'Oh Yeah ..',
+            playSound: false,
+            barrierDismissible: false,
+            showCancelButton: true,
+            doneButtonFn: () {
+              getLife(context);
+            },
+          );
+        }
       },
     );
   }
@@ -357,13 +359,11 @@ class CommonFunction {
       userProfile = getImageFromBase64Img(base64Img: base64Img);
       AppSharedPrefUtil.saveProfileImage(base64Img);
     }
-    if (userProfile == null)
-      userProfile = Image(image: AssetImage(AppConstant.DEFAULT_USER_IMG_PATH));
+    if (userProfile == null) userProfile = Image(image: AssetImage(AppConstant.DEFAULT_USER_IMG_PATH));
     return userProfile;
   }
 
-  static Future<String> getProfilePictureFromServer(
-      BuildContext context, int mhtId) async {
+  static Future<String> getProfilePictureFromServer(BuildContext context, int mhtId) async {
     String profileBase64Image;
     Response res = await _api.getProfilePicture(mhtId: mhtId);
     AppResponse appResponse = ResponseParser.parseResponse(context: context, res: res);
@@ -375,10 +375,8 @@ class CommonFunction {
 
   static Image getImageFromBase64Img({@required String base64Img, bool returnDefault = false}) {
     Image image;
-    if (base64Img != null)
-      image = Image(image: MemoryImage(base64Decode(base64Img)));
-    if (returnDefault && image == null)
-      image = CacheData.getUserDefaultImg();
+    if (base64Img != null) image = Image(image: MemoryImage(base64Decode(base64Img)));
+    if (returnDefault && image == null) image = CacheData.getUserDefaultImg();
     return image;
   }
 
@@ -401,115 +399,109 @@ class CommonFunction {
     bool playSound = true,
   }) {
     AppConstant.POPUP_COUNT += 1;
-    if(type == 'error' && playSound) {
+    if (type == 'error' && playSound) {
       AppAudioUtils.playWrongMusic();
-    } else if(type == 'success' && playSound){
-      if(playSound)
-        AppAudioUtils.playCorrectMusic();
+    } else if (type == 'success' && playSound) {
+      if (playSound) AppAudioUtils.playCorrectMusic();
     }
     showDialog(
       context: context,
       barrierDismissible: barrierDismissible,
       builder: (_) {
         return WillPopScope(
-            onWillPop: () async => false,
-        child: AlertDialog(
-          shape: new RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              displayImage ? Container(
-                height: 150,
-                width: 150,
-                child: FlareActor(
-                  'assets/animation/Teddy.flr',
-                  animation: type == 'success' ? "success" : 'fail',
+          onWillPop: () async => false,
+          child: AlertDialog(
+            shape: new RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                displayImage
+                    ? Container(
+                        height: 150,
+                        width: 150,
+                        child: FlareActor(
+                          'assets/animation/Teddy.flr',
+                          animation: type == 'success' ? "success" : 'fail',
+                        ),
+                      )
+                    : new Container(),
+                SizedBox(
+                  height: 20,
                 ),
-              ) : new Container(),
-              SizedBox(
-                height: 20,
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 25),
-                child: Text(
-                  msg != null
-                      ? msg
-                      : type == 'error'
-                      ? "Looks like your lack of \n Imagination ! "
-                      : "Looks like today is your luckyday ... !!",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.blueGrey, height: 1.5),
-                  textScaleFactor: 1.1,
-                ),
-              ),
-              SizedBox(height: 20.0),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  FlatButton(
-                    padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
-                    color: type == 'error' ? kQuizErrorRed : kQuizMain500,
-                    child: Row(
-                      children: <Widget>[
-                        Text(
-                          doneButtonText != null
-                              ? doneButtonText
-                              : type == 'error' ? "Okeh..." : "Hooray!",
-                          textScaleFactor: 1.2,
-                          style: TextStyle(
-                            color: kQuizBackgroundWhite,
-                          ),
-                        )
-                      ],
-                    ),
-                    onPressed: () {
-                      AppConstant.POPUP_COUNT -= 1;
-                      if(playSound && type == 'success')
-                        AppAudioUtils.stopCorrectMusic();
-                      if(doneButtonFn != null) {
-                        doneButtonFn();
-                      } else {
-                        Navigator.pop(context);
-                      }
-                    }
-                    ,
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 25),
+                  child: Text(
+                    msg != null
+                        ? msg
+                        : type == 'error' ? "Looks like your lack of \n Imagination ! " : "Looks like today is your luckyday ... !!",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.blueGrey, height: 1.5),
+                    textScaleFactor: 1.1,
                   ),
-                  showCancelButton ? SizedBox(width: 10) : new Container(),
-                  showCancelButton
-                      ? FlatButton(
-                    padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
-                    color: kQuizErrorRed,
-                    child: Row(
-                      children: <Widget>[
-                        Text(
-                          cancelButtonText,
-                          textScaleFactor: 1.2,
-                          style: TextStyle(
-                            color: kQuizBackgroundWhite,
-                          ),
-                        )
-                      ],
+                ),
+                SizedBox(height: 20.0),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    FlatButton(
+                      padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+                      color: type == 'error' ? kQuizErrorRed : kQuizMain500,
+                      child: Row(
+                        children: <Widget>[
+                          Text(
+                            doneButtonText != null ? doneButtonText : type == 'error' ? "Okeh..." : "Hooray!",
+                            textScaleFactor: 1.2,
+                            style: TextStyle(
+                              color: kQuizBackgroundWhite,
+                            ),
+                          )
+                        ],
+                      ),
+                      onPressed: () {
+                        AppConstant.POPUP_COUNT -= 1;
+                        if (playSound && type == 'success') AppAudioUtils.stopCorrectMusic();
+                        if (doneButtonFn != null) {
+                          doneButtonFn();
+                        } else {
+                          Navigator.pop(context);
+                        }
+                      },
                     ),
-                    onPressed: () {
-                      AppConstant.POPUP_COUNT -= 1;
-                      if(playSound && type == 'success')
-                        AppAudioUtils.stopCorrectMusic();
-                      if(doneCancelFn != null) {
-                        doneCancelFn();
-                      } else {
-                        Navigator.pop(context);
-                      }
-                    },
-                  )
-                      : new Container(),
-                ],
-              ),
-            ],
+                    showCancelButton ? SizedBox(width: 10) : new Container(),
+                    showCancelButton
+                        ? FlatButton(
+                            padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+                            color: kQuizErrorRed,
+                            child: Row(
+                              children: <Widget>[
+                                Text(
+                                  cancelButtonText,
+                                  textScaleFactor: 1.2,
+                                  style: TextStyle(
+                                    color: kQuizBackgroundWhite,
+                                  ),
+                                )
+                              ],
+                            ),
+                            onPressed: () {
+                              AppConstant.POPUP_COUNT -= 1;
+                              if (playSound && type == 'success') AppAudioUtils.stopCorrectMusic();
+                              if (doneCancelFn != null) {
+                                doneCancelFn();
+                              } else {
+                                Navigator.pop(context);
+                              }
+                            },
+                          )
+                        : new Container(),
+                  ],
+                ),
+              ],
+            ),
           ),
-        ),
         );
       },
     );

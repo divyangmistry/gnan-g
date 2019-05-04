@@ -29,8 +29,7 @@ import '../../common.dart';
 import '../../model/quizlevel.dart';
 import 'pikachar.dart';
 
-final GlobalKey<AnimatedCircularChartState> _chartKey =
-    new GlobalKey<AnimatedCircularChartState>();
+final GlobalKey<AnimatedCircularChartState> _chartKey = new GlobalKey<AnimatedCircularChartState>();
 
 class MainGamePage extends StatefulWidget {
   final QuizLevel level;
@@ -108,12 +107,9 @@ class MainGamePageState extends BaseState<MainGamePage> {
     } else {
       res = await _api.getQuestions(
           level: widget.level.levelIndex,
-          from: widget.level.levelType == 'TIME_BASED'
-              ? currentState.questionReadSt + 1
-              : currentState.questionSt);
+          from: widget.level.levelType == 'TIME_BASED' ? currentState.questionReadSt + 1 : currentState.questionSt);
     }
-    AppResponse appResponse =
-        ResponseParser.parseResponse(context: context, res: res);
+    AppResponse appResponse = ResponseParser.parseResponse(context: context, res: res);
     if (appResponse.status == 200) {
       bool isLoadQuestion = true;
       if (widget.isBonusLevel) {
@@ -181,21 +177,17 @@ class MainGamePageState extends BaseState<MainGamePage> {
       setState(() {
         _reInitForQuestion();
         currentQueIndex++;
-        question =
-            questions.getRange(currentQueIndex, currentQueIndex + 1).first;
+        question = questions.getRange(currentQueIndex, currentQueIndex + 1).first;
       });
       if (!widget.isBonusLevel && widget.level.levelType == 'TIME_BASED') {
         _resetTimer();
         _markReadQuestion();
       }
     } else {
-      AudioPlayer audioPlayer =
-          await AppAudioUtils.playMusic(url: "music/level/levelCompleted.WAV");
+      AudioPlayer audioPlayer = await AppAudioUtils.playMusic(url: "music/level/levelCompleted.WAV");
       CommonFunction.alertDialog(
           context: context,
-          msg: (widget.isBonusLevel)
-              ? "All Questions of Daily Bonus are completed !!"
-              : widget.level.name + ' level is completed !! ',
+          msg: (widget.isBonusLevel) ? "All Questions of Daily Bonus are completed !!" : widget.level.name + ' level is completed !! ',
           barrierDismissible: false,
           type: 'success',
           playSound: false,
@@ -204,8 +196,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
             setState(() {
               isOverlay = true;
             });
-            bool result = await CommonFunction.loadUserState(
-                context, CacheData.userInfo.mhtId);
+            bool result = await CommonFunction.loadUserState(context, CacheData.userInfo.mhtId);
             setState(() {
               isOverlay = false;
             });
@@ -232,8 +223,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
     setState(() {
       isOverlay = true;
     });
-    bool result =
-        await CommonFunction.loadUserState(context, CacheData.userInfo.mhtId);
+    bool result = await CommonFunction.loadUserState(context, CacheData.userInfo.mhtId);
     setState(() {
       isOverlay = false;
     });
@@ -320,19 +310,27 @@ class MainGamePageState extends BaseState<MainGamePage> {
   }
 
   _markReadQuestion() async {
-    Response res = await _api.markReadQuestion(
-      level: question.level,
-      mhtId: CacheData.userInfo.mhtId,
-      questionId: question.questionId,
-      questionSt: question.questionSt,
-    );
-    AppResponse appResponse =
-        ResponseParser.parseResponse(context: context, res: res);
-    if (appResponse.status == WSConstant.SUCCESS_CODE) {
-      print('ReadQuestion :: ');
-      print(appResponse.data);
-      CacheData.userState.currentState.questionReadSt =
-          appResponse.data['question_read_st'];
+    try {
+      Response res = await _api.markReadQuestion(
+        level: question.level,
+        mhtId: CacheData.userInfo.mhtId,
+        questionId: question.questionId,
+        questionSt: question.questionSt,
+      );
+      AppResponse appResponse = ResponseParser.parseResponse(context: context, res: res);
+      if (appResponse.status == WSConstant.SUCCESS_CODE) {
+        print('ReadQuestion :: ');
+        print(appResponse.data);
+        CacheData.userState.currentState.questionReadSt = appResponse.data['question_read_st'];
+      }
+    } catch (err) {
+      _timer.cancel();
+      CommonFunction.alertDialog(
+        context: context,
+        msg: err.toString(),
+        doneButtonFn: exitLevel,
+        type: 'error',
+      );
     }
   }
 
@@ -344,9 +342,9 @@ class MainGamePageState extends BaseState<MainGamePage> {
       type: 'info',
       showCancelButton: true,
       barrierDismissible: false,
-      cancelButtonText: 'Exit Level',
+      cancelButtonText: 'Exit',
       doneCancelFn: exitLevel,
-      doneButtonText: 'Next Question',
+      doneButtonText: 'Next Que.',
       doneButtonFn: nextQuestion,
     );
   }
@@ -380,12 +378,8 @@ class MainGamePageState extends BaseState<MainGamePage> {
                   <CircularStackEntry>[
                     new CircularStackEntry(
                       <CircularSegmentEntry>[
-                        new CircularSegmentEntry(
-                            _timeInSeconds == 1 ? 0 : _remaining, kQuizMain400,
-                            rankKey: 'completed'),
-                        new CircularSegmentEntry(
-                            100, kQuizMain400.withAlpha(50),
-                            rankKey: 'remaining'),
+                        new CircularSegmentEntry(_timeInSeconds == 1 ? 0 : _remaining, kQuizMain400, rankKey: 'completed'),
+                        new CircularSegmentEntry(100, kQuizMain400.withAlpha(50), rankKey: 'remaining'),
                       ],
                       rankKey: 'progress',
                     ),
@@ -442,11 +436,8 @@ class MainGamePageState extends BaseState<MainGamePage> {
                         child: new Column(
                           children: <Widget>[
                             GameTitleBar(
-                              title: (widget.isBonusLevel)
-                                  ? "Daily Bonus"
-                                  : widget.level.name,
-                              questionNumber:
-                                  question != null ? question.questionSt : 1,
+                              title: (widget.isBonusLevel) ? "Daily Bonus" : widget.level.name,
+                              questionNumber: question != null ? question.questionSt : 1,
                               totalQuestion: getTotalQuestion(),
                             ),
                             SizedBox(
@@ -455,24 +446,16 @@ class MainGamePageState extends BaseState<MainGamePage> {
                             Expanded(
                                 child: question != null
                                     ? question.questionType == "MCQ"
-                                        ? new MCQ(question, validateAnswer,
-                                            hiddenOptionIndex)
-                                        : new Pikachar(
-                                            question.question,
-                                            question.jumbledata,
-                                            question.pikacharAnswer,
-                                            validateAnswer)
+                                        ? new MCQ(question, validateAnswer, hiddenOptionIndex)
+                                        : new Pikachar(question.question, question.jumbledata, question.pikacharAnswer, validateAnswer)
                                     : new Container())
                           ],
                         ),
                       ),
                     )
                   : TimeBasedUI(
-                      title: (widget.isBonusLevel)
-                          ? "Daily Bonus"
-                          : widget.level.name,
-                      questionNumber:
-                          question != null ? question.questionSt : 1,
+                      title: (widget.isBonusLevel) ? "Daily Bonus" : widget.level.name,
+                      questionNumber: question != null ? question.questionSt : 1,
                       totalQuestion: getTotalQuestion(),
                       timeLimit: question != null ? question.timeLimit : 0,
                       loadNextQuestion: _loadNextQuestion,
@@ -482,25 +465,16 @@ class MainGamePageState extends BaseState<MainGamePage> {
                       timeOverDialog: timeOverDialog,
                       gameUI: question != null
                           ? question.questionType == "MCQ"
-                              ? new MCQ(
-                                  question, validateAnswer, hiddenOptionIndex)
-                              : new Pikachar(
-                                  question.question,
-                                  question.jumbledata,
-                                  question.pikacharAnswer,
-                                  validateAnswer)
+                              ? new MCQ(question, validateAnswer, hiddenOptionIndex)
+                              : new Pikachar(question.question, question.jumbledata, question.pikacharAnswer, validateAnswer)
                           : new Container(),
                       markRead: _markReadQuestion,
                     ),
             ),
-            bottomNavigationBar:
-                !widget.isBonusLevel ? _buildbottomNavigationBar() : null,
-            floatingActionButtonLocation: widget.isBonusLevel
-                ? FloatingActionButtonLocation.endFloat
-                : FloatingActionButtonLocation.centerDocked,
-            floatingActionButton: widget.isBonusLevel
-                ? getFloatingActionButtonForBonus()
-                : getFloatingButForNonBonus(),
+            bottomNavigationBar: !widget.isBonusLevel ? _buildbottomNavigationBar() : null,
+            floatingActionButtonLocation:
+                widget.isBonusLevel ? FloatingActionButtonLocation.endFloat : FloatingActionButtonLocation.centerDocked,
+            floatingActionButton: widget.isBonusLevel ? getFloatingActionButtonForBonus() : getFloatingButForNonBonus(),
           )
         : new Scaffold(
             body: Container(),
@@ -533,9 +507,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
               //AppUtils.showInSnackBar(context, "You can get " + question.score.toString() + " score by giving correct answer on this question.");
               CommonFunction.alertDialog(
                   context: context,
-                  msg: "You can get " +
-                      question.score.toString() +
-                      " score by giving correct answer on this question.",
+                  msg: "You can get " + question.score.toString() + " score by giving correct answer on this question.",
                   barrierDismissible: false,
                   type: 'info',
                   playSound: false,
@@ -548,10 +520,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
 
   int getTotalQuestion() {
     if (widget.isBonusLevel) {
-      return questions
-          .getRange(questions.length - 1, questions.length)
-          .first
-          .questionSt;
+      return questions.getRange(questions.length - 1, questions.length).first.questionSt;
     }
     int totalQuestion = -1;
     List<QuizLevel> levelInfos = CacheData.userState.quizLevels;
@@ -578,12 +547,10 @@ class MainGamePageState extends BaseState<MainGamePage> {
     setState(() {
       isOverlay = false;
     });
-    AppResponse appResponse =
-        ResponseParser.parseResponse(context: context, res: res);
+    AppResponse appResponse = ResponseParser.parseResponse(context: context, res: res);
     if (appResponse.status == WSConstant.SUCCESS_CODE) {
       if (isTimeBasedLevel) _timer.cancel();
-      ValidateQuestion validateQuestion =
-          ValidateQuestion.fromJson(appResponse.data);
+      ValidateQuestion validateQuestion = ValidateQuestion.fromJson(appResponse.data);
       setState(() {
         isGivenCorrectAns = true;
         validateQuestion.updateSessionScore();
@@ -609,11 +576,11 @@ class MainGamePageState extends BaseState<MainGamePage> {
           context: context,
           msg: 'Your answer is wrong !!',
           type: isTimeBasedLevel ? 'info' : 'error',
-          doneButtonText: isTimeBasedLevel ? 'Next Question' : 'Okay',
+          doneButtonText: isTimeBasedLevel ? 'Next Que.' : 'Okay',
           showCancelButton: isTimeBasedLevel,
           barrierDismissible: false,
           doneCancelFn: exitLevel,
-          cancelButtonText: isTimeBasedLevel ? 'Exit Level' : 'Okay',
+          cancelButtonText: isTimeBasedLevel ? 'Exit' : 'Okay',
           doneButtonFn: () {
             Navigator.pop(context);
             onAnswerGiven(isGivenCorrectAns);
@@ -639,9 +606,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
                   color: kQuizBackgroundWhite,
                 ),
                 onPressed: () {
-                  showModalBottomSheet(
-                      builder: (BuildContext context) => _bottomDrawer(),
-                      context: context);
+                  showModalBottomSheet(builder: (BuildContext context) => _bottomDrawer(), context: context);
                 },
               ),
             ),
@@ -676,8 +641,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
   }
 
   void _getHint() async {
-    AudioPlayer audioPlayer =
-        await AppAudioUtils.playMusic(url: 'music/hint.WAV', volume: 2.6);
+    AudioPlayer audioPlayer = await AppAudioUtils.playMusic(url: 'music/hint.WAV', volume: 2.6);
     CommonFunction.alertDialog(
       context: context,
       msg: question.reference,
@@ -817,9 +781,24 @@ class MainGamePageState extends BaseState<MainGamePage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              CacheData.userState.lives > 1 ? Text('\nWill be available only \nwhen your 1 life is left.', textScaleFactor: 1.2,) : new Container(),
-              (question.questionType != 'MCQ' && CacheData.userState.lives <= 1) ? Text('\nFill in the blanks will \nnot have any lifelines.',textScaleFactor: 1.2,) : new Container(),
-              (question.questionType == 'MCQ' && CacheData.userState.lives <= 1 && !CacheData.userState.currentState.fifty_fifty) ? Text('\nYou have already used \nlifeline in this level.',textScaleFactor: 1.2,) : new Container(),
+              CacheData.userState.lives > 1
+                  ? Text(
+                      '\nWill be available only \nwhen your 1 life is left.',
+                      textScaleFactor: 1.2,
+                    )
+                  : new Container(),
+              (question.questionType != 'MCQ' && CacheData.userState.lives <= 1)
+                  ? Text(
+                      '\nFill in the blanks will \nnot have any lifelines.',
+                      textScaleFactor: 1.2,
+                    )
+                  : new Container(),
+              (question.questionType == 'MCQ' && CacheData.userState.lives <= 1 && !CacheData.userState.currentState.fifty_fifty)
+                  ? Text(
+                      '\nYou have already used \nlifeline in this level.',
+                      textScaleFactor: 1.2,
+                    )
+                  : new Container(),
             ],
           ),
           SizedBox(
@@ -828,9 +807,11 @@ class MainGamePageState extends BaseState<MainGamePage> {
           new Row(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              (question.questionType == 'MCQ' && CacheData.userState.currentState.fifty_fifty != null
-                  && CacheData.userState.currentState.fifty_fifty && CacheData.userState.lives <= 1) ?
-              lifeline(Icons.star_half, '50 - 50', _fiftyFifty)
+              (question.questionType == 'MCQ' &&
+                      CacheData.userState.currentState.fifty_fifty != null &&
+                      CacheData.userState.currentState.fifty_fifty &&
+                      CacheData.userState.lives <= 1)
+                  ? lifeline(Icons.star_half, '50 - 50', _fiftyFifty)
                   : new Container(),
             ],
           ),
@@ -904,11 +885,9 @@ class MainGamePageState extends BaseState<MainGamePage> {
           mht_id: CacheData.userInfo.mhtId,
           level: CacheData.userState.currentState.level,
         );
-        AppResponse appResponse =
-            ResponseParser.parseResponse(context: context, res: res);
+        AppResponse appResponse = ResponseParser.parseResponse(context: context, res: res);
         if (appResponse.status == WSConstant.SUCCESS_CODE) {
-          UserScoreState userScoreState =
-              UserScoreState.fromJson(appResponse.data);
+          UserScoreState userScoreState = UserScoreState.fromJson(appResponse.data);
           setState(() {
             userScoreState.updateSessionScore();
             CacheData.userState.currentState.fifty_fifty = false;
@@ -927,8 +906,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
         var rng = new Random();
         while (hiddenOptionIndex.length < 2) {
           int temp = rng.nextInt(3);
-          if (temp != question.answerIndex &&
-              hiddenOptionIndex.indexOf(temp) == -1) {
+          if (temp != question.answerIndex && hiddenOptionIndex.indexOf(temp) == -1) {
             setState(() {
               hiddenOptionIndex.add(temp);
             });

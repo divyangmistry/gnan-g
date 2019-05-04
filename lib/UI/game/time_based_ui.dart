@@ -141,7 +141,7 @@ class TimeBasedUIState extends State<TimeBasedUI> {
       appBar: PreferredSize(
           child: new BackgroundGredient(
             child: _appBar(),
-          ), preferredSize: Size.fromHeight(190.0)),
+          ), preferredSize: Size.fromHeight(165.0)),
       body: new BackgroundGredient(
         child: SafeArea(
           child: widget.gameUI,
