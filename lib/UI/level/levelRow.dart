@@ -1,5 +1,6 @@
 import 'package:GnanG/UI/game/mainGame.dart';
 import 'package:GnanG/UI/puzzle/main.dart';
+import 'package:GnanG/UI/widgets/base_state.dart';
 import 'package:GnanG/common.dart';
 import 'package:GnanG/model/cacheData.dart';
 import 'package:GnanG/model/user_state.dart';
@@ -8,12 +9,17 @@ import 'package:flutter/material.dart';
 import '../../colors.dart';
 import '../../model/quizlevel.dart';
 
-class LevelCardRow extends StatelessWidget {
+class LevelCardRow extends StatefulWidget {
   final QuizLevel levelDetails;
   final bool lock;
 
   LevelCardRow(this.levelDetails, this.lock);
 
+  @override
+  _LevelCardRowState createState() => _LevelCardRowState();
+}
+
+class _LevelCardRowState extends BaseState<LevelCardRow> {
   Widget levelThumbnail() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -46,12 +52,12 @@ class LevelCardRow extends StatelessWidget {
 
   Widget levelCard() {
     return new Card(
-      color: lock ? Colors.grey[200] : kQuizSurfaceWhite,
+      color: widget.lock ? Colors.grey[200] : kQuizSurfaceWhite,
       margin: const EdgeInsets.only(left: 20.0, right: 20.0),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20.0),
       ),
-      elevation: lock ? 0 : 5,
+      elevation: widget.lock ? 0 : 5,
       child: new Container(
         margin: const EdgeInsets.only(top: 18.0, left: 18.0),
 //        constraints: new BoxConstraints.expand(),
@@ -62,7 +68,7 @@ class LevelCardRow extends StatelessWidget {
               children: <Widget>[
                 new Expanded(
                   child: new Text(
-                    levelDetails.name,
+                    widget.levelDetails.name,
                     style: TextStyle(
                       color: kQuizBrown900,
                     ),
@@ -71,8 +77,8 @@ class LevelCardRow extends StatelessWidget {
                 ),
                 Padding(
                   padding: EdgeInsets.fromLTRB(0, 0, 20, 0),
-                  child: lock
-                      ? isCompleted(levelDetails.levelIndex)
+                  child: widget.lock
+                      ? isCompleted(widget.levelDetails.levelIndex)
                           ? CircleAvatar(
                               backgroundColor: Colors.green,
 //                              color: Color.fromARGB(0, 1, 1, 1),
@@ -105,7 +111,7 @@ class LevelCardRow extends StatelessWidget {
                       style: TextStyle(color: kQuizMain50),
                     ),
                     new Text(
-                      levelDetails.levelIndex.toString(),
+                      widget.levelDetails.levelIndex.toString(),
                       textScaleFactor: 1,
                       style: TextStyle(color: kQuizMain400),
                     )
@@ -119,8 +125,8 @@ class LevelCardRow extends StatelessWidget {
                       style: TextStyle(color: kQuizMain50),
                     ),
                     new Text(
-                      levelDetails.totalscores != null
-                          ? levelDetails.totalscores.toString()
+                      widget.levelDetails.totalscores != null
+                          ? widget.levelDetails.totalscores.toString()
                           : "",
                       textScaleFactor: 1,
                       style: TextStyle(color: kQuizMain400),
@@ -139,31 +145,31 @@ class LevelCardRow extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget pageToDisplay() {
     return new Container(
       margin: const EdgeInsets.only(top: 16.0, bottom: 8.0),
       child: GestureDetector(
         onTap: () {
           print('LEVEL DETAILS :: ');
-          print(levelDetails);
-          if (isCompleted(levelDetails.levelIndex)) {
+          print(widget.levelDetails);
+          if (isCompleted(widget.levelDetails.levelIndex)) {
             CommonFunction.alertDialog(
                 context: context,
                 msg: 'Hooray !!  You have already cleared this level',
                 type: "success");
           } else {
             if (CacheData.userState.lives > 0) {
-              if (!lock) {
+              if (!widget.lock) {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => new MainGamePage(
-                          level: levelDetails,
+                          level: widget.levelDetails,
                         ),
                   ),
                 );
               } else {
-                bool isLevelCompleted = isCompleted(levelDetails.levelIndex);
+                bool isLevelCompleted = isCompleted(widget.levelDetails.levelIndex);
                 CommonFunction.alertDialog(
                     context: context,
                     msg: 'This level is locked for you',
@@ -177,8 +183,14 @@ class LevelCardRow extends StatelessWidget {
                         'You don\'t have enough points.\nYou can earn life from 100 Points',
                     barrierDismissible: false,
                     doneButtonText: 'Get Life',
-                    doneButtonFn: () {
-                      CommonFunction.getLife(context);
+                    doneButtonFn: () async {
+                      setState(() {
+                        isOverlay = true;
+                      });
+                      await CommonFunction.getLife(context);
+                      setState(() {
+                        isOverlay = false;
+                      });
                     },
                     showCancelButton: true);
               } else {

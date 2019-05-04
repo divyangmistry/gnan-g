@@ -229,7 +229,7 @@ class ApiService {
     @required int level,
   }) async {
     Map<String, dynamic> data = {"mht_id": mht_id, "level": level};
-    http.Response res = await postApi(url: '/hint_question', data: data);
+    http.Response res = await postApi(url: '/use_fifty_fifty', data: data);
     return res;
   }
 

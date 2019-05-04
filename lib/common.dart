@@ -284,7 +284,7 @@ class CommonFunction {
     );
   }
 
-  static getLife(BuildContext context) async {
+  static Future<bool> getLife(BuildContext context) async {
     try {
       Response res = await _api.requestLife(mhtId: CacheData.userInfo.mhtId);
       AppResponse appResponse = ResponseParser.parseResponse(context: context, res: res);
@@ -293,10 +293,12 @@ class CommonFunction {
         userState.updateSessionScore();
         Navigator.pop(context);
         main();
+        return true;
       }
     } catch (e) {
       CommonFunction.displayErrorDialog(context: context, msg: e.toString());
     }
+    return false;
   }
 
   static displayErrorDialog({@required BuildContext context, String msg}) {
