@@ -19,7 +19,7 @@ class LevelCardRow extends StatefulWidget {
   _LevelCardRowState createState() => _LevelCardRowState();
 }
 
-class _LevelCardRowState extends BaseState<LevelCardRow> {
+class _LevelCardRowState extends State<LevelCardRow> {
   Widget levelThumbnail() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -145,7 +145,7 @@ class _LevelCardRowState extends BaseState<LevelCardRow> {
   }
 
   @override
-  Widget pageToDisplay() {
+  Widget build(BuildContext context) {
     return new Container(
       margin: const EdgeInsets.only(top: 16.0, bottom: 8.0),
       child: GestureDetector(
@@ -184,13 +184,7 @@ class _LevelCardRowState extends BaseState<LevelCardRow> {
                     barrierDismissible: false,
                     doneButtonText: 'Get Life',
                     doneButtonFn: () async {
-                      setState(() {
-                        isOverlay = true;
-                      });
                       await CommonFunction.getLife(context);
-                      setState(() {
-                        isOverlay = false;
-                      });
                     },
                     showCancelButton: true);
               } else {
