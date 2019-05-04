@@ -239,15 +239,14 @@ class MainGamePageState extends BaseState<MainGamePage> {
           if (CacheData.userState.lives == 1) {
             popupCount += 1;
             CommonFunction.alertDialog(
-              context: context,
-              type: 'success',
-              playSound: false,
-              msg: 'You have only 1 Life remaining. Now you can access hint.',
-              barrierDismissible: false,
-              doneButtonFn: () {
-                closeAllPopup();
-              }
-            );
+                context: context,
+                type: 'success',
+                playSound: false,
+                msg: 'You have only 1 Life remaining. Now you can access hint.',
+                barrierDismissible: false,
+                doneButtonFn: () {
+                  closeAllPopup();
+                });
           } else if (CacheData.userState.lives == 0) {
             AppAudioUtils.playMusic(url: "music/game/gameEnd.WAV");
             popupCount += 1;
@@ -482,10 +481,9 @@ class MainGamePageState extends BaseState<MainGamePage> {
                   type: 'info',
                   playSound: false,
                   displayImage: false,
-                doneButtonFn: () {
-                  closeAllPopup();
-                }
-              );
+                  doneButtonFn: () {
+                    closeAllPopup();
+                  });
             },
           )
         : null;
@@ -544,7 +542,6 @@ class MainGamePageState extends BaseState<MainGamePage> {
             closeAllPopup();
             onAnswerGiven(isGivenCorrectAns);
           },
-
         );
       } else {
         isGivenCorrectAns = false;
@@ -615,60 +612,76 @@ class MainGamePageState extends BaseState<MainGamePage> {
   }
 
   void _getHint() async {
+    AudioPlayer audioPlayer =
+        await AppAudioUtils.playMusic(url: 'music/hint.WAV', volume: 2.6);
+    popupCount += 1;
+    CommonFunction.alertDialog(
+      context: context,
+      msg: question.reference,
+      type: 'success',
+      doneButtonText: 'Okay',
+      title: 'Here is your hint ...',
+      playSound: false,
+      doneButtonFn: () {
+        AppAudioUtils.stopMusic(audioPlayer);
+        Navigator.pop(context);
+      },
+      barrierDismissible: false,
+    );
     // CommonFunction.loadUserState(context, CacheData.userInfo.mhtId);
-    try {
-      bool isApiFailed = false;
-      if (!isHintTaken) {
-        setState(() {
-          isOverlay = true;
-        });
-        Response res = await _api.hintTaken(
-            questionId: question.questionId,
-            mhtId: CacheData.userInfo.mhtId,
-            userLevel: question.level);
-        AppResponse appResponse =
-            ResponseParser.parseResponse(context: context, res: res);
-        if (appResponse.status == WSConstant.SUCCESS_CODE) {
-          UserScoreState userScoreState =
-              UserScoreState.fromJson(appResponse.data);
-          setState(() {
-            userScoreState.updateSessionScore();
-          });
-          SharedPreferences pref = await SharedPreferences.getInstance();
-          pref.setString('user_info', res.body);
-          print('FROM HINT :: ');
-          print(res.body);
-          isHintTaken = true;
-        } else {
-          isApiFailed = true;
-        }
-      }
-      if (!isApiFailed) {
-        AudioPlayer audioPlayer =
-            await AppAudioUtils.playMusic(url: 'music/hint.WAV', volume: 2.6);
-        popupCount += 1;
-        CommonFunction.alertDialog(
-          context: context,
-          msg: question.reference,
-          type: 'success',
-          doneButtonText: 'Okay',
-          title: 'Here is your hint ...',
-          playSound: false,
-          doneButtonFn: () {
-            AppAudioUtils.stopMusic(audioPlayer);
-            Navigator.pop(context);
-          },
-          barrierDismissible: false,
-        );
-      }
-    } catch (err) {
-      print('CATCH IN HINT :: ');
-      print(err);
-      CommonFunction.displayErrorDialog(context: context, msg: err.toString());
-    }
-    setState(() {
-      isOverlay = false;
-    });
+//    try {
+//      bool isApiFailed = false;
+//      if (!isHintTaken) {
+//        setState(() {
+//          isOverlay = true;
+//        });
+//        Response res = await _api.hintTaken(
+//            questionId: question.questionId,
+//            mhtId: CacheData.userInfo.mhtId,
+//            userLevel: question.level);
+//        AppResponse appResponse =
+//            ResponseParser.parseResponse(context: context, res: res);
+//        if (appResponse.status == WSConstant.SUCCESS_CODE) {
+//          UserScoreState userScoreState =
+//              UserScoreState.fromJson(appResponse.data);
+//          setState(() {
+//            userScoreState.updateSessionScore();
+//          });
+//          SharedPreferences pref = await SharedPreferences.getInstance();
+//          pref.setString('user_info', res.body);
+//          print('FROM HINT :: ');
+//          print(res.body);
+//          isHintTaken = true;
+//        } else {
+//          isApiFailed = true;
+//        }
+//      }
+//      if (!isApiFailed) {
+//        AudioPlayer audioPlayer =
+//            await AppAudioUtils.playMusic(url: 'music/hint.WAV', volume: 2.6);
+//        popupCount += 1;
+//        CommonFunction.alertDialog(
+//          context: context,
+//          msg: question.reference,
+//          type: 'success',
+//          doneButtonText: 'Okay',
+//          title: 'Here is your hint ...',
+//          playSound: false,
+//          doneButtonFn: () {
+//            AppAudioUtils.stopMusic(audioPlayer);
+//            Navigator.pop(context);
+//          },
+//          barrierDismissible: false,
+//        );
+//      }
+//    } catch (err) {
+//      print('CATCH IN HINT :: ');
+//      print(err);
+//      CommonFunction.displayErrorDialog(context: context, msg: err.toString());
+//    }
+//    setState(() {
+//      isOverlay = false;
+//    });
   }
 
   Widget _bottomDrawer() {
