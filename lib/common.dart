@@ -264,14 +264,13 @@ class CommonFunction {
           ],
         ),
       ),
-      onTap: () async {
+      onTap: () {
         if (CacheData.userState.lives >= 3) {
           CommonFunction.alertDialog(context: context, msg: 'You have enough lives !!', type: 'success');
         } else {
-          int scores_per_level = await AppSharedPrefUtil.getScore_per_lives();
           CommonFunction.alertDialog(
             context: context,
-            msg: 'You can buy life for ' + scores_per_level.toString() +' points.',
+            msg: 'You can buy life for ' + CacheData.score_per_lives.toString() +' points.',
             doneButtonText: 'Yes take it',
             type: 'success',
             title: 'Oh Yeah ..',

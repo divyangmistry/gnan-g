@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:GnanG/common.dart';
 import 'package:GnanG/constans/sharedpref_constant.dart';
+import 'package:GnanG/model/cacheData.dart';
 import 'package:GnanG/model/userinfo.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -38,6 +39,8 @@ class AppSharedPrefUtil {
 
   static void saveScore_per_lives(int score_per_lives) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
+    if(score_per_lives != null)
+      CacheData.score_per_lives = score_per_lives;
     pref.setInt(SharedPrefConstant.i_score_per_lives, score_per_lives);
   }
   static Future<int> getScore_per_lives() async {

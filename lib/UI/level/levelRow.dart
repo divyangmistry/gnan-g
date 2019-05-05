@@ -173,7 +173,7 @@ class _LevelCardRowState extends State<LevelCardRow> {
     return new Container(
       margin: const EdgeInsets.only(top: 16.0, bottom: 8.0),
       child: GestureDetector(
-        onTap: () async {
+        onTap: () {
           print('LEVEL DETAILS :: ');
           print(widget.levelDetails);
           if (isCompleted(widget.levelDetails.levelIndex)) {
@@ -201,11 +201,10 @@ class _LevelCardRowState extends State<LevelCardRow> {
               }
             } else {
               if (CacheData.userState.totalscore > 100) {
-                int scores_per_level = await AppSharedPrefUtil.getScore_per_lives();
                 CommonFunction.alertDialog(
                     context: context,
                     msg:
-                        'You don\'t have enough points.\nYou can earn life from ' + scores_per_level.toString() +' Points',
+                        'You don\'t have enough points.\nYou can earn life from ' + CacheData.score_per_lives.toString() +' Points',
                     barrierDismissible: false,
                     doneButtonText: 'Get Life',
                     doneButtonFn: () async {

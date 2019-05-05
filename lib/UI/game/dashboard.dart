@@ -51,7 +51,6 @@ class DashboardPageState extends State<DashboardPage> {
 
   @override
   Widget build(BuildContext context) {
-    try {
       // TODO: implement build
       return new Scaffold(
         body: BackgroundGredient(
@@ -66,9 +65,6 @@ class DashboardPageState extends State<DashboardPage> {
 //       ),
         floatingActionButton: FabAnimatedButton(),
       );
-    } catch(error) {
-      CommonFunction.displayErrorDialog(context: context);
-    }
   }
 
   _bodyView() {
