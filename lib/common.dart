@@ -423,7 +423,7 @@ class CommonFunction {
                         width: 150,
                         child: FlareActor(
                           'assets/animation/Teddy.flr',
-                          animation: type == 'success' ? "success" : 'fail',
+                          animation: type == 'success' ? "success" : type == "error" ? 'fail' : "idle", // If not success or error, then it is info
                         ),
                       )
                     : new Container(),
