@@ -51,20 +51,24 @@ class DashboardPageState extends State<DashboardPage> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    return new Scaffold(
-      body: BackgroundGredient(
-        child: _bodyView(),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+    try {
+      // TODO: implement build
+      return new Scaffold(
+        body: BackgroundGredient(
+          child: _bodyView(),
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
 //      floatingActionButton: FabAnimatedButton(),
 //       floatingActionButton: FloatingActionButton(
 //         backgroundColor: kQuizMain300,
 //         child: _buildMuteIcon(),
 //         onPressed: toggleMuteSound,
 //       ),
-      floatingActionButton: FabAnimatedButton(),
-    );
+        floatingActionButton: FabAnimatedButton(),
+      );
+    } catch(error) {
+      CommonFunction.displayErrorDialog(context: context);
+    }
   }
 
   _bodyView() {

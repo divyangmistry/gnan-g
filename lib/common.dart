@@ -264,13 +264,14 @@ class CommonFunction {
           ],
         ),
       ),
-      onTap: () {
+      onTap: () async {
         if (CacheData.userState.lives >= 3) {
           CommonFunction.alertDialog(context: context, msg: 'You have enough lives !!', type: 'success');
         } else {
+          int scores_per_level = await AppSharedPrefUtil.getScore_per_lives();
           CommonFunction.alertDialog(
             context: context,
-            msg: 'You can buy life for 20 points.',
+            msg: 'You can buy life for ' + scores_per_level.toString() +' points.',
             doneButtonText: 'Yes take it',
             type: 'success',
             title: 'Oh Yeah ..',
@@ -304,7 +305,7 @@ class CommonFunction {
   }
 
   static displayErrorDialog({@required BuildContext context, String msg}) {
-    if (msg == null) msg = MessageConstant.COMMON_ERROR_MSG;
+    if (msg == null || msg.toUpperCase().contains("SOCKET")) msg = MessageConstant.COMMON_ERROR_MSG;
     alertDialog(
       context: context,
       msg: msg,
@@ -324,6 +325,7 @@ class CommonFunction {
         pref.setString('userState', res.body);
         UserState userState = UserState.fromJson(appResponse.data['results']);
         CacheData.userState = userState;
+        main();
         return true;
       }
     } catch (err) {
@@ -351,6 +353,12 @@ class CommonFunction {
     return true;
   }
 
+  static Future<bool> startLoggedUserSession({@required BuildContext context}) async {
+    UserInfo userInfo = await AppSharedPrefUtil.getUserInfo();
+    CacheData.userInfo = userInfo;
+    await loadUserState(context, CacheData.userInfo.mhtId);
+    return true;
+  }
   static Future<Image> getUserProfileImg({BuildContext context}) async {
     Image userProfile;
     userProfile = await AppSharedPrefUtil.getProfileImage();

@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 class CacheData {
   static UserState userState;
   static UserInfo userInfo;
-
+  static int score_per_lives = 20;
   static Image _userDefaultImg;
   static Map<int, Image> _userProfileImages = Map();
 
@@ -31,5 +31,9 @@ class CacheData {
       _userProfileImages[mhtId] = userProfileImg;
     }
     return _userProfileImages[mhtId];
+  }
+
+  static void resetUserProfileImages() {
+    _userProfileImages = new Map();
   }
 }

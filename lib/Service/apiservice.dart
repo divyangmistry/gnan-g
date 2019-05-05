@@ -269,6 +269,7 @@ class ApiService {
   Future<void> logout() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.clear();
+    CacheData.resetUserProfileImages();
     AppAudioUtils.stopBackgroundMusic();
   }
 

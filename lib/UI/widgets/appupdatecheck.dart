@@ -21,7 +21,7 @@ class AppUpdateCheck {
   ApiService _api = ApiService();
 
   void checkForNewAppUpdate(BuildContext context) async {
-    bool check = true;
+    /*bool check = true;
     int checkAfter = await AppSharedPrefUtil.getAppUpdateCheckAfter();
     if (checkAfter > 0) {
       DateTime now = DateTime.now();
@@ -30,11 +30,11 @@ class AppUpdateCheck {
         check = false;
       }
     }
-    if (check) {
+    if (check) {*/
       Response res = await _api.getAppSetting();
-      AppResponse appResponse =
-          ResponseParser.parseResponse(res: res, context: context);
+      AppResponse appResponse = ResponseParser.parseResponse(res: res, context: context);
       if (appResponse.status == WSConstant.SUCCESS_CODE) {
+
         AppSetting appSetting = AppSetting.fromJson(appResponse.data);
         if (appSetting.version != null) {
           String version = await AppSettingUtil.getAppVersion();
@@ -44,8 +44,10 @@ class AppUpdateCheck {
             showUpdateDialog(context: context);
           }
         }
+        if(appSetting.score_per_lives != null)
+          AppSharedPrefUtil.saveScore_per_lives(appSetting.score_per_lives);
       }
-    }
+    //}
   }
 
   void showUpdateDialog({

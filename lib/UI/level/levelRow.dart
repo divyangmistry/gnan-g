@@ -95,6 +95,28 @@ class _LevelCardRowState extends State<LevelCardRow> {
               ],
             ),
             new SizedBox(height: 10),
+            (widget.levelDetails.description != null && widget.levelDetails.description.isNotEmpty) ?
+            new Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Row(
+                  children: <Widget>[
+                    new Text(
+                      'Info: ',
+                      textScaleFactor: 1,
+                      style: TextStyle(color: kQuizMain50),
+                    ),
+                    new Text(
+                      //widget.levelDetails.description,
+                      "dafdsfdsfdsf dfasdfdsfdf fgfdgd erwetrsfsdfsdf",
+                      overflow: TextOverflow.clip,
+                      textScaleFactor: 1,
+                      style: TextStyle(color: kQuizMain400),
+                    )
+                  ],
+                )
+              ],
+            ): new Container(),
             new SizedBox(
               height: 2,
             ),
@@ -136,26 +158,7 @@ class _LevelCardRowState extends State<LevelCardRow> {
                 ),
               ],
             ),
-            (widget.levelDetails.description != null && widget.levelDetails.description.isNotEmpty) ? new Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                Row(
-                  children: <Widget>[
-                    new Text(
-                      'Description : ',
-                      textScaleFactor: 1,
-                      style: TextStyle(color: kQuizMain50),
-                    ),
-                    new Text(
-                      widget.levelDetails.description,
-                      overflow: TextOverflow.fade,
-                      textScaleFactor: 1,
-                      style: TextStyle(color: kQuizMain400),
-                    )
-                  ],
-                )
-              ],
-            ): new Container(),
+
             new SizedBox(
               height: 6,
             ),
@@ -170,7 +173,7 @@ class _LevelCardRowState extends State<LevelCardRow> {
     return new Container(
       margin: const EdgeInsets.only(top: 16.0, bottom: 8.0),
       child: GestureDetector(
-        onTap: () {
+        onTap: () async {
           print('LEVEL DETAILS :: ');
           print(widget.levelDetails);
           if (isCompleted(widget.levelDetails.levelIndex)) {
@@ -198,10 +201,11 @@ class _LevelCardRowState extends State<LevelCardRow> {
               }
             } else {
               if (CacheData.userState.totalscore > 100) {
+                int scores_per_level = await AppSharedPrefUtil.getScore_per_lives();
                 CommonFunction.alertDialog(
                     context: context,
                     msg:
-                        'You don\'t have enough points.\nYou can earn life from 20 Points',
+                        'You don\'t have enough points.\nYou can earn life from ' + scores_per_level.toString() +' Points',
                     barrierDismissible: false,
                     doneButtonText: 'Get Life',
                     doneButtonFn: () async {

@@ -32,7 +32,6 @@ class ResponseParser {
     if(appResponse.status == 227) {
       _api.logout();
       Navigator.pushNamedAndRemoveUntil(context, '/login_new', (_) => false);
-      //Navigator.popUntil(context, ModalRoute.withName('/login_new'));
     }
     return appResponse;
   }

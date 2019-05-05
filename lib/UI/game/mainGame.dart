@@ -8,6 +8,7 @@ import 'package:GnanG/UI/game/title_bar.dart';
 import 'package:GnanG/UI/widgets/base_state.dart';
 import 'package:GnanG/constans/appconstant.dart';
 import 'package:GnanG/constans/wsconstants.dart';
+import 'package:GnanG/main.dart';
 import 'package:GnanG/model/appresponse.dart';
 import 'package:GnanG/model/cacheData.dart';
 import 'package:GnanG/model/current_stat.dart';
@@ -97,6 +98,8 @@ class MainGamePageState extends BaseState<MainGamePage> {
     super.dispose();
     if (levelStartPlayer != null) levelStartPlayer.stop();
     if (_timer != null) _timer.cancel();
+    CommonFunction.loadUserState(context, CacheData.userInfo.mhtId);
+    main();
   }
 
   _loadAllQuestions() async {
