@@ -29,7 +29,7 @@ class SplashScreenState extends State<StatefulWidget> {
         connectivityResult == ConnectivityResult.mobile) {
       print(' ------> inside internet <------');
       if (await AppSharedPrefUtil.isUserLoggedIn()) {
-        CommonFunction.startLoggedUserSession(context: context);
+        await CommonFunction.startLoggedUserSession(context: context);
         Navigator.pushReplacementNamed(context, '/dashboardPage');
       } else {
         //Navigator.pushReplacementNamed(context, '/introPage');
