@@ -304,7 +304,9 @@ class CommonFunction {
   }
 
   static displayErrorDialog({@required BuildContext context, String msg}) {
-    if (msg == null || msg.toUpperCase().contains("SOCKET")) msg = MessageConstant.COMMON_ERROR_MSG;
+    if(msg != null && msg.toUpperCase().contains("SOCKET"))
+      msg = "Looks like you lost your Internet !!";
+    if (msg == null) msg = MessageConstant.COMMON_ERROR_MSG;
     alertDialog(
       context: context,
       msg: msg,
