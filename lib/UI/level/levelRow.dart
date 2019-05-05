@@ -77,6 +77,10 @@ class _LevelCardRowState extends State<LevelCardRow> {
                   ),
                 ),
                 Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: Icon(Icons.access_time, size: widget.levelDetails.levelType == 'TIME_BASED' ? 25 : 0,),
+                ),
+                Padding(
                   padding: EdgeInsets.fromLTRB(0, 0, 20, 0),
                   child: widget.lock
                       ? isCompleted(widget.levelDetails.levelIndex)
@@ -96,32 +100,36 @@ class _LevelCardRowState extends State<LevelCardRow> {
             ),
             new SizedBox(height: 10),
             (widget.levelDetails.description != null && widget.levelDetails.description.isNotEmpty) ?
-            new Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Row(
-                  children: <Widget>[
-                    new Text(
-                      'Info: ',
-                      textScaleFactor: 1,
-                      style: TextStyle(color: kQuizMain50),
-                    ),
-                    new Text(
-                      //widget.levelDetails.description,
-                      "dafdsfdsfdsf dfasdfdsfdf fgfdgd erwetrsfsdfsdf",
-                      overflow: TextOverflow.clip,
-                      textScaleFactor: 1,
-                      style: TextStyle(color: kQuizMain400),
-                    )
-                  ],
-                )
-              ],
+            new Container(
+              child: new Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      new Text(
+                        'Info:     ',
+                        textScaleFactor: 1,
+                        style: TextStyle(color: kQuizMain50),
+                      ),
+                      new Container(
+                        width: MediaQuery.of(context).size.width - 120,
+                        child: new Text(
+                          widget.levelDetails.description,
+                          overflow: TextOverflow.clip,
+                          textScaleFactor: 1,
+                          style: TextStyle(color: kQuizMain400),
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
             ): new Container(),
             new SizedBox(
               height: 2,
             ),
             new SizedBox(
-              height: 4,
+              height: 10,
             ),
             new Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
