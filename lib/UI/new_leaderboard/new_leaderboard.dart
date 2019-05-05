@@ -98,6 +98,7 @@ class _NewLeaderBoardState extends State<NewLeaderBoard> {
         _userImage = await CommonFunction.getUserProfileImg(context: context);
         setState(() {
           leaderList = leaders.leaders;
+          _updateMyMonthScoreFromList();
           leaderList.insert(0, pujyashree);
           _userRank = leaders.userRank + 1;
         });
@@ -107,6 +108,16 @@ class _NewLeaderBoardState extends State<NewLeaderBoard> {
     }
   }
 
+  _updateMyMonthScoreFromList() {
+      if(leaderList != null) {
+          leaderList.forEach((leader)  {
+              if(leader != null && leader.mhtId == CacheData.userInfo.mhtId) {
+                  if(leader.totalscoreMonth != null)
+                    CacheData.userState.totalscore_month = leader.totalscoreMonth;
+              }
+          });
+      }
+  }
   _getLeaderListByMonth() async {
     try {
       Response res = await _api.getApi(url: '/leaders_month');

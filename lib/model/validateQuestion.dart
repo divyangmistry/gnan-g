@@ -4,6 +4,7 @@ class ValidateQuestion {
   bool answerStatus;
   int lives;
   int totalscore;
+  int totalscore_month;
   int questionSt;
   int questionReadSt;
 
@@ -13,6 +14,7 @@ class ValidateQuestion {
     answerStatus = json['answer_status'];
     lives = json['lives'];
     totalscore = json['totalscore'];
+    totalscore_month = json['totalscore_month'];
     questionSt = json['question_st'];
     questionReadSt = json['question_read_st'];
   }
@@ -22,6 +24,7 @@ class ValidateQuestion {
     data['answer_status'] = this.answerStatus;
     data['lives'] = this.lives;
     data['totalscore'] = this.totalscore;
+    data['totalscore_month'] = this.totalscore_month;
     data['question_st'] = this.questionSt;
     data['question_read_st'] = this.questionReadSt;
     return data;
@@ -30,6 +33,7 @@ class ValidateQuestion {
   updateSessionScore() {
     if (lives != null) CacheData.userState.lives = lives;
     if (totalscore != null) CacheData.userState.totalscore = totalscore;
+    if (totalscore_month != null) CacheData.userState.totalscore_month = totalscore_month;
     if (questionSt != null)
       CacheData.userState.currentState.questionSt = questionSt;
     if (questionReadSt != null)

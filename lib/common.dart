@@ -270,7 +270,7 @@ class CommonFunction {
         } else {
           CommonFunction.alertDialog(
             context: context,
-            msg: 'You can buy life for 100 points.',
+            msg: 'You can buy life for 20 points.',
             doneButtonText: 'Yes take it',
             type: 'success',
             title: 'Oh Yeah ..',

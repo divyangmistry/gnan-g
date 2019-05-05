@@ -18,7 +18,6 @@ class AppSharedPrefUtil {
   }
 
   AppSharedPrefUtil._internal();*/
-
   static Future<bool> isMuteEnabled() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     return pref.getBool(SharedPrefConstant.b_muteSound) == null
@@ -35,6 +34,17 @@ class AppSharedPrefUtil {
     return pref.getBool(SharedPrefConstant.b_isUserLoggedIn) == null
         ? false
         : pref.getBool(SharedPrefConstant.b_isUserLoggedIn);
+  }
+
+  static void saveScore_per_lives(int score_per_lives) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.setInt(SharedPrefConstant.i_score_per_lives, score_per_lives);
+  }
+  static Future<int> getScore_per_lives() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    return pref.getBool(SharedPrefConstant.i_score_per_lives) == null
+        ? 20
+        : pref.getBool(SharedPrefConstant.i_score_per_lives);
   }
 
   static Future<UserInfo> getUserInfo() async {

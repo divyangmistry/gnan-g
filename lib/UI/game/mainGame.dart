@@ -429,7 +429,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
     return question != null
         ? new Scaffold(
             body: new BackgroundGredient(
-              child: widget.level.levelType != 'TIME_BASED'
+              child: widget.isBonusLevel || widget.level.levelType != 'TIME_BASED'
                   ? SafeArea(
                       child: new Container(
                         padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
@@ -575,7 +575,8 @@ class MainGamePageState extends BaseState<MainGamePage> {
         CommonFunction.alertDialog(
           context: context,
           msg: 'Your answer is wrong !!',
-          type: isTimeBasedLevel ? 'info' : 'error',
+          //type: isTimeBasedLevel ? 'info' : 'error',
+          type: 'error',
           doneButtonText: isTimeBasedLevel ? 'Next Que.' : 'Okay',
           showCancelButton: isTimeBasedLevel,
           barrierDismissible: false,
