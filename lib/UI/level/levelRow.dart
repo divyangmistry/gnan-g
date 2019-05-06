@@ -192,14 +192,33 @@ class _LevelCardRowState extends State<LevelCardRow> {
           } else {
             if (CacheData.userState.lives > 0) {
               if (!widget.lock) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => new MainGamePage(
-                          level: widget.levelDetails,
-                        ),
-                  ),
-                );
+                if(widget.levelDetails.levelType == 'TIME_BASED') {
+                  CommonFunction.alertDialog(
+                      context: context,
+                      msg: 'This is a time base level. Do you wish to continue?',
+                      type: "info",
+                      showCancelButton: true,
+                      doneButtonFn: () {
+                        Navigator.pop(context);
+                        Navigator.push(context, MaterialPageRoute(
+                            builder: (context) =>
+                            new MainGamePage(
+                                level: widget.levelDetails
+                            )
+                          )
+                        );
+                      }
+                  );
+                } else {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => new MainGamePage(
+                        level: widget.levelDetails,
+                      ),
+                    ),
+                  );
+                }
               } else {
                 bool isLevelCompleted = isCompleted(widget.levelDetails.levelIndex);
                 CommonFunction.alertDialog(
