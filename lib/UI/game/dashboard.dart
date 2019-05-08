@@ -35,7 +35,15 @@ class DashboardPageState extends State<DashboardPage> {
     // TODO: implement initState
     super.initState();
     checkBonusLevel();
+    loadUserState();
     AppUpdateCheck.startAppUpdateCheckThread(context);
+  }
+
+  loadUserState() async {
+    if(CacheData.userState == null) {
+        if(CacheData.userInfo != null)
+          CommonFunction.loadUserState(context, CacheData.userInfo.mhtId);
+    }
   }
 
   checkBonusLevel() async {
