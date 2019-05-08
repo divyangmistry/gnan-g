@@ -97,9 +97,18 @@ class ProfilePagePageState extends BaseState<ProfilePagePage> {
         _iconButton(
           Icon(Icons.power_settings_new, color: Colors.white),
               () {
-            _api.logout();
-            Navigator.pop(context);
-            Navigator.pushReplacementNamed(context, '/login_new');
+                CommonFunction.alertDialog(
+                  context: context,
+                  msg: 'Are you sure you want to log out?',
+                  type: 'info',
+                  barrierDismissible: false,
+                  showCancelButton: true,
+                  doneButtonFn: () {
+                    _api.logout();
+                    Navigator.pop(context);
+                    Navigator.pushReplacementNamed(context, '/login_new');
+                  },
+                );
           },
         ),
       ],
