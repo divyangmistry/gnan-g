@@ -342,7 +342,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
     CommonFunction.alertDialog(
       context: context,
       msg: msg,
-      type: 'info',
+      type: 'error',
       showCancelButton: true,
       barrierDismissible: false,
       cancelButtonText: 'Exit',
@@ -397,6 +397,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
 
   @override
   Widget pageToDisplay() {
+
     Widget _timeIndicator = new AnimatedCircularChart(
       key: _chartKey,
       size: const Size(100.0, 100.0),
@@ -510,7 +511,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
               //AppUtils.showInSnackBar(context, "You can get " + question.score.toString() + " score by giving correct answer on this question.");
               CommonFunction.alertDialog(
                   context: context,
-                  msg: "You can get " + question.score.toString() + " score by giving correct answer on this question.",
+                  msg: "You can get " + question.score.toString() + " points by giving correct answer of this question.",
                   barrierDismissible: false,
                   type: 'info',
                   playSound: false,
@@ -895,8 +896,6 @@ class MainGamePageState extends BaseState<MainGamePage> {
             userScoreState.updateSessionScore();
             CacheData.userState.currentState.fifty_fifty = false;
           });
-          SharedPreferences pref = await SharedPreferences.getInstance();
-          pref.setString('user_info', res.body);
           print('FROM HINT :: ');
           print(res.body);
           isHintTaken = true;
