@@ -514,8 +514,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
                   barrierDismissible: false,
                   type: 'info',
                   playSound: false,
-                  displayImage: false,
-                  doneButtonFn: () {});
+                  displayImage: false);
             },
           )
         : null;
