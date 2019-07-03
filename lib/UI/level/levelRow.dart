@@ -1,5 +1,4 @@
 import 'package:GnanG/UI/game/mainGame.dart';
-import 'package:GnanG/UI/puzzle/main.dart';
 import 'package:GnanG/UI/widgets/base_state.dart';
 import 'package:GnanG/common.dart';
 import 'package:GnanG/model/cacheData.dart';
@@ -78,7 +77,11 @@ class _LevelCardRowState extends State<LevelCardRow> {
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 10),
-                  child: Icon(Icons.access_time, size: widget.levelDetails.levelType == 'TIME_BASED' ? 25 : 0,),
+                  child: Icon(
+                    Icons.access_time,
+                    size:
+                        widget.levelDetails.levelType == 'TIME_BASED' ? 25 : 0,
+                  ),
                 ),
                 Padding(
                   padding: EdgeInsets.fromLTRB(0, 0, 20, 0),
@@ -99,32 +102,34 @@ class _LevelCardRowState extends State<LevelCardRow> {
               ],
             ),
             new SizedBox(height: 10),
-            (widget.levelDetails.description != null && widget.levelDetails.description.isNotEmpty) ?
-            new Container(
-              child: new Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  Row(
-                    children: <Widget>[
-                      new Text(
-                        'Info:     ',
-                        textScaleFactor: 1,
-                        style: TextStyle(color: kQuizMain50),
-                      ),
-                      new Container(
-                        width: MediaQuery.of(context).size.width - 120,
-                        child: new Text(
-                          widget.levelDetails.description,
-                          overflow: TextOverflow.clip,
-                          textScaleFactor: 1,
-                          style: TextStyle(color: kQuizMain400),
-                        ),
-                      ),
-                    ],
+            (widget.levelDetails.description != null &&
+                    widget.levelDetails.description.isNotEmpty)
+                ? new Container(
+                    child: new Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        Row(
+                          children: <Widget>[
+                            new Text(
+                              'Info:     ',
+                              textScaleFactor: 1,
+                              style: TextStyle(color: kQuizMain50),
+                            ),
+                            new Container(
+                              width: MediaQuery.of(context).size.width - 120,
+                              child: new Text(
+                                widget.levelDetails.description,
+                                overflow: TextOverflow.clip,
+                                textScaleFactor: 1,
+                                style: TextStyle(color: kQuizMain400),
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
                   )
-                ],
-              ),
-            ): new Container(),
+                : new Container(),
             new SizedBox(
               height: 2,
             ),
@@ -166,7 +171,6 @@ class _LevelCardRowState extends State<LevelCardRow> {
                 ),
               ],
             ),
-
             new SizedBox(
               height: 6,
             ),
@@ -190,74 +194,38 @@ class _LevelCardRowState extends State<LevelCardRow> {
                 msg: 'Hooray !!  You have already cleared this level',
                 type: "success");
           } else {
-            if (CacheData.userState.lives > 0) {
-              if (!widget.lock) {
-                if(widget.levelDetails.levelType == 'TIME_BASED') {
-                  CommonFunction.alertDialog(
-                      context: context,
-                      msg: 'This is a time base level. Do you wish to continue?',
-                      type: "info",
-                      showCancelButton: true,
-                      doneButtonFn: () {
-                        Navigator.pop(context);
-                        Navigator.push(context, MaterialPageRoute(
-                            builder: (context) =>
-                            new MainGamePage(
-                                level: widget.levelDetails
-                            )
-                          )
-                        );
-                      }
-                  );
-                } else {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => new MainGamePage(
-                        level: widget.levelDetails,
-                      ),
-                    ),
-                  );
-                }
-              } else {
-                bool isLevelCompleted = isCompleted(widget.levelDetails.levelIndex);
+            if (!widget.lock) {
+              if (widget.levelDetails.levelType == 'TIME_BASED') {
                 CommonFunction.alertDialog(
                     context: context,
-                    msg: 'This level is locked for you',
-                    type: isLevelCompleted ? "success" : 'error');
-              }
-            } else {
-              if (CacheData.userState.totalscore > 100) {
-                CommonFunction.alertDialog(
-                    context: context,
-                    msg:
-                        'You don\'t have enough points.\nYou can earn life from ' + CacheData.score_per_lives.toString() +' Points',
-                    barrierDismissible: false,
-                    doneButtonText: 'Get Life',
-                    doneButtonFn: () async {
-                      await CommonFunction.getLife(context);
-                    },
-                    showCancelButton: true);
+                    msg: 'This is a time base level. Do you wish to continue?',
+                    type: "info",
+                    showCancelButton: true,
+                    doneButtonFn: () {
+                      Navigator.pop(context);
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => new MainGamePage(
+                                  level: widget.levelDetails)));
+                    });
               } else {
-                CommonFunction.alertDialog(
-                  context: context,
-                  msg:
-                      'You don\'t have enough lives.\nYou can earn points and get life from puzzeles',
-                  barrierDismissible: false,
-                  doneButtonText: 'Play puzzle',
-                  showCancelButton: true,
-                  type: 'info',
-                  doneButtonFn: () {
-                    Navigator.pop(context);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => new GameOfFifteen(),
-                      ),
-                    );
-                  },
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => new MainGamePage(
+                          level: widget.levelDetails,
+                        ),
+                  ),
                 );
               }
+            } else {
+              bool isLevelCompleted =
+                  isCompleted(widget.levelDetails.levelIndex);
+              CommonFunction.alertDialog(
+                  context: context,
+                  msg: 'This level is locked for you',
+                  type: isLevelCompleted ? "success" : 'error');
             }
           }
         },

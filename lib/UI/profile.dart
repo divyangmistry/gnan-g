@@ -195,8 +195,6 @@ class ProfilePagePageState extends BaseState<ProfilePagePage> {
             new Row(
               children: <Widget>[
                 _scoreData('Points', CacheData.userState.totalscore.toString()),
-                CustomVerticalDivider(height: 60),
-                _scoreData('Lives', CacheData.userState.lives.toString()),
               ],
             ),
           ],

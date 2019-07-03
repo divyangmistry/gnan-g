@@ -16,7 +16,6 @@ class SimpleGame extends StatefulWidget {
 }
 
 class SimpleGameState extends State<SimpleGame> {
-  int userLives = 3;
   int correctAnsCounter = 0;
   int wrongAnsCounter = 0;
   int totalAnswers = 1;
@@ -31,10 +30,6 @@ class SimpleGameState extends State<SimpleGame> {
   CurrentState currentState;
   bool isCompletedLevel = false;
   SimpleGameState(int level) {
-    if (CacheData.userState.lives != null)
-      userLives = CacheData.userState.lives;
-    print('USER LIVES :::::::::');
-    print(userLives);
     _loadAllQuestions(level);
   }
 
@@ -75,71 +70,12 @@ class SimpleGameState extends State<SimpleGame> {
       } else {
         isGivenCorrectAns = false;
         wrongAnsCounter = wrongAnsCounter + 1;
-        if (userLives > 1) {
-          userLives = userLives - 1;
-        } else
-          return _gameOverDialogBox();
       }
       totalAnswers = totalAnswers + 1;
 
       if (currentQueIndex == questions.length - 1) isCompletedLevel = true;
       _dialogBox(isGivenCorrectAns, isCompletedLevel);
     });
-  }
-
-  void _gameOverDialogBox() {
-    showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) {
-          return AlertDialog(
-            shape: new RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(7.0),
-            ),
-            title: new Text(
-              'Game Over',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  color: Colors.blueGrey,
-                  fontSize: 30.0,
-                  fontWeight: FontWeight.w800),
-            ),
-            content: new Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                new Text('You are done ... GO HOME !',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: Colors.blueGrey,
-                        fontSize: 18.0,
-                        fontStyle: FontStyle.italic,
-                        fontWeight: FontWeight.w300)),
-                SizedBox(height: 20.0),
-                new FlatButton.icon(
-                    icon: isGivenCorrectAns
-                        ? Icon(
-                            Icons.done,
-                            color: Colors.green,
-                          )
-                        : Icon(Icons.close, color: Colors.red),
-                    label: new Text('OK!',
-                        style: TextStyle(
-                            color:
-                                isGivenCorrectAns ? Colors.green : Colors.red)),
-                    shape: new RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5.0),
-                        side: BorderSide(color: Colors.grey)),
-                    onPressed: () {
-                      Navigator.pop(context);
-                      Navigator.pushReplacementNamed(context, '/level');
-                      setState(() {
-                        isGivenCorrectAns = false;
-                      });
-                    }),
-              ],
-            ),
-          );
-        });
   }
 
   _dialogBox(bool isSelectedAnsCorrect, bool isCompletedLevel) {
@@ -173,7 +109,6 @@ class SimpleGameState extends State<SimpleGame> {
       body: _bodyView(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: _floatingActionButton(),
-      bottomNavigationBar: _bottomBar(),
     );
   }
 
@@ -184,41 +119,6 @@ class SimpleGameState extends State<SimpleGame> {
       child: new Icon(Icons.chevron_right),
     );
   }
-
-  _bottomBar() {
-    return BottomAppBar(
-      shape: CircularNotchedRectangle(),
-      notchMargin: 10.0,
-      child: new Container(
-        height: 50.0,
-        child: new Row(
-          // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            new Container(
-              width: MediaQuery.of(context).size.width / 2,
-              alignment: Alignment.center,
-              child: new Text(
-                "Correct Answer's : $correctAnsCounter",
-                style: TextStyle(color: Colors.green, fontSize: 15.0),
-              ),
-            ),
-            new Container(
-              width: MediaQuery.of(context).size.width / 2,
-              child: new ListView.builder(
-                padding: EdgeInsets.only(left: 60.0),
-                scrollDirection: Axis.horizontal,
-                itemCount: userLives,
-                itemBuilder: (context, index) {
-                  return new Icon(Icons.healing);
-                },
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-
   _appBarView() {
     return new AppBar(
       title: new Text('Score here!'),

@@ -36,7 +36,8 @@ class AccentColorOverride extends StatelessWidget {
   Widget build(BuildContext context) {
     return Theme(
       child: child,
-      data: Theme.of(context).copyWith(accentColor: color, brightness: Brightness.dark),
+      data: Theme.of(context)
+          .copyWith(accentColor: color, brightness: Brightness.dark),
     );
   }
 }
@@ -118,7 +119,8 @@ class CustomLoading extends StatelessWidget {
   final Widget child;
   final bool isOverlay;
 
-  CustomLoading({@required this.isLoading, @required this.child, this.isOverlay = false});
+  CustomLoading(
+      {@required this.isLoading, @required this.child, this.isOverlay = false});
 
   @override
   Widget build(BuildContext context) {
@@ -237,59 +239,40 @@ class CommonFunction {
   }
 
   // points ui
-  static Widget pointsUI({@required BuildContext context, String point = '100'}) {
-    return GestureDetector(
-      child: new Container(
-        height: 35,
-        padding: EdgeInsets.only(right: 10, left: 10),
-        decoration: BoxDecoration(
-          color: Colors.black12,
-          borderRadius: BorderRadius.circular(25),
-        ),
-        child: new Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            SizedBox(width: 1),
-            Text(
-              point,
-              style: TextStyle(
-                color: kQuizMain400,
-              ),
-              textScaleFactor: 1.5,
-            ),
-            SizedBox(width: 15),
-            Image.asset('images/coin.png', height: 20),
-          ],
-        ),
+  static Widget pointsUI(
+      {@required BuildContext context, String point = '100'}) {
+    return new Container(
+      height: 35,
+      padding: EdgeInsets.only(right: 10, left: 10),
+      decoration: BoxDecoration(
+        color: Colors.black12,
+        borderRadius: BorderRadius.circular(25),
       ),
-      onTap: () {
-        if (CacheData.userState.lives >= 3) {
-          CommonFunction.alertDialog(context: context, msg: 'You have enough lives !!', type: 'success');
-        } else {
-          CommonFunction.alertDialog(
-            context: context,
-            msg: 'You can buy life for ' + CacheData.score_per_lives.toString() +' points.',
-            doneButtonText: 'Yes take it',
-            type: 'success',
-            title: 'Oh Yeah ..',
-            playSound: false,
-            barrierDismissible: false,
-            showCancelButton: true,
-            doneButtonFn: () {
-              getLife(context);
-            },
-          );
-        }
-      },
+      child: new Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          SizedBox(width: 1),
+          Text(
+            point,
+            style: TextStyle(
+              color: kQuizMain400,
+            ),
+            textScaleFactor: 1.5,
+          ),
+          SizedBox(width: 15),
+          Image.asset('images/coin.png', height: 20),
+        ],
+      ),
     );
   }
 
   static Future<bool> getLife(BuildContext context) async {
     try {
       Response res = await _api.requestLife(mhtId: CacheData.userInfo.mhtId);
-      AppResponse appResponse = ResponseParser.parseResponse(context: context, res: res);
+      AppResponse appResponse =
+          ResponseParser.parseResponse(context: context, res: res);
       if (appResponse.status == WSConstant.SUCCESS_CODE) {
         UserScoreState userState = UserScoreState.fromJson(appResponse.data);
         userState.updateSessionScore();
@@ -304,7 +287,7 @@ class CommonFunction {
   }
 
   static displayErrorDialog({@required BuildContext context, String msg}) {
-    if(msg != null && msg.toUpperCase().contains("SOCKET"))
+    if (msg != null && msg.toUpperCase().contains("SOCKET"))
       msg = "Looks like you lost your Internet !!";
     if (msg == null) msg = MessageConstant.COMMON_ERROR_MSG;
     alertDialog(
@@ -316,7 +299,8 @@ class CommonFunction {
 
   static Future<bool> loadUserState(BuildContext context, int mhtId) async {
     Response res = await _api.getUserState(mhtId: mhtId);
-    AppResponse appResponse = ResponseParser.parseResponse(context: context, res: res);
+    AppResponse appResponse =
+        ResponseParser.parseResponse(context: context, res: res);
     try {
       if (appResponse.status == WSConstant.SUCCESS_CODE) {
         print('IN LOGIN ::: userstateStr :::');
@@ -339,7 +323,10 @@ class CommonFunction {
     }
   }
 
-  static Future<bool> startUserSession({@required UserInfo userInfo, @required String strUserInfo, BuildContext context}) async {
+  static Future<bool> startUserSession(
+      {@required UserInfo userInfo,
+      @required String strUserInfo,
+      BuildContext context}) async {
     CacheData.userInfo = userInfo;
     SharedPreferences pref = await SharedPreferences.getInstance();
     pref.setString('user_info', strUserInfo);
@@ -347,44 +334,53 @@ class CommonFunction {
     pref.setBool(SharedPrefConstant.b_isUserLoggedIn, true);
     print(userInfo);
     _api.appendTokenToHeader(userInfo.token);
-    await NotificationSetup.setupNotification(userInfo: userInfo, context: context);
+    await NotificationSetup.setupNotification(
+        userInfo: userInfo, context: context);
     await CommonFunction.loadUserState(context, userInfo.mhtId);
     await AppSharedPrefUtil.saveMuteEnabled(false);
     AppAudioUtils.startBackgroundMusic();
     return true;
   }
 
-  static Future<bool> startLoggedUserSession({@required BuildContext context}) async {
+  static Future<bool> startLoggedUserSession(
+      {@required BuildContext context}) async {
     UserInfo userInfo = await AppSharedPrefUtil.getUserInfo();
     CacheData.userInfo = userInfo;
     await loadUserState(context, CacheData.userInfo.mhtId);
     return true;
   }
+
   static Future<Image> getUserProfileImg({BuildContext context}) async {
     Image userProfile;
     userProfile = await AppSharedPrefUtil.getProfileImage();
     if (userProfile == null) {
-      String base64Img = await getProfilePictureFromServer(context, CacheData.userInfo.mhtId);
+      String base64Img =
+          await getProfilePictureFromServer(context, CacheData.userInfo.mhtId);
       userProfile = getImageFromBase64Img(base64Img: base64Img);
       AppSharedPrefUtil.saveProfileImage(base64Img);
     }
-    if (userProfile == null) userProfile = Image(image: AssetImage(AppConstant.DEFAULT_USER_IMG_PATH));
+    if (userProfile == null)
+      userProfile = Image(image: AssetImage(AppConstant.DEFAULT_USER_IMG_PATH));
     return userProfile;
   }
 
-  static Future<String> getProfilePictureFromServer(BuildContext context, int mhtId) async {
+  static Future<String> getProfilePictureFromServer(
+      BuildContext context, int mhtId) async {
     String profileBase64Image;
     Response res = await _api.getProfilePicture(mhtId: mhtId);
-    AppResponse appResponse = ResponseParser.parseResponse(context: context, res: res);
+    AppResponse appResponse =
+        ResponseParser.parseResponse(context: context, res: res);
     if (appResponse.status == WSConstant.SUCCESS_CODE) {
       profileBase64Image = appResponse.data['image'];
     }
     return profileBase64Image;
   }
 
-  static Image getImageFromBase64Img({@required String base64Img, bool returnDefault = false}) {
+  static Image getImageFromBase64Img(
+      {@required String base64Img, bool returnDefault = false}) {
     Image image;
-    if (base64Img != null) image = Image(image: MemoryImage(base64Decode(base64Img)));
+    if (base64Img != null)
+      image = Image(image: MemoryImage(base64Decode(base64Img)));
     if (returnDefault && image == null) image = CacheData.getUserDefaultImg();
     return image;
   }
@@ -432,7 +428,11 @@ class CommonFunction {
                         width: 150,
                         child: FlareActor(
                           'assets/animation/Teddy.flr',
-                          animation: type == 'success' ? "success" : type == "error" ? 'fail' : "idle", // If not success or error, then it is info
+                          animation: type == 'success'
+                              ? "success"
+                              : type == "error"
+                                  ? 'fail'
+                                  : "idle", // If not success or error, then it is info
                         ),
                       )
                     : new Container(),
@@ -444,7 +444,9 @@ class CommonFunction {
                   child: Text(
                     msg != null
                         ? msg
-                        : type == 'error' ? "Looks like your lack of \n Imagination ! " : "Looks like today is your luckyday ... !!",
+                        : type == 'error'
+                            ? "Looks like your lack of \n Imagination ! "
+                            : "Looks like today is your luckyday ... !!",
                     textAlign: TextAlign.center,
                     style: TextStyle(color: Colors.blueGrey, height: 1.5),
                     textScaleFactor: 1.1,
@@ -461,7 +463,9 @@ class CommonFunction {
                       child: Row(
                         children: <Widget>[
                           Text(
-                            doneButtonText != null ? doneButtonText : type == 'error' ? "Okeh..." : "Hooray!",
+                            doneButtonText != null
+                                ? doneButtonText
+                                : type == 'error' ? "Okeh..." : "Hooray!",
                             textScaleFactor: 1.2,
                             style: TextStyle(
                               color: kQuizBackgroundWhite,
@@ -471,7 +475,8 @@ class CommonFunction {
                       ),
                       onPressed: () {
                         AppConstant.POPUP_COUNT -= 1;
-                        if (playSound && type == 'success') AppAudioUtils.stopCorrectMusic();
+                        if (playSound && type == 'success')
+                          AppAudioUtils.stopCorrectMusic();
                         if (doneButtonFn != null) {
                           doneButtonFn();
                         } else {
@@ -497,7 +502,8 @@ class CommonFunction {
                             ),
                             onPressed: () {
                               AppConstant.POPUP_COUNT -= 1;
-                              if (playSound && type == 'success') AppAudioUtils.stopCorrectMusic();
+                              if (playSound && type == 'success')
+                                AppAudioUtils.stopCorrectMusic();
                               if (doneCancelFn != null) {
                                 doneCancelFn();
                               } else {

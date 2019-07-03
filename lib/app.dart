@@ -4,7 +4,6 @@ import 'package:GnanG/UI/intro/intro.dart';
 import 'package:GnanG/UI/new_leaderboard/new_leaderboard.dart';
 import 'package:GnanG/UI/others/feedback.dart';
 import 'package:GnanG/UI/profile.dart';
-import 'package:GnanG/UI/puzzle/main.dart';
 import 'package:GnanG/no-internet-page.dart';
 import 'package:GnanG/utils/audio_utilsdart.dart';
 import 'package:flutter/material.dart';
@@ -89,7 +88,6 @@ class _QuizAppState extends State<QuizApp> {
         '/rules': (BuildContext context) => new RulesPagePage(),
         '/profile': (BuildContext context) => new ProfilePagePage(),
         '/t&c': (BuildContext context) => new TermsAndConditionPage(),
-        '/gameOf15': (BuildContext context) => new GameOfFifteen(),
         '/about': (BuildContext context) => new About(),
         '/registrationrequest': (BuildContext context) => new RegistrationRequestPage(),
       },

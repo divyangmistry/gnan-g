@@ -14,7 +14,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:http/http.dart';
 
-final colors = [Colors.red, Colors.amber, Colors.purple, Colors.blue, Colors.green, Colors.deepOrange, Colors.teal];
+final colors = [
+  Colors.red,
+  Colors.amber,
+  Colors.purple,
+  Colors.blue,
+  Colors.green,
+  Colors.deepOrange,
+  Colors.teal
+];
 
 // ignore: non_constant_identifier_names
 Widget build_users_row(String name, String rank, String points, img) {
@@ -92,7 +100,8 @@ class _NewLeaderBoardState extends State<NewLeaderBoard> {
   _getLeaderList() async {
     try {
       Response res = await _api.getApi(url: '/leaders');
-      AppResponse appResponse = ResponseParser.parseResponse(context: context, res: res);
+      AppResponse appResponse =
+          ResponseParser.parseResponse(context: context, res: res);
       if (appResponse.status == WSConstant.SUCCESS_CODE) {
         LeaderList leaders = LeaderList.fromJson(appResponse.data);
         _userImage = await CommonFunction.getUserProfileImg(context: context);
@@ -104,24 +113,28 @@ class _NewLeaderBoardState extends State<NewLeaderBoard> {
         });
       }
     } catch (err) {
-      if (mounted) CommonFunction.displayErrorDialog(context: context, msg: err.toString());
+      if (mounted)
+        CommonFunction.displayErrorDialog(
+            context: context, msg: err.toString());
     }
   }
 
   _updateMyMonthScoreFromList() {
-      if(leaderList != null) {
-          leaderList.forEach((leader)  {
-              if(leader != null && leader.mhtId == CacheData.userInfo.mhtId) {
-                  if(leader.totalscoreMonth != null)
-                    CacheData.userState.totalscore_month = leader.totalscoreMonth;
-              }
-          });
-      }
+    if (leaderList != null) {
+      leaderList.forEach((leader) {
+        if (leader != null && leader.mhtId == CacheData.userInfo.mhtId) {
+          if (leader.totalscoreMonth != null)
+            CacheData.userState.totalscore_month = leader.totalscoreMonth;
+        }
+      });
+    }
   }
+
   _getLeaderListByMonth() async {
     try {
       Response res = await _api.getApi(url: '/leaders_month');
-      AppResponse appResponse = ResponseParser.parseResponse(context: context, res: res);
+      AppResponse appResponse =
+          ResponseParser.parseResponse(context: context, res: res);
       if (appResponse.status == WSConstant.SUCCESS_CODE) {
         LeaderList leaders = LeaderList.fromJson(appResponse.data);
         _userImage = await CommonFunction.getUserProfileImg(context: context);
@@ -133,7 +146,9 @@ class _NewLeaderBoardState extends State<NewLeaderBoard> {
         });
       }
     } catch (err) {
-      if (mounted) CommonFunction.displayErrorDialog(context: context, msg: err.toString());
+      if (mounted)
+        CommonFunction.displayErrorDialog(
+            context: context, msg: err.toString());
     }
   }
 
@@ -173,9 +188,10 @@ class _NewLeaderBoardState extends State<NewLeaderBoard> {
               crossAxisAlignment: CrossAxisAlignment.baseline,
               textBaseline: TextBaseline.alphabetic,
               children: <Widget>[
-                Rank(rank: _currentIndex == 0 ? _userRank : _userRankMonth),
+                Rank(rank: _userRankMonth),
                 Text(
-                  getOrdinalOfNumber(_currentIndex == 0 ? _userRank : _userRankMonth),
+                  getOrdinalOfNumber(
+                      _currentIndex == 0 ? _userRank : _userRankMonth),
                   textScaleFactor: 1,
                   style: TextStyle(
                     color: Colors.white,
@@ -198,7 +214,7 @@ class _NewLeaderBoardState extends State<NewLeaderBoard> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Text(
-                  _currentIndex == 0 ? CacheData.userState.totalscore.toString() : CacheData.userState.totalscore_month.toString(),
+                  CacheData.userState.totalscore_month.toString(),
                   textScaleFactor: 1,
                   style: TextStyle(
                     fontSize: 32,
@@ -225,7 +241,7 @@ class _NewLeaderBoardState extends State<NewLeaderBoard> {
         Container(
           padding: EdgeInsets.all(16),
           child: Text(
-            _currentIndex == 0 ? 'Overall Leaderboard' : 'Monthly Leaderboard',
+            'Monthly Leaderboard',
             textScaleFactor: 1,
             style: TextStyle(
               fontSize: 25,
@@ -246,25 +262,7 @@ class _NewLeaderBoardState extends State<NewLeaderBoard> {
         ),
       ),
       body: SafeArea(
-        child: _currentIndex == 0 ? NewOverAllLeaderBoard(leaderList) : NewMonthlyLeaderBoard(leaderListMonth),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        onTap: (int index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
-        items: [
-          BottomNavigationBarItem(
-            icon: new Icon(Icons.all_inclusive),
-            title: new Text('Overall'),
-          ),
-          BottomNavigationBarItem(
-            icon: new Icon(Icons.today),
-            title: new Text('Monthly'),
-          ),
-        ],
+        child: NewMonthlyLeaderBoard(leaderListMonth),
       ),
     );
   }
@@ -284,7 +282,8 @@ class LeaderRow extends StatefulWidget {
   }
 }
 
-class LeaderRowState extends State<LeaderRow> with AutomaticKeepAliveClientMixin<LeaderRow> {
+class LeaderRowState extends State<LeaderRow>
+    with AutomaticKeepAliveClientMixin<LeaderRow> {
   Image image = CacheData.getUserDefaultImg();
 
   @override
@@ -316,7 +315,8 @@ class LeaderRowState extends State<LeaderRow> with AutomaticKeepAliveClientMixin
       children: <Widget>[
         ListTile(
           title: Text(widget.name),
-          subtitle: Text(widget.mhtId != 1 ? 'Points : ' + widget.points.toString() : ""),
+          subtitle: Text(
+              widget.mhtId != 1 ? 'Points : ' + widget.points.toString() : ""),
           trailing: Padding(
             padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
             child: Text(
@@ -327,28 +327,18 @@ class LeaderRowState extends State<LeaderRow> with AutomaticKeepAliveClientMixin
           ),
           leading: CircleAvatar(
             radius: 28,
-            child: HeroImage(image: image, maxRadius: 30, heroTag: widget.name + widget.rank.toString()),
+            child: HeroImage(
+                image: image,
+                maxRadius: 30,
+                heroTag: widget.name + widget.rank.toString()),
             backgroundColor: colors[_random.nextInt(colors.length)],
           ),
         ),
-//        Row(
-//          children: <Widget>[
-//            Container(
-//              child: Title(
-//                child: Text(widget.rank.toString()),
-//                color: Colors.blue,
-//              ),
-//              width: 60.0,
-//            ),
-//
-//          ],
-//        ),
         Divider(),
       ],
     );
   }
 
   @override
-  // TODO: implement wantKeepAlive
   bool get wantKeepAlive => false;
 }

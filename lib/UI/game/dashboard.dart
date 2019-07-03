@@ -94,10 +94,6 @@ class DashboardPageState extends State<DashboardPage> {
         SizedBox(
           height: 15.0,
         ),
-        _puzzle(),
-        SizedBox(
-          height: 15.0,
-        ),
         _leaderBoard(),
         SizedBox(
           height: 15.0,
@@ -195,26 +191,6 @@ class DashboardPageState extends State<DashboardPage> {
             ),
           ),
           "Daily Bonus"),
-    );
-  }
-
-  Widget _puzzle() {
-    return GestureDetector(
-      onTap: () {
-        Navigator.pushNamed(context, '/gameOf15');
-      },
-      child: _gameMenu(
-          Colors.blue.shade400,
-          Container(
-            height: 120,
-            width: 120,
-            child: FlareActor(
-              'assets/animation/puzzl.flr',
-              animation: 'rotating',
-              fit: BoxFit.contain,
-            ),
-          ),
-          'Puzzle'),
     );
   }
 

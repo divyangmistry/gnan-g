@@ -197,6 +197,8 @@ class _PikacharState extends State<Pikachar> {
           : null,
       textColor: Colors.white,
       padding: EdgeInsets.all(0.0),
+      disabledColor: kQuizMain400,
+      disabledElevation: 0,
       minWidth: 50.0,
       height: 50.0,
       color: kQuizMain400,
@@ -344,7 +346,8 @@ class _PikacharState extends State<Pikachar> {
               findIndexToInsert();
             }
           : null,
-//      disabledElevation: 0,
+      disabledElevation: 0,
+      disabledColor: kQuizMain500,
       textColor: Colors.white,
       padding: EdgeInsets.all(0.0),
       minWidth: 60.0,
@@ -388,7 +391,7 @@ class _PikacharState extends State<Pikachar> {
                 color: kQuizSurfaceWhite),
           ),
         ),
-        color: kQuizMain400,
+        color: kQuizMain500,
       ),
     );
   }
