@@ -90,7 +90,30 @@ class MainGamePageState extends BaseState<MainGamePage> {
     currentState = CacheData.userState.currentState;
     print('currentState ::::::::: ');
     print(currentState);
-    _loadAllQuestions();
+    if (widget.isBonusLevel) {
+      _loadAllQuestions();
+    } else {
+      getCurruntLevelQuestionState();
+    }
+  }
+
+  getCurruntLevelQuestionState() async {
+    Map<String, dynamic> reqData = {
+      'mht_id': CacheData.userInfo.mhtId,
+      'level': widget.level.levelIndex
+    };
+    Response res = await _api.postApi(url: '/check_user_level', data: reqData);
+    AppResponse appResponse =
+        ResponseParser.parseResponse(context: context, res: res);
+    if (appResponse.status == 200) {
+      CurrentState tempCurruntState = CurrentState.fromJson(appResponse.data);
+      _loadAllQuestions(
+        levelIndex: tempCurruntState.level,
+        questionState: widget.level.levelType == 'TIME_BASED'
+            ? tempCurruntState.questionReadSt
+            : tempCurruntState.questionSt,
+      );
+    }
   }
 
   @override
@@ -102,16 +125,16 @@ class MainGamePageState extends BaseState<MainGamePage> {
     main();
   }
 
-  _loadAllQuestions() async {
+  _loadAllQuestions({int levelIndex, int questionState}) async {
     Response res;
     if (widget.isBonusLevel) {
       res = await _api.getBonusQuestion(mhtId: CacheData.userInfo.mhtId);
     } else {
       res = await _api.getQuestions(
-          level: widget.level.levelIndex,
+          level: levelIndex,
           from: widget.level.levelType == 'TIME_BASED'
-              ? currentState.questionReadSt + 1
-              : currentState.questionSt);
+              ? questionState + 1
+              : questionState);
     }
     AppResponse appResponse =
         ResponseParser.parseResponse(context: context, res: res);

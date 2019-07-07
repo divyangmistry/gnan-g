@@ -14,8 +14,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiService {
 //   final _apiUrl = 'http://192.168.43.23:3000';
-  //  final _apiUrl = 'http://3.16.51.94:3000';
- final _apiUrl = 'http://gnang.purecelibacy.org:3000'; // live API
+   final _apiUrl = 'http://3.16.51.94:3000';
+//  final _apiUrl = 'http://gnang.purecelibacy.org:3000'; // live API
 
   Map<String, String> headers = {'content-type': 'application/json'};
   bool enableMock = false;
@@ -117,6 +117,8 @@ class ApiService {
   Future<http.Response> getUserState({@required int mhtId}) async {
     var data = {'mht_id': mhtId};
     http.Response res = await postApi(url: '/user_state', data: data);
+    print('Res user_state');
+    print(res);
     return res;
   }
 

@@ -252,7 +252,7 @@ class DashboardPageState extends State<DashboardPage> {
         Container(
           child: CommonFunction.pointsUI(
             context: context,
-            point: CacheData.userState != null ? CacheData.userState.totalscore.toString() : '100',
+            point: CacheData.userState != null ? CacheData.userState.totalscore_month.toString() : '100',
           ),
         ),
       ],

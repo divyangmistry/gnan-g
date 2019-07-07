@@ -56,7 +56,7 @@ class NewLevelPageState extends State<NewLevelPage> {
                 ),
                 CommonFunction.pointsUI(
                   context: context,
-                  point: CacheData.userState.totalscore.toString(),
+                  point: CacheData.userState.totalscore_month.toString(),
                 ),
               ],
             ),
@@ -89,7 +89,8 @@ class LevelList extends StatelessWidget {
             //print('CacheData.userState :: ');
             //print(CacheData.userState.currentState.level);
             //print(index + 1);
-            return new LevelCardRow(CacheData.userState.quizLevels[index], CacheData.userState.currentState.level == index + 1 ? false : true);
+            // return new LevelCardRow(CacheData.userState.quizLevels[index], CacheData.userState.currentState.level == index + 1 ? false : true);
+            return new LevelCardRow(CacheData.userState.quizLevels[index], false);
           },
         ),
       ),

@@ -54,7 +54,7 @@ class GameTitleBar extends StatelessWidget {
           Container(
             child: CommonFunction.pointsUI(
               context: context,
-              point: CacheData.userState.totalscore.toString(),
+              point: CacheData.userState.totalscore_month.toString(),
             ),
           ),
         ],
