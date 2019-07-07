@@ -2,9 +2,9 @@ import 'dart:math';
 
 import 'package:GnanG/Service/apiservice.dart';
 import 'package:GnanG/UI/new_leaderboard/new_monthly.dart';
-import 'package:GnanG/UI/new_leaderboard/new_overall.dart';
 import 'package:GnanG/UI/widgets/hero_image.dart';
 import 'package:GnanG/common.dart';
+import 'package:GnanG/constans/appconstant.dart';
 import 'package:GnanG/constans/wsconstants.dart';
 import 'package:GnanG/model/appresponse.dart';
 import 'package:GnanG/model/cacheData.dart';
@@ -97,31 +97,9 @@ class _NewLeaderBoardState extends State<NewLeaderBoard> {
     "question_id": 507
   });
 
-  _getLeaderList() async {
-    try {
-      Response res = await _api.getApi(url: '/leaders');
-      AppResponse appResponse =
-          ResponseParser.parseResponse(context: context, res: res);
-      if (appResponse.status == WSConstant.SUCCESS_CODE) {
-        LeaderList leaders = LeaderList.fromJson(appResponse.data);
-        _userImage = await CommonFunction.getUserProfileImg(context: context);
-        setState(() {
-          leaderList = leaders.leaders;
-          _updateMyMonthScoreFromList();
-          leaderList.insert(0, pujyashree);
-          _userRank = leaders.userRank + 1;
-        });
-      }
-    } catch (err) {
-      if (mounted)
-        CommonFunction.displayErrorDialog(
-            context: context, msg: err.toString());
-    }
-  }
-
   _updateMyMonthScoreFromList() {
     if (leaderList != null) {
-      leaderList.forEach((leader) {
+      leaderListMonth.forEach((leader) {
         if (leader != null && leader.mhtId == CacheData.userInfo.mhtId) {
           if (leader.totalscoreMonth != null)
             CacheData.userState.totalscore_month = leader.totalscoreMonth;
@@ -137,10 +115,16 @@ class _NewLeaderBoardState extends State<NewLeaderBoard> {
           ResponseParser.parseResponse(context: context, res: res);
       if (appResponse.status == WSConstant.SUCCESS_CODE) {
         LeaderList leaders = LeaderList.fromJson(appResponse.data);
-        _userImage = await CommonFunction.getUserProfileImg(context: context);
+        // _userImage = await CommonFunction.getUserProfileImg(context: context);
+        _userImage = Image(
+          image: CacheData.userInfo.profilePic != null
+              ? NetworkImage(CacheData.userInfo.profilePic)
+              : AssetImage(AppConstant.DEFAULT_USER_IMG_PATH),
+        );
         setState(() {
           leaderListMonth = leaders.leaders;
           leaderListMonth.insert(0, pujyashree);
+          _updateMyMonthScoreFromList();
           print(leaderListMonth);
           _userRankMonth = leaders.userRank + 1;
         });
@@ -154,7 +138,6 @@ class _NewLeaderBoardState extends State<NewLeaderBoard> {
 
   @override
   void initState() {
-    _getLeaderList();
     _getLeaderListByMonth();
     super.initState();
   }
@@ -272,8 +255,10 @@ class LeaderRow extends StatefulWidget {
   int rank, points, mhtId;
   String name;
   IconData icon;
+  String profilePic;
 
-  LeaderRow(this.rank, this.name, this.points, this.icon, this.mhtId);
+  LeaderRow(this.rank, this.name, this.points, this.icon, this.mhtId,
+      this.profilePic);
 
   @override
   State<StatefulWidget> createState() {
@@ -284,27 +269,9 @@ class LeaderRow extends StatefulWidget {
 
 class LeaderRowState extends State<LeaderRow>
     with AutomaticKeepAliveClientMixin<LeaderRow> {
-  Image image = CacheData.getUserDefaultImg();
-
   @override
   void initState() {
     super.initState();
-    CacheData.getUserProfileImages(context, widget.mhtId).then((userImage) {
-      if (mounted) {
-        if (widget.mhtId != 1) {
-          setState(() {
-            image = userImage;
-          });
-        } else {
-          setState(() {
-            image = CommonFunction.getImageFromBase64Img(
-              base64Img: CacheData.pujyashreeImg,
-              returnDefault: true,
-            );
-          });
-        }
-      }
-    });
   }
 
   @override
@@ -328,7 +295,11 @@ class LeaderRowState extends State<LeaderRow>
           leading: CircleAvatar(
             radius: 28,
             child: HeroImage(
-                image: image,
+                image: Image(
+                  image: widget.profilePic != null
+                      ? NetworkImage(CacheData.userInfo.profilePic)
+                      : AssetImage(AppConstant.DEFAULT_USER_IMG_PATH),
+                ),
                 maxRadius: 30,
                 heroTag: widget.name + widget.rank.toString()),
             backgroundColor: colors[_random.nextInt(colors.length)],

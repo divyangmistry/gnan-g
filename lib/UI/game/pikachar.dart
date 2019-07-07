@@ -31,6 +31,7 @@ class _PikacharState extends State<Pikachar> {
   List<Widget> aTiles = List<Widget>();
   List opTiles = List();
   Map _answerChars = new Map();
+  ScrollController scrollController = new ScrollController();
 
   _PikacharState() {
     print("State restarted");
@@ -38,8 +39,24 @@ class _PikacharState extends State<Pikachar> {
 
   @override
   void initState() {
-    // TODO: implement initState
+    scrollToTop();
     super.initState();
+  }
+
+  scrollToTop() {
+    if (scrollController.hasClients) {
+      scrollController.animateTo(
+        0.0,
+        curve: Curves.easeOut,
+        duration: const Duration(milliseconds: 300),
+      );
+    }
+  }
+
+  @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
   }
 
   @override
@@ -50,12 +67,16 @@ class _PikacharState extends State<Pikachar> {
     }
 
     return new ListView(
+      controller: scrollController,
       children: <Widget>[
         question(),
         answerRows(),
         optionTiles(),
         SizedBox(
           height: 20,
+        ),
+        Container(
+          height: 50,
         )
       ],
     );

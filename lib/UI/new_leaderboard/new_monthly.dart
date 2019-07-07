@@ -26,6 +26,7 @@ class _NewMonthlyLeaderBoardState extends State<NewMonthlyLeaderBoard> {
               widget.leaderList[index].totalscoreMonth,
               Icons.face,
               widget.leaderList[index].mhtId,
+              widget.leaderList[index].profilePic
             );
           },
         )

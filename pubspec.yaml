@@ -26,6 +26,7 @@ dependencies:
   vector_math: "2.0.8"
   flutter_speed_dial: "1.1.1"
   flutter_markdown: "0.2.0"
+  simple_permissions: "0.1.6"
 
   # For Puzzle -
   # cupertino_icons: ^0.1.2

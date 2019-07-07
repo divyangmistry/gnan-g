@@ -16,9 +16,34 @@ class MCQ extends StatefulWidget {
 
 class MCQState extends State<MCQ> {
   int selectedIndex = -1;
+  ScrollController scrollController = new ScrollController();
+
+  @override
+  void initState() {
+    scrollToTop();
+    super.initState();
+  }
+
+  scrollToTop() {
+    if (scrollController.hasClients) {
+      scrollController.animateTo(
+        0.0,
+        curve: Curves.easeOut,
+        duration: const Duration(milliseconds: 300),
+      );
+    }
+  }
+
+  @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListView(
+      controller: scrollController,
       children: <Widget>[
         Container(
           alignment: Alignment(0, -0.30),
@@ -35,6 +60,9 @@ class MCQState extends State<MCQ> {
         new Container(
           padding: EdgeInsets.fromLTRB(50, 30, 50, 50),
           child: _buildOptions(),
+        ),
+        Container(
+          height: 50,
         )
       ],
     );
@@ -68,48 +96,49 @@ class MCQState extends State<MCQ> {
       width: double.infinity,
       child: !widget.hiddenOptionIndex.contains(index)
           ? new MaterialButton(
-        elevation: 5,
-        onPressed: () {
-          setState(() {
-            selectedIndex = index;
-            widget.validateAnswer(answer: text);
-          });
-          setState(() {
-            selectedIndex = -1;
-          });
-        },
-        height: 50,
-        child: Row(
-          children: <Widget>[
-            selectedIndex == index
-                ? new Container(
-              width: 0,
-              child: Icon(
-                Icons.check_circle,
-                size: 25,
-                color: kQuizMain500,
+              elevation: 5,
+              onPressed: () {
+                setState(() {
+                  selectedIndex = index;
+                  widget.validateAnswer(answer: text);
+                });
+                setState(() {
+                  selectedIndex = -1;
+                });
+              },
+              height: 50,
+              child: Row(
+                children: <Widget>[
+                  selectedIndex == index
+                      ? new Container(
+                          width: 0,
+                          child: Icon(
+                            Icons.check_circle,
+                            size: 25,
+                            color: kQuizMain500,
+                          ),
+                        )
+                      : new Container(),
+                  Expanded(
+                    child: Text(
+                      text,
+                      textScaleFactor: 1.1,
+                      style: TextStyle(
+                        fontFamily: 'Gujarati',
+                        color: selectedIndex == index
+                            ? kQuizBackgroundWhite
+                            : kQuizBackgroundWhite,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ],
               ),
+              color: selectedIndex == index ? kQuizMain400 : kQuizMain500,
             )
-                : new Container(),
-            Expanded(
-              child: Text(
-                text,
-                textScaleFactor: 1.1,
-                style: TextStyle(
-                  fontFamily: 'Gujarati',
-                  color:
-                  selectedIndex == index ? kQuizBackgroundWhite : kQuizBackgroundWhite,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ),
-          ],
-        ),
-        color: selectedIndex == index ? kQuizMain400 : kQuizMain500,
-      )
           : new Container(
-        height: 50,
-      ),
+              height: 50,
+            ),
     );
   }
 }

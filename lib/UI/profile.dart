@@ -7,6 +7,7 @@ import 'package:GnanG/UI/imagepicker/image_input.dart';
 import 'package:GnanG/UI/widgets/base_state.dart';
 import 'package:GnanG/colors.dart';
 import 'package:GnanG/common.dart';
+import 'package:GnanG/constans/appconstant.dart';
 import 'package:GnanG/constans/wsconstants.dart';
 import 'package:GnanG/model/appresponse.dart';
 import 'package:GnanG/model/cacheData.dart';
@@ -32,15 +33,11 @@ class ProfilePagePageState extends BaseState<ProfilePagePage> {
   }
 
   _loadData() {
-    setState(() {
-      isOverlay = true;
-    });
-    CommonFunction.getUserProfileImg(context: context).then((image) {
-      setState(() {
-        profileImage = image;
-        isOverlay = false;
-      });
-    });
+    profileImage = Image(
+      image: CacheData.userInfo.profilePic != null
+          ? NetworkImage(CacheData.userInfo.profilePic)
+          : AssetImage(AppConstant.DEFAULT_USER_IMG_PATH),
+    );
   }
 
   @override
@@ -76,7 +73,7 @@ class ProfilePagePageState extends BaseState<ProfilePagePage> {
             Icons.help_outline,
             color: Colors.white,
           ),
-              () {
+          () {
             Navigator.push(
               context,
               MaterialPageRoute(
@@ -96,19 +93,19 @@ class ProfilePagePageState extends BaseState<ProfilePagePage> {
         ),
         _iconButton(
           Icon(Icons.power_settings_new, color: Colors.white),
-              () {
-                CommonFunction.alertDialog(
-                  context: context,
-                  msg: 'Are you sure you want to log out?',
-                  type: 'info',
-                  barrierDismissible: false,
-                  showCancelButton: true,
-                  doneButtonFn: () {
-                    _api.logout();
-                    Navigator.pop(context);
-                    Navigator.pushReplacementNamed(context, '/login_new');
-                  },
-                );
+          () {
+            CommonFunction.alertDialog(
+              context: context,
+              msg: 'Are you sure you want to log out?',
+              type: 'info',
+              barrierDismissible: false,
+              showCancelButton: true,
+              doneButtonFn: () {
+                _api.logout();
+                Navigator.pop(context);
+                Navigator.pushReplacementNamed(context, '/login_new');
+              },
+            );
           },
         ),
       ],
@@ -151,15 +148,18 @@ class ProfilePagePageState extends BaseState<ProfilePagePage> {
             SizedBox(height: 15),
             new Divider(),
             SizedBox(height: 15),
-            CommonFunction.titleAndData(context,'Mobile no. : ', CacheData.userInfo.mobile),
+            CommonFunction.titleAndData(
+                context, 'Mobile no. : ', CacheData.userInfo.mobile),
             SizedBox(height: 15),
-            CommonFunction.titleAndData(context,
+            CommonFunction.titleAndData(
+                context,
                 'Email id : ',
                 CacheData.userInfo.email != null
                     ? CacheData.userInfo.email
                     : ""),
             SizedBox(height: 15),
-            CommonFunction.titleAndData(context,'Center : ', CacheData.userInfo.center),
+            CommonFunction.titleAndData(
+                context, 'Center : ', CacheData.userInfo.center),
           ],
         ),
       ),
@@ -246,21 +246,20 @@ class ProfilePagePageState extends BaseState<ProfilePagePage> {
       isOverlay = true;
     });
     try {
-      Response res = await _api.uploadProfilePicture(mhtId: CacheData.userInfo.mhtId, file: image);
-      AppResponse appResponse = ResponseParser.parseResponse(context: context, res: res);
+      Response res = await _api.uploadProfilePicture(
+          mhtId: CacheData.userInfo.mhtId, file: image);
+      AppResponse appResponse =
+          ResponseParser.parseResponse(context: context, res: res);
       if (appResponse.status == WSConstant.SUCCESS_CODE) {
         setState(() {
           profileImage = Image(image: AssetImage(image.path));
         });
-        await AppSharedPrefUtil.saveProfileImage(base64Encode(image.readAsBytesSync()));
       }
-    } catch(error) {
+    } catch (error) {
       print("Error while uploading Profile Picture:" + error);
     }
     setState(() {
       isOverlay = false;
     });
   }
-
-
 }

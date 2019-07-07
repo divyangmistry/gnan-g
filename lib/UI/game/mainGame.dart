@@ -54,7 +54,6 @@ class MainGamePageState extends BaseState<MainGamePage> {
   int selectedAnsIndex = -1;
   ApiService _api = new ApiService();
   CurrentState currentState;
-  Image image;
   ValueNotifier<bool> isReset = new ValueNotifier(false);
   bool isTimeBasedLevel = false;
 
@@ -104,7 +103,6 @@ class MainGamePageState extends BaseState<MainGamePage> {
   }
 
   _loadAllQuestions() async {
-    image = await CommonFunction.getUserProfileImg(context: context);
     Response res;
     if (widget.isBonusLevel) {
       res = await _api.getBonusQuestion(mhtId: CacheData.userInfo.mhtId);
@@ -420,16 +418,17 @@ class MainGamePageState extends BaseState<MainGamePage> {
                               height: 15,
                             ),
                             Expanded(
-                                child: question != null
-                                    ? question.questionType == "MCQ"
-                                        ? new MCQ(question, validateAnswer,
-                                            hiddenOptionIndex)
-                                        : new Pikachar(
-                                            question.question,
-                                            question.jumbledata,
-                                            question.pikacharAnswer,
-                                            validateAnswer)
-                                    : new Container())
+                              child: question != null
+                                  ? question.questionType == "MCQ"
+                                      ? new MCQ(question, validateAnswer,
+                                          hiddenOptionIndex)
+                                      : new Pikachar(
+                                          question.question,
+                                          question.jumbledata,
+                                          question.pikacharAnswer,
+                                          validateAnswer)
+                                  : new Container(),
+                            ),
                           ],
                         ),
                       ),

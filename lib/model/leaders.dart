@@ -37,6 +37,7 @@ class Leaders {
   int totalscore;
   int totalscoreMonth;
   int totalscoreWeek;
+  String profilePic;
   String updatedAt;
   String createdAt;
   String img;
@@ -66,6 +67,7 @@ class Leaders {
     bonus = json['bonus'];
     questionId = json['question_id'];
     totalscore = json['totalscore'];
+    profilePic = json['img_dropbox_url'];
     totalscoreMonth = json['totalscore_month'];
     totalscoreWeek = json['totalscore_week'];
     updatedAt = json['updatedAt'];
@@ -87,6 +89,7 @@ class Leaders {
     data['totalscore'] = this.totalscore;
     data['totalscoreMonth'] = this.totalscoreMonth;
     data['totalscoreWeek'] = this.totalscoreWeek;
+    data['img_dropbox_url'] = this.profilePic;
     data['updatedAt'] = this.updatedAt;
     data['createdAt'] = this.createdAt;
     data['img'] = this.img;

@@ -61,12 +61,6 @@ class AppSharedPrefUtil {
     return pref.getString('token');
   }
 
-  static Future<bool> saveProfileImage(String base64Image) async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    pref.setString(SharedPrefConstant.s_profileImage, base64Image);
-    return true;
-  }
-
   static Future<Image> getProfileImage() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     return CommonFunction.getImageFromBase64Img(base64Img: pref.getString(SharedPrefConstant.s_profileImage));

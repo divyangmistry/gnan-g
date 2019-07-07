@@ -21,17 +21,17 @@ class CacheData {
     return _userDefaultImg;
   }
 
-  static Future<Image> getUserProfileImages(
-      BuildContext context, int mhtId) async {
-    if (_userProfileImages[mhtId] == null) {
-      String base64Img =
-          await CommonFunction.getProfilePictureFromServer(context, mhtId);
-      Image userProfileImg = CommonFunction.getImageFromBase64Img(
-          base64Img: base64Img, returnDefault: true);
-      _userProfileImages[mhtId] = userProfileImg;
-    }
-    return _userProfileImages[mhtId];
-  }
+  // static Future<Image> getUserProfileImages(
+  //     BuildContext context, int mhtId) async {
+  //   if (_userProfileImages[mhtId] == null) {
+  //     String base64Img =
+  //         await CommonFunction.getProfilePictureFromServer(context, mhtId);
+  //     Image userProfileImg = CommonFunction.getImageFromBase64Img(
+  //         base64Img: base64Img, returnDefault: true);
+  //     _userProfileImages[mhtId] = userProfileImg;
+  //   }
+  //   return _userProfileImages[mhtId];
+  // }
 
   static void resetUserProfileImages() {
     _userProfileImages = new Map();
