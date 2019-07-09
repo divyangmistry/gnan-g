@@ -57,7 +57,7 @@ class _LevelCardRowState extends State<LevelCardRow> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20.0),
       ),
-      elevation: widget.lock ? 0 : 5,
+      elevation: isCompleted(widget.levelDetails.levelIndex) ? 0 : 5,
       child: new Container(
         margin: const EdgeInsets.only(top: 18.0, left: 18.0),
 //        constraints: new BoxConstraints.expand(),
@@ -85,19 +85,18 @@ class _LevelCardRowState extends State<LevelCardRow> {
                 ),
                 Padding(
                   padding: EdgeInsets.fromLTRB(0, 0, 20, 0),
-                  child: widget.lock
-                      ? isCompleted(widget.levelDetails.levelIndex)
-                          ? CircleAvatar(
-                              backgroundColor: Colors.green,
+                  child: isCompleted(widget.levelDetails.levelIndex)
+                      ? CircleAvatar(
+                          backgroundColor: Colors.green,
 //                              color: Color.fromARGB(0, 1, 1, 1),
 //                              shape: CircleBorder(side: BorderSide(style: BorderStyle.solid, color: Colors.green)),
-                              child: CircleAvatar(
-                                backgroundColor: Colors.grey[200],
-                                child: Icon(Icons.done, color: Colors.green),
-                                radius: 18,
-                              ))
-                          : Icon(Icons.lock)
-                      : new Container(),
+                          child: CircleAvatar(
+                            backgroundColor: Colors.grey[200],
+                            child: Icon(Icons.done, color: Colors.green),
+                            radius: 18,
+                          ),
+                        )
+                      : Container(),
                 )
               ],
             ),

@@ -13,6 +13,7 @@ import 'package:GnanG/model/appresponse.dart';
 import 'package:GnanG/model/cacheData.dart';
 import 'package:GnanG/model/current_stat.dart';
 import 'package:GnanG/model/question.dart';
+import 'package:GnanG/model/user_level.dart';
 import 'package:GnanG/model/user_score_state.dart';
 import 'package:GnanG/model/validateQuestion.dart';
 import 'package:GnanG/utils/audio_utilsdart.dart';
@@ -56,6 +57,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
   CurrentState currentState;
   ValueNotifier<bool> isReset = new ValueNotifier(false);
   bool isTimeBasedLevel = false;
+  UserLevel userLevel;
 
   Timer _timer;
   int _timeInSeconds = 0; // question timer
@@ -106,12 +108,14 @@ class MainGamePageState extends BaseState<MainGamePage> {
     AppResponse appResponse =
         ResponseParser.parseResponse(context: context, res: res);
     if (appResponse.status == 200) {
-      CurrentState tempCurruntState = CurrentState.fromJson(appResponse.data);
+      print('===========>');
+      userLevel = UserLevel.fromJson(appResponse.data['results']);
+      print(appResponse.data['results']);
       _loadAllQuestions(
-        levelIndex: tempCurruntState.level,
+        levelIndex: userLevel.level,
         questionState: widget.level.levelType == 'TIME_BASED'
-            ? tempCurruntState.questionReadSt
-            : tempCurruntState.questionSt,
+            ? userLevel.questionReadSt
+            : userLevel.questionSt,
       );
     }
   }
@@ -126,6 +130,9 @@ class MainGamePageState extends BaseState<MainGamePage> {
   }
 
   _loadAllQuestions({int levelIndex, int questionState}) async {
+    print('****** ==> ');
+    print(levelIndex);
+    print(questionState);
     Response res;
     if (widget.isBonusLevel) {
       res = await _api.getBonusQuestion(mhtId: CacheData.userInfo.mhtId);
@@ -537,16 +544,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
           .first
           .questionSt;
     }
-    int totalQuestion = -1;
-    List<QuizLevel> levelInfos = CacheData.userState.quizLevels;
-    for (final quizLevel in levelInfos) {
-      if (quizLevel.levelIndex == CacheData.userState.currentState.level) {
-        totalQuestion = quizLevel.totalQuestions;
-        break;
-      }
-    }
-
-    return totalQuestion;
+    return userLevel.totalQuestions;
   }
 
   void validateAnswer({String answer}) async {
@@ -557,7 +555,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
       questionId: question.questionId,
       mhtId: CacheData.userInfo.mhtId,
       answer: answer,
-      level: CacheData.userState.currentState.level,
+      level: userLevel.level,
     );
     setState(() {
       isOverlay = false;
