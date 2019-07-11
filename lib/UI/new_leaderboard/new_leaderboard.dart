@@ -117,7 +117,7 @@ class _NewLeaderBoardState extends State<NewLeaderBoard> {
         LeaderList leaders = LeaderList.fromJson(appResponse.data);
         // _userImage = await CommonFunction.getUserProfileImg(context: context);
         _userImage = Image(
-          image: CacheData.userInfo.profilePic != null
+          image: CacheData.userInfo.profilePic != null && CacheData.userInfo.profilePic.isNotEmpty
               ? NetworkImage(CacheData.userInfo.profilePic)
               : AssetImage(AppConstant.DEFAULT_USER_IMG_PATH),
         );
@@ -262,7 +262,7 @@ class LeaderRow extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
+    print(profilePic);
     return new LeaderRowState();
   }
 }
@@ -296,8 +296,8 @@ class LeaderRowState extends State<LeaderRow>
             radius: 28,
             child: HeroImage(
                 image: Image(
-                  image: widget.profilePic != null
-                      ? NetworkImage(CacheData.userInfo.profilePic)
+                  image: widget.profilePic != null && widget.profilePic.isNotEmpty
+                      ? NetworkImage(widget.profilePic)
                       : AssetImage(AppConstant.DEFAULT_USER_IMG_PATH),
                 ),
                 maxRadius: 30,

@@ -253,6 +253,7 @@ class ProfilePagePageState extends BaseState<ProfilePagePage> {
       if (appResponse.status == WSConstant.SUCCESS_CODE) {
         setState(() {
           profileImage = Image(image: AssetImage(image.path));
+          CacheData.userInfo.profilePic = appResponse.data['img_dropbox_url'];
         });
       }
     } catch (error) {
