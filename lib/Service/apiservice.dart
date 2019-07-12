@@ -13,9 +13,15 @@ import 'package:meta/meta.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiService {
-//   final _apiUrl = 'http://192.168.43.23:3000';
-   final _apiUrl = 'http://3.16.51.94:3000';
-//  final _apiUrl = 'http://gnang.purecelibacy.org:3000'; // live API
+  
+  /// * ALSO CHANGE URL AT
+  ///
+  /// * lib/UI/DailyBonusAnswer/bloc/daily_bonus_answer_bloc.dart
+  ///
+  /// 
+  // final _apiUrl = 'http://192.168.43.23:3000'; // Check Above Comment Before change This 
+  final _apiUrl = 'http://3.16.51.94:3000'; // Check Above Comment Before change This 
+  // final _apiUrl = 'http://gnang.purecelibacy.org:3000'; // live API // Check Above Comment Before change This 
 
   Map<String, String> headers = {'content-type': 'application/json'};
   bool enableMock = false;
@@ -61,7 +67,7 @@ class ApiService {
   /// * [token] - For authenticate api
   appendTokenToHeader(token) {
     headers['x-access-token'] = token;
-    if(CacheData.userInfo != null && CacheData.userInfo.mhtId != null)
+    if (CacheData.userInfo != null && CacheData.userInfo.mhtId != null)
       headers['mht_id'] = CacheData.userInfo.mhtId.toString();
     print(headers);
   }
@@ -87,7 +93,8 @@ class ApiService {
     return res;
   }
 
-  Future<http.Response> requestRegistration({@required UserData userData}) async {
+  Future<http.Response> requestRegistration(
+      {@required UserData userData}) async {
     Map<String, dynamic> data = userData.toJson();
     data['new_mobile'] = userData.mobile;
     Response res = await postApi(url: '/request_registration', data: data);
@@ -152,11 +159,8 @@ class ApiService {
   }
 
   // Bonus Question
-  Future<http.Response> getBonusQuestion(
-      {@required int mhtId}) async {
-    Map<String, dynamic> data = {
-      'mht_id': mhtId
-    };
+  Future<http.Response> getBonusQuestion({@required int mhtId}) async {
+    Map<String, dynamic> data = {'mht_id': mhtId};
     http.Response res = await postApi(url: '/bonus_question', data: data);
     return res;
   }
@@ -175,22 +179,17 @@ class ApiService {
     return res;
   }
 
-  Future<http.Response> uploadProfilePicture(
-      {@required int mhtId,
-        @required File file,
-      }) async {
+  Future<http.Response> uploadProfilePicture({
+    @required int mhtId,
+    @required File file,
+  }) async {
     String base64Image = base64Encode(file.readAsBytesSync());
-    Map<String, dynamic> data = {
-      'mht_id': mhtId,
-      'image' : base64Image
-    };
+    Map<String, dynamic> data = {'mht_id': mhtId, 'image': base64Image};
     http.Response res = await postApi(url: '/upload_photo', data: data);
     return res;
   }
 
-  Future<http.Response> getProfilePicture(
-      {@required int mhtId
-      }) async {
+  Future<http.Response> getProfilePicture({@required int mhtId}) async {
     Map<String, dynamic> data = {
       'mht_id': mhtId,
     };
@@ -205,23 +204,27 @@ class ApiService {
 
   Future<http.Response> updateNotificationToken(
       {@required int mhtId,
-        @required String fbToken,
-        @required String oneSignalToken}) async {
+      @required String fbToken,
+      @required String oneSignalToken}) async {
     Map<String, dynamic> data = {
       'mht_id': mhtId,
       'fb_token': fbToken,
       'onesignal_token': oneSignalToken
     };
-    http.Response res = await postApi(url: '/update_notification_token', data: data);
+    http.Response res =
+        await postApi(url: '/update_notification_token', data: data);
     return res;
   }
 
-  Future<http.Response> hintTaken({
-    @required int questionId,
-    @required int mhtId,
-    @required int userLevel
-  }) async {
-    Map<String, dynamic> data = {"question_id": questionId, "mht_id": mhtId, "user_level": userLevel};
+  Future<http.Response> hintTaken(
+      {@required int questionId,
+      @required int mhtId,
+      @required int userLevel}) async {
+    Map<String, dynamic> data = {
+      "question_id": questionId,
+      "mht_id": mhtId,
+      "user_level": userLevel
+    };
     http.Response res = await postApi(url: '/hint_question', data: data);
     return res;
   }

@@ -1,4 +1,5 @@
 import 'package:GnanG/Service/apiservice.dart';
+import 'package:GnanG/UI/DailyBonusAnswer/ui/daily_bonus_answers.dart';
 import 'package:GnanG/UI/game/fab_animated_button.dart';
 import 'package:GnanG/UI/game/mainGame.dart';
 import 'package:GnanG/UI/widgets/appupdatecheck.dart';
@@ -18,7 +19,6 @@ import '../../common.dart';
 class DashboardPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
     return DashboardPageState();
   }
 }
@@ -32,7 +32,6 @@ class DashboardPageState extends State<DashboardPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     checkBonusLevel();
     loadUserState();
@@ -40,9 +39,9 @@ class DashboardPageState extends State<DashboardPage> {
   }
 
   loadUserState() async {
-    if(CacheData.userState == null) {
-        if(CacheData.userInfo != null)
-          CommonFunction.loadUserState(context, CacheData.userInfo.mhtId);
+    if (CacheData.userState == null) {
+      if (CacheData.userInfo != null)
+        CommonFunction.loadUserState(context, CacheData.userInfo.mhtId);
     }
   }
 
@@ -59,20 +58,20 @@ class DashboardPageState extends State<DashboardPage> {
 
   @override
   Widget build(BuildContext context) {
-      // TODO: implement build
-      return new Scaffold(
-        body: BackgroundGredient(
-          child: _bodyView(),
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+    // TODO: implement build
+    return new Scaffold(
+      body: BackgroundGredient(
+        child: _bodyView(),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
 //      floatingActionButton: FabAnimatedButton(),
 //       floatingActionButton: FloatingActionButton(
 //         backgroundColor: kQuizMain300,
 //         child: _buildMuteIcon(),
 //         onPressed: toggleMuteSound,
 //       ),
-        floatingActionButton: FabAnimatedButton(),
-      );
+      floatingActionButton: FabAnimatedButton(),
+    );
   }
 
   _bodyView() {
@@ -100,6 +99,10 @@ class DashboardPageState extends State<DashboardPage> {
         ),
         _profile(),
         SizedBox(
+          height: 15.0,
+        ),
+        _dailyBonusAns(),
+        SizedBox(
           height: 55.0,
         ),
       ],
@@ -122,6 +125,32 @@ class DashboardPageState extends State<DashboardPage> {
             ),
           ),
           'Profile'),
+    );
+  }
+
+  Widget _dailyBonusAns() {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => DailyBonusAnswers(
+                  DateTime.now(),
+                ),
+          ),
+        );
+      },
+      child: _gameMenu(
+          Colors.deepPurple.shade300,
+          Container(
+            height: 180,
+            width: 120,
+            child: FlareActor(
+              'assets/animation/person_floating.flr',
+              animation: 'Relaxing',
+            ),
+          ),
+          'DB Answers'),
     );
   }
 
@@ -252,7 +281,9 @@ class DashboardPageState extends State<DashboardPage> {
         Container(
           child: CommonFunction.pointsUI(
             context: context,
-            point: CacheData.userState != null ? CacheData.userState.totalscore_month.toString() : '100',
+            point: CacheData.userState != null
+                ? CacheData.userState.totalscore_month.toString()
+                : '100',
           ),
         ),
       ],
