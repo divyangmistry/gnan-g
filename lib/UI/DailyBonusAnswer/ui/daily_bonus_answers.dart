@@ -16,11 +16,11 @@ class _DailyBonusAnswersState extends State<DailyBonusAnswers> {
     super.initState();
   }
 
-  @override
-  void dispose() {
-    bloc.dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   bloc.dispose();
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -74,16 +74,21 @@ class _DailyBonusAnswersState extends State<DailyBonusAnswers> {
                 return mainUI(snapshot.data);
               }
               if (snapshot.hasError) {
+                print(snapshot.error);
                 return Container(
-                  child: Text(
-                    'Error to Load Answers !! \n\n${snapshot.error}',
+                  padding: EdgeInsets.all(10),
+                  child: Center(
+                    child: Text(
+                    'There was no daily bonus question asked yesterday !!\n\nHave a good day !!\n\nJSCA',
+                    textScaleFactor: 1,
+                    textAlign: TextAlign.center,
                     style: TextStyle(
                       color: kQuizErrorRed,
                     ),
                   ),
+                  ),
                 );
               }
-              // return mainUI();
               return Center(
                 child: CircularProgressIndicator(),
               );

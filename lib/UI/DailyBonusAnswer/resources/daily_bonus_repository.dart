@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:GnanG/model/cacheData.dart';
+import 'package:GnanG/model/leaders.dart';
 import 'package:GnanG/model/question.dart';
 import 'package:GnanG/utils/appsharedpref.dart';
 import 'package:http/http.dart' show Client;
+import 'package:http/http.dart';
 import '../../../model/daily_bonus_answer.dart';
 
 class DailyBonusAnswerProvider {
@@ -31,21 +33,27 @@ class DailyBonusAnswerProvider {
   }
 
   Future<List<Question>> getDailyBonusAnswer() async {
-    try {
-      await checkLogin();
-      final response = await client.get('$apiUrl/get_pre_bonus', headers: headers);
-      print('Response Answers ');
-      print(response.body);
-      switch (response.statusCode) {
-        case 200:
-          return Question.fromJsonArray(json.decode(response.body)['data']);
-          break;
-        default:
-          return throw Exception(json.decode(response.body)['message']);
-      }
-    } catch (e) {
-      print('Error in API ::: ');
-      print(e);
+    await checkLogin();
+    final response =
+        await client.get('$apiUrl/get_pre_bonus', headers: headers);
+    print('Response Answers ');
+    print(response.body);
+    if (response.statusCode == 200) {
+      return Question.fromJsonArray(json.decode(response.body)['data']);
+    } else {
+      throw Exception('There is no any Questions ...');
+    }
+  }
+
+  Future<LeaderList> getlastMonthWinners() async {
+    await checkLogin();
+    final response = await client.get('$apiUrl/last_month_toppers', headers: headers);
+    print('Response Winners ');
+    print(response.body);
+    if (response.statusCode == 200) {
+      return LeaderList.fromJson(json.decode(response.body)['data']);
+    } else {
+      throw Exception('Error to load Winners !! ');
     }
   }
 }

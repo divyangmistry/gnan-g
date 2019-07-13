@@ -1,5 +1,6 @@
 import 'package:GnanG/Service/apiservice.dart';
 import 'package:GnanG/UI/DailyBonusAnswer/ui/daily_bonus_answers.dart';
+import 'package:GnanG/UI/DailyBonusAnswer/ui/winners.dart';
 import 'package:GnanG/UI/game/fab_animated_button.dart';
 import 'package:GnanG/UI/game/mainGame.dart';
 import 'package:GnanG/UI/widgets/appupdatecheck.dart';
@@ -103,6 +104,10 @@ class DashboardPageState extends State<DashboardPage> {
         ),
         _dailyBonusAns(),
         SizedBox(
+          height: 15.0,
+        ),
+        _winners(),
+        SizedBox(
           height: 55.0,
         ),
       ],
@@ -143,12 +148,36 @@ class DashboardPageState extends State<DashboardPage> {
           Container(
             height: 180,
             width: 120,
-            // child: FlareActor(
-              // 'assets/animation/puzzl.flr2d',
-              // animation: 'animate',
-            // ),
+            child: FlareActor(
+              'assets/animation/Dancing.flr',
+              animation: "Flipflap",
+            ),
           ),
           'Daily Bonus\nAnswers'),
+    );
+  }
+
+  Widget _winners() {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Winners(),
+          ),
+        );
+      },
+      child: _gameMenu(
+          Colors.blue.shade300,
+          Container(
+            height: 180,
+            width: 120,
+            child: FlareActor(
+              'assets/animation/Dancing.flr',
+              animation: "Flipflap",
+            ),
+          ),
+          'Winners'),
     );
   }
 

@@ -11,8 +11,12 @@ class Bloc {
   Observable<List<Question>> get dailyBonusAnswer => _dailyBonusAnswerFetcher.stream;
 
   Future getDailyBonusAnswer() async {
+    try {
     List<Question> dailyBonusAnswer = await _repository.getDailyBonusAnswers();
     _dailyBonusAnswerFetcher.sink.add(dailyBonusAnswer);
+    } catch (e) {
+      _dailyBonusAnswerFetcher.sink.addError(e);
+    }
   }
 
   void dispose() {
