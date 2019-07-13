@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:GnanG/model/cacheData.dart';
+import 'package:GnanG/model/question.dart';
 import 'package:GnanG/utils/appsharedpref.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' show Client;
 import '../../../model/daily_bonus_answer.dart';
 
@@ -30,25 +30,19 @@ class DailyBonusAnswerProvider {
     print(headers);
   }
 
-  Future<DailyBonusAnswer> getDailyBonusAnswer({@required DateTime date}) async {
+  Future<List<Question>> getDailyBonusAnswer() async {
     try {
-      Future.delayed(const Duration(seconds: 10), () {
-        return DailyBonusAnswer(
-          question: 'Question',
-          answer: 'Answer'
-        );
-      });
-      // Map<String, dynamic> reqData = {'date': date.toIso8601String()};
-      // final response = await client.post('$apiUrl/getQuestion', headers: headers, body: json.encode(reqData));
-      // print('Response Answers ');
-      // print(response.body);
-      // switch (response.statusCode) {
-      //   case 200:
-      //     return DailyBonusAnswer.fromJson(json.decode(response.body)['data']);
-      //     break;
-      //   default:
-      //     return throw Exception(json.decode(response.body)['message']);
-      // }
+      await checkLogin();
+      final response = await client.get('$apiUrl/get_pre_bonus', headers: headers);
+      print('Response Answers ');
+      print(response.body);
+      switch (response.statusCode) {
+        case 200:
+          return Question.fromJsonArray(json.decode(response.body)['data']);
+          break;
+        default:
+          return throw Exception(json.decode(response.body)['message']);
+      }
     } catch (e) {
       print('Error in API ::: ');
       print(e);

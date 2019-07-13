@@ -106,6 +106,7 @@ flutter:
     - assets/animation/world.flr
     - assets/animation/leader.flr
     - assets/animation/bigbang.flr
+    - assets/animation/dailyBonus.flr2d
     - images/photo_camera.png
     
 

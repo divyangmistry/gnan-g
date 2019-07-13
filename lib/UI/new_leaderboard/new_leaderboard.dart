@@ -94,7 +94,8 @@ class _NewLeaderBoardState extends State<NewLeaderBoard> {
     "totalscore": 4000,
     "fb_token": null,
     "onesignal_token": "7f97262d-f4ca-4cd1-be8c-600687895a69",
-    "question_id": 507
+    "question_id": 507,
+    "img_dropbox_url": "https://dl.dropboxusercontent.com/s/gk8gc8ydhdls20j/profile_1.0.png?dl=0"
   });
 
   _updateMyMonthScoreFromList() {

@@ -1,12 +1,10 @@
 import 'package:GnanG/UI/DailyBonusAnswer/bloc/daily_bonus_answer_bloc.dart';
 import 'package:GnanG/colors.dart';
 import 'package:GnanG/model/daily_bonus_answer.dart';
+import 'package:GnanG/model/question.dart';
 import 'package:flutter/material.dart';
 
 class DailyBonusAnswers extends StatefulWidget {
-  final DateTime date;
-
-  DailyBonusAnswers(this.date);
   @override
   _DailyBonusAnswersState createState() => _DailyBonusAnswersState();
 }
@@ -14,7 +12,7 @@ class DailyBonusAnswers extends StatefulWidget {
 class _DailyBonusAnswersState extends State<DailyBonusAnswers> {
   @override
   void initState() {
-    bloc.getDailyBonusAnswer(widget.date);
+    bloc.getDailyBonusAnswer();
     super.initState();
   }
 
@@ -26,16 +24,16 @@ class _DailyBonusAnswersState extends State<DailyBonusAnswers> {
 
   @override
   Widget build(BuildContext context) {
-    Widget mainUI() {
+    Widget mainUI(List<Question> data) {
       return ListView.builder(
-        itemCount: 5,
+        itemCount: data.length,
         itemBuilder: (BuildContext context, int index) {
           return Container(
             padding: EdgeInsets.all(3),
             child: Card(
               child: ListTile(
                 title: Text(
-                  'Question From API Is come here with ?',
+                  '${data[index].question}',
                   style: TextStyle(
                     fontFamily: 'Gujarati',
                     color: kQuizMain400,
@@ -45,7 +43,7 @@ class _DailyBonusAnswersState extends State<DailyBonusAnswers> {
                   child: Text('${index+1}'),
                 ),
                 subtitle: Text(
-                  'Answers',
+                  'Answer: ${data[index].answer[0].answer}',
                   style: TextStyle(
                     fontFamily: 'Gujarati',
                     color: kQuizMain500,
@@ -69,11 +67,11 @@ class _DailyBonusAnswersState extends State<DailyBonusAnswers> {
         child: StreamBuilder(
             stream: bloc.dailyBonusAnswer,
             builder: (BuildContext context,
-                AsyncSnapshot<DailyBonusAnswer> snapshot) {
+                AsyncSnapshot<List<Question>> snapshot) {
               if (snapshot.hasData) {
-                return Container(
-                  child: Text('Data Loaded'),
-                );
+                print('************');
+                print(snapshot.data);
+                return mainUI(snapshot.data);
               }
               if (snapshot.hasError) {
                 return Container(
@@ -85,10 +83,10 @@ class _DailyBonusAnswersState extends State<DailyBonusAnswers> {
                   ),
                 );
               }
-              return mainUI();
-              // return Center(
-              //   child: CircularProgressIndicator(),
-              // );
+              // return mainUI();
+              return Center(
+                child: CircularProgressIndicator(),
+              );
             }),
       ),
     );

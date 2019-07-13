@@ -134,23 +134,21 @@ class DashboardPageState extends State<DashboardPage> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => DailyBonusAnswers(
-                  DateTime.now(),
-                ),
+            builder: (context) => DailyBonusAnswers(),
           ),
         );
       },
       child: _gameMenu(
-          Colors.deepPurple.shade300,
+          Colors.blue.shade300,
           Container(
             height: 180,
             width: 120,
-            child: FlareActor(
-              'assets/animation/person_floating.flr',
-              animation: 'Relaxing',
-            ),
+            // child: FlareActor(
+              // 'assets/animation/puzzl.flr2d',
+              // animation: 'animate',
+            // ),
           ),
-          'DB Answers'),
+          'Daily Bonus\nAnswers'),
     );
   }
 
