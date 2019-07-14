@@ -34,9 +34,9 @@ class ValidateQuestion {
     if (lives != null) CacheData.userState.lives = lives;
     if (totalscore != null) CacheData.userState.totalscore = totalscore;
     if (totalscore_month != null) CacheData.userState.totalscore_month = totalscore_month;
-    if (questionSt != null)
-      CacheData.userState.currentState.questionSt = questionSt;
-    if (questionReadSt != null)
-      CacheData.userState.currentState.questionReadSt = questionReadSt;
+    // if (questionSt != null)
+    //   CacheData.userState.currentState.questionSt = questionSt;
+    // if (questionReadSt != null)
+    //   CacheData.userState.currentState.questionReadSt = questionReadSt;
   }
 }

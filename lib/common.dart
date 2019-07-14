@@ -313,7 +313,8 @@ class CommonFunction {
         main();
         return true;
       }
-    } catch (err) {
+    } catch (err,s) {
+      print(s);
       print('CATCH 2 :: ');
       print(err);
       var data = res.body;

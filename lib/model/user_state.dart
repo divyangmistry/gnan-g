@@ -4,7 +4,7 @@ import 'package:GnanG/model/quizlevel.dart';
 class UserState {
   List<QuizLevel> quizLevels;
   List<CompletedLevel> completed;
-  CurrentState currentState;
+  // CurrentState currentState;
   int totalscore;
   int totalscore_month;
   int totalscore_week;
@@ -12,7 +12,7 @@ class UserState {
 
   UserState({this.quizLevels,
     this.completed,
-    this.currentState,
+    // this.currentState,
     this.totalscore,
     this.totalscore_month,
     this.totalscore_week,
@@ -32,9 +32,9 @@ class UserState {
         completed.add(new CompletedLevel.fromJson(v));
       });
     }
-    if (json['current'] != null && json['current'][0] != null) {
-      currentState = new CurrentState.fromJson(json['current'][0]);
-    }
+    // if (json['current'] != null && json['current'][0] != null) {
+    //   currentState = new CurrentState.fromJson(json['current'][0]);
+    // }
     totalscore = json['totalscore'];
     totalscore_month = json['totalscore_month'];
     totalscore_week = json['totalscore_week'];

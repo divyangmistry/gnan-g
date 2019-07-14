@@ -34,7 +34,7 @@ class SimpleGameState extends State<SimpleGame> {
   }
 
   _loadAllQuestions(int level) {
-    currentState = CacheData.userState.currentState;
+    // currentState = CacheData.userState.currentState;
     _api
         .getQuestions(level: level, from: 0, to: currentState.totalQuestions)
         .then((res) {

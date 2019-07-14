@@ -40,7 +40,7 @@ class _DailyBonusAnswersState extends State<DailyBonusAnswers> {
                   ),
                 ),
                 leading: CircleAvatar(
-                  child: Text('${index+1}'),
+                  child: Text('${index + 1}'),
                 ),
                 subtitle: Text(
                   'Answer: ${data[index].answer[0].answer}',
@@ -62,8 +62,8 @@ class _DailyBonusAnswersState extends State<DailyBonusAnswers> {
       body: SafeArea(
         child: StreamBuilder(
             stream: bloc.dailyBonusAnswer,
-            builder: (BuildContext context,
-                AsyncSnapshot<List<Question>> snapshot) {
+            builder:
+                (BuildContext context, AsyncSnapshot<List<Question>> snapshot) {
               if (snapshot.hasData) {
                 print('************');
                 print(snapshot.data);
@@ -75,13 +75,13 @@ class _DailyBonusAnswersState extends State<DailyBonusAnswers> {
                   padding: EdgeInsets.all(10),
                   child: Center(
                     child: Text(
-                    'There was no daily bonus question asked yesterday !!\n\nHave a good day !!\n\nJSCA',
-                    textScaleFactor: 1,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: kQuizErrorRed,
+                      'There was no daily bonus question asked yesterday !!\n\nHave a good day !!\n\nJSCA',
+                      textScaleFactor: 1,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: kQuizErrorRed,
+                      ),
                     ),
-                  ),
                   ),
                 );
               }

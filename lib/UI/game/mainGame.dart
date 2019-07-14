@@ -89,7 +89,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
       levelStartPlayer = player;
     });*/
     isLoading = true;
-    currentState = CacheData.userState.currentState;
+    // currentState = CacheData.userState.currentState;
     print('currentState ::::::::: ');
     print(currentState);
     if (widget.isBonusLevel) {
@@ -316,8 +316,8 @@ class MainGamePageState extends BaseState<MainGamePage> {
       if (appResponse.status == WSConstant.SUCCESS_CODE) {
         print('ReadQuestion :: ');
         print(appResponse.data);
-        CacheData.userState.currentState.questionReadSt =
-            appResponse.data['question_read_st'];
+        // CacheData.userState.currentState.questionReadSt =
+        //     appResponse.data['question_read_st'];
       }
     } catch (err) {
       _timer.cancel();
