@@ -56,7 +56,8 @@ class _WinnersState extends State<Winners> {
                 height: rank == 1 ? 125 : 80,
                 width: rank == 1 ? 115 : 75,
                 alignment: Alignment.bottomRight,
-                child: Image.asset('images/$rank.png', height: rank == 1 ? 60 : 40),
+                child: Image.asset('images/$rank.png',
+                    height: rank == 1 ? 60 : 40),
               ),
             ],
           ),
@@ -82,17 +83,22 @@ class _WinnersState extends State<Winners> {
     }
 
     Widget newUI(LeaderList leaders) {
-      return Container(
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          mainAxisSize: MainAxisSize.max,
-          children: <Widget>[
-            winnerUI(leaders.leaders[1], 2),
-            winnerUI(leaders.leaders[0], 1),
-            winnerUI(leaders.leaders[2], 3)
-          ],
-        ),
+      return ListView(
+        children: <Widget>[
+          Container(
+            padding: EdgeInsets.only(top: 40, bottom: 20),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              mainAxisSize: MainAxisSize.max,
+              children: <Widget>[
+                winnerUI(leaders.leaders[1], 2),
+                winnerUI(leaders.leaders[0], 1),
+                winnerUI(leaders.leaders[2], 3)
+              ],
+            ),
+          )
+        ],
       );
     }
 
@@ -114,7 +120,6 @@ class _WinnersState extends State<Winners> {
                     ),
                   );
                 }
-                // return mainUI(snapshot.data);
                 return newUI(snapshot.data);
               }
               if (snapshot.hasError) {
