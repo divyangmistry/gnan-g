@@ -24,6 +24,10 @@
 	<true/>
 	<key>NSCameraUsageDescription</key>
 	<string>GnanG uses Camera for profile picture</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>GnanG uses Location</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>GnanG uses Location</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>GnanG uses Microphone</string>
 	<key>NSPhotoLibraryUsageDescription</key>
@@ -49,5 +53,9 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>UIFileSharingEnabled</key>
+	<true/>
+	<key>LSSupportsOpeningDocumentsInPlace</key>
+	<true/>
 </dict>
 </plist>
