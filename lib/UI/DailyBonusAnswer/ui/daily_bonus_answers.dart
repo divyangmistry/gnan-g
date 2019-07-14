@@ -59,10 +59,6 @@ class _DailyBonusAnswersState extends State<DailyBonusAnswers> {
 
     return Scaffold(
       backgroundColor: kBackgroundGrediant1,
-      appBar: AppBar(
-        title: Text('Yesterday Answers'),
-        backgroundColor: kQuizMain400,
-      ),
       body: SafeArea(
         child: StreamBuilder(
             stream: bloc.dailyBonusAnswer,

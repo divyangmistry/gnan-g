@@ -25,43 +25,6 @@ class _WinnersState extends State<Winners> {
 
   @override
   Widget build(BuildContext context) {
-    Widget mainUI(LeaderList data) {
-      return ListView.builder(
-        itemCount: data.leaders.length,
-        itemBuilder: (BuildContext context, int index) {
-          return Container(
-            padding: EdgeInsets.all(3),
-            child: Card(
-              child: ListTile(
-                title: Text(
-                  '${data.leaders[index].name}',
-                ),
-                leading: CircleAvatar(
-                  child: HeroImage(
-                    image: Image(
-                      image: data.leaders[index].profilePic != null &&
-                              data.leaders[index].profilePic.isNotEmpty
-                          ? NetworkImage(data.leaders[index].profilePic)
-                          : AssetImage(AppConstant.DEFAULT_USER_IMG_PATH),
-                    ),
-                    maxRadius: 25,
-                  ),
-                  maxRadius: 25,
-                ),
-                subtitle: Text(
-                  'Points: ${data.leaders[index].totalscore}',
-                ),
-                trailing: Text(
-                  '${index + 1}',
-                  textScaleFactor: 1.5,
-                ),
-              ),
-            ),
-          );
-        },
-      );
-    }
-
     Widget winnerUI(Leaders leader, int rank) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -72,22 +35,37 @@ class _WinnersState extends State<Winners> {
             textScaleFactor: 4,
             style: TextStyle(color: kQuizBrown900),
           ),
-          CircleAvatar(
-            foregroundColor: kQuizMain400,
-            child: HeroImage(
-              maxRadius: rank == 1 ? 50 : 30,
-              image: Image(
-                image: leader.profilePic != null && leader.profilePic.isNotEmpty
-                    ? NetworkImage(leader.profilePic)
-                    : AssetImage(AppConstant.DEFAULT_USER_IMG_PATH),
+          Stack(
+            children: <Widget>[
+              CircleAvatar(
+                foregroundColor: kQuizMain400,
+                child: HeroImage(
+                  maxRadius: rank == 1 ? 50 : 30,
+                  image: Image(
+                    image: leader.profilePic != null &&
+                            leader.profilePic.isNotEmpty
+                        ? NetworkImage(leader.profilePic)
+                        : AssetImage(AppConstant.DEFAULT_USER_IMG_PATH),
+                  ),
+                  heroTag: rank.toString(),
+                ),
+                maxRadius: rank == 1 ? 55 : 35,
+                backgroundColor: rank == 1 ? Colors.teal : kBackgroundGrediant4,
               ),
-              heroTag: rank.toString(),
-            ),
-            maxRadius: rank == 1 ? 55 : 35,
-            backgroundColor: rank == 1 ? Colors.teal : kBackgroundGrediant4,
+              Container(
+                height: rank == 1 ? 125 : 80,
+                width: rank == 1 ? 115 : 75,
+                alignment: Alignment.bottomRight,
+                child: Image.asset('images/$rank.png', height: rank == 1 ? 60 : 40),
+              ),
+            ],
           ),
           SizedBox(height: 10),
-          Text('${leader.name}', textScaleFactor: rank == 1 ? 1.3 : 1),
+          Container(
+            width: rank == 1 ? 120 : 100,
+            alignment: Alignment.center,
+            child: Text('${leader.name}', textScaleFactor: rank == 1 ? 1.3 : 1),
+          ),
           SizedBox(height: 5),
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -120,10 +98,6 @@ class _WinnersState extends State<Winners> {
 
     return Scaffold(
       backgroundColor: kBackgroundGrediant1,
-      appBar: AppBar(
-        title: Text('Winners of Last Month'),
-        backgroundColor: kQuizMain400,
-      ),
       body: SafeArea(
         child: StreamBuilder<LeaderList>(
             stream: bloc.winnerList,

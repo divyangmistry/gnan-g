@@ -2,6 +2,7 @@ import 'package:GnanG/Service/apiservice.dart';
 import 'package:GnanG/UI/DailyBonusAnswer/ui/daily_bonus_answers.dart';
 import 'package:GnanG/UI/DailyBonusAnswer/ui/winners.dart';
 import 'package:GnanG/UI/game/fab_animated_button.dart';
+import 'package:GnanG/UI/game/history.dart';
 import 'package:GnanG/UI/game/mainGame.dart';
 import 'package:GnanG/UI/widgets/appupdatecheck.dart';
 import 'package:GnanG/colors.dart';
@@ -102,11 +103,7 @@ class DashboardPageState extends State<DashboardPage> {
         SizedBox(
           height: 15.0,
         ),
-        _dailyBonusAns(),
-        SizedBox(
-          height: 15.0,
-        ),
-        _winners(),
+        _history(),
         SizedBox(
           height: 55.0,
         ),
@@ -133,51 +130,27 @@ class DashboardPageState extends State<DashboardPage> {
     );
   }
 
-  Widget _dailyBonusAns() {
+  Widget _history() {
     return GestureDetector(
       onTap: () {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => DailyBonusAnswers(),
+            builder: (context) => HistoryPage(),
           ),
         );
       },
       child: _gameMenu(
-          Colors.blue.shade300,
+          Colors.black54,
           Container(
             height: 180,
             width: 120,
             child: FlareActor(
-              'assets/animation/Dancing.flr',
-              animation: "Flipflap",
+              'assets/animation/timeline.flr',
+              animation: "dir",
             ),
           ),
-          'Daily Bonus\nAnswers'),
-    );
-  }
-
-  Widget _winners() {
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => Winners(),
-          ),
-        );
-      },
-      child: _gameMenu(
-          Colors.blue.shade300,
-          Container(
-            height: 180,
-            width: 120,
-            child: FlareActor(
-              'assets/animation/Dancing.flr',
-              animation: "Flipflap",
-            ),
-          ),
-          'Winners'),
+          'History'),
     );
   }
 
