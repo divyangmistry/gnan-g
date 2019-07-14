@@ -68,20 +68,31 @@ class ProfilePagePageState extends BaseState<ProfilePagePage> {
   Widget _gameBar() {
     return new Row(
       children: <Widget>[
-        _iconButton(
-          Icon(
-            Icons.help_outline,
-            color: Colors.white,
-          ),
-          () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => new SucessAnimationPage(),
+        Container(
+          padding: EdgeInsets.only(left: 30,right: 20),
+          child: CircleAvatar(
+            maxRadius: 22,
+            backgroundColor: kQuizMain400,
+            child: PopupMenuButton(
+              icon: Icon(
+                Icons.more_vert,
+                color: Colors.white,
               ),
-            );
-            // Navigator.pushNamed(context, '/rules');
-          },
+              itemBuilder: (_) => [
+                    PopupMenuItem(
+                      child: Text('Rules'),
+                      value: 'rules',
+                    ),
+                    PopupMenuItem(
+                      child: Text('About'),
+                      value: 'about',
+                    )
+                  ],
+              onSelected: (value) {
+                Navigator.pushNamed(context, '/$value');
+              },
+            ),
+          ),
         ),
         new Expanded(
           child: Center(
@@ -194,7 +205,8 @@ class ProfilePagePageState extends BaseState<ProfilePagePage> {
             ),
             new Row(
               children: <Widget>[
-                _scoreData('Points', CacheData.userState.totalscore_month.toString()),
+                _scoreData(
+                    'Points', CacheData.userState.totalscore_month.toString()),
               ],
             ),
           ],

@@ -60,19 +60,10 @@ class DashboardPageState extends State<DashboardPage> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return new Scaffold(
       body: BackgroundGredient(
         child: _bodyView(),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-//      floatingActionButton: FabAnimatedButton(),
-//       floatingActionButton: FloatingActionButton(
-//         backgroundColor: kQuizMain300,
-//         child: _buildMuteIcon(),
-//         onPressed: toggleMuteSound,
-//       ),
-      floatingActionButton: FabAnimatedButton(),
     );
   }
 
@@ -103,10 +94,10 @@ class DashboardPageState extends State<DashboardPage> {
         SizedBox(
           height: 15.0,
         ),
-        _history(),
-        SizedBox(
-          height: 55.0,
-        ),
+        // _history(),
+        // SizedBox(
+        //   height: 15.0,
+        // ),
       ],
     );
   }
@@ -120,10 +111,11 @@ class DashboardPageState extends State<DashboardPage> {
           Colors.deepPurple.shade300,
           Container(
             height: 180,
-            width: 120,
+            width: 180,
             child: FlareActor(
               'assets/animation/person_floating.flr',
               animation: 'Relaxing',
+              alignment: Alignment.bottomLeft,
             ),
           ),
           'Profile'),
@@ -162,6 +154,7 @@ class DashboardPageState extends State<DashboardPage> {
       child: _gameMenu(
           Colors.pinkAccent.shade100,
           Container(
+            padding: EdgeInsets.only(left: 10),
             decoration: BoxDecoration(shape: BoxShape.circle),
             height: 100,
             width: 120,
@@ -169,6 +162,7 @@ class DashboardPageState extends State<DashboardPage> {
               'assets/animation/leader.flr',
               animation: 'after_success',
               fit: BoxFit.fill,
+              alignment: Alignment.bottomRight,
             ),
           ),
           'Leader Board'),
@@ -215,6 +209,7 @@ class DashboardPageState extends State<DashboardPage> {
             width: 120,
             child: FlareActor(
               'assets/animation/bonus.flr',
+              alignment: Alignment.bottomLeft,
               animation:
                   _bonusLevelFinished ? 'No Notification' : 'Notification Loop',
             ),

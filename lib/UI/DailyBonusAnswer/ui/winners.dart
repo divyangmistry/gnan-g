@@ -92,9 +92,9 @@ class _WinnersState extends State<Winners> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               mainAxisSize: MainAxisSize.max,
               children: <Widget>[
-                winnerUI(leaders.leaders[1], 2),
-                winnerUI(leaders.leaders[0], 1),
-                winnerUI(leaders.leaders[2], 3)
+                leaders.leaders.length >= 0 ? winnerUI(leaders.leaders[1], 2) : Container(),
+                leaders.leaders.length >= 1 ? winnerUI(leaders.leaders[0], 1) : Container(),
+                leaders.leaders.length > 1 ? winnerUI(leaders.leaders[2], 3) : Container()
               ],
             ),
           )

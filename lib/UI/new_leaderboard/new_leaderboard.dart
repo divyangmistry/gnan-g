@@ -1,8 +1,10 @@
 import 'dart:math';
 
 import 'package:GnanG/Service/apiservice.dart';
+import 'package:GnanG/UI/DailyBonusAnswer/ui/winners.dart';
 import 'package:GnanG/UI/new_leaderboard/new_monthly.dart';
 import 'package:GnanG/UI/widgets/hero_image.dart';
+import 'package:GnanG/colors.dart';
 import 'package:GnanG/common.dart';
 import 'package:GnanG/constans/appconstant.dart';
 import 'package:GnanG/constans/wsconstants.dart';
@@ -95,7 +97,8 @@ class _NewLeaderBoardState extends State<NewLeaderBoard> {
     "fb_token": null,
     "onesignal_token": "7f97262d-f4ca-4cd1-be8c-600687895a69",
     "question_id": 507,
-    "img_dropbox_url": "https://dl.dropboxusercontent.com/s/gk8gc8ydhdls20j/profile_1.0.png?dl=0"
+    "img_dropbox_url":
+        "https://dl.dropboxusercontent.com/s/gk8gc8ydhdls20j/profile_1.0.png?dl=0"
   });
 
   _updateMyMonthScoreFromList() {
@@ -118,7 +121,8 @@ class _NewLeaderBoardState extends State<NewLeaderBoard> {
         LeaderList leaders = LeaderList.fromJson(appResponse.data);
         // _userImage = await CommonFunction.getUserProfileImg(context: context);
         _userImage = Image(
-          image: CacheData.userInfo.profilePic != null && CacheData.userInfo.profilePic.isNotEmpty
+          image: CacheData.userInfo.profilePic != null &&
+                  CacheData.userInfo.profilePic.isNotEmpty
               ? NetworkImage(CacheData.userInfo.profilePic)
               : AssetImage(AppConstant.DEFAULT_USER_IMG_PATH),
         );
@@ -222,31 +226,60 @@ class _NewLeaderBoardState extends State<NewLeaderBoard> {
 
     Widget topSection = Column(
       children: <Widget>[
-        Container(
-          padding: EdgeInsets.all(16),
-          child: Text(
-            'Monthly Leaderboard',
-            textScaleFactor: 1,
-            style: TextStyle(
-              fontSize: 25,
-              color: Colors.white,
-            ),
-          ),
-        ),
+        // Container(
+        //   padding: EdgeInsets.all(16),
+        //   child: Text(
+        //     'Monthly Leaderboard',
+        //     textScaleFactor: 1,
+        //     style: TextStyle(
+        //       fontSize: 25,
+        //       color: Colors.white,
+        //     ),
+        //   ),
+        // ),
         myRank
       ],
     );
 
-    return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        bottom: PreferredSize(
-          child: topSection,
-          preferredSize: Size(100, 110),
+    Widget monthlyLeaderboardUI() {
+      return Scaffold(
+        appBar: AppBar(
+          backgroundColor: kQuizMain500,
+          automaticallyImplyLeading: false,
+          bottom: PreferredSize(
+            child: topSection,
+            preferredSize: Size(50, 50),
+          ),
         ),
-      ),
-      body: SafeArea(
-        child: NewMonthlyLeaderBoard(leaderListMonth),
+        body: SafeArea(
+          child: NewMonthlyLeaderBoard(leaderListMonth),
+        ),
+      );
+    }
+
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        appBar: AppBar(
+          // backgroundColor: kQuizMain500,
+          title: TabBar(
+            tabs: [
+              Tab(
+                child: Text('Monthly Leaderboard'),
+              ),
+              Tab(child: Text('Last Month Winners')),
+            ],
+          ),
+          automaticallyImplyLeading: false,
+          titleSpacing: 0,
+          // bottom: ,
+        ),
+        body: TabBarView(
+          children: [
+            monthlyLeaderboardUI(),
+            Winners(),
+          ],
+        ),
       ),
     );
   }
@@ -297,9 +330,10 @@ class LeaderRowState extends State<LeaderRow>
             radius: 28,
             child: HeroImage(
                 image: Image(
-                  image: widget.profilePic != null && widget.profilePic.isNotEmpty
-                      ? NetworkImage(widget.profilePic)
-                      : AssetImage(AppConstant.DEFAULT_USER_IMG_PATH),
+                  image:
+                      widget.profilePic != null && widget.profilePic.isNotEmpty
+                          ? NetworkImage(widget.profilePic)
+                          : AssetImage(AppConstant.DEFAULT_USER_IMG_PATH),
                 ),
                 maxRadius: 30,
                 heroTag: widget.name + widget.rank.toString()),
