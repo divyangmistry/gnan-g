@@ -51,11 +51,70 @@ class _WinnersState extends State<Winners> {
                 subtitle: Text(
                   'Points: ${data.leaders[index].totalscore}',
                 ),
-                trailing: Text('${index+1}', textScaleFactor: 1.5,),
+                trailing: Text(
+                  '${index + 1}',
+                  textScaleFactor: 1.5,
+                ),
               ),
             ),
           );
         },
+      );
+    }
+
+    Widget winnerUI(Leaders leader, int rank) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Text(
+            '$rank',
+            textScaleFactor: 4,
+            style: TextStyle(color: kQuizBrown900),
+          ),
+          CircleAvatar(
+            foregroundColor: kQuizMain400,
+            child: HeroImage(
+              maxRadius: rank == 1 ? 50 : 30,
+              image: Image(
+                image: leader.profilePic != null && leader.profilePic.isNotEmpty
+                    ? NetworkImage(leader.profilePic)
+                    : AssetImage(AppConstant.DEFAULT_USER_IMG_PATH),
+              ),
+              heroTag: rank.toString(),
+            ),
+            maxRadius: rank == 1 ? 55 : 35,
+            backgroundColor: rank == 1 ? Colors.teal : kBackgroundGrediant4,
+          ),
+          SizedBox(height: 10),
+          Text('${leader.name}', textScaleFactor: rank == 1 ? 1.3 : 1),
+          SizedBox(height: 5),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Image.asset('images/coin.png', height: 20),
+              SizedBox(width: 5),
+              Text('${leader.totalscore}', textScaleFactor: rank == 1 ? 1.1 : 1)
+            ],
+          )
+        ],
+      );
+    }
+
+    Widget newUI(LeaderList leaders) {
+      return Container(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          mainAxisSize: MainAxisSize.max,
+          children: <Widget>[
+            winnerUI(leaders.leaders[1], 2),
+            winnerUI(leaders.leaders[0], 1),
+            winnerUI(leaders.leaders[2], 3)
+          ],
+        ),
       );
     }
 
@@ -81,7 +140,8 @@ class _WinnersState extends State<Winners> {
                     ),
                   );
                 }
-                return mainUI(snapshot.data);
+                // return mainUI(snapshot.data);
+                return newUI(snapshot.data);
               }
               if (snapshot.hasError) {
                 print(snapshot.error);
