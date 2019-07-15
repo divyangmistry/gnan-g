@@ -38,6 +38,7 @@ class Leaders {
   int totalscoreMonth;
   int totalscoreWeek;
   String profilePic;
+  int profilePicVersion;
   String updatedAt;
   String createdAt;
   String img;
@@ -51,6 +52,8 @@ class Leaders {
       this.center,
       this.bonus,
       this.questionId,
+      this.profilePic,
+      this.profilePicVersion,
       this.totalscore,this.totalscoreMonth,this.totalscoreWeek,
       this.updatedAt,
       this.createdAt,
@@ -67,6 +70,7 @@ class Leaders {
     bonus = json['bonus'];
     questionId = json['question_id'];
     totalscore = json['totalscore'];
+    profilePicVersion = json['profile_img_version_num'];
     profilePic = json['img_dropbox_url'];
     totalscoreMonth = json['totalscore_month'];
     totalscoreWeek = json['totalscore_week'];
@@ -90,6 +94,7 @@ class Leaders {
     data['totalscoreMonth'] = this.totalscoreMonth;
     data['totalscoreWeek'] = this.totalscoreWeek;
     data['img_dropbox_url'] = this.profilePic;
+    data['profile_img_version_num'] = this.profilePicVersion;
     data['updatedAt'] = this.updatedAt;
     data['createdAt'] = this.createdAt;
     data['img'] = this.img;

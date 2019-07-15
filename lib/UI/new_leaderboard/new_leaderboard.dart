@@ -1,6 +1,8 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:GnanG/Service/apiservice.dart';
+import 'package:GnanG/Service/profile_pic.dart';
 import 'package:GnanG/UI/DailyBonusAnswer/ui/winners.dart';
 import 'package:GnanG/UI/new_leaderboard/new_monthly.dart';
 import 'package:GnanG/UI/widgets/hero_image.dart';
@@ -81,6 +83,7 @@ class _NewLeaderBoardState extends State<NewLeaderBoard> {
   int _userRank = 0;
   int _userRankMonth = 0;
   Image _userImage;
+  ProfilePic profilePicService = new ProfilePic();
   Leaders pujyashree = new Leaders.fromJson({
     "lives": 3,
     "isactive": true,
@@ -97,8 +100,8 @@ class _NewLeaderBoardState extends State<NewLeaderBoard> {
     "fb_token": null,
     "onesignal_token": "7f97262d-f4ca-4cd1-be8c-600687895a69",
     "question_id": 507,
-    "img_dropbox_url":
-        "https://dl.dropboxusercontent.com/s/gk8gc8ydhdls20j/profile_1.0.png?dl=0"
+    // "img_dropbox_url":
+    //     "https://dl.dropboxusercontent.com/s/gk8gc8ydhdls20j/profile_1.0.png?dl=0"
   });
 
   _updateMyMonthScoreFromList() {
@@ -118,14 +121,18 @@ class _NewLeaderBoardState extends State<NewLeaderBoard> {
       AppResponse appResponse =
           ResponseParser.parseResponse(context: context, res: res);
       if (appResponse.status == WSConstant.SUCCESS_CODE) {
+        File userPhoto = await profilePicService.getCurruntUserProfilePic();
         LeaderList leaders = LeaderList.fromJson(appResponse.data);
-        // _userImage = await CommonFunction.getUserProfileImg(context: context);
+        print('********** ====> <==== ***********');
+        print(userPhoto.path);
+        print(CacheData.userInfo.profilePic);
+        print('********** ====> <==== ***********');
         _userImage = Image(
-          image: CacheData.userInfo.profilePic != null &&
-                  CacheData.userInfo.profilePic.isNotEmpty
-              ? NetworkImage(CacheData.userInfo.profilePic)
+          image: userPhoto != null && userPhoto.existsSync()
+              ? FileImage(userPhoto)
               : AssetImage(AppConstant.DEFAULT_USER_IMG_PATH),
         );
+        _userImage = Image.file(userPhoto);
         setState(() {
           leaderListMonth = leaders.leaders;
           leaderListMonth.insert(0, pujyashree);
@@ -286,13 +293,13 @@ class _NewLeaderBoardState extends State<NewLeaderBoard> {
 }
 
 class LeaderRow extends StatefulWidget {
-  int rank, points, mhtId;
-  String name;
-  IconData icon;
-  String profilePic;
+  final int rank, points, mhtId, profileVersion;
+  final String name;
+  final IconData icon;
+  final String profilePic;
 
   LeaderRow(this.rank, this.name, this.points, this.icon, this.mhtId,
-      this.profilePic);
+      this.profilePic, this.profileVersion);
 
   @override
   State<StatefulWidget> createState() {
@@ -303,9 +310,23 @@ class LeaderRow extends StatefulWidget {
 
 class LeaderRowState extends State<LeaderRow>
     with AutomaticKeepAliveClientMixin<LeaderRow> {
+  File image;
+  ProfilePic _profilePicService = new ProfilePic();
+
   @override
   void initState() {
+    loadProfilePic();
     super.initState();
+  }
+
+  loadProfilePic() async {
+    image = await _profilePicService.readProfilePic(
+        widget.mhtId, widget.profileVersion);
+    if (image != null && !image.existsSync()) {
+      image = await _profilePicService.writeProfilePic(
+          widget.profilePic, widget.mhtId, widget.profileVersion);
+    }
+    setState(() {});
   }
 
   @override
@@ -330,10 +351,9 @@ class LeaderRowState extends State<LeaderRow>
             radius: 28,
             child: HeroImage(
                 image: Image(
-                  image:
-                      widget.profilePic != null && widget.profilePic.isNotEmpty
-                          ? NetworkImage(widget.profilePic)
-                          : AssetImage(AppConstant.DEFAULT_USER_IMG_PATH),
+                  image: image != null && image.existsSync()
+                      ? FileImage(image)
+                      : AssetImage(AppConstant.DEFAULT_USER_IMG_PATH),
                 ),
                 maxRadius: 30,
                 heroTag: widget.name + widget.rank.toString()),

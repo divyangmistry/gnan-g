@@ -10,6 +10,7 @@ class UserInfo {
   int bonus;
   int questionId;
   String profilePic;
+  int profilePicVersion;
   String updatedAt;
   String createdAt;
   int iV;
@@ -26,6 +27,8 @@ class UserInfo {
       this.center,
       this.bonus,
       this.questionId,
+      this.profilePic,
+      this.profilePicVersion,
       this.updatedAt,
       this.createdAt,
       this.iV,
@@ -47,6 +50,7 @@ class UserInfo {
       bonus = json['bonus'];
       questionId = json['question_id'];
       profilePic = json['img_dropbox_url'];
+      profilePicVersion = json['profile_img_version_num'];
       updatedAt = json['updatedAt'];
       createdAt = json['createdAt'];
       iV = json['__v'];
@@ -65,7 +69,8 @@ class UserInfo {
     data['center'] = this.center;
     data['bonus'] = this.bonus;
     data['question_id'] = this.questionId;
-    data['profilePic'] = this.profilePic;
+    data['img_dropbox_url'] = this.profilePic;
+    data['profile_img_version_num'] = this.profilePicVersion;
     data['updatedAt'] = this.updatedAt;
     data['createdAt'] = this.createdAt;
     data['__v'] = this.iV;

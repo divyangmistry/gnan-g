@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:GnanG/Service/apiservice.dart';
+import 'package:GnanG/Service/profile_pic.dart';
 import 'package:GnanG/UI/animation/success.dart';
 import 'package:GnanG/UI/imagepicker/image_input.dart';
 import 'package:GnanG/UI/widgets/base_state.dart';
@@ -24,6 +25,7 @@ class ProfilePagePage extends StatefulWidget {
 class ProfilePagePageState extends BaseState<ProfilePagePage> {
   ApiService _api = new ApiService();
   Image profileImage;
+  ProfilePic profilePicService = new ProfilePic();
 
   @override
   void initState() {
@@ -32,10 +34,11 @@ class ProfilePagePageState extends BaseState<ProfilePagePage> {
     // Flame.audio.play('music/bensound-epic.mp3', volume: 0.5);
   }
 
-  _loadData() {
+  _loadData() async {
+    File userPhoto = await profilePicService.getCurruntUserProfilePic();
     profileImage = Image(
-      image: CacheData.userInfo.profilePic != null
-          ? NetworkImage(CacheData.userInfo.profilePic)
+      image: userPhoto != null && userPhoto.existsSync()
+          ? FileImage(userPhoto)
           : AssetImage(AppConstant.DEFAULT_USER_IMG_PATH),
     );
   }
