@@ -30,6 +30,12 @@ class ProfilePic {
       File image = new File(join(path, '${mhtId}_$v.png'));
       image.writeAsBytesSync(response.bodyBytes);
       print('Image Saved Successfully ... !!! $imageUrl');
+      // remove last version image if available
+      File lastImage = new File(join(path, '${mhtId}_${v-1}.png'));
+      if (lastImage.existsSync()) {
+        lastImage.deleteSync();
+        print('Delete Image from Storage of $mhtId');
+      }
       File tempImage = await readProfilePic(mhtId, v);
       return tempImage;
     } catch (e) {
@@ -44,7 +50,7 @@ class ProfilePic {
       File _image;
       _image = await readProfilePic(
           CacheData.userInfo.mhtId, CacheData.userInfo.profilePicVersion ?? 1);
-      if (_image == null && !_image.existsSync()) {
+      if (_image == null && !_image.existsSync() && CacheData.userInfo.profilePic != null && CacheData.userInfo.profilePic.isNotEmpty) {
         _image = await writeProfilePic(CacheData.userInfo.profilePic,
             CacheData.userInfo.mhtId, CacheData.userInfo.profilePicVersion ?? 1);
       }

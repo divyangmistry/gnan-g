@@ -10,25 +10,31 @@ class HistoryPage extends StatefulWidget {
 class _HistoryPageState extends State<HistoryPage> {
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 2,
-      child: Scaffold(
-        appBar: AppBar(
-          bottom: TabBar(
-            tabs: [
-              Tab(child: Text('Last Month Winners')),
-              Tab(child: Text('Yesterday\'s Answer'),),
-            ],
-          ),
-          title: Text('History'),
-        ),
-        body: TabBarView(
-          children: [
-            Winners(),
-            DailyBonusAnswers(),
-          ],
-        ),
+    // return DefaultTabController(
+    //   length: 2,
+    //   child: Scaffold(
+    //     appBar: AppBar(
+    //       bottom: TabBar(
+    //         tabs: [
+    //           Tab(child: Text('Last Month Winners')),
+    //           Tab(child: Text('Yesterday\'s Answer'),),
+    //         ],
+    //       ),
+    //       title: Text('History'),
+    //     ),
+    //     body: TabBarView(
+    //       children: [
+    //         Winners(),
+    //         DailyBonusAnswers(),
+    //       ],
+    //     ),
+    //   ),
+    // );
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Yesterday Answers'),
       ),
+      body: DailyBonusAnswers(),
     );
   }
 }

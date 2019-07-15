@@ -322,11 +322,16 @@ class LeaderRowState extends State<LeaderRow>
   loadProfilePic() async {
     image = await _profilePicService.readProfilePic(
         widget.mhtId, widget.profileVersion);
-    if (image != null && !image.existsSync()) {
+    if (image != null &&
+        !image.existsSync() &&
+        widget.profilePic != null &&
+        widget.profilePic.isNotEmpty) {
       image = await _profilePicService.writeProfilePic(
           widget.profilePic, widget.mhtId, widget.profileVersion);
     }
-    setState(() {});
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   @override

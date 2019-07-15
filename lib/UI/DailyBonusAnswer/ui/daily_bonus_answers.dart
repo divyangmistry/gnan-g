@@ -33,17 +33,19 @@ class _DailyBonusAnswersState extends State<DailyBonusAnswers> {
             child: Card(
               child: ListTile(
                 title: Text(
-                  '${data[index].question}',
+                  '${data[index].question}\n',
                   style: TextStyle(
                     fontFamily: 'Gujarati',
                     color: kQuizMain400,
                   ),
+                  textScaleFactor: 1.2,
                 ),
                 leading: CircleAvatar(
                   child: Text('${index + 1}'),
                 ),
                 subtitle: Text(
                   'Answer: ${data[index].answer[0].answer}',
+                  textScaleFactor: 1.1,
                   style: TextStyle(
                     fontFamily: 'Gujarati',
                     color: kQuizMain500,

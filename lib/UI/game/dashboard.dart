@@ -94,10 +94,10 @@ class DashboardPageState extends State<DashboardPage> {
         SizedBox(
           height: 15.0,
         ),
-        // _history(),
-        // SizedBox(
-        //   height: 15.0,
-        // ),
+        _history(),
+        SizedBox(
+          height: 15.0,
+        ),
       ],
     );
   }
@@ -142,7 +142,7 @@ class DashboardPageState extends State<DashboardPage> {
               animation: "dir",
             ),
           ),
-          'History'),
+          'Y\'day Answer'),
     );
   }
 

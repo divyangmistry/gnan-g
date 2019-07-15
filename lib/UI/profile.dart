@@ -5,6 +5,7 @@ import 'package:GnanG/Service/apiservice.dart';
 import 'package:GnanG/Service/profile_pic.dart';
 import 'package:GnanG/UI/animation/success.dart';
 import 'package:GnanG/UI/imagepicker/image_input.dart';
+import 'package:GnanG/UI/new_leaderboard/profile_service.dart';
 import 'package:GnanG/UI/widgets/base_state.dart';
 import 'package:GnanG/colors.dart';
 import 'package:GnanG/common.dart';
@@ -35,12 +36,19 @@ class ProfilePagePageState extends BaseState<ProfilePagePage> {
   }
 
   _loadData() async {
-    File userPhoto = await profilePicService.getCurruntUserProfilePic();
+    File profilePic = await profilePicService.readProfilePic(
+        CacheData.userInfo.mhtId, CacheData.userInfo.profilePicVersion);
+    setState(() {
+      if (profilePic.existsSync()) {}
+    });
     profileImage = Image(
-      image: userPhoto != null && userPhoto.existsSync()
-          ? FileImage(userPhoto)
+      image: profilePic != null && profilePic.existsSync()
+          ? FileImage(profilePic)
           : AssetImage(AppConstant.DEFAULT_USER_IMG_PATH),
     );
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   @override
@@ -72,7 +80,7 @@ class ProfilePagePageState extends BaseState<ProfilePagePage> {
     return new Row(
       children: <Widget>[
         Container(
-          padding: EdgeInsets.only(left: 30,right: 20),
+          padding: EdgeInsets.only(left: 30, right: 20),
           child: CircleAvatar(
             maxRadius: 22,
             backgroundColor: kQuizMain400,
@@ -266,9 +274,17 @@ class ProfilePagePageState extends BaseState<ProfilePagePage> {
       AppResponse appResponse =
           ResponseParser.parseResponse(context: context, res: res);
       if (appResponse.status == WSConstant.SUCCESS_CODE) {
+        CacheData.userInfo.profilePic = appResponse.data['img_dropbox_url'];
+        await profilePicService.writeProfilePic(
+            appResponse.data['img_dropbox_url'],
+            CacheData.userInfo.mhtId,
+            CacheData.userInfo.profilePicVersion);
+        File profilePic = await profilePicService.readProfilePic(
+            CacheData.userInfo.mhtId, CacheData.userInfo.profilePicVersion);
         setState(() {
-          profileImage = Image(image: AssetImage(image.path));
-          CacheData.userInfo.profilePic = appResponse.data['img_dropbox_url'];
+          if (profilePic.existsSync()) {
+            profileImage = Image(image: FileImage(profilePic));
+          }
         });
       }
     } catch (error) {
