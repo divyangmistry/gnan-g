@@ -38,9 +38,6 @@ class ProfilePagePageState extends BaseState<ProfilePagePage> {
   _loadData() async {
     File profilePic = await profilePicService.readProfilePic(
         CacheData.userInfo.mhtId, CacheData.userInfo.profilePicVersion);
-    setState(() {
-      if (profilePic.existsSync()) {}
-    });
     profileImage = Image(
       image: profilePic != null && profilePic.existsSync()
           ? FileImage(profilePic)
@@ -274,13 +271,10 @@ class ProfilePagePageState extends BaseState<ProfilePagePage> {
       AppResponse appResponse =
           ResponseParser.parseResponse(context: context, res: res);
       if (appResponse.status == WSConstant.SUCCESS_CODE) {
+        CacheData.userInfo.profilePicVersion += 1;
         CacheData.userInfo.profilePic = appResponse.data['img_dropbox_url'];
-        await profilePicService.writeProfilePic(
-            appResponse.data['img_dropbox_url'],
-            CacheData.userInfo.mhtId,
-            CacheData.userInfo.profilePicVersion);
-        File profilePic = await profilePicService.readProfilePic(
-            CacheData.userInfo.mhtId, CacheData.userInfo.profilePicVersion);
+        await profilePicService.writeProfilePic(appResponse.data['img_dropbox_url'],CacheData.userInfo.mhtId,CacheData.userInfo.profilePicVersion);
+        File profilePic = await profilePicService.readProfilePic(CacheData.userInfo.mhtId, CacheData.userInfo.profilePicVersion);
         setState(() {
           if (profilePic.existsSync()) {
             profileImage = Image(image: FileImage(profilePic));

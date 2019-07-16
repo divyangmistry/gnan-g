@@ -121,18 +121,15 @@ class _NewLeaderBoardState extends State<NewLeaderBoard> {
       AppResponse appResponse =
           ResponseParser.parseResponse(context: context, res: res);
       if (appResponse.status == WSConstant.SUCCESS_CODE) {
-        File userPhoto = await profilePicService.getCurruntUserProfilePic();
         LeaderList leaders = LeaderList.fromJson(appResponse.data);
-        print('********** ====> <==== ***********');
-        print(userPhoto.path);
-        print(CacheData.userInfo.profilePic);
-        print('********** ====> <==== ***********');
+
+        File userPhoto = await profilePicService.readProfilePic(
+            CacheData.userInfo.mhtId, CacheData.userInfo.profilePicVersion);
         _userImage = Image(
           image: userPhoto != null && userPhoto.existsSync()
               ? FileImage(userPhoto)
               : AssetImage(AppConstant.DEFAULT_USER_IMG_PATH),
         );
-        _userImage = Image.file(userPhoto);
         setState(() {
           leaderListMonth = leaders.leaders;
           leaderListMonth.insert(0, pujyashree);

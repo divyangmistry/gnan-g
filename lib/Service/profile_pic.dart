@@ -29,7 +29,7 @@ class ProfilePic {
       final path = await _localPath;
       File image = new File(join(path, '${mhtId}_$v.png'));
       image.writeAsBytesSync(response.bodyBytes);
-      print('Image Saved Successfully ... !!! $imageUrl');
+      // print('Image Saved Successfully ... !!! $imageUrl');
       // remove last version image if available
       File lastImage = new File(join(path, '${mhtId}_${v-1}.png'));
       if (lastImage.existsSync()) {
