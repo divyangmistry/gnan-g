@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:GnanG/Service/apiservice.dart';
+import 'package:GnanG/UI/DailyBonusAnswer/ui/daily_bonus_answers.dart';
 import 'package:GnanG/UI/game/mcq.dart';
 import 'package:GnanG/UI/game/time_based_ui.dart';
 import 'package:GnanG/UI/game/title_bar.dart';
@@ -58,6 +59,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
   ValueNotifier<bool> isReset = new ValueNotifier(false);
   bool isTimeBasedLevel = false;
   UserLevel userLevel;
+  bool isBonusComplete = false;
 
   Timer _timer;
   int _timeInSeconds = 0; // question timer
@@ -148,9 +150,16 @@ class MainGamePageState extends BaseState<MainGamePage> {
     if (appResponse.status == 200) {
       bool isLoadQuestion = true;
       if (widget.isBonusLevel) {
-        if (isBonusCompleted(appResponse)) {
+        if (appResponse.data is Map && appResponse.data['msg'] != null) {
           isLoadQuestion = false;
           isLoading = false;
+          setState(() {
+            isBonusComplete = true;
+          });
+        } else {
+          setState(() {
+            isBonusComplete = false;
+          });
         }
       }
       if (isLoadQuestion) {
@@ -174,23 +183,6 @@ class MainGamePageState extends BaseState<MainGamePage> {
         });
       }
     }
-  }
-
-  bool isBonusCompleted(AppResponse appResponse) {
-    if (appResponse.data is Map && appResponse.data['msg'] != null) {
-      AppAudioUtils.stopMusic(levelStartPlayer);
-      CommonFunction.alertDialog(
-          context: context,
-          type: "success",
-          msg: appResponse.data['msg'],
-          barrierDismissible: false,
-          doneButtonFn: () {
-            Navigator.pop(context);
-            Navigator.pop(context);
-          });
-      return true;
-    }
-    return false;
   }
 
   void onOKButtonClick(bool isCompletedLevel) {
@@ -222,29 +214,35 @@ class MainGamePageState extends BaseState<MainGamePage> {
     } else {
       AudioPlayer audioPlayer =
           await AppAudioUtils.playMusic(url: "music/level/levelCompleted.WAV");
-      CommonFunction.alertDialog(
-          context: context,
-          msg: (widget.isBonusLevel)
-              ? "All Questions of Daily Bonus are completed !!"
-              : widget.level.name + ' level is completed !! ',
-          barrierDismissible: false,
-          type: 'success',
-          playSound: false,
-          doneButtonFn: () async {
-            AppAudioUtils.stopMusic(audioPlayer);
-            setState(() {
-              isOverlay = true;
+      if (!widget.isBonusLevel) {
+        CommonFunction.alertDialog(
+            context: context,
+            msg: (widget.isBonusLevel)
+                ? "All Questions of Daily Bonus are completed !!"
+                : widget.level.name + ' level is completed !! ',
+            barrierDismissible: false,
+            type: 'success',
+            playSound: false,
+            doneButtonFn: () async {
+              AppAudioUtils.stopMusic(audioPlayer);
+              setState(() {
+                isOverlay = true;
+              });
+              bool result = await CommonFunction.loadUserState(
+                  context, CacheData.userInfo.mhtId);
+              setState(() {
+                isOverlay = false;
+              });
+              if (result) {
+                exitLevel();
+                //Navigator.pop(context);
+              }
             });
-            bool result = await CommonFunction.loadUserState(
-                context, CacheData.userInfo.mhtId);
-            setState(() {
-              isOverlay = false;
-            });
-            if (result) {
-              exitLevel();
-              //Navigator.pop(context);
-            }
-          });
+      } else {
+        setState(() {
+          isBonusComplete = true;
+        });
+      }
     }
   }
 
@@ -426,79 +424,136 @@ class MainGamePageState extends BaseState<MainGamePage> {
       ),
     );
 
-    return question != null
-        ? new Scaffold(
-            body: new BackgroundGredient(
-              child: widget.isBonusLevel ||
-                      widget.level.levelType != 'TIME_BASED'
-                  ? SafeArea(
-                      child: new Container(
-                        padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
-                        child: new Column(
-                          children: <Widget>[
-                            GameTitleBar(
-                              title: (widget.isBonusLevel)
-                                  ? "Daily Bonus"
-                                  : widget.level.name,
-                              questionNumber:
-                                  question != null ? question.questionSt : 1,
-                              totalQuestion: getTotalQuestion(),
+    Widget simpleView() {
+      return question != null
+          ? new Scaffold(
+              body: new BackgroundGredient(
+                child: widget.isBonusLevel ||
+                        widget.level.levelType != 'TIME_BASED'
+                    ? (!isBonusComplete
+                        ? SafeArea(
+                            child: new Container(
+                              padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
+                              child: new Column(
+                                children: <Widget>[
+                                  GameTitleBar(
+                                    title: (widget.isBonusLevel)
+                                        ? "Daily Bonus"
+                                        : widget.level.name,
+                                    questionNumber: question != null
+                                        ? question.questionSt
+                                        : 1,
+                                    totalQuestion: getTotalQuestion(),
+                                  ),
+                                  SizedBox(
+                                    height: 15,
+                                  ),
+                                  Expanded(
+                                    child: question != null
+                                        ? question.questionType == "MCQ"
+                                            ? new MCQ(question, validateAnswer,
+                                                hiddenOptionIndex)
+                                            : new Pikachar(
+                                                question.question,
+                                                question.jumbledata,
+                                                question.pikacharAnswer,
+                                                validateAnswer)
+                                        : new Container(),
+                                  ),
+                                ],
+                              ),
                             ),
-                            SizedBox(
-                              height: 15,
+                          )
+                        : Container(
+                            padding: EdgeInsets.all(20),
+                            child: Center(
+                              child: Text(
+                                'All Questions of Daily Bonus are completed !!',
+                                style: TextStyle(fontSize: 26),
+                                textAlign: TextAlign.center,
+                              ),
                             ),
-                            Expanded(
-                              child: question != null
-                                  ? question.questionType == "MCQ"
-                                      ? new MCQ(question, validateAnswer,
-                                          hiddenOptionIndex)
-                                      : new Pikachar(
-                                          question.question,
-                                          question.jumbledata,
-                                          question.pikacharAnswer,
-                                          validateAnswer)
-                                  : new Container(),
-                            ),
-                          ],
-                        ),
+                          ))
+                    : TimeBasedUI(
+                        title: (widget.isBonusLevel)
+                            ? "Daily Bonus"
+                            : widget.level.name,
+                        questionNumber:
+                            question != null ? question.questionSt : 1,
+                        totalQuestion: getTotalQuestion(),
+                        timeLimit: question != null ? question.timeLimit : 0,
+                        loadNextQuestion: _loadNextQuestion,
+                        questionInfo: question,
+                        timeIndicator: _timeIndicator,
+                        timer: startTimer,
+                        timeOverDialog: timeOverDialog,
+                        gameUI: question != null
+                            ? question.questionType == "MCQ"
+                                ? new MCQ(
+                                    question, validateAnswer, hiddenOptionIndex)
+                                : new Pikachar(
+                                    question.question,
+                                    question.jumbledata,
+                                    question.pikacharAnswer,
+                                    validateAnswer)
+                            : new Container(),
+                        markRead: _markReadQuestion,
                       ),
-                    )
-                  : TimeBasedUI(
-                      title: (widget.isBonusLevel)
-                          ? "Daily Bonus"
-                          : widget.level.name,
-                      questionNumber:
-                          question != null ? question.questionSt : 1,
-                      totalQuestion: getTotalQuestion(),
-                      timeLimit: question != null ? question.timeLimit : 0,
-                      loadNextQuestion: _loadNextQuestion,
-                      questionInfo: question,
-                      timeIndicator: _timeIndicator,
-                      timer: startTimer,
-                      timeOverDialog: timeOverDialog,
-                      gameUI: question != null
-                          ? question.questionType == "MCQ"
-                              ? new MCQ(
-                                  question, validateAnswer, hiddenOptionIndex)
-                              : new Pikachar(
-                                  question.question,
-                                  question.jumbledata,
-                                  question.pikacharAnswer,
-                                  validateAnswer)
-                          : new Container(),
-                      markRead: _markReadQuestion,
+              ),
+              floatingActionButtonLocation: widget.isBonusLevel
+                  ? FloatingActionButtonLocation.endFloat
+                  : FloatingActionButtonLocation.centerDocked,
+              floatingActionButton: widget.isBonusLevel
+                  ? !isBonusComplete
+                      ? getFloatingActionButtonForBonus()
+                      : Container()
+                  : getFloatingButForNonBonus(),
+            )
+          : isBonusComplete
+              ? Container(
+                  padding: EdgeInsets.all(20),
+                  child: Center(
+                    child: Text(
+                      'All Questions of Daily Bonus are completed !!',
+                      style: TextStyle(fontSize: 26),
+                      textAlign: TextAlign.center,
                     ),
+                  ),
+                )
+              : new Scaffold(
+                  body: Container(),
+                );
+    }
+
+    Widget tabularView() {
+      return DefaultTabController(
+        length: 2,
+        child: Scaffold(
+          appBar: AppBar(
+            // backgroundColor: kQuizMain500,
+            title: TabBar(
+              tabs: [
+                Tab(
+                  child: Text('Daily Bonus'),
+                ),
+                Tab(child: Text('Yesterday Answers')),
+              ],
             ),
-            floatingActionButtonLocation: widget.isBonusLevel
-                ? FloatingActionButtonLocation.endFloat
-                : FloatingActionButtonLocation.centerDocked,
-            floatingActionButton: widget.isBonusLevel
-                ? getFloatingActionButtonForBonus()
-                : getFloatingButForNonBonus(),
-          )
-        : new Scaffold(
-            body: Container(),
-          );
+            automaticallyImplyLeading: false,
+            titleSpacing: 0,
+            // bottom: ,
+          ),
+          body: TabBarView(
+            children: [
+              simpleView(),
+              DailyBonusAnswers(),
+            ],
+          ),
+        ),
+      );
+    }
+
+    return widget.isBonusLevel == true ? tabularView() : simpleView();
   }
 
   Widget getFloatingButForNonBonus() {
@@ -555,7 +610,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
       questionId: question.questionId,
       mhtId: CacheData.userInfo.mhtId,
       answer: answer,
-      level: userLevel.level,
+      level: widget.isBonusLevel ? 0 : userLevel.level,
     );
     setState(() {
       isOverlay = false;

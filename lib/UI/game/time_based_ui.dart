@@ -123,7 +123,7 @@ class TimeBasedUIState extends State<TimeBasedUI> {
                     ],
                   ),
                 ),
-                CommonFunction.pointsUI(context: context, point: CacheData.userState.totalscore.toString()),
+                CommonFunction.pointsUI(context: context, point: CacheData.userState.totalscore_month.toString()),
               ],
             ),
             Row(

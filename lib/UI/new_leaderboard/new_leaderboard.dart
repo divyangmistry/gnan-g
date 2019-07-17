@@ -100,8 +100,7 @@ class _NewLeaderBoardState extends State<NewLeaderBoard> {
     "fb_token": null,
     "onesignal_token": "7f97262d-f4ca-4cd1-be8c-600687895a69",
     "question_id": 507,
-    // "img_dropbox_url":
-    //     "https://dl.dropboxusercontent.com/s/gk8gc8ydhdls20j/profile_1.0.png?dl=0"
+    "img_dropbox_url": "https://sosios.page.link/6DtX"
   });
 
   _updateMyMonthScoreFromList() {
@@ -327,14 +326,22 @@ class LeaderRowState extends State<LeaderRow>
   }
 
   loadProfilePic() async {
-    image = await _profilePicService.readProfilePic(
-        widget.mhtId, widget.profileVersion);
-    if (image != null &&
-        !image.existsSync() &&
-        widget.profilePic != null &&
-        widget.profilePic.isNotEmpty) {
-      image = await _profilePicService.writeProfilePic(
-          widget.profilePic, widget.mhtId, widget.profileVersion);
+    if (widget.mhtId != 1) {
+      image = await _profilePicService.readProfilePic(
+          widget.mhtId, widget.profileVersion);
+      if (image != null &&
+          !image.existsSync() &&
+          widget.profilePic != null &&
+          widget.profilePic.isNotEmpty) {
+        image = await _profilePicService.writeProfilePic(
+            widget.profilePic, widget.mhtId, widget.profileVersion);
+      }
+    } else {
+      image = await _profilePicService.readProfilePic(1, 1);
+      if (image != null && !image.existsSync()) {
+        image = await _profilePicService.writeProfilePic(
+            widget.profilePic, 1, 1);
+      }
     }
     if (mounted) {
       setState(() {});
