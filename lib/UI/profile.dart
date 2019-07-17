@@ -38,6 +38,16 @@ class ProfilePagePageState extends BaseState<ProfilePagePage> {
   _loadData() async {
     File profilePic = await profilePicService.readProfilePic(
         CacheData.userInfo.mhtId, CacheData.userInfo.profilePicVersion);
+    // If Not availabale in storage then download and save if url is available
+    if (profilePic != null &&
+        !profilePic.existsSync() &&
+        CacheData.userInfo.profilePic != null &&
+        CacheData.userInfo.profilePic.isNotEmpty) {
+      profilePic = await profilePicService.writeProfilePic(
+          CacheData.userInfo.profilePic,
+          CacheData.userInfo.mhtId,
+          CacheData.userInfo.profilePicVersion);
+    }
     profileImage = Image(
       image: profilePic != null && profilePic.existsSync()
           ? FileImage(profilePic)
@@ -273,8 +283,12 @@ class ProfilePagePageState extends BaseState<ProfilePagePage> {
       if (appResponse.status == WSConstant.SUCCESS_CODE) {
         CacheData.userInfo.profilePicVersion += 1;
         CacheData.userInfo.profilePic = appResponse.data['img_dropbox_url'];
-        await profilePicService.writeProfilePic(appResponse.data['img_dropbox_url'],CacheData.userInfo.mhtId,CacheData.userInfo.profilePicVersion);
-        File profilePic = await profilePicService.readProfilePic(CacheData.userInfo.mhtId, CacheData.userInfo.profilePicVersion);
+        await profilePicService.writeProfilePic(
+            appResponse.data['img_dropbox_url'],
+            CacheData.userInfo.mhtId,
+            CacheData.userInfo.profilePicVersion);
+        File profilePic = await profilePicService.readProfilePic(
+            CacheData.userInfo.mhtId, CacheData.userInfo.profilePicVersion);
         setState(() {
           if (profilePic.existsSync()) {
             profileImage = Image(image: FileImage(profilePic));
