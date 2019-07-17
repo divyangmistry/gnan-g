@@ -85,7 +85,7 @@ class _WinnersState extends State<Winners> {
     Widget newUI(LeaderList leaders) {
       return ListView(
         children: <Widget>[
-          Container(
+          leaders != null && leaders.leaders != null ? Container(
             padding: EdgeInsets.only(top: 40, bottom: 20),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -97,7 +97,7 @@ class _WinnersState extends State<Winners> {
                 leaders.leaders.length > 1 ? winnerUI(leaders.leaders[2], 3) : Container()
               ],
             ),
-          )
+          ) : Container()
         ],
       );
     }
