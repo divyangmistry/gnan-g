@@ -125,6 +125,16 @@ class _NewLeaderBoardState extends State<NewLeaderBoard> {
 
         File userPhoto = await profilePicService.readProfilePic(
             CacheData.userInfo.mhtId, CacheData.userInfo.profilePicVersion);
+        // If Not availabale in storage then download and save if url is available
+        if (userPhoto != null &&
+            !userPhoto.existsSync() &&
+            CacheData.userInfo.profilePic != null &&
+            CacheData.userInfo.profilePic.isNotEmpty) {
+          userPhoto = await profilePicService.writeProfilePic(
+              CacheData.userInfo.profilePic,
+              CacheData.userInfo.mhtId,
+              CacheData.userInfo.profilePicVersion);
+        }
         _userImage = Image(
           image: userPhoto != null && userPhoto.existsSync()
               ? FileImage(userPhoto)
