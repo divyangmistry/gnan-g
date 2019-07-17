@@ -85,19 +85,25 @@ class _WinnersState extends State<Winners> {
     Widget newUI(LeaderList leaders) {
       return ListView(
         children: <Widget>[
-          leaders != null && leaders.leaders != null ? Container(
+          Container(
             padding: EdgeInsets.only(top: 40, bottom: 20),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               mainAxisSize: MainAxisSize.max,
               children: <Widget>[
-                leaders.leaders.length >= 0 ? winnerUI(leaders.leaders[1], 2) : Container(),
-                leaders.leaders.length >= 1 ? winnerUI(leaders.leaders[0], 1) : Container(),
-                leaders.leaders.length > 1 ? winnerUI(leaders.leaders[2], 3) : Container()
+                leaders.leaders.length >= 0
+                    ? winnerUI(leaders.leaders[1], 2)
+                    : Container(),
+                leaders.leaders.length >= 1
+                    ? winnerUI(leaders.leaders[0], 1)
+                    : Container(),
+                leaders.leaders.length > 1
+                    ? winnerUI(leaders.leaders[2], 3)
+                    : Container()
               ],
             ),
-          ) : Container()
+          )
         ],
       );
     }
@@ -112,7 +118,9 @@ class _WinnersState extends State<Winners> {
               if (snapshot.hasData) {
                 print('************');
                 print(snapshot.data);
-                if (snapshot.data.leaders.length == 0) {
+                if (snapshot.data == null ||
+                    snapshot.data.leaders == null ||
+                    snapshot.data.leaders.length == 0) {
                   return Center(
                     child: Text(
                       'No Winners Available',
