@@ -65,7 +65,7 @@ class _WinnersState extends State<Winners> {
           Container(
             width: rank == 1 ? 120 : 100,
             alignment: Alignment.center,
-            child: Text('${leader.name}', textScaleFactor: rank == 1 ? 1.3 : 1),
+            child: Text('${leader.name}', textScaleFactor: rank == 1 ? 1.3 : 1, textAlign: TextAlign.center,),
           ),
           SizedBox(height: 5),
           Row(
