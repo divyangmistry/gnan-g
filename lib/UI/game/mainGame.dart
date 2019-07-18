@@ -599,7 +599,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
           .first
           .questionSt;
     }
-    return userLevel.totalQuestions;
+    return widget.level.totalQuestions;
   }
 
   void validateAnswer({String answer}) async {
