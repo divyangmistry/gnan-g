@@ -121,22 +121,9 @@ class _NewLeaderBoardState extends State<NewLeaderBoard> {
           ResponseParser.parseResponse(context: context, res: res);
       if (appResponse.status == WSConstant.SUCCESS_CODE) {
         LeaderList leaders = LeaderList.fromJson(appResponse.data);
-
-        File userPhoto = await profilePicService.readProfilePic(
-            CacheData.userInfo.mhtId, CacheData.userInfo.profilePicVersion);
-        // If Not availabale in storage then download and save if url is available
-        if (userPhoto != null &&
-            !userPhoto.existsSync() &&
-            CacheData.userInfo.profilePic != null &&
-            CacheData.userInfo.profilePic.isNotEmpty) {
-          userPhoto = await profilePicService.writeProfilePic(
-              CacheData.userInfo.profilePic,
-              CacheData.userInfo.mhtId,
-              CacheData.userInfo.profilePicVersion);
-        }
         _userImage = Image(
-          image: userPhoto != null && userPhoto.existsSync()
-              ? FileImage(userPhoto)
+          image: CacheData.userInfo.profilePic != null
+              ? NetworkImage(CacheData.userInfo.profilePic)
               : AssetImage(AppConstant.DEFAULT_USER_IMG_PATH),
         );
         setState(() {
@@ -257,7 +244,7 @@ class _NewLeaderBoardState extends State<NewLeaderBoard> {
     Widget monthlyLeaderboardUI() {
       return Scaffold(
         appBar: AppBar(
-          backgroundColor: kQuizMain500,
+          backgroundColor: kQuizMain400,
           automaticallyImplyLeading: false,
           bottom: PreferredSize(
             child: topSection,
@@ -280,7 +267,7 @@ class _NewLeaderBoardState extends State<NewLeaderBoard> {
               Tab(
                 child: Text('Monthly Leaderboard'),
               ),
-              Tab(child: Text('Last Month Winners')),
+              Tab(child: Text('Last Month\'s Winners')),
             ],
           ),
           automaticallyImplyLeading: false,

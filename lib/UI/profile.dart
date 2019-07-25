@@ -36,21 +36,9 @@ class ProfilePagePageState extends BaseState<ProfilePagePage> {
   }
 
   _loadData() async {
-    File profilePic = await profilePicService.readProfilePic(
-        CacheData.userInfo.mhtId, CacheData.userInfo.profilePicVersion);
-    // If Not availabale in storage then download and save if url is available
-    if (profilePic != null &&
-        !profilePic.existsSync() &&
-        CacheData.userInfo.profilePic != null &&
-        CacheData.userInfo.profilePic.isNotEmpty) {
-      profilePic = await profilePicService.writeProfilePic(
-          CacheData.userInfo.profilePic,
-          CacheData.userInfo.mhtId,
-          CacheData.userInfo.profilePicVersion);
-    }
     profileImage = Image(
-      image: profilePic != null && profilePic.existsSync()
-          ? FileImage(profilePic)
+      image: CacheData.userInfo.profilePic != null
+          ? NetworkImage(CacheData.userInfo.profilePic)
           : AssetImage(AppConstant.DEFAULT_USER_IMG_PATH),
     );
     if (mounted) {
@@ -131,6 +119,7 @@ class ProfilePagePageState extends BaseState<ProfilePagePage> {
               showCancelButton: true,
               doneButtonFn: () {
                 _api.logout();
+                Navigator.pop(context);
                 Navigator.pop(context);
                 Navigator.pushReplacementNamed(context, '/login_new');
               },

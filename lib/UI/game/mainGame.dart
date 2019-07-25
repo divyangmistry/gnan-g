@@ -536,7 +536,7 @@ class MainGamePageState extends BaseState<MainGamePage> {
                 Tab(
                   child: Text('Daily Bonus'),
                 ),
-                Tab(child: Text('Yesterday Answers')),
+                Tab(child: Text('Yesterday\'s Answers')),
               ],
             ),
             automaticallyImplyLeading: false,
