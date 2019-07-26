@@ -20,8 +20,8 @@ class ApiService {
   ///
   /// 
   // final _apiUrl = 'http://192.168.43.23:3000'; // Check Above Comment Before change This 
-  final _apiUrl = 'http://3.16.51.94:3000'; // Check Above Comment Before change This 
-  // final _apiUrl = 'http://gnang.purecelibacy.org:3000'; // live API // Check Above Comment Before change This 
+  // final _apiUrl = 'http://3.16.51.94:3000'; // Check Above Comment Before change This 
+  final _apiUrl = 'http://gnang.purecelibacy.org:3000'; // live API // Check Above Comment Before change This 
 
   Map<String, String> headers = {'content-type': 'application/json'};
   bool enableMock = false;

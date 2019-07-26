@@ -12,8 +12,8 @@ class DailyBonusAnswerProvider {
   Client client = Client();
   Map<String, String> headers = {'content-type': 'application/json'};
   // final String apiUrl = 'http://192.168.43.23:3000';
-  final String apiUrl = 'http://3.16.51.94:3000';
-  // final _apiUrl = 'http://gnang.purecelibacy.org:3000';
+  // final String apiUrl = 'http://3.16.51.94:3000';
+  final apiUrl = 'http://gnang.purecelibacy.org:3000';
 
   checkLogin() async {
     if (await AppSharedPrefUtil.isUserLoggedIn()) {
