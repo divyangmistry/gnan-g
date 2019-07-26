@@ -17,6 +17,7 @@ import 'package:GnanG/utils/appsharedpref.dart';
 import 'package:GnanG/utils/response_parser.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfilePagePage extends StatefulWidget {
   @override
@@ -36,9 +37,24 @@ class ProfilePagePageState extends BaseState<ProfilePagePage> {
   }
 
   _loadData() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    // get_photo, mht_id
+    String profileUrl = pref.getString('profile_pic');
+    if (profileUrl == null || profileUrl.isEmpty) {
+      try {
+        Response res = await _api.postApi(
+            url: '/get_photo', data: {'mht_id': CacheData.userInfo.mhtId});
+        profileUrl = json.decode(res.body)['data']['image'];
+        if (profileUrl != null && profileUrl.isNotEmpty) {
+          pref.setString('profile_pic', profileUrl);
+        }
+      } catch (e) {
+        print('Error to get Image $e');
+      }
+    }
     profileImage = Image(
-      image: CacheData.userInfo.profilePic != null
-          ? NetworkImage(CacheData.userInfo.profilePic)
+      image: profileUrl != null && profileUrl.isNotEmpty
+          ? NetworkImage(profileUrl)
           : AssetImage(AppConstant.DEFAULT_USER_IMG_PATH),
     );
     if (mounted) {

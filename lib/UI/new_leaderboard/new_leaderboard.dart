@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
@@ -17,6 +18,7 @@ import 'package:GnanG/utils/response_parser.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:http/http.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 final colors = [
   Colors.red,
@@ -121,9 +123,25 @@ class _NewLeaderBoardState extends State<NewLeaderBoard> {
           ResponseParser.parseResponse(context: context, res: res);
       if (appResponse.status == WSConstant.SUCCESS_CODE) {
         LeaderList leaders = LeaderList.fromJson(appResponse.data);
+
+        SharedPreferences pref = await SharedPreferences.getInstance();
+        String profileUrl = pref.getString('profile_pic');
+        if (profileUrl == null || profileUrl.isEmpty) {
+          try {
+            Response res = await _api.postApi(
+                url: '/get_photo', data: {'mht_id': CacheData.userInfo.mhtId});
+            profileUrl = json.decode(res.body)['data']['image'];
+            if (profileUrl != null && profileUrl.isNotEmpty) {
+              pref.setString('profile_pic', profileUrl);
+            }
+          } catch (e) {
+            print('Error to get Image $e');
+          }
+        }
+
         _userImage = Image(
-          image: CacheData.userInfo.profilePic != null
-              ? NetworkImage(CacheData.userInfo.profilePic)
+          image: profileUrl != null && profileUrl.isNotEmpty
+              ? NetworkImage(profileUrl)
               : AssetImage(AppConstant.DEFAULT_USER_IMG_PATH),
         );
         setState(() {
@@ -326,8 +344,8 @@ class LeaderRowState extends State<LeaderRow>
     } else {
       image = await _profilePicService.readProfilePic(1, 1);
       if (image != null && !image.existsSync()) {
-        image = await _profilePicService.writeProfilePic(
-            widget.profilePic, 1, 1);
+        image =
+            await _profilePicService.writeProfilePic(widget.profilePic, 1, 1);
       }
     }
     if (mounted) {
