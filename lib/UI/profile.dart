@@ -101,15 +101,15 @@ class ProfilePagePageState extends BaseState<ProfilePagePage> {
                 color: Colors.white,
               ),
               itemBuilder: (_) => [
-                    PopupMenuItem(
-                      child: Text('Rules'),
-                      value: 'rules',
-                    ),
-                    PopupMenuItem(
-                      child: Text('About'),
-                      value: 'about',
-                    )
-                  ],
+                PopupMenuItem(
+                  child: Text('Rules'),
+                  value: 'rules',
+                ),
+                PopupMenuItem(
+                  child: Text('About'),
+                  value: 'about',
+                )
+              ],
               onSelected: (value) {
                 Navigator.pushNamed(context, '/$value');
               },
@@ -288,6 +288,8 @@ class ProfilePagePageState extends BaseState<ProfilePagePage> {
       if (appResponse.status == WSConstant.SUCCESS_CODE) {
         CacheData.userInfo.profilePicVersion += 1;
         CacheData.userInfo.profilePic = appResponse.data['img_dropbox_url'];
+        SharedPreferences pref = await SharedPreferences.getInstance();
+        await pref.setString('profile_pic', appResponse.data['img_dropbox_url']);
         await profilePicService.writeProfilePic(
             appResponse.data['img_dropbox_url'],
             CacheData.userInfo.mhtId,
