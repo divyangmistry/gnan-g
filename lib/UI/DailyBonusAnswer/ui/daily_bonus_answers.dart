@@ -43,14 +43,29 @@ class _DailyBonusAnswersState extends State<DailyBonusAnswers> {
                 leading: CircleAvatar(
                   child: Text('${index + 1}'),
                 ),
-                subtitle: Text(
-                  'Answer: ${data[index].answer[0].answer}',
-                  textScaleFactor: 1.1,
-                  style: TextStyle(
-                    fontFamily: 'Gujarati',
-                    color: kQuizMain500,
-                    fontWeight: FontWeight.bold,
-                  ),
+                subtitle: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      'Answer: ',
+                      textScaleFactor: 1.1,
+                      style: TextStyle(
+                        fontFamily: 'Gujarati',
+                        color: kQuizMain500,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      '${data[index].answer[0].answer}',
+                      textScaleFactor: 1.1,
+                      style: TextStyle(
+                        fontFamily: 'Gujarati',
+                        color: kQuizMain500,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
