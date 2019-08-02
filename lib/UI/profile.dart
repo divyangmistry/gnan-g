@@ -37,20 +37,16 @@ class ProfilePagePageState extends BaseState<ProfilePagePage> {
   }
 
   _loadData() async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
     // get_photo, mht_id
-    String profileUrl = pref.getString('profile_pic');
-    if (profileUrl == null || profileUrl.isEmpty) {
-      try {
-        Response res = await _api.postApi(
-            url: '/get_photo', data: {'mht_id': CacheData.userInfo.mhtId});
+    String profileUrl;
+    try {
+      Response res = await _api.postApi(
+          url: '/get_photo', data: {'mht_id': CacheData.userInfo.mhtId});
+      if (res.statusCode == 200) {
         profileUrl = json.decode(res.body)['data']['image'];
-        if (profileUrl != null && profileUrl.isNotEmpty) {
-          pref.setString('profile_pic', profileUrl);
-        }
-      } catch (e) {
-        print('Error to get Image $e');
       }
+    } catch (e) {
+      print('Error to get Image $e');
     }
     profileImage = Image(
       image: profileUrl != null && profileUrl.isNotEmpty
@@ -289,7 +285,8 @@ class ProfilePagePageState extends BaseState<ProfilePagePage> {
         CacheData.userInfo.profilePicVersion += 1;
         CacheData.userInfo.profilePic = appResponse.data['img_dropbox_url'];
         SharedPreferences pref = await SharedPreferences.getInstance();
-        await pref.setString('profile_pic', appResponse.data['img_dropbox_url']);
+        await pref.setString(
+            'profile_pic', appResponse.data['img_dropbox_url']);
         await profilePicService.writeProfilePic(
             appResponse.data['img_dropbox_url'],
             CacheData.userInfo.mhtId,

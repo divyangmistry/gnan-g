@@ -123,22 +123,16 @@ class _NewLeaderBoardState extends State<NewLeaderBoard> {
           ResponseParser.parseResponse(context: context, res: res);
       if (appResponse.status == WSConstant.SUCCESS_CODE) {
         LeaderList leaders = LeaderList.fromJson(appResponse.data);
-
-        SharedPreferences pref = await SharedPreferences.getInstance();
-        String profileUrl = pref.getString('profile_pic');
-        if (profileUrl == null || profileUrl.isEmpty) {
-          try {
-            Response res = await _api.postApi(
-                url: '/get_photo', data: {'mht_id': CacheData.userInfo.mhtId});
+        String profileUrl;
+        try {
+          Response res = await _api.postApi(
+              url: '/get_photo', data: {'mht_id': CacheData.userInfo.mhtId});
+          if (res.statusCode == 200) {
             profileUrl = json.decode(res.body)['data']['image'];
-            if (profileUrl != null && profileUrl.isNotEmpty) {
-              pref.setString('profile_pic', profileUrl);
-            }
-          } catch (e) {
-            print('Error to get Image $e');
           }
+        } catch (e) {
+          print('Error to get Image $e');
         }
-
         _userImage = Image(
           image: profileUrl != null && profileUrl.isNotEmpty
               ? NetworkImage(profileUrl)
