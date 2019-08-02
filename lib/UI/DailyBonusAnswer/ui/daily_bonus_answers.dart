@@ -51,7 +51,6 @@ class _DailyBonusAnswersState extends State<DailyBonusAnswers> {
                       'Answer: ',
                       textScaleFactor: 1.1,
                       style: TextStyle(
-                        fontFamily: 'Gujarati',
                         color: kQuizMain500,
                         fontWeight: FontWeight.bold,
                       ),
