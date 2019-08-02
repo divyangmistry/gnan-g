@@ -313,7 +313,7 @@ class CommonFunction {
         main();
         return true;
       }
-    } catch (err,s) {
+    } catch (err, s) {
       print(s);
       print('CATCH 2 :: ');
       print(err);
@@ -324,10 +324,11 @@ class CommonFunction {
     }
   }
 
-  static Future<bool> startUserSession(
-      {@required UserInfo userInfo,
-      @required String strUserInfo,
-      BuildContext context}) async {
+  static Future<bool> startUserSession({
+    @required UserInfo userInfo,
+    @required String strUserInfo,
+    BuildContext context,
+  }) async {
     CacheData.userInfo = userInfo;
     SharedPreferences pref = await SharedPreferences.getInstance();
     pref.setString('user_info', strUserInfo);

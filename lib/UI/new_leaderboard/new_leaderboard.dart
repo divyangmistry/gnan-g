@@ -102,7 +102,7 @@ class _NewLeaderBoardState extends State<NewLeaderBoard> {
     "fb_token": null,
     "onesignal_token": "7f97262d-f4ca-4cd1-be8c-600687895a69",
     "question_id": 507,
-    "img_dropbox_url": "https://sosios.page.link/6DtX"
+    "img_dropbox_url": "https://gnang.page.link/PiMG"
   });
 
   _updateMyMonthScoreFromList() {

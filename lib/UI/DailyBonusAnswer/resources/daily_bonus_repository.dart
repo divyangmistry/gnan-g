@@ -4,6 +4,7 @@ import 'package:GnanG/model/cacheData.dart';
 import 'package:GnanG/model/leaders.dart';
 import 'package:GnanG/model/question.dart';
 import 'package:GnanG/utils/appsharedpref.dart';
+import 'package:GnanG/utils/config.dart';
 import 'package:http/http.dart' show Client;
 import 'package:http/http.dart';
 import '../../../model/daily_bonus_answer.dart';
@@ -13,7 +14,7 @@ class DailyBonusAnswerProvider {
   Map<String, String> headers = {'content-type': 'application/json'};
   // final String apiUrl = 'http://192.168.43.23:3000';
   // final String apiUrl = 'http://3.16.51.94:3000';
-  final apiUrl = 'http://gnang.purecelibacy.org:3000';
+  final apiUrl = Config.apiUrl;
 
   checkLogin() async {
     if (await AppSharedPrefUtil.isUserLoggedIn()) {

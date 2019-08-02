@@ -7,6 +7,7 @@ import 'package:GnanG/model/cacheData.dart';
 import 'package:GnanG/model/signupsession.dart';
 import 'package:GnanG/utils/appsharedpref.dart';
 import 'package:GnanG/utils/audio_utilsdart.dart';
+import 'package:GnanG/utils/config.dart';
 import 'package:http/http.dart';
 import 'package:http/http.dart' as http;
 import 'package:meta/meta.dart';
@@ -21,7 +22,7 @@ class ApiService {
   /// 
   // final _apiUrl = 'http://192.168.43.23:3000'; // Check Above Comment Before change This 
   // final _apiUrl = 'http://3.16.51.94:3000'; // Check Above Comment Before change This 
-  final _apiUrl = 'http://gnang.purecelibacy.org:3000'; // live API // Check Above Comment Before change This 
+  final _apiUrl = Config.apiUrl; // live API // Check Above Comment Before change This 
 
   Map<String, String> headers = {'content-type': 'application/json'};
   bool enableMock = false;
