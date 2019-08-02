@@ -190,8 +190,7 @@ class _NewLeaderBoardState extends State<NewLeaderBoard> {
               children: <Widget>[
                 Rank(rank: _userRankMonth),
                 Text(
-                  getOrdinalOfNumber(
-                      _currentIndex == 0 ? _userRank : _userRankMonth),
+                  getOrdinalOfNumber(_userRankMonth),
                   textScaleFactor: 1,
                   style: TextStyle(
                     color: Colors.white,
